@@ -1,0 +1,634 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
+		7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */; };
+		7759CF4313DBA1A300789DB3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF4213DBA1A300789DB3 /* main.m */; };
+		7759CF4713DBA1A300789DB3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF4513DBA1A300789DB3 /* Credits.rtf */; };
+		7759CF4A13DBA1A300789DB3 /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF4913DBA1A300789DB3 /* MyDocument.m */; };
+		7759CF4D13DBA1A300789DB3 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF4B13DBA1A300789DB3 /* MyDocument.xib */; };
+		7759CF5013DBA1A300789DB3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF4E13DBA1A300789DB3 /* MainMenu.xib */; };
+		7759CF5313DBA1A300789DB3 /* MyDocument.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */; };
+		7759CF5B13DBA1A300789DB3 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF5A13DBA1A300789DB3 /* SenTestingKit.framework */; };
+		7759CF5C13DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
+		7759CF6413DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF6213DBA1A300789DB3 /* InfoPlist.strings */; };
+		7759CF6613DBA1A300789DB3 /* StreamTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF6513DBA1A300789DB3 /* StreamTests.h */; };
+		7759CF6813DBA1A300789DB3 /* StreamTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF6713DBA1A300789DB3 /* StreamTests.m */; };
+		7759CF7013DBA1A300789DB3 /* StreamImporter.mdimporter in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF6D13DBA1A300789DB3 /* StreamImporter.mdimporter */; };
+		7759CF7213DBA1A300789DB3 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF7113DBA1A300789DB3 /* CoreServices.framework */; };
+		7759CF7413DBA1A300789DB3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF7313DBA1A300789DB3 /* CoreFoundation.framework */; };
+		7759CF7613DBA1A300789DB3 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF7513DBA1A300789DB3 /* CoreData.framework */; };
+		7759CF7813DBA1A300789DB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF7713DBA1A300789DB3 /* Foundation.framework */; };
+		7759CF7E13DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF7C13DBA1A300789DB3 /* InfoPlist.strings */; };
+		7759CF8013DBA1A300789DB3 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF7F13DBA1A300789DB3 /* main.c */; };
+		7759CF8213DBA1A300789DB3 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF8113DBA1A300789DB3 /* GetMetadataForFile.m */; };
+		7759CF8513DBA1A300789DB3 /* MySpotlightImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF8413DBA1A300789DB3 /* MySpotlightImporter.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7759CF5D13DBA1A300789DB3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7759CF2913DBA1A200789DB3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7759CF3113DBA1A300789DB3;
+			remoteInfo = Stream;
+		};
+		7759CF6E13DBA1A300789DB3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7759CF2913DBA1A200789DB3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7759CF6C13DBA1A300789DB3;
+			remoteInfo = StreamImporter;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7759CF3213DBA1A300789DB3 /* Stream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stream.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7759CF3613DBA1A300789DB3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		7759CF3913DBA1A300789DB3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		7759CF3A13DBA1A300789DB3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		7759CF3B13DBA1A300789DB3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		7759CF3E13DBA1A300789DB3 /* Stream-Info.plist */ = {isa = PBXFileReference; path = "Stream-Info.plist"; sourceTree = "<group>"; };
+		7759CF4013DBA1A300789DB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7759CF4213DBA1A300789DB3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7759CF4413DBA1A300789DB3 /* Stream-Prefix.pch */ = {isa = PBXFileReference; path = "Stream-Prefix.pch"; sourceTree = "<group>"; };
+		7759CF4613DBA1A300789DB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		7759CF4813DBA1A300789DB3 /* MyDocument.h */ = {isa = PBXFileReference; path = MyDocument.h; sourceTree = "<group>"; };
+		7759CF4913DBA1A300789DB3 /* MyDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
+		7759CF4C13DBA1A300789DB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
+		7759CF4F13DBA1A300789DB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		7759CF5213DBA1A300789DB3 /* MyDocument.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyDocument.xcdatamodel; sourceTree = "<group>"; };
+		7759CF5913DBA1A300789DB3 /* StreamTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StreamTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7759CF5A13DBA1A300789DB3 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		7759CF6113DBA1A300789DB3 /* StreamTests-Info.plist */ = {isa = PBXFileReference; path = "StreamTests-Info.plist"; sourceTree = "<group>"; };
+		7759CF6313DBA1A300789DB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7759CF6513DBA1A300789DB3 /* StreamTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamTests.h; sourceTree = "<group>"; };
+		7759CF6713DBA1A300789DB3 /* StreamTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StreamTests.m; sourceTree = "<group>"; };
+		7759CF6D13DBA1A300789DB3 /* StreamImporter.mdimporter */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StreamImporter.mdimporter; sourceTree = BUILT_PRODUCTS_DIR; };
+		7759CF7113DBA1A300789DB3 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		7759CF7313DBA1A300789DB3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		7759CF7513DBA1A300789DB3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		7759CF7713DBA1A300789DB3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		7759CF7B13DBA1A300789DB3 /* StreamImporter-Info.plist */ = {isa = PBXFileReference; path = "StreamImporter-Info.plist"; sourceTree = "<group>"; };
+		7759CF7D13DBA1A300789DB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7759CF7F13DBA1A300789DB3 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		7759CF8113DBA1A300789DB3 /* GetMetadataForFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetMetadataForFile.m; sourceTree = "<group>"; };
+		7759CF8313DBA1A300789DB3 /* MySpotlightImporter.h */ = {isa = PBXFileReference; path = MySpotlightImporter.h; sourceTree = "<group>"; };
+		7759CF8413DBA1A300789DB3 /* MySpotlightImporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MySpotlightImporter.m; sourceTree = "<group>"; };
+		7759CF8613DBA1A300789DB3 /* Importer Read Me.txt */ = {isa = PBXFileReference; path = "Importer Read Me.txt"; sourceTree = "<group>"; };
+		7759CF8713DBA1A300789DB3 /* StreamImporter-Prefix.pch */ = {isa = PBXFileReference; path = "StreamImporter-Prefix.pch"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7759CF2F13DBA1A300789DB3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7759CF5513DBA1A300789DB3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7759CF5B13DBA1A300789DB3 /* SenTestingKit.framework in Frameworks */,
+				7759CF5C13DBA1A300789DB3 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7759CF6A13DBA1A300789DB3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7759CF7213DBA1A300789DB3 /* CoreServices.framework in Frameworks */,
+				7759CF7413DBA1A300789DB3 /* CoreFoundation.framework in Frameworks */,
+				7759CF7613DBA1A300789DB3 /* CoreData.framework in Frameworks */,
+				7759CF7813DBA1A300789DB3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7759CF2713DBA1A200789DB3 = {
+			isa = PBXGroup;
+			children = (
+				7759CF3C13DBA1A300789DB3 /* Stream */,
+				7759CF5F13DBA1A300789DB3 /* StreamTests */,
+				7759CF7913DBA1A300789DB3 /* StreamImporter */,
+				7759CF3513DBA1A300789DB3 /* Frameworks */,
+				7759CF3313DBA1A300789DB3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7759CF3313DBA1A300789DB3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7759CF3213DBA1A300789DB3 /* Stream.app */,
+				7759CF5913DBA1A300789DB3 /* StreamTests.octest */,
+				7759CF6D13DBA1A300789DB3 /* StreamImporter.mdimporter */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7759CF3513DBA1A300789DB3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7759CF3613DBA1A300789DB3 /* Cocoa.framework */,
+				7759CF5A13DBA1A300789DB3 /* SenTestingKit.framework */,
+				7759CF7113DBA1A300789DB3 /* CoreServices.framework */,
+				7759CF7313DBA1A300789DB3 /* CoreFoundation.framework */,
+				7759CF7513DBA1A300789DB3 /* CoreData.framework */,
+				7759CF7713DBA1A300789DB3 /* Foundation.framework */,
+				7759CF3813DBA1A300789DB3 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7759CF3813DBA1A300789DB3 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7759CF3913DBA1A300789DB3 /* AppKit.framework */,
+				7759CF3A13DBA1A300789DB3 /* CoreData.framework */,
+				7759CF3B13DBA1A300789DB3 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		7759CF3C13DBA1A300789DB3 /* Stream */ = {
+			isa = PBXGroup;
+			children = (
+				7759CF4813DBA1A300789DB3 /* MyDocument.h */,
+				7759CF4913DBA1A300789DB3 /* MyDocument.m */,
+				7759CF4B13DBA1A300789DB3 /* MyDocument.xib */,
+				7759CF4E13DBA1A300789DB3 /* MainMenu.xib */,
+				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
+				7759CF3D13DBA1A300789DB3 /* Supporting Files */,
+			);
+			path = Stream;
+			sourceTree = "<group>";
+		};
+		7759CF3D13DBA1A300789DB3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7759CF3E13DBA1A300789DB3 /* Stream-Info.plist */,
+				7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */,
+				7759CF4213DBA1A300789DB3 /* main.m */,
+				7759CF4413DBA1A300789DB3 /* Stream-Prefix.pch */,
+				7759CF4513DBA1A300789DB3 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7759CF5F13DBA1A300789DB3 /* StreamTests */ = {
+			isa = PBXGroup;
+			children = (
+				7759CF6513DBA1A300789DB3 /* StreamTests.h */,
+				7759CF6713DBA1A300789DB3 /* StreamTests.m */,
+				7759CF6013DBA1A300789DB3 /* Supporting Files */,
+			);
+			path = StreamTests;
+			sourceTree = "<group>";
+		};
+		7759CF6013DBA1A300789DB3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7759CF6113DBA1A300789DB3 /* StreamTests-Info.plist */,
+				7759CF6213DBA1A300789DB3 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7759CF7913DBA1A300789DB3 /* StreamImporter */ = {
+			isa = PBXGroup;
+			children = (
+				7759CF8113DBA1A300789DB3 /* GetMetadataForFile.m */,
+				7759CF8313DBA1A300789DB3 /* MySpotlightImporter.h */,
+				7759CF8413DBA1A300789DB3 /* MySpotlightImporter.m */,
+				7759CF8613DBA1A300789DB3 /* Importer Read Me.txt */,
+				7759CF7A13DBA1A300789DB3 /* Supporting Files */,
+			);
+			path = StreamImporter;
+			sourceTree = "<group>";
+		};
+		7759CF7A13DBA1A300789DB3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7759CF7B13DBA1A300789DB3 /* StreamImporter-Info.plist */,
+				7759CF7C13DBA1A300789DB3 /* InfoPlist.strings */,
+				7759CF7F13DBA1A300789DB3 /* main.c */,
+				7759CF8713DBA1A300789DB3 /* StreamImporter-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7759CF3113DBA1A300789DB3 /* Stream */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7759CF8D13DBA1A300789DB3 /* Build configuration list for PBXNativeTarget "Stream" */;
+			buildPhases = (
+				7759CF2E13DBA1A300789DB3 /* Sources */,
+				7759CF2F13DBA1A300789DB3 /* Frameworks */,
+				7759CF3013DBA1A300789DB3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7759CF6F13DBA1A300789DB3 /* PBXTargetDependency */,
+			);
+			name = Stream;
+			productName = Stream;
+			productReference = 7759CF3213DBA1A300789DB3 /* Stream.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7759CF5813DBA1A300789DB3 /* StreamTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7759CF9013DBA1A300789DB3 /* Build configuration list for PBXNativeTarget "StreamTests" */;
+			buildPhases = (
+				7759CF5413DBA1A300789DB3 /* Sources */,
+				7759CF5513DBA1A300789DB3 /* Frameworks */,
+				7759CF5613DBA1A300789DB3 /* Resources */,
+				7759CF5713DBA1A300789DB3 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7759CF5E13DBA1A300789DB3 /* PBXTargetDependency */,
+			);
+			name = StreamTests;
+			productName = StreamTests;
+			productReference = 7759CF5913DBA1A300789DB3 /* StreamTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+		7759CF6C13DBA1A300789DB3 /* StreamImporter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7759CF8A13DBA1A300789DB3 /* Build configuration list for PBXNativeTarget "StreamImporter" */;
+			buildPhases = (
+				7759CF6913DBA1A300789DB3 /* Sources */,
+				7759CF6A13DBA1A300789DB3 /* Frameworks */,
+				7759CF6B13DBA1A300789DB3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StreamImporter;
+			productName = StreamImporter;
+			productReference = 7759CF6D13DBA1A300789DB3 /* StreamImporter.mdimporter */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7759CF2913DBA1A200789DB3 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 7759CF2C13DBA1A200789DB3 /* Build configuration list for PBXProject "Stream" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7759CF2713DBA1A200789DB3;
+			productRefGroup = 7759CF3313DBA1A300789DB3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7759CF3113DBA1A300789DB3 /* Stream */,
+				7759CF5813DBA1A300789DB3 /* StreamTests */,
+				7759CF6C13DBA1A300789DB3 /* StreamImporter */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7759CF3013DBA1A300789DB3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */,
+				7759CF4713DBA1A300789DB3 /* Credits.rtf in Resources */,
+				7759CF4D13DBA1A300789DB3 /* MyDocument.xib in Resources */,
+				7759CF5013DBA1A300789DB3 /* MainMenu.xib in Resources */,
+				7759CF7013DBA1A300789DB3 /* StreamImporter.mdimporter in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7759CF5613DBA1A300789DB3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7759CF6413DBA1A300789DB3 /* InfoPlist.strings in Resources */,
+				7759CF6613DBA1A300789DB3 /* StreamTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7759CF6B13DBA1A300789DB3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7759CF7E13DBA1A300789DB3 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7759CF5713DBA1A300789DB3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7759CF2E13DBA1A300789DB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7759CF4313DBA1A300789DB3 /* main.m in Sources */,
+				7759CF4A13DBA1A300789DB3 /* MyDocument.m in Sources */,
+				7759CF5313DBA1A300789DB3 /* MyDocument.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7759CF5413DBA1A300789DB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7759CF6813DBA1A300789DB3 /* StreamTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7759CF6913DBA1A300789DB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7759CF8013DBA1A300789DB3 /* main.c in Sources */,
+				7759CF8213DBA1A300789DB3 /* GetMetadataForFile.m in Sources */,
+				7759CF8513DBA1A300789DB3 /* MySpotlightImporter.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7759CF5E13DBA1A300789DB3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7759CF3113DBA1A300789DB3 /* Stream */;
+			targetProxy = 7759CF5D13DBA1A300789DB3 /* PBXContainerItemProxy */;
+		};
+		7759CF6F13DBA1A300789DB3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7759CF6C13DBA1A300789DB3 /* StreamImporter */;
+			targetProxy = 7759CF6E13DBA1A300789DB3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7759CF4013DBA1A300789DB3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7759CF4513DBA1A300789DB3 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7759CF4613DBA1A300789DB3 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		7759CF4B13DBA1A300789DB3 /* MyDocument.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7759CF4C13DBA1A300789DB3 /* en */,
+			);
+			name = MyDocument.xib;
+			sourceTree = "<group>";
+		};
+		7759CF4E13DBA1A300789DB3 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7759CF4F13DBA1A300789DB3 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		7759CF6213DBA1A300789DB3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7759CF6313DBA1A300789DB3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7759CF7C13DBA1A300789DB3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7759CF7D13DBA1A300789DB3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7759CF8813DBA1A300789DB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		7759CF8913DBA1A300789DB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		7759CF8B13DBA1A300789DB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "StreamImporter/StreamImporter-Prefix.pch";
+				INFOPLIST_FILE = "StreamImporter/StreamImporter-Info.plist";
+				INSTALL_PATH = "@executable_path/../Contents/Library/Spotlight";
+				LIBRARY_STYLE = BUNDLE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = mdimporter;
+			};
+			name = Debug;
+		};
+		7759CF8C13DBA1A300789DB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "StreamImporter/StreamImporter-Prefix.pch";
+				INFOPLIST_FILE = "StreamImporter/StreamImporter-Info.plist";
+				INSTALL_PATH = "@executable_path/../Contents/Library/Spotlight";
+				LIBRARY_STYLE = BUNDLE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = mdimporter;
+			};
+			name = Release;
+		};
+		7759CF8E13DBA1A300789DB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Stream/Stream-Prefix.pch";
+				INFOPLIST_FILE = "Stream/Stream-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		7759CF8F13DBA1A300789DB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Stream/Stream-Prefix.pch";
+				INFOPLIST_FILE = "Stream/Stream-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		7759CF9113DBA1A300789DB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Stream.app/Contents/MacOS/Stream";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Stream/Stream-Prefix.pch";
+				INFOPLIST_FILE = "StreamTests/StreamTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		7759CF9213DBA1A300789DB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Stream.app/Contents/MacOS/Stream";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Stream/Stream-Prefix.pch";
+				INFOPLIST_FILE = "StreamTests/StreamTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7759CF2C13DBA1A200789DB3 /* Build configuration list for PBXProject "Stream" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7759CF8813DBA1A300789DB3 /* Debug */,
+				7759CF8913DBA1A300789DB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7759CF8A13DBA1A300789DB3 /* Build configuration list for PBXNativeTarget "StreamImporter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7759CF8B13DBA1A300789DB3 /* Debug */,
+				7759CF8C13DBA1A300789DB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7759CF8D13DBA1A300789DB3 /* Build configuration list for PBXNativeTarget "Stream" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7759CF8E13DBA1A300789DB3 /* Debug */,
+				7759CF8F13DBA1A300789DB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7759CF9013DBA1A300789DB3 /* Build configuration list for PBXNativeTarget "StreamTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7759CF9113DBA1A300789DB3 /* Debug */,
+				7759CF9213DBA1A300789DB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7759CF5213DBA1A300789DB3 /* MyDocument.xcdatamodel */,
+			);
+			currentVersion = 7759CF5213DBA1A300789DB3 /* MyDocument.xcdatamodel */;
+			path = MyDocument.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 7759CF2913DBA1A200789DB3 /* Project object */;
+}
