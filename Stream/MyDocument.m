@@ -38,4 +38,11 @@
     return YES;
 }
 
+- (IBAction)add:(id)sender
+{
+    
+    //NSBeep();
+    //NSLog(@"I've been clicked!");
+    [streamTreeControler add:sender];
+}
 @end

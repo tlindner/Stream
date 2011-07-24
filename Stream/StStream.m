@@ -2,7 +2,7 @@
 //  StStream.m
 //  Stream
 //
-//  Created by tim lindner on 7/23/11.
+//  Created by tim lindner on 7/24/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
@@ -10,17 +10,23 @@
 
 
 @implementation StStream
-@dynamic displayName;
-@dynamic sourceURL;
-@dynamic changedBytes;
+@dynamic bytesAfterTransform;
 @dynamic bytesCache;
+@dynamic changedBytes;
+@dynamic displayName;
 @dynamic modificationDateofURL;
 @dynamic parentBlock;
+@dynamic sourceURL;
 @dynamic streamTransform;
-@dynamic bytesAfterTransform;
+@dynamic customeSortOrder;
 @dynamic anaylizers;
 @dynamic blocks;
-@dynamic parentStream;
 @dynamic childStreams;
+@dynamic parentStream;
+
+- (void)awakeFromInsert
+{
+    NSLog(@"Awoke!");
+}
 
 @end
