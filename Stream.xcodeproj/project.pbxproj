@@ -29,7 +29,6 @@
 		7759CF8013DBA1A300789DB3 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF7F13DBA1A300789DB3 /* main.c */; };
 		7759CF8213DBA1A300789DB3 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF8113DBA1A300789DB3 /* GetMetadataForFile.m */; };
 		7759CF8513DBA1A300789DB3 /* MySpotlightImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF8413DBA1A300789DB3 /* MySpotlightImporter.m */; };
-		77614F2913DC84B800041279 /* StStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 77614F2813DC84B800041279 /* StStream.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,8 +83,7 @@
 		7759CF8413DBA1A300789DB3 /* MySpotlightImporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MySpotlightImporter.m; sourceTree = "<group>"; };
 		7759CF8613DBA1A300789DB3 /* Importer Read Me.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Importer Read Me.txt"; sourceTree = "<group>"; };
 		7759CF8713DBA1A300789DB3 /* StreamImporter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StreamImporter-Prefix.pch"; sourceTree = "<group>"; };
-		77614F2713DC84B800041279 /* StStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StStream.h; path = Stream/StStream.h; sourceTree = "<group>"; };
-		77614F2813DC84B800041279 /* StStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StStream.m; path = Stream/StStream.m; sourceTree = "<group>"; };
+		775ED2CD13DCF86500BC96C9 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +121,7 @@
 		7759CF2713DBA1A200789DB3 = {
 			isa = PBXGroup;
 			children = (
+				775ED2CD13DCF86500BC96C9 /* README */,
 				77614F3413DC9B6C00041279 /* Models */,
 				7759CF3C13DBA1A300789DB3 /* Stream */,
 				7759CF5F13DBA1A300789DB3 /* StreamTests */,
@@ -236,8 +235,6 @@
 		77614F3413DC9B6C00041279 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				77614F2713DC84B800041279 /* StStream.h */,
-				77614F2813DC84B800041279 /* StStream.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -379,7 +376,6 @@
 				7759CF4313DBA1A300789DB3 /* main.m in Sources */,
 				7759CF4A13DBA1A300789DB3 /* MyDocument.m in Sources */,
 				7759CF5313DBA1A300789DB3 /* MyDocument.xcdatamodeld in Sources */,
-				77614F2913DC84B800041279 /* StStream.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

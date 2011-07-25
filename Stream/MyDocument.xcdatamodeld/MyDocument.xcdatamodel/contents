@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="562" systemVersion="11A511" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="562" systemVersion="11A511" minimumToolsVersion="Automatic" macOSVersion="Mac OS X 10.7" iOSVersion="Automatic">
     <entity name="StAnaylizer">
         <attribute name="anaylizerKind" attributeType="String" indexed="YES"/>
-        <attribute name="optionsDictionary" optional="YES" attributeType="Binary"/>
+        <attribute name="optionsDictionary" optional="YES" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream"/>
     </entity>
     <entity name="StBlock">
@@ -12,13 +12,14 @@
         <relationship name="attributeRanges" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StRange" inverseName="parentBlock" inverseEntity="StRange"/>
         <relationship name="dataRanges" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StRange" inverseName="parentBlock" inverseEntity="StRange"/>
         <relationship name="dependantRanges" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StRange" inverseName="parentBlock" inverseEntity="StRange"/>
+        <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="blocks" inverseEntity="StStream"/>
     </entity>
     <entity name="StRange">
         <attribute name="length" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <attribute name="offset" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <relationship name="parentBlock" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StBlock" inverseName="dependantRanges" inverseEntity="StBlock"/>
     </entity>
-    <entity name="StStream" representedClassName="StStream">
+    <entity name="StStream" representedClassName="">
         <attribute name="bytesAfterTransform" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="bytesCache" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="changedBytes" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
@@ -26,16 +27,16 @@
         <attribute name="displayName" attributeType="String" defaultValueString="Untitled"/>
         <attribute name="modificationDateofURL" attributeType="Date"/>
         <attribute name="parentBlock" optional="YES" attributeType="String" indexed="YES"/>
-        <attribute name="sourceURL" attributeType="Binary"/>
+        <attribute name="sourceURL" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <attribute name="streamTransform" attributeType="String" defaultValueString="none"/>
         <relationship name="anaylizers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StAnaylizer" inverseName="parentStream" inverseEntity="StAnaylizer"/>
-        <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock"/>
+        <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock" inverseName="parent" inverseEntity="StBlock"/>
         <relationship name="childStreams" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StStream" inverseName="parentStream" inverseEntity="StStream"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
     </entity>
     <elements>
         <element name="StAnaylizer" positionX="513" positionY="333" width="128" height="90"/>
-        <element name="StBlock" positionX="531" positionY="360" width="128" height="135"/>
+        <element name="StBlock" positionX="531" positionY="360" width="128" height="150"/>
         <element name="StRange" positionX="549" positionY="369" width="128" height="75"/>
         <element name="StStream" positionX="486" positionY="273" width="144" height="240"/>
     </elements>

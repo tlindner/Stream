@@ -43,6 +43,28 @@
     
     //NSBeep();
     //NSLog(@"I've been clicked!");
-    [streamTreeControler add:sender];
+    //[streamTreeControler add:sender];
+    
+    NSOpenPanel *myOpenPanel = [NSOpenPanel openPanel];
+    [myOpenPanel setAllowsMultipleSelection:YES];
+    
+    void *sheetCompleation = ^(NSInteger result) {
+        if( result == NSFileHandlingPanelOKButton ) {
+            for (NSURL *aURL in [myOpenPanel URLs]) {
+ 
+                NSManagedObject *newObject = [[streamTreeControler newObject] autorelease];
+                
+                [newObject setValue:aURL forKey:@"sourceURL"];
+                [newObject setValue:[aURL lastPathComponent] forKey:@"displayName"];
+                NSDate *modDate = [[[NSFileManager defaultManager] attributesOfItemAtPath:[aURL path] error:nil] fileModificationDate];
+                [newObject setValue:modDate forKey:@"modificationDateofURL"];
+                [newObject setValue:[[[NSData alloc] initWithContentsOfURL:aURL] autorelease] forKey:@"bytesCache"];
+ 
+                [streamTreeControler addObject:newObject];
+            }
+        }
+     };
+
+    [myOpenPanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
 }
 @end
