@@ -8,6 +8,7 @@
 
 #import "MyDocument.h"
 
+
 @implementation MyDocument
 
 - (id)init
@@ -40,11 +41,6 @@
 
 - (IBAction)add:(id)sender
 {
-    
-    //NSBeep();
-    //NSLog(@"I've been clicked!");
-    //[streamTreeControler add:sender];
-    
     NSOpenPanel *myOpenPanel = [NSOpenPanel openPanel];
     [myOpenPanel setAllowsMultipleSelection:YES];
     
