@@ -50,12 +50,23 @@
  
                 NSManagedObject *newObject = [[streamTreeControler newObject] autorelease];
                 
+                /* Setup main object */
                 [newObject setValue:aURL forKey:@"sourceURL"];
                 [newObject setValue:[aURL lastPathComponent] forKey:@"displayName"];
                 NSDate *modDate = [[[NSFileManager defaultManager] attributesOfItemAtPath:[aURL path] error:nil] fileModificationDate];
                 [newObject setValue:modDate forKey:@"modificationDateofURL"];
                 [newObject setValue:[[[NSData alloc] initWithContentsOfURL:aURL] autorelease] forKey:@"bytesCache"];
- 
+                
+                /* Setup first anaylizer */
+                NSMutableOrderedSet *theSet = [newObject mutableOrderedSetValueForKey:@"anaylizers"];
+                
+                for( int i=0; i<(random()&01)+1; i++ )
+                {
+                    NSManagedObject *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
+                    [newAnaylizer setValue:@"base anaylizer" forKey:@"anaylizerKind"];
+                    [theSet addObject:newAnaylizer];
+                }
+                
                 [streamTreeControler addObject:newObject];
             }
         }

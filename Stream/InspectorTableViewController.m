@@ -22,7 +22,7 @@
 
 - (void)awakeFromNib
 {
-    [streamTreeControler addObserver:self forKeyPath:@"selection" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
+//    [streamTreeControler addObserver:self forKeyPath:@"selection" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
@@ -40,13 +40,13 @@
 {
     if (object == streamTreeControler) {
         if ([keyPath isEqualToString:@"selection"]) {
-            NSLog( @"I got a change: %@", change );
+            NSLog( @"I got a change: %@", [streamTreeControler selectedObjects] );
         }
     }
 }
 
 - (void)dealloc
 {
-    [streamTreeControler removeObserver:self forKeyPath:@"selection" context:nil];
+//    [streamTreeControler removeObserver:self forKeyPath:@"selection" context:nil];
 }
 @end

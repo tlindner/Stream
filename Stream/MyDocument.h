@@ -11,6 +11,7 @@
 @interface MyDocument : NSPersistentDocument {
 
     IBOutlet NSTreeController *streamTreeControler;
+
 }
 
 - (IBAction)add:(id)sender;
