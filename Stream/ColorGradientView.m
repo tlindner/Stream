@@ -14,6 +14,7 @@
 @synthesize startingColor;
 @synthesize endingColor;
 @synthesize angle;
+@synthesize newConstraints;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -23,6 +24,8 @@
         [self setEndingColor:nil];
         [self setAngle:270];
     }
+    
+    //[self setupConstraints];
     return self;
 }
 
@@ -30,7 +33,27 @@
 {
     [self setStartingColor:[NSColor colorWithCalibratedWhite:0.85 alpha:1.0]];
     [self setEndingColor:[NSColor colorWithCalibratedWhite:0.75 alpha:1.0]];
-    [self setAngle:270];    
+    [self setAngle:270];
+    
+    [self updateConstraints];
+    [super awakeFromNib];
+}
+
+
+- (void)updateConstraints {
+    if( newConstraints == nil )
+    {
+        self.newConstraints = [[[NSMutableArray alloc] init] autorelease];
+        NSDictionary *views = NSDictionaryOfVariableBindings(tlDisclosure, tlTitle, tlAction);
+        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-3-[tlDisclosure]-0-[tlTitle]-0-[tlAction(==25)]-3-|" options:0 metrics:nil views:views]];
+        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tlDisclosure]-0-|" options:0 metrics:nil views:views]];
+        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tlTitle]-0-|" options:0 metrics:nil views:views]];
+        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tlAction]-0-|" options:0 metrics:nil views:views]];
+        [self removeConstraints:[self constraints]];
+        [self addConstraints:newConstraints];
+    }
+    
+    [super updateConstraints];
 }
 
 - (BOOL)isOpaque
