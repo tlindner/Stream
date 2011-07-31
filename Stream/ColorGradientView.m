@@ -25,7 +25,6 @@
         [self setAngle:270];
     }
     
-    //[self setupConstraints];
     return self;
 }
 
@@ -77,4 +76,8 @@
     }
 }
 
+- (void)dealloc {
+    self.newConstraints = nil;
+    [super dealloc];
+}
 @end

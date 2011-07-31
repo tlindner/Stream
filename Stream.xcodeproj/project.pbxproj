@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		773F17C813E4F77E002606A0 /* AnaylizerTableViewCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */; };
 		7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
 		7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */; };
 		7759CF4313DBA1A300789DB3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF4213DBA1A300789DB3 /* main.m */; };
@@ -30,6 +31,7 @@
 		7759CF8213DBA1A300789DB3 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF8113DBA1A300789DB3 /* GetMetadataForFile.m */; };
 		7759CF8513DBA1A300789DB3 /* MySpotlightImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF8413DBA1A300789DB3 /* MySpotlightImporter.m */; };
 		776139AF13E1BA4200CA80BB /* ColorGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776139AE13E1BA4200CA80BB /* ColorGradientView.m */; };
+		7799CD2213E5C691007D5B8E /* AudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */; };
 		77F2045613DD3AD000FA5B1F /* HFBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FC13DD3ACF00FA5B1F /* HFBTree.m */; };
 		77F2045713DD3AD000FA5B1F /* HFBTreeByteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FE13DD3ACF00FA5B1F /* HFBTreeByteArray.m */; };
 		77F2045813DD3AD000FA5B1F /* HFByteArray_FileWriting.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FF13DD3ACF00FA5B1F /* HFByteArray_FileWriting.m */; };
@@ -95,6 +97,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
+		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
 		7759CF3213DBA1A300789DB3 /* Stream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7759CF3613DBA1A300789DB3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		7759CF3913DBA1A300789DB3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -130,8 +134,10 @@
 		7759CF8613DBA1A300789DB3 /* Importer Read Me.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Importer Read Me.txt"; sourceTree = "<group>"; };
 		7759CF8713DBA1A300789DB3 /* StreamImporter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StreamImporter-Prefix.pch"; sourceTree = "<group>"; };
 		775ED2CD13DCF86500BC96C9 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		776139AD13E1BA4200CA80BB /* ColorGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; path = ColorGradientView.h; sourceTree = "<group>"; };
+		776139AD13E1BA4200CA80BB /* ColorGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorGradientView.h; sourceTree = "<group>"; };
 		776139AE13E1BA4200CA80BB /* ColorGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorGradientView.m; sourceTree = "<group>"; };
+		7799CD2013E5C691007D5B8E /* AudioAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaylizer.h; path = Stream/AudioAnaylizer/AudioAnaylizer.h; sourceTree = "<group>"; };
+		7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaylizer.m; path = Stream/AudioAnaylizer/AudioAnaylizer.m; sourceTree = "<group>"; };
 		77F203FA13DD3ACF00FA5B1F /* HexFiend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiend.h; path = Stream/HexFiend/HexFiend.h; sourceTree = "<group>"; };
 		77F203FB13DD3ACF00FA5B1F /* HFBTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HFBTree.h; path = Stream/HexFiend/HFBTree.h; sourceTree = "<group>"; };
 		77F203FC13DD3ACF00FA5B1F /* HFBTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HFBTree.m; path = Stream/HexFiend/HFBTree.m; sourceTree = "<group>"; };
@@ -260,6 +266,7 @@
 		7759CF2713DBA1A200789DB3 = {
 			isa = PBXGroup;
 			children = (
+				7799CD1E13E5C651007D5B8E /* AudioAnaylizer */,
 				77F203F913DD3A5F00FA5B1F /* HexFiend */,
 				775ED2CD13DCF86500BC96C9 /* README */,
 				77614F3413DC9B6C00041279 /* Models */,
@@ -311,6 +318,8 @@
 				7759CF4813DBA1A300789DB3 /* MyDocument.h */,
 				7759CF4913DBA1A300789DB3 /* MyDocument.m */,
 				7759CF4B13DBA1A300789DB3 /* MyDocument.xib */,
+				773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */,
+				773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */,
 				776139AD13E1BA4200CA80BB /* ColorGradientView.h */,
 				776139AE13E1BA4200CA80BB /* ColorGradientView.m */,
 				7759CF4E13DBA1A300789DB3 /* MainMenu.xib */,
@@ -379,6 +388,15 @@
 			children = (
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		7799CD1E13E5C651007D5B8E /* AudioAnaylizer */ = {
+			isa = PBXGroup;
+			children = (
+				7799CD2013E5C691007D5B8E /* AudioAnaylizer.h */,
+				7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */,
+			);
+			name = AudioAnaylizer;
 			sourceTree = "<group>";
 		};
 		77F203F913DD3A5F00FA5B1F /* HexFiend */ = {
@@ -662,6 +680,8 @@
 				77F2048013DD3AD000FA5B1F /* HFTextView.m in Sources */,
 				77F2048113DD3AD000FA5B1F /* HFVerticalScrollerRepresenter.m in Sources */,
 				776139AF13E1BA4200CA80BB /* ColorGradientView.m in Sources */,
+				773F17C813E4F77E002606A0 /* AnaylizerTableViewCellView.m in Sources */,
+				7799CD2213E5C691007D5B8E /* AudioAnaylizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
