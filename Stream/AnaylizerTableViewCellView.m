@@ -8,6 +8,7 @@
 
 #import "AnaylizerTableViewCellView.h"
 #import "HFTextView.h"
+#import "AudioAnaylizer.h"
 
 @implementation AnaylizerTableViewCellView
 
@@ -58,8 +59,8 @@
         }
         
         // Create sub view editor.
-        HFTextView *builtView;
-        builtView = [[[HFTextView alloc] initWithFrame:[_customView frame]] autorelease];
+        AudioAnaylizer *builtView;
+        builtView = [[[AudioAnaylizer alloc] initWithFrame:[_customView frame]] autorelease];
         [_customView addSubview:builtView];
         [builtView setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
 
