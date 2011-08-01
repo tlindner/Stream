@@ -28,6 +28,7 @@
         <attribute name="modificationDateofURL" attributeType="Date"/>
         <attribute name="parentBlock" optional="YES" attributeType="String" indexed="YES"/>
         <attribute name="sourceURL" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
+        <attribute name="sourceUTI" attributeType="String" defaultValueString="public.data"/>
         <attribute name="streamTransform" attributeType="String" defaultValueString="none"/>
         <relationship name="anaylizers" toMany="YES" minCount="1" deletionRule="Cascade" ordered="YES" destinationEntity="StAnaylizer" inverseName="parentStream" inverseEntity="StAnaylizer"/>
         <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock" inverseName="parent" inverseEntity="StBlock"/>
@@ -38,6 +39,6 @@
         <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="0"/>
         <element name="StBlock" positionX="0" positionY="0" width="0" height="0"/>
         <element name="StRange" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StStream" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StStream" positionX="0" positionY="0" width="0" height="255"/>
     </elements>
 </model>
