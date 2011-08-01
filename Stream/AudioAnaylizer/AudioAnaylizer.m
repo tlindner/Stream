@@ -137,5 +137,16 @@
     [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount/[self.slider floatValue], [wfv frame].size.height)];
     [self.scroller.documentView setNeedsDisplay:YES];
 }
+
++ (NSArray *)anaylizerUTIs
+{
+    return [NSArray arrayWithObject:@"public.audio"];
+}
+
++ (NSString *)anayliserName
+{
+    return @"Color Computer Audio Anaylizer";
+}
+
 @end
 

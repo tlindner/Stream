@@ -21,6 +21,9 @@
 @property(nonatomic, assign) NSScrollView *scroller;
 @property(nonatomic, assign) NSSlider *slider;
 
++ (NSArray *)anaylizerUTIs;
++ (NSString *)anayliserName;
+
 - (IBAction)updateSlider:(id)sender;
 
 @end

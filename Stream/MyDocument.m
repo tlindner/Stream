@@ -57,6 +57,10 @@
                 [newObject setValue:modDate forKey:@"modificationDateofURL"];
                 [newObject setValue:[[[NSData alloc] initWithContentsOfURL:aURL] autorelease] forKey:@"bytesCache"];
                 
+                CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)[aURL pathExtension], NULL);
+                [newObject setValue:(NSString *)fileUTI forKey:@"sourceUTI"];
+                CFRelease( fileUTI );
+                
                 /* Setup first anaylizer */
                 NSMutableOrderedSet *theSet = [newObject mutableOrderedSetValueForKey:@"anaylizers"];
                 
