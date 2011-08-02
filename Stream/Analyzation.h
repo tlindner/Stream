@@ -11,11 +11,21 @@
 @interface Analyzation : NSObject
 {
     NSMutableArray *classList;
+    NSMutableDictionary *nameLookup;
 }
 
 @property(nonatomic, retain) NSMutableArray *classList;
+@property(nonatomic, retain) NSMutableDictionary *nameLookup;
 
 + (Analyzation *)sharedInstance;
 - (void) addAnalyzer:(NSString *)anaylizer;
+- (NSArray *)anaylizersforUTI:(NSString *)inUTI;
+- (Class)anaylizerClassforName:(NSString *)inName;
 
+@end
+
+@interface NSView(AnaylizationExtensions)
++ (NSArray *)anaylizerUTIs;
++ (NSString *)anayliserName;
+- (void)setData:(NSData *)data;
 @end

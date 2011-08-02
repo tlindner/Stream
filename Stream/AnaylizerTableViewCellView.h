@@ -14,12 +14,14 @@
 {
     IBOutlet ColorGradientView *_cgv;
     IBOutlet NSView *_customView;
-    id editorSubView;
+    NSView *editorSubView;
     NSMutableArray *newConstraints;
     
 }
 
-@property(nonatomic, retain) id editorSubView;
+@property(nonatomic, retain) NSView *editorSubView;
 @property(nonatomic, retain) NSMutableArray *newConstraints;
+
+
 
 @end

@@ -7,14 +7,13 @@
 //
 
 #import "Analyzation.h"
-#import "WaveFormView.h"
-#import "HFTextView.h"
 
 static Analyzation *sharedSingleton;
 
 @implementation Analyzation
 
 @synthesize classList;
+@synthesize nameLookup;
 
 + (void)initialize
 {
@@ -23,9 +22,9 @@ static Analyzation *sharedSingleton;
     {
         initialized = YES;
         sharedSingleton = [[Analyzation alloc] init];
-        [sharedSingleton addAnalyzer:@"WaveFormView"];
+        [sharedSingleton addAnalyzer:@"AudioAnaylizer"];
         [sharedSingleton addAnalyzer:@"HFTextView"];
-        [sharedSingleton addAnalyzer:@"NSTextView"];
+//        [sharedSingleton addAnalyzer:@"NSTextView"];
     }
 }
 
@@ -51,10 +50,19 @@ static Analyzation *sharedSingleton;
         self.classList = [[[NSMutableArray alloc] init] autorelease];
     }
     
+    if (self.nameLookup == nil)
+    {
+        self.nameLookup = [[[NSMutableDictionary alloc] init] autorelease];
+    }
+    
     [self.classList addObject:anaylizer];
+    
+    Class theClass = NSClassFromString(anaylizer);
+    [self.nameLookup setObject:theClass forKey:[theClass anayliserName]];
+
 }
 
-- (NSArray *)anaylizersforUTI:(NSString *)inUTI
+- (NSArray*)anaylizersforUTI:(NSString *)inUTI
 {
     NSMutableArray *resultArray = [[NSMutableArray alloc] init];
     
@@ -71,10 +79,10 @@ static Analyzation *sharedSingleton;
                 for( NSString *aUTI in classUTIs )
                 {
                     Boolean conforms;
-                    conforms = UTTypeConformsTo((CFStringRef)aUTI, (CFStringRef)inUTI );
+                    conforms = UTTypeConformsTo((CFStringRef)inUTI, (CFStringRef)aUTI);
                     
                     if( conforms )
-                        [resultArray addObject:anaylizer];
+                        [resultArray addObject:[theClass anayliserName]];
                 }
             }
             else
@@ -87,4 +95,15 @@ static Analyzation *sharedSingleton;
               
 }
 
+- (Class)anaylizerClassforName:(NSString *)inName
+{
+    return [nameLookup objectForKey:inName];
+}
+
+- (void)dealloc {
+    self.classList = nil;
+    self.nameLookup = nil;
+
+    [super dealloc];
+}
 @end

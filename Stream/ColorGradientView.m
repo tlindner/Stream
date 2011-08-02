@@ -7,6 +7,7 @@
 //
 
 #import "ColorGradientView.h"
+#import "Analyzation.h"
 
 @implementation ColorGradientView
 
@@ -15,6 +16,7 @@
 @synthesize endingColor;
 @synthesize angle;
 @synthesize newConstraints;
+@synthesize actionPopOverNib;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -76,8 +78,45 @@
     }
 }
 
+- (IBAction)doPopOver:(id)sender
+{
+    if( self.actionPopOverNib == nil )
+    {
+        self.actionPopOverNib = [[[NSNib alloc] initWithNibNamed:@"AnaylizerSettingPopover" bundle:nil] autorelease];
+
+        if (![self.actionPopOverNib instantiateNibWithOwner:self topLevelObjects:nil])
+        {
+            NSLog(@"Warning! Could not load nib file.\n");
+        }
+
+        [utiTextField bind:@"value" toObject:[self superview] withKeyPath:@"objectValue.parentStream.sourceUTI" options:nil];
+        
+        NSArrayController *EditorsPopupController = [[NSArrayController alloc] init];
+        NSArray *stuff = [[Analyzation sharedInstance] anaylizersforUTI:[[self superview] valueForKeyPath:@"objectValue.parentStream.sourceUTI"]];
+        [EditorsPopupController addObjects:stuff];
+        
+        [editorPopup bind:@"content" toObject:EditorsPopupController withKeyPath:@"arrangedObjects" options:nil];
+        [editorPopup bind:@"selectedObject" toObject:[self superview] withKeyPath:@"objectValue.currentEditorView" options:nil];
+        
+    }
+
+    [actionPopOver showRelativeToRect:[tlAction bounds] ofView:tlAction preferredEdge:NSMaxYEdge];
+}
+
+
 - (void)dealloc {
+    
+    if (utiTextField) {
+        [utiTextField unbind:@"value"];
+    }
+    
+    if (editorPopup) {
+        [editorPopup unbind:@"contentObjects"];
+        [editorPopup unbind:@"selectedObject"];
+    }
+    
     self.newConstraints = nil;
+    self.actionPopOverNib = nil;
     [super dealloc];
 }
 @end

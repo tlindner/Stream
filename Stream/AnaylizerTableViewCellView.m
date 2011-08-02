@@ -9,6 +9,7 @@
 #import "AnaylizerTableViewCellView.h"
 #import "HFTextView.h"
 #import "AudioAnaylizer.h"
+#import "Analyzation.h"
 
 @implementation AnaylizerTableViewCellView
 
@@ -27,7 +28,7 @@
 
 - (void)awakeFromNib
 {
-    [self addObserver:self forKeyPath:@"objectValue" options:NSKeyValueChangeSetting context:nil];
+    [self addObserver:self forKeyPath:@"objectValue.currentEditorView" options:NSKeyValueChangeSetting context:nil];
     [super awakeFromNib];
 }
 
@@ -49,23 +50,23 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     
-    if ([keyPath isEqualToString:@"objectValue"]) {
-        //NSLog( @"Anaylizer table view cell view change.\n object: %@\n key path: %@\nchange: %@", object, keyPath, change );
+    if ([keyPath isEqualToString:@"objectValue.currentEditorView"]) {
+        NSLog( @"Anaylizer table view cell view change.\n object: %@\n key path: %@\nchange: %@", object, keyPath, change );
         
         if( self.editorSubView != nil )
         {
             //teardown exiting sub view editor
             [self.editorSubView removeFromSuperview];
+            self.editorSubView = nil;
         }
         
         // Create sub view editor.
-        AudioAnaylizer *builtView;
-        builtView = [[[AudioAnaylizer alloc] initWithFrame:[_customView frame]] autorelease];
-        [_customView addSubview:builtView];
-        [builtView setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
+        Class editorViewClass = [[Analyzation sharedInstance] anaylizerClassforName:[change objectForKey:@"new"]];
+        self.editorSubView = [[[editorViewClass alloc] initWithFrame:[_customView frame]] autorelease];
 
-        self.editorSubView = builtView;
-        [builtView setData:[self.objectValue valueForKeyPath:@"parentStream.bytesCache"]];      
+        [_customView addSubview:self.editorSubView];
+        [self.editorSubView setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
+        [self.editorSubView setData:[self.objectValue valueForKeyPath:@"parentStream.bytesCache"]];      
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -73,7 +74,7 @@
 
 -(void)dealloc
 {
-    [self removeObserver:self forKeyPath:@"objectValue"];
+    [self removeObserver:self forKeyPath:@"objectValue.currentEditorView"];
     self.editorSubView = nil;
     self.newConstraints= nil;
     [super dealloc];

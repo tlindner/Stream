@@ -35,6 +35,7 @@
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
 		77C8DE1613E6F2C000AD079E /* Analyzation.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C8DE1513E6F2C000AD079E /* Analyzation.m */; };
+		77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */; };
 		77F2045613DD3AD000FA5B1F /* HFBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FC13DD3ACF00FA5B1F /* HFBTree.m */; };
 		77F2045713DD3AD000FA5B1F /* HFBTreeByteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FE13DD3ACF00FA5B1F /* HFBTreeByteArray.m */; };
 		77F2045813DD3AD000FA5B1F /* HFByteArray_FileWriting.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FF13DD3ACF00FA5B1F /* HFByteArray_FileWriting.m */; };
@@ -146,6 +147,7 @@
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
 		77C8DE1413E6F2C000AD079E /* Analyzation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Analyzation.h; sourceTree = "<group>"; };
 		77C8DE1513E6F2C000AD079E /* Analyzation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Analyzation.m; sourceTree = "<group>"; };
+		77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnaylizerSettingPopover.xib; sourceTree = "<group>"; };
 		77F203FA13DD3ACF00FA5B1F /* HexFiend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiend.h; path = Stream/HexFiend/HexFiend.h; sourceTree = "<group>"; };
 		77F203FB13DD3ACF00FA5B1F /* HFBTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HFBTree.h; path = Stream/HexFiend/HFBTree.h; sourceTree = "<group>"; };
 		77F203FC13DD3ACF00FA5B1F /* HFBTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HFBTree.m; path = Stream/HexFiend/HFBTree.m; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 				773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */,
 				776139AD13E1BA4200CA80BB /* ColorGradientView.h */,
 				776139AE13E1BA4200CA80BB /* ColorGradientView.m */,
+				77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */,
 				7759CF4E13DBA1A300789DB3 /* MainMenu.xib */,
 				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
 				7759CF3D13DBA1A300789DB3 /* Supporting Files */,
@@ -605,6 +608,7 @@
 				77F2048513DD3AEF00FA5B1F /* HFCancelOff.tiff in Resources */,
 				77F2048613DD3AEF00FA5B1F /* HFCancelOn.tiff in Resources */,
 				77F2048713DD3AEF00FA5B1F /* HFModalProgress.xib in Resources */,
+				77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
