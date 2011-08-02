@@ -51,7 +51,7 @@
 {
     
     if ([keyPath isEqualToString:@"objectValue.currentEditorView"]) {
-        NSLog( @"Anaylizer table view cell view change.\n object: %@\n key path: %@\nchange: %@", object, keyPath, change );
+        //NSLog( @"Anaylizer table view cell view change.\n object: %@\n key path: %@\nchange: %@", object, keyPath, change );
         
         if( self.editorSubView != nil )
         {
@@ -62,6 +62,12 @@
         
         // Create sub view editor.
         Class editorViewClass = [[Analyzation sharedInstance] anaylizerClassforName:[change objectForKey:@"new"]];
+        
+        if (editorViewClass == nil)
+        {
+            editorViewClass = [HFTextView class];
+        }
+        
         self.editorSubView = [[[editorViewClass alloc] initWithFrame:[_customView frame]] autorelease];
 
         [_customView addSubview:self.editorSubView];

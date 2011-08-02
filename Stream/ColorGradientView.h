@@ -14,7 +14,7 @@
     IBOutlet NSPopUpButton *editorPopup;
     IBOutlet NSTextField *utiTextField;
     IBOutlet NSPopover *actionPopOver;
-    NSArray *nibTopLevelObjects;
+    NSArrayController *popupArrayController;
 }
 
 // Define the variables as properties
@@ -22,6 +22,7 @@
 @property(nonatomic, retain) NSColor *startingColor;
 @property(nonatomic, retain) NSColor *endingColor;
 @property(nonatomic, retain) NSNib *actionPopOverNib;
+@property(nonatomic, retain) NSArrayController *popupArrayController;
 @property(assign) int angle;
 
 - (IBAction)doPopOver:(id)sender;

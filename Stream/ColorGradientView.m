@@ -17,6 +17,8 @@
 @synthesize angle;
 @synthesize newConstraints;
 @synthesize actionPopOverNib;
+@synthesize popupArrayController;
+
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -91,11 +93,11 @@
 
         [utiTextField bind:@"value" toObject:[self superview] withKeyPath:@"objectValue.parentStream.sourceUTI" options:nil];
         
-        NSArrayController *EditorsPopupController = [[NSArrayController alloc] init];
+        self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
         NSArray *stuff = [[Analyzation sharedInstance] anaylizersforUTI:[[self superview] valueForKeyPath:@"objectValue.parentStream.sourceUTI"]];
-        [EditorsPopupController addObjects:stuff];
+        [self.popupArrayController addObjects:stuff];
         
-        [editorPopup bind:@"content" toObject:EditorsPopupController withKeyPath:@"arrangedObjects" options:nil];
+        [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
         [editorPopup bind:@"selectedObject" toObject:[self superview] withKeyPath:@"objectValue.currentEditorView" options:nil];
         
     }
@@ -115,6 +117,7 @@
         [editorPopup unbind:@"selectedObject"];
     }
     
+    self.popupArrayController = nil;
     self.newConstraints = nil;
     self.actionPopOverNib = nil;
     [super dealloc];
