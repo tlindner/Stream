@@ -29,25 +29,17 @@
 
 - (void)viewWillMoveToSuperview:(NSView *)newSuperview
 {
-//    [self addObserver:self forKeyPath:@"objectValue.currentEditorView" options:NSKeyValueChangeSetting context:nil];
     dragging = NO;
     float newHeight = [[self valueForKeyPath:@"objectValue.anaylizerHeight"] floatValue];
     NSRect ourRect = [self frame];
     ourRect.size.height = newHeight;
     [self setFrame:ourRect];
     self.newConstraints = nil;
-//    [self setValue:[self valueForKeyPath:@"objectValue.currentEditorView"] forKeyPath:@"objectValue.currentEditorView"];
 }
 
 - (void)awakeFromNib
 {
     [self addObserver:self forKeyPath:@"objectValue.currentEditorView" options:NSKeyValueChangeSetting context:nil];
-//    dragging = NO;
-//    float newHeight = [[self valueForKeyPath:@"objectValue.anaylizerHeight"] floatValue];
-//    NSRect ourRect = [self frame];
-//    ourRect.size.height = newHeight;
-//    [self setFrame:ourRect];
-//    [super awakeFromNib];
 }
 
 - (void)updateConstraints {
@@ -58,7 +50,7 @@
         [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_customView]-0-|" options:0 metrics:nil views:views]];
         [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_cgv]-0-|" options:0 metrics:nil views:views]];
         [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[dragThumbView]-0-|" options:0 metrics:nil views:views]];
-        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_cgv(==20)]-0-[_customView]-0-[dragThumbView(==6)]-0-|" options:0 metrics:nil views:views]];
+        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_cgv(==19)]-0-[_customView]-0-[dragThumbView(==6)]-0-|" options:0 metrics:nil views:views]];
         [self removeConstraints:[self constraints]];
         [self addConstraints:newConstraints];
     }
@@ -72,7 +64,7 @@
     if ([keyPath isEqualToString:@"objectValue.currentEditorView"])
     {
         //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
-        NSLog( @"us: %@", [self valueForKeyPath:@"objectValue"]);
+        //NSLog( @"us: %@", [self valueForKeyPath:@"objectValue"]);
         if( self.editorSubView != nil )
         {
             //teardown exiting sub view editor
@@ -87,7 +79,7 @@
             editorViewClass = [HFTextView class];
 
         NSRect adjustedFrame = [_customView frame];
-        adjustedFrame.size.height = [[self valueForKeyPath:@"objectValue.anaylizerHeight"] floatValue] - 26.0f;
+        adjustedFrame.size.height = [[self valueForKeyPath:@"objectValue.anaylizerHeight"] floatValue] - 19.0f - 6.0f;
         self.editorSubView = [[[editorViewClass alloc] initWithFrame:adjustedFrame] autorelease];
         
         [self setAutoresizesSubviews:YES];
