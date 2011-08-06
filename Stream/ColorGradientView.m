@@ -34,8 +34,8 @@
 
 - (void)awakeFromNib
 {
-    [self setStartingColor:[NSColor colorWithCalibratedWhite:0.85 alpha:1.0]];
-    [self setEndingColor:[NSColor colorWithCalibratedWhite:0.75 alpha:1.0]];
+    [self setStartingColor:[NSColor colorWithCalibratedRed:0.92f green:0.93f blue:0.98f alpha:1.0f]];
+    [self setEndingColor:[NSColor colorWithCalibratedRed:0.74f green:0.76f blue:0.83f alpha:1.0f]];
     [self setAngle:270];
     
     [self updateConstraints];

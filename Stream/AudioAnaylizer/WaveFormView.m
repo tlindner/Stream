@@ -31,7 +31,7 @@ void SamplesSamples( Float32 *outBuffer, uint8 *inBuffer, NSInteger sampleSize, 
     // Drawing code here.
     if( audioFrames != nil )
     {
- //       NSInteger viewWidth = [self frame].size.width;
+        NSInteger viewheight = [self frame].size.height - 32.0f;
         
         float origin = dirtyRect.origin.x;
         float width = dirtyRect.size.width;
@@ -43,14 +43,15 @@ void SamplesSamples( Float32 *outBuffer, uint8 *inBuffer, NSInteger sampleSize, 
         
         [[NSColor colorWithCalibratedWhite:0.95 alpha:1.0] set];
         NSRectFill(dirtyRect);
-        
+        NSRect rect;
         [[NSColor blackColor] set];
+        rect = NSMakeRect(dirtyRect.origin.x, 32+(viewheight/2), dirtyRect.size.width, 1);
+        NSRectFill(rect);
         
         int i;
-        NSRect rect;
         for( i=0; i<width; i++ )
         {
-            rect = NSMakeRect(i+origin, 32+(viewFloats[i]*120), 1, 1);
+            rect = NSMakeRect(i+origin, 32+(viewFloats[i]*viewheight), 1, 1);
             NSRectFill(rect);
         }
         
@@ -91,6 +92,6 @@ void SamplesSamples( Float32 *outBuffer, uint8 *inBuffer, NSInteger sampleSize, 
             }
         }
         
-        outBuffer[i] = curValue/256.0f;
+        outBuffer[i] = (curValue-128)/128.0;
     }
 }

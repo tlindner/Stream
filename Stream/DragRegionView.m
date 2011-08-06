@@ -23,7 +23,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     NSRect bounds = [self bounds];
-    [[NSColor grayColor] set];
+    [[NSColor keyboardFocusIndicatorColor] set];
     NSRectFill(bounds);
 }
 

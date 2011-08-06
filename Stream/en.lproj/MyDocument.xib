@@ -637,6 +637,22 @@
 					</object>
 					<int key="connectionID">102965</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">title: objectValue.currentEditorView</string>
+						<reference key="source" ref="435843328"/>
+						<reference key="destination" ref="16548953"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="435843328"/>
+							<reference key="NSDestination" ref="16548953"/>
+							<string key="NSLabel">title: objectValue.currentEditorView</string>
+							<string key="NSBinding">title</string>
+							<string key="NSKeyPath">objectValue.currentEditorView</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">102968</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -1568,7 +1584,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">102965</int>
+			<int key="maxID">102968</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1579,7 +1595,6 @@
 						<string key="_cgv">ColorGradientView</string>
 						<string key="_customView">NSView</string>
 						<string key="dragThumbView">NSView</string>
-						<string key="theTableView">NSTableView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="_cgv">
@@ -1593,10 +1608,6 @@
 						<object class="IBToOneOutletInfo" key="dragThumbView">
 							<string key="name">dragThumbView</string>
 							<string key="candidateClassName">NSView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="theTableView">
-							<string key="name">theTableView</string>
-							<string key="candidateClassName">NSTableView</string>
 						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

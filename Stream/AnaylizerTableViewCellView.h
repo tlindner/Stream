@@ -15,7 +15,6 @@
     IBOutlet ColorGradientView *_cgv;
     IBOutlet NSView *_customView;
     IBOutlet NSView *dragThumbView;
-    IBOutlet NSTableView *theTableView;
     NSView *editorSubView;
     NSMutableArray *newConstraints;
     NSSize dragOffsetIntoGrowBox;

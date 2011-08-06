@@ -50,7 +50,7 @@
         [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_customView]-0-|" options:0 metrics:nil views:views]];
         [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_cgv]-0-|" options:0 metrics:nil views:views]];
         [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[dragThumbView]-0-|" options:0 metrics:nil views:views]];
-        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_cgv(==19)]-0-[_customView]-0-[dragThumbView(==6)]-0-|" options:0 metrics:nil views:views]];
+        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_cgv(==19)]-0-[_customView]-2-[dragThumbView(==6)]-0-|" options:0 metrics:nil views:views]];
         [self removeConstraints:[self constraints]];
         [self addConstraints:newConstraints];
     }
@@ -79,10 +79,12 @@
             editorViewClass = [HFTextView class];
 
         NSRect adjustedFrame = [_customView frame];
-        adjustedFrame.size.height = [[self valueForKeyPath:@"objectValue.anaylizerHeight"] floatValue] - 19.0f - 6.0f;
+        //adjustedFrame.size.height = [[self valueForKeyPath:@"objectValue.anaylizerHeight"] floatValue] - 19.0f - 6.0f;
+        adjustedFrame.origin.x = 0;
+        adjustedFrame.origin.y = 0;
         self.editorSubView = [[[editorViewClass alloc] initWithFrame:adjustedFrame] autorelease];
         
-        [self setAutoresizesSubviews:YES];
+//        [self setAutoresizesSubviews:YES];
         [_customView addSubview:self.editorSubView];
 
         if( self.newConstraints != nil )
@@ -105,6 +107,7 @@
     
     if( NSPointInRect(locationInSelf, dragThumbFrame) )
     {
+        dragOffsetIntoGrowBox = NSMakeSize(locationInSelf.x - dragThumbFrame.origin.x, locationInSelf.y - dragThumbFrame.origin.y);
         dragging = YES;
     }
     else

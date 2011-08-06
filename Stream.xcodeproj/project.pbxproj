@@ -104,10 +104,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
-		7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewAutoLayoutSubView.m; sourceTree = "<group>"; };
-		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
-		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
+		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
+		7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewAutoLayoutSubView.m; path = Stream/ViewAutoLayoutSubView.m; sourceTree = "<group>"; };
+		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerTableViewCellView.h; path = Stream/AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
+		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerTableViewCellView.m; path = Stream/AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
 		7759CF3213DBA1A300789DB3 /* Stream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7759CF3613DBA1A300789DB3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		7759CF3913DBA1A300789DB3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -143,8 +143,8 @@
 		7759CF8613DBA1A300789DB3 /* Importer Read Me.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Importer Read Me.txt"; sourceTree = "<group>"; };
 		7759CF8713DBA1A300789DB3 /* StreamImporter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StreamImporter-Prefix.pch"; sourceTree = "<group>"; };
 		775ED2CD13DCF86500BC96C9 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		776139AD13E1BA4200CA80BB /* ColorGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorGradientView.h; sourceTree = "<group>"; };
-		776139AE13E1BA4200CA80BB /* ColorGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorGradientView.m; sourceTree = "<group>"; };
+		776139AD13E1BA4200CA80BB /* ColorGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorGradientView.h; path = Stream/ColorGradientView.h; sourceTree = "<group>"; };
+		776139AE13E1BA4200CA80BB /* ColorGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColorGradientView.m; path = Stream/ColorGradientView.m; sourceTree = "<group>"; };
 		777984BB13E99E96007198EE /* StreamsTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamsTreeController.h; sourceTree = "<group>"; };
 		777984BC13E99E96007198EE /* StreamsTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamsTreeController.m; sourceTree = "<group>"; };
 		7799CD2013E5C691007D5B8E /* AudioAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaylizer.h; path = Stream/AudioAnaylizer/AudioAnaylizer.h; sourceTree = "<group>"; };
@@ -154,9 +154,9 @@
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
 		77C8DE1413E6F2C000AD079E /* Analyzation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Analyzation.h; sourceTree = "<group>"; };
 		77C8DE1513E6F2C000AD079E /* Analyzation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Analyzation.m; sourceTree = "<group>"; };
-		77D94C8A13E8F704009192BA /* DragRegionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragRegionView.h; sourceTree = "<group>"; };
-		77D94C8B13E8F704009192BA /* DragRegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragRegionView.m; sourceTree = "<group>"; };
-		77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnaylizerSettingPopover.xib; sourceTree = "<group>"; };
+		77D94C8A13E8F704009192BA /* DragRegionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DragRegionView.h; path = Stream/DragRegionView.h; sourceTree = "<group>"; };
+		77D94C8B13E8F704009192BA /* DragRegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DragRegionView.m; path = Stream/DragRegionView.m; sourceTree = "<group>"; };
+		77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerSettingPopover.xib; path = Stream/AnaylizerSettingPopover.xib; sourceTree = "<group>"; };
 		77F203FA13DD3ACF00FA5B1F /* HexFiend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiend.h; path = Stream/HexFiend/HexFiend.h; sourceTree = "<group>"; };
 		77F203FB13DD3ACF00FA5B1F /* HFBTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HFBTree.h; path = Stream/HexFiend/HFBTree.h; sourceTree = "<group>"; };
 		77F203FC13DD3ACF00FA5B1F /* HFBTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HFBTree.m; path = Stream/HexFiend/HFBTree.m; sourceTree = "<group>"; };
@@ -290,6 +290,7 @@
 				77F203F913DD3A5F00FA5B1F /* HexFiend */,
 				775ED2CD13DCF86500BC96C9 /* README */,
 				77614F3413DC9B6C00041279 /* Models */,
+				7788588B13EDC1B30057E042 /* AnaylizerUI */,
 				7759CF3C13DBA1A300789DB3 /* Stream */,
 				7759CF5F13DBA1A300789DB3 /* StreamTests */,
 				7759CF7913DBA1A300789DB3 /* StreamImporter */,
@@ -341,15 +342,6 @@
 				77C8DE1413E6F2C000AD079E /* Analyzation.h */,
 				77C8DE1513E6F2C000AD079E /* Analyzation.m */,
 				7759CF4B13DBA1A300789DB3 /* MyDocument.xib */,
-				77D94C8A13E8F704009192BA /* DragRegionView.h */,
-				77D94C8B13E8F704009192BA /* DragRegionView.m */,
-				773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */,
-				773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */,
-				7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */,
-				7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */,
-				776139AD13E1BA4200CA80BB /* ColorGradientView.h */,
-				776139AE13E1BA4200CA80BB /* ColorGradientView.m */,
-				77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */,
 				7759CF4E13DBA1A300789DB3 /* MainMenu.xib */,
 				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
 				7759CF3D13DBA1A300789DB3 /* Supporting Files */,
@@ -418,6 +410,22 @@
 			children = (
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		7788588B13EDC1B30057E042 /* AnaylizerUI */ = {
+			isa = PBXGroup;
+			children = (
+				77D94C8A13E8F704009192BA /* DragRegionView.h */,
+				77D94C8B13E8F704009192BA /* DragRegionView.m */,
+				773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */,
+				773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */,
+				7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */,
+				7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */,
+				776139AD13E1BA4200CA80BB /* ColorGradientView.h */,
+				776139AE13E1BA4200CA80BB /* ColorGradientView.m */,
+				77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */,
+			);
+			name = AnaylizerUI;
 			sourceTree = "<group>";
 		};
 		7799CD1E13E5C651007D5B8E /* AudioAnaylizer */ = {

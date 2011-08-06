@@ -35,7 +35,7 @@
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setAutoresizesSubviews:YES];
         
-        NSRect sliderRect = NSMakeRect(1.0f, 1.0, frame.size.width-2, 15.0f);
+        NSRect sliderRect = NSMakeRect(1.0f, 2.0, frame.size.width-2, 15.0f);
         NSAssert(self.slider == nil, @"self.slider should be nil here");
         self.slider = [[NSSlider alloc] initWithFrame:sliderRect];
 
@@ -51,7 +51,7 @@
         [self.slider release];
         
         NSAssert(self.scroller == nil, @"self.scroller should be nil here");
-        NSRect scrollerRect = NSMakeRect(1.0f,17,frame.size.width-2, frame.size.height-19.0f);
+        NSRect scrollerRect = NSMakeRect(1.0f,17,frame.size.width-3, frame.size.height-19.0f);
         self.scroller = [[NSScrollView alloc] initWithFrame:scrollerRect];
         //[self.scroller setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.scroller setTranslatesAutoresizingMaskIntoConstraints:YES];
