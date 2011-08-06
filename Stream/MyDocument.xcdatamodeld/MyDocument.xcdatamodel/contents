@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="562" systemVersion="11A511" minimumToolsVersion="Automatic" macOSVersion="Mac OS X 10.7" iOSVersion="Automatic">
     <entity name="StAnaylizer">
+        <attribute name="anaylizerHeight" attributeType="Float" minValueString="0" defaultValueString="207"/>
         <attribute name="anaylizerKind" attributeType="String" indexed="YES"/>
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
         <attribute name="optionsDictionary" optional="YES" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
@@ -37,7 +38,7 @@
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
     </entity>
     <elements>
-        <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="105"/>
+        <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="120"/>
         <element name="StBlock" positionX="0" positionY="0" width="0" height="0"/>
         <element name="StRange" positionX="0" positionY="0" width="0" height="0"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="255"/>

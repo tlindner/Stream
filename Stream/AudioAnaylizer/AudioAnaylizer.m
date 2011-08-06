@@ -16,6 +16,7 @@
 @synthesize result;
 @synthesize scroller;
 @synthesize slider;
+@synthesize newConstraints;
 
 + (void)initialize {
     if (self == [AudioAnaylizer class]) {
@@ -29,10 +30,19 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        NSRect sliderRect = NSMakeRect(0.0f, 0.0f, frame.size.width, 16.0f);
+        
+        [self setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
+        [self setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self setAutoresizesSubviews:YES];
+        
+        NSRect sliderRect = NSMakeRect(1.0f, 1.0, frame.size.width-2, 15.0f);
+        NSAssert(self.slider == nil, @"self.slider should be nil here");
         self.slider = [[NSSlider alloc] initWithFrame:sliderRect];
+
         [self addSubview:self.slider];
-        [self.slider setAutoresizingMask:(NSViewWidthSizable)];
+        //[self.slider setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.slider setTranslatesAutoresizingMaskIntoConstraints:YES];
+        [self.slider setAutoresizingMask:NSViewWidthSizable];
         [[self.slider cell] setControlSize:NSMiniControlSize];
         [self.slider setTickMarkPosition:(NSTickMarkAbove)];
         [self.slider setNumberOfTickMarks:25];
@@ -40,21 +50,35 @@
         [self.slider setTarget:self];
         [self.slider release];
         
-        NSRect scrollerRect = NSMakeRect(0.0f,16.0f,frame.size.width, frame.size.height-16.0f);
+        NSAssert(self.scroller == nil, @"self.scroller should be nil here");
+        NSRect scrollerRect = NSMakeRect(1.0f,17,frame.size.width-2, frame.size.height-19.0f);
         self.scroller = [[NSScrollView alloc] initWithFrame:scrollerRect];
+        //[self.scroller setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.scroller setTranslatesAutoresizingMaskIntoConstraints:YES];
+        [self.scroller setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+        [self.scroller setAutoresizesSubviews:YES];
         [self.scroller setBorderType:NSLineBorder];
         [self.scroller setHasVerticalScroller:NO];
         [self.scroller setHasHorizontalScroller:YES];
-        [self.scroller setAutoresizingMask:(NSViewWidthSizable)];
-        [[self.scroller contentView] setAutoresizesSubviews:YES];
         [self addSubview:self.scroller];
+        [self.scroller release];
         
-        WaveFormView *wfv = [[WaveFormView alloc] initWithFrame:scrollerRect];
-        [wfv setBounds:scrollerRect];
+        NSRect contentRect = NSMakeRect(0, 0, 0, 0);
+
+        contentRect.size = [NSScrollView contentSizeForFrameSize:scrollerRect.size horizontalScrollerClass:[NSScroller class] verticalScrollerClass:nil borderType:NSLineBorder controlSize:NSRegularControlSize scrollerStyle:NSScrollerStyleOverlay];
+       WaveFormView *wfv = [[WaveFormView alloc] initWithFrame:contentRect];
+        [wfv setTranslatesAutoresizingMaskIntoConstraints:YES];
+        [wfv setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
         [self.scroller setDocumentView:wfv];
         [wfv release];
         
-        [self.scroller release];
+//        NSDictionary *views = [NSDictionary dictionaryWithObjectsAndKeys:self.slider, @"slider", self.scroller, @"scroller", [self.scroller documentView], @"docView", nil];
+//        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-2-[slider]-2-|" options:0 metrics:nil views:views]];
+        //[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-1-[scroller]-1-|" options:0 metrics:nil views:views]];
+       // [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[scroller(>=10)]-0-[slider(==15)]-2-|" options:0 metrics:nil views:views]];
+        
+//        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[docView]-0-|" options:0 metrics:nil views:views]];
+//        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[docView]-0-|" options:0 metrics:nil views:views]];
     }
     
     return self;
@@ -67,13 +91,13 @@
 
 - (void)setData:(NSData *)inData
 {
-    [data release];
-    data = nil;
     WaveFormView *wfv = [self.scroller documentView];
     
-    if( inData != nil )
+    [data release];
+    data = [inData retain];
+
+    if( data != nil )
     {
-        data = [inData retain];
         /* Convert data to samples */
         OSStatus err;
         ExtAudioFileRef af;
@@ -102,21 +126,32 @@
             bufList.mNumberBuffers = 1;
             bufList.mBuffers[0].mNumberChannels = 1;
             bufList.mBuffers[0].mData = wfv.audioFrames;
-            bufList.mBuffers[0].mDataByteSize = wfv.frameCount;
-            UInt32 ioFrameCount = fileFrameCount;
+            bufList.mBuffers[0].mDataByteSize = (unsigned int)wfv.frameCount;
+            UInt32 ioFrameCount = (unsigned int)fileFrameCount;
             err = ExtAudioFileRead(af, &ioFrameCount, &bufList);
             
-            float avaiableWidth = [self frame].size.width;
+            float avaiableWidth = [self.scroller frame].size.width;
             self.slider.maxValue = wfv.frameCount/avaiableWidth;
             self.slider.minValue = 1;
+            self.slider.floatValue = wfv.frameCount/avaiableWidth;
             wfv.scale = self.slider.intValue;
 
-            [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount/[self.slider floatValue], [wfv frame].size.height)];
-            [[self.scroller documentView] setNeedsDisplay:YES];
+            [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount/[self.slider floatValue], [self.scroller contentSize ].height)];
+            //[[self.scroller documentView] setNeedsDisplay:YES];
+            [self.scroller setNeedsDisplay:YES];
         }
         
         err = ExtAudioFileDispose(af);    
-    }   
+    }
+    else
+    {
+        if( wfv.audioFrames != nil )
+        {
+            free(wfv.audioFrames);
+            wfv.audioFrames = nil;
+        }
+        wfv.frameCount = 0;
+    }
 }
 
 - (void)dealloc {
@@ -130,14 +165,36 @@
     [super dealloc];
 }
 
+- (void)setFrame:(NSRect)frameRect
+{
+    WaveFormView *wfv = [self.scroller documentView];
+    float avaiableWidth = frameRect.size.width;
+    self.slider.maxValue = wfv.frameCount/avaiableWidth;
+    self.slider.minValue = 1;
+    wfv.scale = self.slider.intValue;
+    
+    [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount/[self.slider floatValue], [self.scroller contentSize ].height)];
+    [self.scroller setNeedsDisplay:YES];
+    [super setFrame:frameRect];
+}
+
 - (IBAction)updateSlider:(id)sender
 {
     WaveFormView *wfv = [self.scroller documentView];
     wfv.scale = self.slider.intValue;
-    [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount/[self.slider floatValue], [wfv frame].size.height)];
+    [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount/[self.slider floatValue], [self.scroller contentSize].height)];
     [self.scroller.documentView setNeedsDisplay:YES];
 }
 
+- (void)viewDidEndLiveResize
+{
+    WaveFormView *wfv = [self.scroller documentView];
+    float maxValue = wfv.frameCount/[self bounds].size.width;
+    self.slider.maxValue = maxValue;
+    [self updateSlider:self];
+
+    [super viewDidEndLiveResize];
+}
 + (NSArray *)anaylizerUTIs
 {
     return [NSArray arrayWithObject:@"public.audio"];

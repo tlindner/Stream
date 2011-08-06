@@ -14,9 +14,13 @@
 {
     IBOutlet ColorGradientView *_cgv;
     IBOutlet NSView *_customView;
+    IBOutlet NSView *dragThumbView;
+    IBOutlet NSTableView *theTableView;
     NSView *editorSubView;
     NSMutableArray *newConstraints;
-    
+    NSSize dragOffsetIntoGrowBox;
+    Boolean dragging;
+    float rowHeight;
 }
 
 @property(nonatomic, retain) NSView *editorSubView;
