@@ -7,17 +7,18 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "CoreAudio/CoreAudioTypes.h"
 
 @interface WaveFormView : NSView
 {
-    uint8 *audioFrames;
+    AudioSampleType *audioFrames;
     NSUInteger frameCount;
-    NSUInteger scale;
+    Float64 sampleRate;
 
 }
 
-@property(nonatomic, assign) uint8 *audioFrames;
+@property(nonatomic, assign) AudioSampleType *audioFrames;
 @property(nonatomic, assign) NSUInteger frameCount;
-@property(nonatomic, assign) NSUInteger scale;
+@property(nonatomic, assign) Float64 sampleRate;
 
 @end

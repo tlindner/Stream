@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7714BC5713EA580600892495 /* ViewAutoLayoutSubView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */; };
+		771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 771DC21A13F0374800579077 /* AudioAnaScrollView.m */; };
 		773F17C813E4F77E002606A0 /* AnaylizerTableViewCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */; };
 		7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
 		7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */; };
@@ -106,6 +107,8 @@
 /* Begin PBXFileReference section */
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
 		7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewAutoLayoutSubView.m; path = Stream/ViewAutoLayoutSubView.m; sourceTree = "<group>"; };
+		771DC21913F0374800579077 /* AudioAnaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaScrollView.h; path = Stream/AudioAnaScrollView.h; sourceTree = "<group>"; };
+		771DC21A13F0374800579077 /* AudioAnaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaScrollView.m; path = Stream/AudioAnaScrollView.m; sourceTree = "<group>"; };
 		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerTableViewCellView.h; path = Stream/AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
 		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerTableViewCellView.m; path = Stream/AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
 		7759CF3213DBA1A300789DB3 /* Stream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stream.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -435,6 +438,8 @@
 				7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */,
 				7799CD2913E63C1F007D5B8E /* WaveFormView.h */,
 				7799CD2A13E63C1F007D5B8E /* WaveFormView.m */,
+				771DC21913F0374800579077 /* AudioAnaScrollView.h */,
+				771DC21A13F0374800579077 /* AudioAnaScrollView.m */,
 			);
 			name = AudioAnaylizer;
 			sourceTree = "<group>";
@@ -728,6 +733,7 @@
 				77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */,
 				777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */,
 				7714BC5713EA580600892495 /* ViewAutoLayoutSubView.m in Sources */,
+				771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

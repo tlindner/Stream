@@ -8,7 +8,10 @@
 
 #import "AudioAnaylizer.h"
 #import "WaveFormView.h"
+#import "AudioAnaScrollView.h"
 #include "AudioToolbox/AudioToolbox.h"
+
+void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved);
 
 @implementation AudioAnaylizer
 
@@ -52,7 +55,7 @@
         
         NSAssert(self.scroller == nil, @"self.scroller should be nil here");
         NSRect scrollerRect = NSMakeRect(1.0f,17,frame.size.width-3, frame.size.height-19.0f);
-        self.scroller = [[NSScrollView alloc] initWithFrame:scrollerRect];
+        self.scroller = [[AudioAnaScrollView alloc] initWithFrame:scrollerRect];
         //[self.scroller setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.scroller setTranslatesAutoresizingMaskIntoConstraints:YES];
         [self.scroller setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
@@ -60,6 +63,11 @@
         [self.scroller setBorderType:NSLineBorder];
         [self.scroller setHasVerticalScroller:NO];
         [self.scroller setHasHorizontalScroller:YES];
+        [self.scroller setHasHorizontalRuler:YES];
+        [self.scroller setRulersVisible:YES];
+        [[self.scroller horizontalRulerView] setMeasurementUnits:@"Points"];
+        [[self.scroller horizontalRulerView] setReservedThicknessForAccessoryView:0];
+        [[self.scroller horizontalRulerView] setReservedThicknessForMarkers:0];
         [self addSubview:self.scroller];
         [self.scroller release];
         
@@ -116,29 +124,41 @@
             propSize = sizeof(clientFormat);
             
             err = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileDataFormat, &propSize, &clientFormat);
+            NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty1: returned %d", err );
             propSize = sizeof(SInt64);
             err = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileLengthFrames, &propSize, &fileFrameCount);
+            NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty2: returned %d", err );
+
+            wfv.sampleRate = clientFormat.mSampleRate;
+            SetCanonical(&clientFormat, 1, true);
             
-            wfv.frameCount = sizeof(uint8) * fileFrameCount;
-            wfv.audioFrames = malloc(wfv.frameCount);
+            propSize = sizeof(clientFormat);
+            err = ExtAudioFileSetProperty(af, kExtAudioFileProperty_ClientDataFormat, propSize, &clientFormat);
+            NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", err );
+
+            wfv.frameCount = fileFrameCount;
+            NSLog( @"Frames: %lld", fileFrameCount );
+            wfv.audioFrames = malloc(((UInt32)sizeof(AudioSampleType)) * wfv.frameCount);
             
             AudioBufferList bufList;
             bufList.mNumberBuffers = 1;
             bufList.mBuffers[0].mNumberChannels = 1;
             bufList.mBuffers[0].mData = wfv.audioFrames;
-            bufList.mBuffers[0].mDataByteSize = (unsigned int)wfv.frameCount;
+            bufList.mBuffers[0].mDataByteSize = (unsigned int)((sizeof(AudioSampleType)) * wfv.frameCount);
             UInt32 ioFrameCount = (unsigned int)fileFrameCount;
             err = ExtAudioFileRead(af, &ioFrameCount, &bufList);
-            
-            float avaiableWidth = [self.scroller frame].size.width;
-            self.slider.maxValue = wfv.frameCount/avaiableWidth;
-            self.slider.minValue = 1;
-            self.slider.floatValue = wfv.frameCount/avaiableWidth;
-            wfv.scale = self.slider.intValue;
+            NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", err );
 
-            [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount/[self.slider floatValue], [self.scroller contentSize ].height)];
-            //[[self.scroller documentView] setNeedsDisplay:YES];
-            [self.scroller setNeedsDisplay:YES];
+            self.slider.maxValue = wfv.frameCount;
+            self.slider.minValue = [[[self scroller] contentView] frame].size.width;
+            self.slider.floatValue = wfv.frameCount;
+
+            [wfv setAutoresizingMask:NSViewHeightSizable];
+            [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount, [self.scroller contentSize].height)];
+
+            NSView *clipView = [[self.scroller documentView] superview];
+            NSSize clipViewFrameSize = [clipView frame].size;
+            [clipView setBoundsSize:NSMakeSize([[self slider] floatValue], clipViewFrameSize.height)];
         }
         
         err = ExtAudioFileDispose(af);    
@@ -165,36 +185,24 @@
     [super dealloc];
 }
 
-- (void)setFrame:(NSRect)frameRect
-{
-    WaveFormView *wfv = [self.scroller documentView];
-    float avaiableWidth = frameRect.size.width;
-    self.slider.maxValue = wfv.frameCount/avaiableWidth;
-    self.slider.minValue = 1;
-    wfv.scale = self.slider.intValue;
-    
-    [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount/[self.slider floatValue], [self.scroller contentSize ].height)];
-    [self.scroller setNeedsDisplay:YES];
-    [super setFrame:frameRect];
-}
+//- (void)setFrame:(NSRect)frameRect
+//{
+//
+//    [super setFrame:frameRect];
+//}
 
 - (IBAction)updateSlider:(id)sender
 {
-    WaveFormView *wfv = [self.scroller documentView];
-    wfv.scale = self.slider.intValue;
-    [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount/[self.slider floatValue], [self.scroller contentSize].height)];
-    [self.scroller.documentView setNeedsDisplay:YES];
+    NSView *clipView = [[self.scroller documentView] superview];
+    NSSize clipViewFrameSize = [clipView frame].size;
+    [clipView setBoundsSize:NSMakeSize((CGFloat)[[self slider] intValue], clipViewFrameSize.height)];
 }
 
-- (void)viewDidEndLiveResize
-{
-    WaveFormView *wfv = [self.scroller documentView];
-    float maxValue = wfv.frameCount/[self bounds].size.width;
-    self.slider.maxValue = maxValue;
-    [self updateSlider:self];
+//- (void)viewDidEndLiveResize
+//{
+//    [super viewDidEndLiveResize];
+//}
 
-    [super viewDidEndLiveResize];
-}
 + (NSArray *)anaylizerUTIs
 {
     return [NSArray arrayWithObject:@"public.audio"];
@@ -206,4 +214,23 @@
 }
 
 @end
+
+/* taken from: /Developer/Extras/CoreAudio/PublicUtility/CAStreamBasicDescription.h */
+
+void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved)
+// note: leaves sample rate untouched
+{
+    clientFormat->mFormatID = kAudioFormatLinearPCM;
+    int sampleSize = ((UInt32)sizeof(AudioSampleType)); //SizeOf32(AudioSampleType);
+    clientFormat->mFormatFlags = kAudioFormatFlagsCanonical;
+    clientFormat->mBitsPerChannel = 8 * sampleSize;
+    clientFormat->mChannelsPerFrame = nChannels;
+    clientFormat->mFramesPerPacket = 1;
+    if (interleaved)
+        clientFormat->mBytesPerPacket = clientFormat->mBytesPerFrame = nChannels * sampleSize;
+    else {
+        clientFormat->mBytesPerPacket = clientFormat->mBytesPerFrame = sampleSize;
+        clientFormat->mFormatFlags |= kAudioFormatFlagIsNonInterleaved;
+    }
+}
 
