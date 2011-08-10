@@ -7,6 +7,7 @@
 //
 
 #import "AudioAnaScrollView.h"
+#import "AudioAnaylizer.h"
 
 @implementation AudioAnaScrollView
 
@@ -22,8 +23,23 @@
 
 - (void)scrollWheel:(NSEvent *)theEvent
 {
-    /* Scale horizontal scrollwheel events, pass up vertical scroll wheel events */
     CGFloat scale = [[self contentView] bounds].size.width / [[self contentView] frame].size.width;
+    NSUInteger flags = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
+    if( flags == NSAlternateKeyMask )
+    {
+        if ([theEvent respondsToSelector:@selector(hasPreciseScrollingDeltas)] && [theEvent hasPreciseScrollingDeltas])
+        {
+            [(AudioAnaylizer *)[self superview] deltaSlider:round(theEvent.scrollingDeltaY * scale) fromPoint:theEvent.locationInWindow];
+        }
+        else
+        {
+            [(AudioAnaylizer *)[self superview] deltaSlider:theEvent.deltaY * scale fromPoint:theEvent.locationInWindow];
+        }
+        
+        return;
+    }
+    
+    /* Scale horizontal scrollwheel events, pass up vertical scroll wheel events */
     NSPoint currentScrollPosition=[[self contentView] bounds].origin;
 
     CGFloat deltaX, deltaY;

@@ -33,6 +33,7 @@
 		7759CF8213DBA1A300789DB3 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF8113DBA1A300789DB3 /* GetMetadataForFile.m */; };
 		7759CF8513DBA1A300789DB3 /* MySpotlightImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF8413DBA1A300789DB3 /* MySpotlightImporter.m */; };
 		776139AF13E1BA4200CA80BB /* ColorGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776139AE13E1BA4200CA80BB /* ColorGradientView.m */; };
+		7768590613F0FF92006BE753 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7768590513F0FF92006BE753 /* Accelerate.framework */; };
 		777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 777984BC13E99E96007198EE /* StreamsTreeController.m */; };
 		7799CD2213E5C691007D5B8E /* AudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
@@ -148,6 +149,7 @@
 		775ED2CD13DCF86500BC96C9 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		776139AD13E1BA4200CA80BB /* ColorGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorGradientView.h; path = Stream/ColorGradientView.h; sourceTree = "<group>"; };
 		776139AE13E1BA4200CA80BB /* ColorGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColorGradientView.m; path = Stream/ColorGradientView.m; sourceTree = "<group>"; };
+		7768590513F0FF92006BE753 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		777984BB13E99E96007198EE /* StreamsTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamsTreeController.h; sourceTree = "<group>"; };
 		777984BC13E99E96007198EE /* StreamsTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamsTreeController.m; sourceTree = "<group>"; };
 		7799CD2013E5C691007D5B8E /* AudioAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaylizer.h; path = Stream/AudioAnaylizer/AudioAnaylizer.h; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 			files = (
 				7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */,
 				7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */,
+				7768590613F0FF92006BE753 /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +318,7 @@
 		7759CF3513DBA1A300789DB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7768590513F0FF92006BE753 /* Accelerate.framework */,
 				7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */,
 				7759CF3613DBA1A300789DB3 /* Cocoa.framework */,
 				7759CF5A13DBA1A300789DB3 /* SenTestingKit.framework */,
@@ -346,7 +350,6 @@
 				77C8DE1513E6F2C000AD079E /* Analyzation.m */,
 				7759CF4B13DBA1A300789DB3 /* MyDocument.xib */,
 				7759CF4E13DBA1A300789DB3 /* MainMenu.xib */,
-				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
 				7759CF3D13DBA1A300789DB3 /* Supporting Files */,
 				777984BB13E99E96007198EE /* StreamsTreeController.h */,
 				777984BC13E99E96007198EE /* StreamsTreeController.m */,
@@ -411,6 +414,7 @@
 		77614F3413DC9B6C00041279 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1005,7 +1009,8 @@
 				7759CF5213DBA1A300789DB3 /* MyDocument.xcdatamodel */,
 			);
 			currentVersion = 7759CF5213DBA1A300789DB3 /* MyDocument.xcdatamodel */;
-			path = MyDocument.xcdatamodeld;
+			name = MyDocument.xcdatamodeld;
+			path = Stream/MyDocument.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
