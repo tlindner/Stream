@@ -64,13 +64,10 @@
                 /* Setup first anaylizer */
                 NSMutableOrderedSet *theSet = [newObject mutableOrderedSetValueForKey:@"anaylizers"];
                 
-                for( int i=0; i<(random()&01)+1; i++ )
-                {
-                    NSManagedObject *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
-                    [newAnaylizer setValue:@"base anaylizer" forKey:@"anaylizerKind"];
-                    [theSet addObject:newAnaylizer];
-                }
-                
+                 NSManagedObject *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
+                [newAnaylizer setValue:@"base anaylizer" forKey:@"anaylizerKind"];
+                [theSet addObject:newAnaylizer];
+             
                 [streamTreeControler addObject:newObject];
             }
         }

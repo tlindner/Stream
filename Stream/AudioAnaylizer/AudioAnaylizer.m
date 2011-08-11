@@ -149,7 +149,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
             NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", err );
             
             self.slider.maxValue = wfv.frameCount;
-            self.slider.minValue = [[[self scroller] contentView] frame].size.width;
+            self.slider.minValue = [[[self scroller] contentView] frame].size.width / 4.0;
             self.slider.floatValue = wfv.frameCount;
             
             [wfv setAutoresizingMask:NSViewHeightSizable];
@@ -200,7 +200,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 
 - (void)setFrame:(NSRect)frameRect
 {
-    self.slider.minValue = [[[self scroller] contentView] frame].size.width;
+    self.slider.minValue = [[[self scroller] contentView] frame].size.width / 4.0;
     
     NSView *clipView = [[self.scroller documentView] superview];
     NSSize clipViewFrameSize = [clipView frame].size;

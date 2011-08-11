@@ -29,11 +29,11 @@
     {
         if ([theEvent respondsToSelector:@selector(hasPreciseScrollingDeltas)] && [theEvent hasPreciseScrollingDeltas])
         {
-            [(AudioAnaylizer *)[self superview] deltaSlider:round(theEvent.scrollingDeltaY * scale) fromPoint:theEvent.locationInWindow];
+            [(AudioAnaylizer *)[self superview] deltaSlider:round(theEvent.scrollingDeltaY * scale)*-1.0 fromPoint:theEvent.locationInWindow];
         }
         else
         {
-            [(AudioAnaylizer *)[self superview] deltaSlider:theEvent.deltaY * scale fromPoint:theEvent.locationInWindow];
+            [(AudioAnaylizer *)[self superview] deltaSlider:theEvent.deltaY * scale * -1.0 fromPoint:theEvent.locationInWindow];
         }
         
         return;
