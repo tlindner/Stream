@@ -200,13 +200,12 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 
 - (void)setFrame:(NSRect)frameRect
 {
+    [super setFrame:frameRect];
     self.slider.minValue = [[[self scroller] contentView] frame].size.width / 4.0;
     
     NSView *clipView = [[self.scroller documentView] superview];
     NSSize clipViewFrameSize = [clipView frame].size;
     [clipView setBoundsSize:NSMakeSize((CGFloat)[[self slider] intValue], clipViewFrameSize.height)];
-    
-    [super setFrame:frameRect];
 }
 
 - (IBAction)updateSlider:(id)sender

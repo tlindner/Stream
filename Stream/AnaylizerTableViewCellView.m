@@ -60,7 +60,6 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    
     if ([keyPath isEqualToString:@"objectValue.currentEditorView"])
     {
         //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
