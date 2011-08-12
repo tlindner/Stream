@@ -87,6 +87,7 @@
 		77F2048513DD3AEF00FA5B1F /* HFCancelOff.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048213DD3AEF00FA5B1F /* HFCancelOff.tiff */; };
 		77F2048613DD3AEF00FA5B1F /* HFCancelOn.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048313DD3AEF00FA5B1F /* HFCancelOn.tiff */; };
 		77F2048713DD3AEF00FA5B1F /* HFModalProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048413DD3AEF00FA5B1F /* HFModalProgress.xib */; };
+		77FEA6D813F57D4B0082B946 /* StAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77FEA6D713F57D4B0082B946 /* StAnaylizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -255,6 +256,8 @@
 		77F2048213DD3AEF00FA5B1F /* HFCancelOff.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = HFCancelOff.tiff; path = Stream/HexFiend/resources/HFCancelOff.tiff; sourceTree = "<group>"; };
 		77F2048313DD3AEF00FA5B1F /* HFCancelOn.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = HFCancelOn.tiff; path = Stream/HexFiend/resources/HFCancelOn.tiff; sourceTree = "<group>"; };
 		77F2048413DD3AEF00FA5B1F /* HFModalProgress.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HFModalProgress.xib; path = Stream/HexFiend/resources/HFModalProgress.xib; sourceTree = "<group>"; };
+		77FEA6D613F57D4B0082B946 /* StAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StAnaylizer.h; path = Stream/StAnaylizer.h; sourceTree = "<group>"; };
+		77FEA6D713F57D4B0082B946 /* StAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StAnaylizer.m; path = Stream/StAnaylizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -419,6 +422,8 @@
 			isa = PBXGroup;
 			children = (
 				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
+				77FEA6D613F57D4B0082B946 /* StAnaylizer.h */,
+				77FEA6D713F57D4B0082B946 /* StAnaylizer.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -742,6 +747,7 @@
 				777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */,
 				7714BC5713EA580600892495 /* ViewAutoLayoutSubView.m in Sources */,
 				771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */,
+				77FEA6D813F57D4B0082B946 /* StAnaylizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

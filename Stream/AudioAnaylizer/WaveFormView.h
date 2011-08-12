@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "StAnaylizer.h"
 #import "CoreAudio/CoreAudioTypes.h"
 
 typedef struct
@@ -37,7 +38,7 @@ typedef struct
 @property(nonatomic, assign) NSUInteger char_count;
 @property(nonatomic, assign) NSUInteger coa_char_count;
 
-- (void) anaylizeAudioDataWithOptions:(NSDictionary *)options;
+- (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer;
 + (NSMutableDictionary *)defaultOptions;
 
 @end

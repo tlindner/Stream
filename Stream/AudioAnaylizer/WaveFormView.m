@@ -191,10 +191,10 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     [super dealloc];
 }
 
-- (void) anaylizeAudioDataWithOptions:(NSDictionary *)options
+- (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer
 {
-    float lowCycle = [[options objectForKey:@"low cycle"] floatValue];
-    float highCycle = [[options objectForKey:@"high cycle"] floatValue];
+    float lowCycle = [[anaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"] floatValue];
+    float highCycle = [[anaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"] floatValue];
     vDSP_Length i;
     int zc_count;
     
@@ -354,7 +354,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"low cycle", [NSNumber numberWithFloat:2004.54545454545f], @"high cycle", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", nil] autorelease];
 }
 
 @end

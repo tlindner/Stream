@@ -25,6 +25,7 @@
 
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;
++ (NSString *)anaylizerKey;
 
 - (IBAction)updateSlider:(id)sender;
 - (void)deltaSlider:(float)delta fromPoint:(NSPoint)point;

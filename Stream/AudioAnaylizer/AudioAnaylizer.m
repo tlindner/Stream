@@ -9,6 +9,8 @@
 #import "AudioAnaylizer.h"
 #import "WaveFormView.h"
 #import "AudioAnaScrollView.h"
+#import "StAnaylizer.h"
+
 #include "AudioToolbox/AudioToolbox.h"
 
 #define MAXZOOM 16.0
@@ -161,19 +163,9 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
             NSSize clipViewFrameSize = [clipView frame].size;
             [clipView setBoundsSize:NSMakeSize([[self slider] floatValue], clipViewFrameSize.height)];
             
-            NSMutableDictionary *optionsDictionary = [[[self superview] superview] valueForKeyPath:@"objectValue.optionsDictionary"];
-            if( optionsDictionary != nil )
-                optionsDictionary = [[NSMutableDictionary alloc] init];
-
-            NSMutableDictionary *aaOptions = [optionsDictionary objectForKey:[AudioAnaylizer anayliserName]];
-            
-            if( aaOptions == nil )
-            {
-                aaOptions = [WaveFormView defaultOptions];
-                [optionsDictionary setObject:aaOptions forKey:[AudioAnaylizer anayliserName]];
-            }
-
-            [wfv anaylizeAudioDataWithOptions:aaOptions];
+            StAnaylizer *anaylizerObject = [[[self superview] superview] valueForKeyPath:@"objectValue"];
+            [anaylizerObject addSubOptionsDictionary:[AudioAnaylizer anaylizerKey]  withDictionary:[WaveFormView defaultOptions]];
+            [wfv anaylizeAudioDataWithOptions:anaylizerObject];
         }
         
         err = ExtAudioFileDispose(af);    
@@ -248,6 +240,12 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 + (NSString *)anayliserName
 {
     return @"Color Computer Audio Anaylizer";
+}
+
+/* Used for KVC and KVO in anaylizer options dictionary */
++ (NSString *)anaylizerKey;
+{
+    return @"ColorComputerAudioAnaylizer";
 }
 
 @end
