@@ -11,6 +11,8 @@
 #import "AudioAnaScrollView.h"
 #include "AudioToolbox/AudioToolbox.h"
 
+#define MAXZOOM 16.0
+
 void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved);
 
 @implementation AudioAnaylizer
@@ -149,7 +151,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
             NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", err );
             
             self.slider.maxValue = wfv.frameCount;
-            self.slider.minValue = [[[self scroller] contentView] frame].size.width / 4.0;
+            self.slider.minValue = [[[self scroller] contentView] frame].size.width / MAXZOOM;
             self.slider.floatValue = wfv.frameCount;
             
             [wfv setAutoresizingMask:NSViewHeightSizable];
@@ -201,7 +203,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 - (void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
-    self.slider.minValue = [[[self scroller] contentView] frame].size.width / 4.0;
+    self.slider.minValue = [[[self scroller] contentView] frame].size.width / MAXZOOM;
     
     NSView *clipView = [[self.scroller documentView] superview];
     NSSize clipViewFrameSize = [clipView frame].size;

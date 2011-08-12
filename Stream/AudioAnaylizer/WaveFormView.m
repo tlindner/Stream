@@ -10,8 +10,6 @@
 #import "Accelerate/Accelerate.h"
 #import "samplerate.h"
 
-#define MAX_CHARACTERS 1000000
-
 void SamplesSamples_max( Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 void SamplesSamples_avg( Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 void SamplesSamples_1to1(Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
@@ -76,9 +74,11 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         rect = NSMakeRect(dirtyRect.origin.x/scale, dirtyRect.origin.y, dirtyRect.size.width/scale, dirtyRect.size.height);
         NSRectFill(rect);
         
+        /* decoded data values and data regions */
         int i = 0;
-        if( scale <2.7)
+        if( ((sampleRate / 2400.0) * 8 / scale) > 9.5)
         {
+            /* we're zoomed enought to draw segemented frames around byte groups and actual values */
             while ( i< char_count && characters[i].start < dirtyRect.origin.x) i++;
             
             if( i>0 ) i--;
@@ -107,6 +107,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         }
         else
         {
+            /* we're zoomed too far out to see detial */
             while ( (i < coa_char_count) && (coalescedCharacters[i].start < dirtyRect.origin.x)) i++;
             
             if( i>0 ) i--;
@@ -119,11 +120,11 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
                 NSRectFill(rect);
                 
                 /* Draw value bar */
-                rect = NSMakeRect(coalescedCharacters[i].start/scale, 14, coalescedCharacters[i].length/scale, 10);
+                rect.origin.y = 14;
+                rect.size.height = 10;
                 NSRectFill(rect);
                 i++;
             }
-            
         }
         
         /* Draw zero line */
@@ -133,27 +134,20 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         
         /* Draw wave form */
         [[NSColor blackColor] set];
-        if( scale < 1.0 )
-        {
-            /* Vero close zoom, just draw points */
-            for( i=0; i<width; i++ )
-            {
-                rect = NSMakeRect(i+origin, (viewheight/2.0)+(viewFloats[i]*(viewheight/2.0))+25.0, 1.0, 1.0);
-                NSRectFill(rect);
-            }
-        }
-        else if( scale < 3.0 )
+        
+        if( scale < 3.0 )
         {
             /* Near 1:1 zoom, draw vertical lines connecting points to points */
             CGFloat lastHeight = 0, thisHeight;
             for( i=0; i<width; i++ )
             {
                 thisHeight = (viewheight/2)+(viewFloats[i]*(viewheight/2));
-                if (thisHeight > lastHeight) {
+
+                if (thisHeight > lastHeight)
                     rect = NSMakeRect(i+origin, lastHeight+25, 1, thisHeight - lastHeight);
-                } else {
+                else
                     rect = NSMakeRect(i+origin, thisHeight+25, 1, lastHeight - thisHeight);
-                }
+                
                 NSRectFill(rect);
                 lastHeight = thisHeight;
             }
@@ -223,6 +217,9 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         i += crossing-1;
     }
     
+    /* removed unused space in zero crossing array */
+    zero_crossings = realloc(zero_crossings, sizeof(float)*zc_count);
+    
     /* Scan zero crossings looking for valid data */
     
     if( self.characters != nil )
@@ -234,8 +231,9 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     if( self.coalescedCharacters != nil )
         free(self.coalescedCharacters);
     
-    self.characters = malloc( sizeof(charRef)*MAX_CHARACTERS );
-    self.character = malloc( sizeof(unsigned char)*MAX_CHARACTERS );
+    int max_possible_characters = (zc_count*2*8)+1;
+    self.characters = malloc( sizeof(charRef)*max_possible_characters );
+    self.character = malloc( sizeof(unsigned char)*max_possible_characters );
     self.char_count = 0;
     
     zc_count -= 1;
@@ -264,12 +262,12 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         {
             if( (odd_parity & 0xff0f) == 0x3c05 )
             {
-                /* adjust position one block into the future */
+                /* adjust position one zero crossing into the future */
                 i++;
                 even_parity = odd_parity;
             }
             
-            /* capture 0x55 start byte */
+            /* capture (0x0f & 0x05) start byte */
             characters[char_count].start = zero_crossings[i-(16*2)];
             characters[char_count].length = zero_crossings[i-(8*2)] - zero_crossings[i-(16*2)];
             character[char_count] = even_parity & 0x00ff;
@@ -310,7 +308,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
                 }
                 else if( test1 > threashold * 3.0 )
                 {
-                    /* lost sync, finish off last byte, break out of loop to try to synchronize later */
+                    /* lost sync, finish off last byte, break out of loop to try to re-synchronize */
                     characters[char_count].length = zero_crossings[i-1] - characters[char_count].start + (threashold * 3.0);
                     character[char_count] = even_parity >> 8;
                     char_count++;
@@ -329,9 +327,9 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
             char_count++;
         }
     }
-    
-    NSAssert( char_count < MAX_CHARACTERS, @"Overflowed character buffer" );
-    
+
+    free(zero_crossings);
+
     /* shirnk buffers to actual size */
     self.characters = realloc(characters, sizeof(charRef)*char_count);
     self.character = realloc(character, sizeof(unsigned char)*char_count);
@@ -340,7 +338,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     coalescedCharacters[0] = characters[0];
     self.coa_char_count = 1;
     
-    /* coalesce nearby found byte rectangles into single continous block rectangle */
+    /* coalesce nearby found byte rectangles into single continous rectangle */
     /* this greatly speeds up the "found data" tint when zoomed out */
     for( i=1; i<char_count; i++ )
     {
@@ -352,8 +350,6 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     
     /* shirnk buffer to actual size */
     self.coalescedCharacters = realloc(coalescedCharacters, sizeof(charRef)*coa_char_count);
-    
-    free(zero_crossings);
 }
 
 + (NSMutableDictionary *)defaultOptions
@@ -385,7 +381,7 @@ void SamplesSamples_max( Float32 *outBuffer, AudioSampleType *inBuffer, double s
         process.output_frames = viewWidth;
         process.src_ratio = 1.0/sampleSize;
         
-        src_simple (&process, SRC_SINC_BEST_QUALITY, 1);
+        src_simple( &process, SRC_SINC_BEST_QUALITY, 1 );
     }
     else
     {
