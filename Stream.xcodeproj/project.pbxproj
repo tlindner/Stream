@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7714BC5713EA580600892495 /* ViewAutoLayoutSubView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */; };
 		771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 771DC21A13F0374800579077 /* AudioAnaScrollView.m */; };
+		77354A2013F4ED1500CAB68A /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77354A1F13F4ED1500CAB68A /* libsamplerate.a */; };
 		773F17C813E4F77E002606A0 /* AnaylizerTableViewCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */; };
 		7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
 		7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */; };
@@ -110,6 +111,7 @@
 		7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewAutoLayoutSubView.m; path = Stream/ViewAutoLayoutSubView.m; sourceTree = "<group>"; };
 		771DC21913F0374800579077 /* AudioAnaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaScrollView.h; path = Stream/AudioAnaScrollView.h; sourceTree = "<group>"; };
 		771DC21A13F0374800579077 /* AudioAnaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaScrollView.m; path = Stream/AudioAnaScrollView.m; sourceTree = "<group>"; };
+		77354A1F13F4ED1500CAB68A /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /usr/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
 		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerTableViewCellView.h; path = Stream/AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
 		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerTableViewCellView.m; path = Stream/AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
 		7759CF3213DBA1A300789DB3 /* Stream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stream.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -263,6 +265,7 @@
 				7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */,
 				7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */,
 				7768590613F0FF92006BE753 /* Accelerate.framework in Frameworks */,
+				77354A2013F4ED1500CAB68A /* libsamplerate.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +321,7 @@
 		7759CF3513DBA1A300789DB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				77354A1F13F4ED1500CAB68A /* libsamplerate.a */,
 				7768590513F0FF92006BE753 /* Accelerate.framework */,
 				7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */,
 				7759CF3613DBA1A300789DB3 /* Cocoa.framework */,

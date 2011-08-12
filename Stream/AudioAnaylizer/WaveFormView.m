@@ -8,6 +8,7 @@
 
 #import "WaveFormView.h"
 #import "Accelerate/Accelerate.h"
+#import "samplerate.h"
 
 #define MAX_CHARACTERS 1000000
 
@@ -374,27 +375,33 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )
 
 void SamplesSamples_max( Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
 {
-    int i, j;
-    
-    for( i=0; i<viewWidth; i++ )
+    if (sampleSize < 1.0)
     {
-        AudioSampleType curValue = negativeInfinity;
-        for( j=0; j<sampleSize; j++ )
-        {
-            NSUInteger bufPointer = i*sampleSize+j;
-            
-            if( bufPointer < maxOffset)
-            {
-                if( inBuffer[bufPointer] > curValue )
-                {
-                    curValue = inBuffer[bufPointer];
-                }
-            }
-            else
-                NSLog( @"reading past array" );
-        }
+        SRC_DATA process;
+
+        process.data_in = inBuffer;
+        process.data_out = outBuffer;
+        process.input_frames = viewWidth * sampleSize;
+        process.output_frames = viewWidth;
+        process.src_ratio = 1.0/sampleSize;
         
-        outBuffer[i] = curValue;
+        src_simple (&process, SRC_SINC_BEST_QUALITY, 1);
+    }
+    else
+    {
+        for( int i=0; i<viewWidth; i++ )
+        {
+            int j = i*sampleSize;
+            
+            if( j+sampleSize < maxOffset )
+                vDSP_maxv( &(inBuffer[j]), 1, &(outBuffer[i]), sampleSize );
+            else
+            {
+                NSLog( @"reading past array" );
+                outBuffer[i] = 0;
+            }
+            
+        }
     }
 }
 
