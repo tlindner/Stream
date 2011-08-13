@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "StAnaylizer.h"
+#include "AudioToolbox/AudioToolbox.h"
+
+void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved);
 
 @interface AudioAnaylizer : NSView
 {

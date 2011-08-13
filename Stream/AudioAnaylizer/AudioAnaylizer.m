@@ -10,11 +10,7 @@
 #import "WaveFormView.h"
 #import "AudioAnaScrollView.h"
 
-#include "AudioToolbox/AudioToolbox.h"
-
 #define MAXZOOM 16.0
-
-void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved);
 
 @implementation AudioAnaylizer
 
