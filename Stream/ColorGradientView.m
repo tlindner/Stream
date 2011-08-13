@@ -18,7 +18,8 @@
 @synthesize newConstraints;
 @synthesize actionPopOverNib;
 @synthesize popupArrayController;
-
+@synthesize subMOC;
+@synthesize subObjectValue;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -82,29 +83,60 @@
 
 - (IBAction)doPopOver:(id)sender
 {
+    if( self.subMOC == nil )
+    {
+        self.subMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
+        
+        //NSLog( @"?: %lu", [[(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext] concurrencyType]);
+              
+        [subMOC setParentContext:[(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext]];
+    }
+    
+    if( self.subObjectValue != nil )
+    {
+        [utiTextField unbind:@"value"];
+        [editorPopup unbind:@"contentObjects"];
+        [editorPopup unbind:@"selectedObject"];
+    }
+    
+    NSManagedObjectID *objectValueID = [[[self superview] valueForKey:@"objectValue"] objectID];
+    NSError *err;
+    self.subObjectValue = [subMOC existingObjectWithID:objectValueID error:&err];
+
     if( self.actionPopOverNib == nil )
     {
         self.actionPopOverNib = [[[NSNib alloc] initWithNibNamed:@"AnaylizerSettingPopover" bundle:nil] autorelease];
-
+        
         if (![self.actionPopOverNib instantiateNibWithOwner:self topLevelObjects:nil])
         {
             NSLog(@"Warning! Could not load nib file.\n");
         }
 
-        [utiTextField bind:@"value" toObject:[self superview] withKeyPath:@"objectValue.parentStream.sourceUTI" options:nil];
-        
         self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
-        NSArray *stuff = [[Analyzation sharedInstance] anaylizersforUTI:[[self superview] valueForKeyPath:@"objectValue.parentStream.sourceUTI"]];
+        NSArray *stuff = [[Analyzation sharedInstance] anaylizersforUTI:[self.subObjectValue valueForKeyPath:@"parentStream.sourceUTI"]];
         [self.popupArrayController addObjects:stuff];
-        
-        [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
-        [editorPopup bind:@"selectedObject" toObject:[self superview] withKeyPath:@"objectValue.currentEditorView" options:nil];
-        
     }
-
+    
+    [utiTextField bind:@"value" toObject:self.subObjectValue withKeyPath:@"parentStream.sourceUTI" options:nil];
+    
+    [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
+    [editorPopup bind:@"selectedObject" toObject:self.subObjectValue withKeyPath:@"currentEditorView" options:nil];
+    
     [actionPopOver showRelativeToRect:[tlAction bounds] ofView:tlAction preferredEdge:NSMaxYEdge];
 }
 
+- (IBAction)popOverOK:(id)sender
+{
+    NSError *err;
+    
+    [subMOC save:&err];
+    [actionPopOver performClose:self];
+}
+
+- (IBAction)popOverCancel:(id)sender
+{
+    [actionPopOver performClose:self];
+}
 
 - (void)dealloc {
     
@@ -117,6 +149,8 @@
         [editorPopup unbind:@"selectedObject"];
     }
     
+    self.subObjectValue = nil;
+    self.subMOC = nil;
     self.popupArrayController = nil;
     self.newConstraints = nil;
     self.actionPopOverNib = nil;

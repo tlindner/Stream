@@ -39,6 +39,5 @@ typedef struct
 @property(nonatomic, assign) NSUInteger coa_char_count;
 
 - (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer;
-+ (NSMutableDictionary *)defaultOptions;
 
 @end

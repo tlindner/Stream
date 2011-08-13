@@ -32,6 +32,11 @@
 {
     [super windowControllerDidLoadNib:aController];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
+    
+    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
+    NSManagedObjectContext *newMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
+    [newMOC setPersistentStoreCoordinator:psc];
+    [self setManagedObjectContext:newMOC];
 }
 
 + (BOOL)autosavesInPlace

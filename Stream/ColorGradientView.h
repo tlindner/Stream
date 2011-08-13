@@ -23,8 +23,11 @@
 @property(nonatomic, retain) NSColor *endingColor;
 @property(nonatomic, retain) NSNib *actionPopOverNib;
 @property(nonatomic, retain) NSArrayController *popupArrayController;
+@property(nonatomic, retain) NSManagedObjectContext *subMOC;
+@property(nonatomic, retain) NSManagedObject *subObjectValue;
 @property(assign) int angle;
 
 - (IBAction)doPopOver:(id)sender;
-
+- (IBAction)popOverOK:(id)sender;
+- (IBAction)popOverCancel:(id)sender;
 @end

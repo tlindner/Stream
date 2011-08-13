@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "StAnaylizer.h"
 
 @interface AudioAnaylizer : NSView
 {
@@ -22,10 +23,12 @@
 @property(nonatomic, assign) NSScrollView *scroller;
 @property(nonatomic, assign) NSSlider *slider;
 @property(nonatomic, retain) NSMutableArray *newConstraints;
+@property(nonatomic, assign) StAnaylizer *objectValue;
 
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;
 + (NSString *)anaylizerKey;
++ (NSMutableDictionary *)defaultOptions;
 
 - (IBAction)updateSlider:(id)sender;
 - (void)deltaSlider:(float)delta fromPoint:(NSPoint)point;

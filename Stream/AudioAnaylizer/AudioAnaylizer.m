@@ -9,7 +9,6 @@
 #import "AudioAnaylizer.h"
 #import "WaveFormView.h"
 #import "AudioAnaScrollView.h"
-#import "StAnaylizer.h"
 
 #include "AudioToolbox/AudioToolbox.h"
 
@@ -24,6 +23,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 @synthesize scroller;
 @synthesize slider;
 @synthesize newConstraints;
+@synthesize objectValue;
 
 + (void)initialize {
     if (self == [AudioAnaylizer class]) {
@@ -90,6 +90,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
         
         //        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[docView]-0-|" options:0 metrics:nil views:views]];
         //        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[docView]-0-|" options:0 metrics:nil views:views]];
+        
     }
     
     return self;
@@ -103,6 +104,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 - (void)setData:(NSData *)inData
 {
     WaveFormView *wfv = [self.scroller documentView];
+    self.objectValue = [[[self superview] superview] valueForKey:@"objectValue"];
     
     [data release];
     data = [inData retain];
@@ -113,7 +115,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
         OSStatus err;
         ExtAudioFileRef af;
         
-        NSManagedObject *parentStream = [[[self superview] superview] valueForKeyPath:@"objectValue.parentStream"];
+        NSManagedObject *parentStream = [self.objectValue valueForKeyPath:@"parentStream"];
         NSURL *fileURL = [parentStream valueForKey:@"sourceURL"];
         
         err = ExtAudioFileOpenURL((CFURLRef)fileURL, &af);
@@ -163,9 +165,23 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
             NSSize clipViewFrameSize = [clipView frame].size;
             [clipView setBoundsSize:NSMakeSize([[self slider] floatValue], clipViewFrameSize.height)];
             
-            StAnaylizer *anaylizerObject = [[[self superview] superview] valueForKeyPath:@"objectValue"];
-            [anaylizerObject addSubOptionsDictionary:[AudioAnaylizer anaylizerKey]  withDictionary:[WaveFormView defaultOptions]];
-            [wfv anaylizeAudioDataWithOptions:anaylizerObject];
+            [self.objectValue addSubOptionsDictionary:[AudioAnaylizer anaylizerKey]  withDictionary:[AudioAnaylizer defaultOptions]];
+            
+            float retrieveScale = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"] floatValue];
+            if( isnan(retrieveScale) )
+            {
+                [self.objectValue setValue:[NSNumber numberWithFloat:self.slider.floatValue] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+            }
+            else
+            {
+                self.slider.floatValue = retrieveScale;
+                [self updateSlider:self];
+            }
+            
+            float retrieveOrigin = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"] floatValue];
+                [[self.scroller contentView] scrollToPoint:NSMakePoint(retrieveOrigin, 0.0f)];
+            
+            [wfv anaylizeAudioDataWithOptions:self.objectValue];
         }
         
         err = ExtAudioFileDispose(af);    
@@ -212,6 +228,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
     boundsRect.size.width = newWidth;
     boundsRect.origin.x += (width-newWidth)/2.0;
     [clipView setBounds:boundsRect];
+    [self.objectValue setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
 }
 
 - (void)deltaSlider:(float)delta fromPoint:(NSPoint)point
@@ -246,6 +263,11 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 + (NSString *)anaylizerKey;
 {
     return @"ColorComputerAudioAnaylizer";
+}
+
++ (NSMutableDictionary *)defaultOptions
+{
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:-1.0], @"scrollOrigin", nil] autorelease];
 }
 
 @end

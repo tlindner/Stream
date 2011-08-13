@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7714BC5713EA580600892495 /* ViewAutoLayoutSubView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */; };
+		771C998513F624DC00C3A263 /* AudioAnaylizer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 771C998413F624DC00C3A263 /* AudioAnaylizer.xib */; };
 		771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 771DC21A13F0374800579077 /* AudioAnaScrollView.m */; };
 		77354A2013F4ED1500CAB68A /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77354A1F13F4ED1500CAB68A /* libsamplerate.a */; };
 		773F17C813E4F77E002606A0 /* AnaylizerTableViewCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */; };
@@ -110,6 +111,7 @@
 /* Begin PBXFileReference section */
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
 		7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewAutoLayoutSubView.m; path = Stream/ViewAutoLayoutSubView.m; sourceTree = "<group>"; };
+		771C998413F624DC00C3A263 /* AudioAnaylizer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnaylizer.xib; path = Stream/AudioAnaylizer/AudioAnaylizer.xib; sourceTree = "<group>"; };
 		771DC21913F0374800579077 /* AudioAnaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaScrollView.h; path = Stream/AudioAnaScrollView.h; sourceTree = "<group>"; };
 		771DC21A13F0374800579077 /* AudioAnaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaScrollView.m; path = Stream/AudioAnaScrollView.m; sourceTree = "<group>"; };
 		77354A1F13F4ED1500CAB68A /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /usr/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
@@ -453,6 +455,7 @@
 				7799CD2A13E63C1F007D5B8E /* WaveFormView.m */,
 				771DC21913F0374800579077 /* AudioAnaScrollView.h */,
 				771DC21A13F0374800579077 /* AudioAnaScrollView.m */,
+				771C998413F624DC00C3A263 /* AudioAnaylizer.xib */,
 			);
 			name = AudioAnaylizer;
 			sourceTree = "<group>";
@@ -650,6 +653,7 @@
 				77F2048613DD3AEF00FA5B1F /* HFCancelOn.tiff in Resources */,
 				77F2048713DD3AEF00FA5B1F /* HFModalProgress.xib in Resources */,
 				77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */,
+				771C998513F624DC00C3A263 /* AudioAnaylizer.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

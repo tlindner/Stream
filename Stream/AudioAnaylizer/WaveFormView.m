@@ -7,6 +7,7 @@
 //
 
 #import "WaveFormView.h"
+#import "AudioAnaylizer.h"
 #import "Accelerate/Accelerate.h"
 #import "samplerate.h"
 
@@ -45,12 +46,13 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    CGFloat scale;
+    AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
+    [aa.objectValue setValue:[NSNumber numberWithFloat:[[self superview] bounds].origin.x] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"];
     
     // Drawing code here.
     if( audioFrames != nil )
     {
-        scale = [[self superview] bounds].size.width/[[self superview] frame].size.width;
+        CGFloat scale = [[self superview] bounds].size.width/[[self superview] frame].size.width;
         //NSLog( @"%f", scale );
         
         NSAffineTransform *at = [NSAffineTransform transform];
@@ -350,11 +352,6 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     
     /* shirnk buffer to actual size */
     self.coalescedCharacters = realloc(coalescedCharacters, sizeof(charRef)*coa_char_count);
-}
-
-+ (NSMutableDictionary *)defaultOptions
-{
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", nil] autorelease];
 }
 
 @end
