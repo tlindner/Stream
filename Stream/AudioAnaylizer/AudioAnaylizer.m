@@ -138,7 +138,6 @@
             NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", err );
             
             wfv.frameCount = fileFrameCount;
-            NSLog( @"Frames: %lld", fileFrameCount );
             wfv.audioFrames = malloc(((UInt32)sizeof(AudioSampleType)) * wfv.frameCount);
             
             AudioBufferList bufList;
@@ -261,9 +260,14 @@
     return @"ColorComputerAudioAnaylizer";
 }
 
++ (NSString *)AnaylizerPopoverAccessoryViewNib
+{
+    return @"AudioAnaylizer";
+}
+
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:-1.0], @"scrollOrigin", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:-1.0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", nil] autorelease];
 }
 
 @end

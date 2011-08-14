@@ -26,6 +26,10 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 @synthesize char_count;
 @synthesize coalescedCharacters;
 @synthesize coa_char_count;
+@synthesize previousBoundsWidth;
+@synthesize previousFrameWidth;
+@synthesize previousOffset;
+@synthesize previousBuffer;
 
 //- (id)initWithFrame:(NSRect)frame
 //{
@@ -52,7 +56,9 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     // Drawing code here.
     if( audioFrames != nil )
     {
-        CGFloat scale = [[self superview] bounds].size.width/[[self superview] frame].size.width;
+        CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
+        CGFloat currentFrameWidth = [[self superview] frame].size.width;
+        CGFloat scale = currentBoundsWidth/currentFrameWidth;
         //NSLog( @"%f", scale );
         
         NSAffineTransform *at = [NSAffineTransform transform];
@@ -65,11 +71,25 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         float width = dirtyRect.size.width / scale;
         
         /* Create sub-sample array */
-        Float32 *viewFloats = malloc(sizeof(Float32)*width);
+        
+        Float32 *viewFloats;
         int offset = dirtyRect.origin.x;
-        
-        SamplesSamples_max( sampleRate, viewFloats, &(audioFrames[offset]), scale, width, frameCount-offset);
-        
+
+        if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) )
+        {
+            viewFloats = previousBuffer;
+        }
+        else
+        {
+            free( previousBuffer );
+            viewFloats = malloc(sizeof(Float32)*width);
+            SamplesSamples_max( sampleRate, viewFloats, &(audioFrames[offset]), scale, width, frameCount-offset);
+            previousBuffer = viewFloats;
+            previousOffset = offset;
+            previousBoundsWidth = currentBoundsWidth;
+            previousFrameWidth = currentFrameWidth;
+        }
+
         /* Blank background */
         NSRect rect;
         [[NSColor colorWithCalibratedWhite:0.95 alpha:1.0] set];
@@ -140,7 +160,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         if( scale < 3.0 )
         {
             /* Near 1:1 zoom, draw vertical lines connecting points to points */
-            CGFloat lastHeight = 0, thisHeight;
+            CGFloat lastHeight = (viewheight/2)+25, thisHeight;
             for( i=0; i<width; i++ )
             {
                 thisHeight = (viewheight/2)+(viewFloats[i]*(viewheight/2));
@@ -164,8 +184,6 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
                 NSRectFill(rect);
             }
         }
-        
-        free(viewFloats);
     }
     else
     {
@@ -189,6 +207,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     if( coalescedCharacters != nil )
         free( coalescedCharacters );
     
+    if( previousBuffer != nil )
+        free( previousBuffer );
     
     [super dealloc];
 }
@@ -200,7 +220,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     vDSP_Length i;
     int zc_count;
     
-    float *zero_crossings = malloc(sizeof(float)*frameCount);
+    unsigned long max_possible_zero_crossings = (frameCount / 2) + 1;
+    float *zero_crossings = malloc(sizeof(float)*max_possible_zero_crossings);
     zc_count = 0;
     
     /* Create temporary array of zero crossing points */
@@ -241,12 +262,12 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     zc_count -= 1;
     unsigned short even_parity = 0, odd_parity = 0;
     double threashold = ((sampleRate/lowCycle) + (sampleRate/highCycle)) / 2.0, test1, test2;
-    int bit_count;
+    double resyncThreshold = sampleRate/[[anaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"] floatValue];
+    int bit_count = 0;
     
+    /* start by scanning zero crossing looking for the start of a block */
     for (i=2; i<zc_count; i+=2)
     {
-        /* start by scanning zero crossing looking for the start of a block */
-        
         /* test frequency of 2 zero crossings */
         even_parity >>= 1;
         test1 = (zero_crossings[i] - zero_crossings[i-2]);
@@ -269,13 +290,13 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
                 even_parity = odd_parity;
             }
             
-            /* capture (0x0f & 0x05) start byte */
+            /* capture (0x0f & 0x05) sync byte */
             characters[char_count].start = zero_crossings[i-(16*2)];
             characters[char_count].length = zero_crossings[i-(8*2)] - zero_crossings[i-(16*2)];
             character[char_count] = even_parity & 0x00ff;
             char_count++;
             
-            /* capture 0x3c start byte */
+            /* capture 0x3c sync byte */
             characters[char_count].start = zero_crossings[i-(8*2)];
             characters[char_count].length = zero_crossings[i] - zero_crossings[i-(8*2)];
             character[char_count] = even_parity >> 8;
@@ -283,12 +304,14 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
             
             /* start capturing synchronized bits */
             i += 2;
-            bit_count = 0;
             for( ; i<zc_count; i+=2 )
             {
                 /* mark begining of byte */
                 if(bit_count == 0)
+                {
                     characters[char_count].start = zero_crossings[i-2];
+                    //characters[char_count].length = 0;
+                }
                 
                 /* test frequency of 2 zero crossings */ 
                 even_parity >>= 1;
@@ -300,20 +323,21 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
                 if( bit_count == 8 )
                 {
                     /* we have eight bits, finish byte capture */
-                    if( test1 > threashold * 3.0 )
-                        characters[char_count].length = zero_crossings[i-1] - characters[char_count].start + (threashold * 3.0);
+                    if( test1 > resyncThreshold )
+                        characters[char_count].length = zero_crossings[i-1] - characters[char_count].start + resyncThreshold;
                     else
                         characters[char_count].length = zero_crossings[i] - characters[char_count].start;
                     character[char_count] = even_parity >> 8;
                     char_count++;
                     bit_count = 0;
                 }
-                else if( test1 > threashold * 3.0 )
+                else if( test1 > resyncThreshold )
                 {
                     /* lost sync, finish off last byte, break out of loop to try to re-synchronize */
-                    characters[char_count].length = zero_crossings[i-1] - characters[char_count].start + (threashold * 3.0);
+                    characters[char_count].length = zero_crossings[i-1] - characters[char_count].start + resyncThreshold;
                     character[char_count] = even_parity >> 8;
                     char_count++;
+                    bit_count = 0;
                     i += 2;
                     break;
                 }

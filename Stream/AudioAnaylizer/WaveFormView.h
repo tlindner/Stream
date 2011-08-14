@@ -38,6 +38,12 @@ typedef struct
 @property(nonatomic, assign) NSUInteger char_count;
 @property(nonatomic, assign) NSUInteger coa_char_count;
 
+@property(nonatomic, assign) CGFloat previousBoundsWidth;
+@property(nonatomic, assign) CGFloat previousFrameWidth;
+@property(nonatomic, assign) int previousOffset;
+@property(nonatomic, assign) Float32 *previousBuffer;
+
+
 - (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer;
 
 @end

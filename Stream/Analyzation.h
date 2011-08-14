@@ -28,4 +28,7 @@
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;
 - (void)setData:(NSData *)data;
++ (NSString *)anaylizerKey;
++ (NSString *)AnaylizerPopoverAccessoryViewNib;
++ (NSMutableDictionary *)defaultOptions;
 @end

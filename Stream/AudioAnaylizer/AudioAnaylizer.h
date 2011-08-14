@@ -32,6 +32,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 + (NSString *)anayliserName;
 + (NSString *)anaylizerKey;
 + (NSMutableDictionary *)defaultOptions;
++ (NSString *)AnaylizerPopoverAccessoryViewNib;
 
 - (IBAction)updateSlider:(id)sender;
 - (void)deltaSlider:(float)delta fromPoint:(NSPoint)point;

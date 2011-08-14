@@ -8,7 +8,6 @@
 
 #import "StAnaylizer.h"
 
-
 @implementation StAnaylizer
 @dynamic anaylizerHeight;
 @dynamic anaylizerKind;

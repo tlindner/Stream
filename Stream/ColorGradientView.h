@@ -1,4 +1,5 @@
 #import <Cocoa/Cocoa.h>
+#import "AnaylizerSettingPopOverAccessoryViewController.h"
 
 @interface ColorGradientView : NSView
 {
@@ -14,6 +15,7 @@
     IBOutlet NSPopUpButton *editorPopup;
     IBOutlet NSTextField *utiTextField;
     IBOutlet NSPopover *actionPopOver;
+    IBOutlet NSView *accessoryView;
     NSArrayController *popupArrayController;
 }
 
@@ -25,6 +27,7 @@
 @property(nonatomic, retain) NSArrayController *popupArrayController;
 @property(nonatomic, retain) NSManagedObjectContext *subMOC;
 @property(nonatomic, retain) NSManagedObject *subObjectValue;
+@property(nonatomic, retain) AnaylizerSettingPopOverAccessoryViewController *avc;
 @property(assign) int angle;
 
 - (IBAction)doPopOver:(id)sender;

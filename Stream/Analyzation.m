@@ -7,6 +7,7 @@
 //
 
 #import "Analyzation.h"
+#import <HFTextView.h>
 
 static Analyzation *sharedSingleton;
 
@@ -91,8 +92,11 @@ static Analyzation *sharedSingleton;
         else
             NSLog( @"Shared Anaylizer error: Can not find class %@", anaylizer );
     }
+    
+    if( [resultArray count] == 0 )
+        [resultArray addObject:[HFTextView anayliserName]];
+    
     return [resultArray autorelease];
-              
 }
 
 - (Class)anaylizerClassforName:(NSString *)inName
