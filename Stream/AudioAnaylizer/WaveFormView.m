@@ -30,6 +30,13 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 @synthesize previousFrameWidth;
 @synthesize previousOffset;
 @synthesize previousBuffer;
+@synthesize lowCycle;
+@synthesize highCycle;
+@synthesize resyncThresholdHertz;
+@synthesize cachedAnaylizer;
+@synthesize anaylizationError;
+@synthesize errorString;
+@synthesize needsAnaylyzation;
 
 //- (id)initWithFrame:(NSRect)frame
 //{
@@ -53,7 +60,19 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
     [aa.objectValue setValue:[NSNumber numberWithFloat:[[self superview] bounds].origin.x] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"];
     
+    if( needsAnaylyzation ) [self anaylizeAudioDataWithOptions:nil];
+    
     // Drawing code here.
+    if( anaylizationError == YES )
+    {
+        if (errorString == nil) self.errorString = @"No error message set!";
+
+        [errorString drawInRect:dirtyRect withAttributes:nil];
+        
+        [[NSColor grayColor] set];
+        NSRectFill(dirtyRect);
+    }
+    
     if( audioFrames != nil )
     {
         CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
@@ -194,7 +213,12 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 }
 
 - (void)dealloc
-{    
+{
+
+    [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"];
+    [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
+    [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
+    
     if( audioFrames != nil )
         free( audioFrames );
     
@@ -213,10 +237,66 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     [super dealloc];
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
+    
+    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"])
+    {
+        if ([[change objectForKey:@"new"] floatValue] != lowCycle)
+        {
+            self.needsAnaylyzation= YES;
+            [self setNeedsDisplay:YES];
+        }
+        
+        return;
+    }
+    
+    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"])
+    {
+        if ([[change objectForKey:@"new"] floatValue] != highCycle)
+        {
+            self.needsAnaylyzation= YES;
+            [self setNeedsDisplay:YES];
+        }
+        
+        return;
+    }
+    
+    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"])
+    {
+        if ([[change objectForKey:@"new"] floatValue] != resyncThresholdHertz)
+        {
+            self.needsAnaylyzation= YES;
+            [self setNeedsDisplay:YES];
+        }
+        
+        return;
+    }
+
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
 - (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer
 {
-    float lowCycle = [[anaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"] floatValue];
-    float highCycle = [[anaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"] floatValue];
+    needsAnaylyzation = NO;
+    anaylizationError = NO;
+    
+    if( self.cachedAnaylizer == nil && anaylizer != nil)
+        self.cachedAnaylizer = anaylizer;
+    else if( self.cachedAnaylizer == nil && anaylizer == nil )
+    {
+        NSLog( @"anaylizeAudioDataWithOptions: no anaylizer avaiable" );
+        return;
+    }
+    
+    /* setup observations */
+    [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle" options:NSKeyValueChangeSetting context:nil];
+    [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle" options:NSKeyValueChangeSetting context:nil];
+    [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
+
+    lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"] floatValue];
+    highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"] floatValue];
     vDSP_Length i;
     int zc_count;
     
@@ -261,8 +341,18 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     
     zc_count -= 1;
     unsigned short even_parity = 0, odd_parity = 0;
-    double threashold = ((sampleRate/lowCycle) + (sampleRate/highCycle)) / 2.0, test1, test2;
-    double resyncThreshold = sampleRate/[[anaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"] floatValue];
+    double dataThreashold = ((sampleRate/lowCycle) + (sampleRate/highCycle)) / 2.0, test1, test2;
+    resyncThresholdHertz = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"] floatValue];
+    
+    if( resyncThresholdHertz > lowCycle/2.0 )
+    {
+        self.errorString = @"Resynchronization threshold cannot be larger than half of the low frequency target.";
+        self.anaylizationError = YES;
+        NSLog( @"Setting anaylization error" );
+        return;
+    }
+    
+    double resyncThreshold = sampleRate/resyncThresholdHertz;
     int bit_count = 0;
     
     /* start by scanning zero crossing looking for the start of a block */
@@ -271,13 +361,13 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         /* test frequency of 2 zero crossings */
         even_parity >>= 1;
         test1 = (zero_crossings[i] - zero_crossings[i-2]);
-        if( test1 < threashold )
+        if( test1 < dataThreashold )
             even_parity |= 0x8000;
         
         /* test frequency of 2 zero crossings, offset by one zero crossing into the future */
         odd_parity >>= 1;
         test2 = (zero_crossings[i+1] - zero_crossings[i-1]);
-        if( test2 < threashold )
+        if( test2 < dataThreashold )
             odd_parity |= 0x8000;
         
         /* test for start block bit pattern */
@@ -316,7 +406,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
                 /* test frequency of 2 zero crossings */ 
                 even_parity >>= 1;
                 test1 = (zero_crossings[i] - zero_crossings[i-2]);
-                if( test1 < threashold )
+                if( test1 < dataThreashold )
                     even_parity |= 0x8000;
                 bit_count++;
                 
@@ -396,7 +486,7 @@ typedef struct
 {
 	AudioSampleType *inBuffer;
     UInt32 count;
-    Boolean done;
+    BOOL done;
 } AudioFileIO;
 
 void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
@@ -420,7 +510,10 @@ void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType
         SetCanonical(&inDestinationFormat, 1, false);
 
         OSStatus myErr = AudioConverterNew( &inSourceFormat, &inDestinationFormat, &inAudioRef );
-
+        
+        if( myErr != noErr )
+            fprintf(stderr, "Error in AudioConverterNew: %d", myErr );
+        
         outOutputData.mNumberBuffers = 1;
         outOutputData.mBuffers[0].mNumberChannels = 1;
         outOutputData.mBuffers[0].mDataByteSize = sizeof(Float32)*(unsigned int)viewWidth;
@@ -444,11 +537,17 @@ void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType
                                                 &outOutputData,
                                                 &outPacketDescription);
 
+        if( myErr != noErr )
+            fprintf(stderr, "Error in AudioConverterFillComplexBuffer: %d", myErr );
+
         myErr = AudioConverterDispose( inAudioRef );
+
+        if( myErr != noErr )
+            fprintf(stderr, "Error in AudioConverterDispose: %d", myErr );
     }
     else
     {
-        /* find maximum sample in group */
+        /* find maximum sample in each group */
         for( int i=0; i<viewWidth; i++ )
         {
             int j = i*sampleSize;

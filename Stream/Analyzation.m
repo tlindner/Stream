@@ -79,7 +79,7 @@ static Analyzation *sharedSingleton;
             {
                 for( NSString *aUTI in classUTIs )
                 {
-                    Boolean conforms;
+                    BOOL conforms;
                     conforms = UTTypeConformsTo((CFStringRef)inUTI, (CFStringRef)aUTI);
                     
                     if( conforms )

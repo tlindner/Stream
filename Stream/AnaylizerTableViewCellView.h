@@ -18,7 +18,7 @@
     NSView *editorSubView;
     NSMutableArray *newConstraints;
     NSSize dragOffsetIntoGrowBox;
-    Boolean dragging;
+    BOOL dragging;
     float rowHeight;
 }
 

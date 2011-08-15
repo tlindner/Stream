@@ -24,9 +24,9 @@
 
 - (void)didAddSubview:(NSView *)subview
 {
-    if (self.newConstraints != nil) {
+    if (newConstraints != nil) {
         [self removeConstraints:self.constraints];
-        [self.newConstraints removeAllObjects];
+        [newConstraints removeAllObjects];
     }
     else
         self.newConstraints = [[[NSMutableArray alloc] init] autorelease];
@@ -40,10 +40,10 @@
 
 - (void)willRemoveSubview:(NSView *)subview
 {
-    if (self.newConstraints != nil)
+    if (newConstraints != nil)
     {
         [self removeConstraints:self.constraints];
-        [self.newConstraints removeAllObjects];
+        [newConstraints removeAllObjects];
         self.newConstraints = nil;
     }
 

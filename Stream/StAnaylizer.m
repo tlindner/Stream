@@ -27,10 +27,14 @@
     }
     
     NSMutableDictionary *dict = [self.optionsDictionary objectForKey:subOptionsID];
-    [newOptions addEntriesFromDictionary:dict];
-    
-    NSString *theKeyPath = [NSString stringWithFormat:@"optionsDictionary.%@", subOptionsID];
-    [self setValue:newOptions forKeyPath:theKeyPath];
+
+    for (NSString *key in [newOptions allKeys])
+    {
+        id value = [dict objectForKey:key];
+        
+        if( value == nil )
+            [dict setObject:[newOptions objectForKey:key] forKey:key];
+    }
 }
          
 @end

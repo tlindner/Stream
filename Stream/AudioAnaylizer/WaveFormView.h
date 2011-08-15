@@ -43,6 +43,14 @@ typedef struct
 @property(nonatomic, assign) int previousOffset;
 @property(nonatomic, assign) Float32 *previousBuffer;
 
+@property(nonatomic, assign) StAnaylizer *cachedAnaylizer;
+@property(nonatomic, assign) float lowCycle;
+@property(nonatomic, assign) float highCycle;
+@property(nonatomic, assign) float resyncThresholdHertz;
+
+@property(nonatomic, assign) BOOL anaylizationError;
+@property(nonatomic, retain) NSString *errorString;
+@property(nonatomic, assign) BOOL needsAnaylyzation;
 
 - (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer;
 

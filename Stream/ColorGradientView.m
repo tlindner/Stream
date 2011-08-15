@@ -27,8 +27,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
-        [self setStartingColor:[NSColor colorWithCalibratedWhite:1.0 alpha:1.0]];
-        [self setEndingColor:nil];
+        self.startingColor = [NSColor colorWithCalibratedWhite:1.0 alpha:1.0];
+        self.endingColor = nil;
         [self setAngle:270];
     }
     
@@ -37,8 +37,8 @@
 
 - (void)awakeFromNib
 {
-    [self setStartingColor:[NSColor colorWithCalibratedRed:0.92f green:0.93f blue:0.98f alpha:1.0f]];
-    [self setEndingColor:[NSColor colorWithCalibratedRed:0.74f green:0.76f blue:0.83f alpha:1.0f]];
+    self.startingColor = [NSColor colorWithCalibratedRed:0.92f green:0.93f blue:0.98f alpha:1.0f];
+    self.endingColor = [NSColor colorWithCalibratedRed:0.74f green:0.76f blue:0.83f alpha:1.0f];
     [self setAngle:270];
     
     [self updateConstraints];
@@ -191,6 +191,10 @@
         newSubViewHeight = 0;
     }
     
+    NSView *editorView = [[self superview] valueForKey:@"editorSubView"];
+    if( [editorView respondsToSelector:@selector(prepareAccessoryView:)] )
+        [editorView prepareAccessoryView:[self.avc view]];
+    
     [actionPopOver showRelativeToRect:[tlAction bounds] ofView:tlAction preferredEdge:NSMaxYEdge];
     NSSize contentsize = [actionPopOver contentSize];
     contentsize.height += newSubViewHeight - currentAVHeight;
@@ -242,6 +246,10 @@
         contentsize.height += newSubViewHeight - currentAVHeight;
         [actionPopOver setContentSize:contentsize];
 
+        NSView *editorView = [[self superview] valueForKey:@"editorSubView"];
+        if( [editorView respondsToSelector:@selector(prepareAccessoryView:)] )
+            [editorView prepareAccessoryView:[self.avc view]];
+        
         return;
     }
     else if( [keyPath isEqualToString:@"parentStream.sourceUTI"] )

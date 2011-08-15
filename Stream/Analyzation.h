@@ -31,4 +31,5 @@
 + (NSString *)anaylizerKey;
 + (NSString *)AnaylizerPopoverAccessoryViewNib;
 + (NSMutableDictionary *)defaultOptions;
+- (void)prepareAccessoryView: (NSView *)baseView;
 @end

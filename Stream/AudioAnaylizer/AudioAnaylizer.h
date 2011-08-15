@@ -28,6 +28,9 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 @property(nonatomic, retain) NSMutableArray *newConstraints;
 @property(nonatomic, assign) StAnaylizer *objectValue;
 
+@property(nonatomic, assign) NSInteger channelCount;
+@property(nonatomic, assign) NSInteger currentChannel;
+
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;
 + (NSString *)anaylizerKey;

@@ -20,6 +20,8 @@
 @synthesize slider;
 @synthesize newConstraints;
 @synthesize objectValue;
+@synthesize channelCount;
+@synthesize currentChannel;
 
 + (void)initialize {
     if (self == [AudioAnaylizer class]) {
@@ -39,9 +41,9 @@
         
         NSRect sliderRect = NSMakeRect(1.0f, 2.0, frame.size.width-2, 15.0f);
         NSAssert(self.slider == nil, @"self.slider should be nil here");
-        self.slider = [[NSSlider alloc] initWithFrame:sliderRect];
+        self.slider = [[[NSSlider alloc] initWithFrame:sliderRect] autorelease];
         
-        [self addSubview:self.slider];
+        [self addSubview:slider];
         //[self.slider setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.slider setTranslatesAutoresizingMaskIntoConstraints:YES];
         [self.slider setAutoresizingMask:NSViewWidthSizable];
@@ -50,11 +52,11 @@
         [self.slider setNumberOfTickMarks:25];
         [self.slider setAction:@selector(updateSlider:)];
         [self.slider setTarget:self];
-        [self.slider release];
+        //[slider release];
         
         NSAssert(self.scroller == nil, @"self.scroller should be nil here");
         NSRect scrollerRect = NSMakeRect(1.0f,17,frame.size.width-3, frame.size.height-19.0f);
-        self.scroller = [[AudioAnaScrollView alloc] initWithFrame:scrollerRect];
+        self.scroller = [[[AudioAnaScrollView alloc] initWithFrame:scrollerRect] autorelease];
         //[self.scroller setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.scroller setTranslatesAutoresizingMaskIntoConstraints:YES];
         [self.scroller setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
@@ -68,7 +70,7 @@
         [[self.scroller horizontalRulerView] setReservedThicknessForAccessoryView:0];
         [[self.scroller horizontalRulerView] setReservedThicknessForMarkers:0];
         [self addSubview:self.scroller];
-        [self.scroller release];
+        //[self.scroller release];
         
         NSRect contentRect = NSMakeRect(0, 0, 0, 0);
         
@@ -101,7 +103,8 @@
 {
     WaveFormView *wfv = [self.scroller documentView];
     self.objectValue = [[[self superview] superview] valueForKey:@"objectValue"];
-    
+    [self.objectValue addSubOptionsDictionary:[AudioAnaylizer anaylizerKey] withDictionary:[AudioAnaylizer defaultOptions]];
+      
     [data release];
     data = [inData retain];
     
@@ -126,6 +129,16 @@
             
             err = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileDataFormat, &propSize, &clientFormat);
             NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty1: returned %d", err );
+            
+            channelCount = clientFormat.mChannelsPerFrame;
+            currentChannel = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+            
+            if (currentChannel > channelCount)
+            {
+                currentChannel = channelCount;
+                [self.objectValue setValue:[NSString stringWithFormat:@"%d", currentChannel] forKey:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
+            }
+            
             propSize = sizeof(SInt64);
             err = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileLengthFrames, &propSize, &fileFrameCount);
             NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty2: returned %d", err );
@@ -160,8 +173,6 @@
             NSSize clipViewFrameSize = [clipView frame].size;
             [clipView setBoundsSize:NSMakeSize([[self slider] floatValue], clipViewFrameSize.height)];
             
-            [self.objectValue addSubOptionsDictionary:[AudioAnaylizer anaylizerKey]  withDictionary:[AudioAnaylizer defaultOptions]];
-            
             float retrieveScale = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"] floatValue];
             if( isnan(retrieveScale) )
             {
@@ -179,7 +190,7 @@
             [wfv anaylizeAudioDataWithOptions:self.objectValue];
         }
         
-        err = ExtAudioFileDispose(af);    
+        ExtAudioFileDispose(af);
     }
     else
     {
@@ -189,6 +200,18 @@
             wfv.audioFrames = nil;
         }
         wfv.frameCount = 0;
+    }
+}
+
+- (void)prepareAccessoryView: (NSView *)baseView
+{
+    NSPopUpButton *channelsPopup = [baseView viewWithTag:6809];
+    
+    [channelsPopup removeAllItems];
+    
+    for( int i=1; i<=channelCount; i++ )
+    {
+        [channelsPopup addItemWithTitle:[NSString stringWithFormat:@"%d", i]];
     }
 }
 
@@ -267,7 +290,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:-1.0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:-1.0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", nil] autorelease];
 }
 
 @end
