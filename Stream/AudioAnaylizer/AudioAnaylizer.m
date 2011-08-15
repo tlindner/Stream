@@ -207,6 +207,8 @@
 {
     NSPopUpButton *channelsPopup = [baseView viewWithTag:6809];
     
+    NSLog( @"Why call me?" );
+    [channelsPopup setEnabled:YES];
     [channelsPopup removeAllItems];
     
     for( int i=1; i<=channelCount; i++ )

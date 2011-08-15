@@ -4,7 +4,7 @@
         <attribute name="anaylizerHeight" attributeType="Float" minValueString="0" defaultValueString="207"/>
         <attribute name="anaylizerKind" attributeType="String" indexed="YES"/>
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
-        <attribute name="optionsDictionary" optional="YES" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
+        <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream"/>
     </entity>
     <entity name="StBlock">

@@ -97,15 +97,6 @@
         [subMOC setParentContext:parentContext];
     }
     
-    if( self.subObjectValue != nil )
-    {
-        [utiTextField unbind:@"value"];
-        [editorPopup unbind:@"contentObjects"];
-        [editorPopup unbind:@"selectedObject"];
-        [self.subObjectValue unbind:@"currentEditorView"];
-        [self.subObjectValue unbind:@"parentStream.sourceUTI"];
-    }
-    
     NSManagedObjectID *objectValueID = [[[self superview] valueForKey:@"objectValue"] objectID];
     err = nil;
     self.subObjectValue = [subMOC existingObjectWithID:objectValueID error:&err];
@@ -155,11 +146,13 @@
     [self.subObjectValue addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:nil];
     [self.subObjectValue addObserver:self forKeyPath:@"parentStream.sourceUTI" options:NSKeyValueChangeSetting context:nil];
     
+    /* Editview changed, update UI */
     for (NSView *aSubView in [accessoryView subviews])
     {
         [aSubView removeFromSuperview];
     }
     
+    /* ask current anaylization the name of it accessory nib */
     Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:[editorPopup titleOfSelectedItem]];
     NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");
     [[[self superview] valueForKey:@"objectValue"] addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
@@ -192,8 +185,11 @@
     }
     
     NSView *editorView = [[self superview] valueForKey:@"editorSubView"];
-    if( [editorView respondsToSelector:@selector(prepareAccessoryView:)] )
-        [editorView prepareAccessoryView:[self.avc view]];
+    if( [editorView isKindOfClass:anaClass] )
+    {
+        if( [editorView respondsToSelector:@selector(prepareAccessoryView:)] )
+            [editorView prepareAccessoryView:[self.avc view]];
+    }
     
     [actionPopOver showRelativeToRect:[tlAction bounds] ofView:tlAction preferredEdge:NSMaxYEdge];
     NSSize contentsize = [actionPopOver contentSize];
@@ -212,17 +208,20 @@
             [aSubView removeFromSuperview];
         }
         
+        /* ask current anaylization the name of it accessory nib */
         Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:[editorPopup titleOfSelectedItem]];
         NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");
         [[[self superview] valueForKey:@"objectValue"] addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
         NSString *nibName = [anaClass AnaylizerPopoverAccessoryViewNib];
         
+        /* record some geometry */
         NSRect accessoryFrame = [accessoryView frame];
         CGFloat currentAVHeight = accessoryFrame.size.height;
         CGFloat newSubViewHeight;
         
         if( nibName != nil && ![nibName isEqualToString:@""] )
         {
+            /* load and link new nib view hirearchy */
             if( self.avc != nil )
                 [self.avc setRepresentedObject:nil];
             
@@ -237,18 +236,23 @@
         }
         else
         {
+            /* no new nib, collapse accressory frame */
             accessoryFrame.size.height = 0;
             [accessoryView setFrame:accessoryFrame];
             newSubViewHeight = 0;
         }
         
+        /* calculate proper accessory view height */
         NSSize contentsize = [actionPopOver contentSize];
         contentsize.height += newSubViewHeight - currentAVHeight;
         [actionPopOver setContentSize:contentsize];
 
         NSView *editorView = [[self superview] valueForKey:@"editorSubView"];
-        if( [editorView respondsToSelector:@selector(prepareAccessoryView:)] )
-            [editorView prepareAccessoryView:[self.avc view]];
+        if( [editorView isKindOfClass:anaClass] )
+        {
+            if( [editorView respondsToSelector:@selector(prepareAccessoryView:)] )
+                [editorView prepareAccessoryView:[self.avc view]];
+        }
         
         return;
     }
@@ -265,11 +269,24 @@
     NSError *err;
     
     [subMOC save:&err];
+
+    [utiTextField unbind:@"value"];
+    [editorPopup unbind:@"contentObjects"];
+    [editorPopup unbind:@"selectedObject"];
+    [self.subObjectValue unbind:@"currentEditorView"];
+    [self.subObjectValue unbind:@"parentStream.sourceUTI"];
+    
     [actionPopOver performClose:self];
 }
 
 - (IBAction)popOverCancel:(id)sender
 {
+    [utiTextField unbind:@"value"];
+    [editorPopup unbind:@"contentObjects"];
+    [editorPopup unbind:@"selectedObject"];
+    [self.subObjectValue unbind:@"currentEditorView"];
+    [self.subObjectValue unbind:@"parentStream.sourceUTI"];
+    
     [actionPopOver performClose:self];
 }
 

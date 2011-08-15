@@ -17,16 +17,15 @@
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions
 {
-    if( self.optionsDictionary == nil )
-        self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
+    NSMutableDictionary *ourOptDict = self.optionsDictionary;
     
-    if( [self.optionsDictionary valueForKey:subOptionsID] == nil )
+    if( [ourOptDict valueForKey:subOptionsID] == nil )
     {
-       [self.optionsDictionary setObject:newOptions forKey:subOptionsID];
+       [ourOptDict setObject:newOptions forKey:subOptionsID];
         return;
     }
     
-    NSMutableDictionary *dict = [self.optionsDictionary objectForKey:subOptionsID];
+    NSMutableDictionary *dict = [ourOptDict objectForKey:subOptionsID];
 
     for (NSString *key in [newOptions allKeys])
     {
@@ -36,5 +35,10 @@
             [dict setObject:[newOptions objectForKey:key] forKey:key];
     }
 }
-         
+
+- (void)awakeFromInsert
+{
+    self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
+}
+
 @end

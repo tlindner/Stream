@@ -93,7 +93,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         
         Float32 *viewFloats;
         int offset = dirtyRect.origin.x;
-
+        if( offset < 0 ) offset = 0;
+        
         if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) )
         {
             viewFloats = previousBuffer;
@@ -169,7 +170,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         }
         
         /* Draw zero line */
-        [[NSColor blackColor] set];
+        [[NSColor grayColor] set];
         rect = NSMakeRect(dirtyRect.origin.x/scale, (viewheight/2)+25, dirtyRect.size.width/scale, 1);
         NSRectFill(rect);
         
@@ -214,7 +215,6 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 
 - (void)dealloc
 {
-
     [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"];
     [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
     [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
@@ -239,11 +239,14 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
+    NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
+    
+    id newObject;
     
     if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"])
     {
-        if ([[change objectForKey:@"new"] floatValue] != lowCycle)
+        newObject = [change objectForKey:@"new"];
+        if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != lowCycle)
         {
             self.needsAnaylyzation= YES;
             [self setNeedsDisplay:YES];
@@ -254,7 +257,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     
     if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"])
     {
-        if ([[change objectForKey:@"new"] floatValue] != highCycle)
+        newObject = [change objectForKey:@"new"];
+        if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != highCycle)
         {
             self.needsAnaylyzation= YES;
             [self setNeedsDisplay:YES];
@@ -265,7 +269,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     
     if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"])
     {
-        if ([[change objectForKey:@"new"] floatValue] != resyncThresholdHertz)
+        newObject = [change objectForKey:@"new"];
+        if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != resyncThresholdHertz)
         {
             self.needsAnaylyzation= YES;
             [self setNeedsDisplay:YES];
