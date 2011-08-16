@@ -3,7 +3,7 @@
 //  Stream
 //
 //  Created by tim lindner on 8/2/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 org.macmess. All rights reserved.
 //
 
 #import "DragRegionView.h"

@@ -3,7 +3,7 @@
 //  Stream
 //
 //  Created by tim lindner on 7/30/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 org.macmess. All rights reserved.
 //
 
 #import <AppKit/AppKit.h>

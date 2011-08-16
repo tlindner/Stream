@@ -3,7 +3,7 @@
 //  Stream
 //
 //  Created by tim lindner on 7/31/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 org.macmess. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -20,6 +20,8 @@ typedef struct
 {
     AudioSampleType *audioFrames;
     NSUInteger frameCount;
+    NSUInteger channelCount;
+    NSUInteger currentChannel;
     Float64 sampleRate;
     
     charRef *coalescedCharacters;
@@ -32,6 +34,8 @@ typedef struct
 @property(nonatomic, assign) AudioSampleType *audioFrames;
 @property(nonatomic, assign) NSUInteger frameCount;
 @property(nonatomic, assign) Float64 sampleRate;
+@property(nonatomic, assign) NSUInteger channelCount;
+@property(nonatomic, assign) NSUInteger currentChannel;
 @property(nonatomic, assign) charRef *characters;
 @property(nonatomic, assign) charRef *coalescedCharacters;
 @property(nonatomic, assign) unsigned char *character;

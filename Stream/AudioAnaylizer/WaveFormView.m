@@ -3,7 +3,7 @@
 //  Stream
 //
 //  Created by tim lindner on 7/31/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 org.macmess. All rights reserved.
 //
 
 #import "WaveFormView.h"
@@ -15,6 +15,14 @@ void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType
 void SamplesSamples_avg( Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 void SamplesSamples_1to1(Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
+OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData);
+
+typedef struct
+{
+	AudioSampleType *inBuffer;
+    UInt32 count;
+    BOOL done;
+} AudioFileIO;
 
 @implementation WaveFormView
 
@@ -37,6 +45,24 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 @synthesize anaylizationError;
 @synthesize errorString;
 @synthesize needsAnaylyzation;
+@synthesize channelCount;
+@dynamic currentChannel;
+
+- (NSUInteger) currentChannel
+{
+    return currentChannel;
+}
+
+- (void) setCurrentChannel: (NSUInteger)newChannel
+{
+    if( newChannel < 1 )
+        return;
+    
+    if( newChannel > channelCount )
+        return;
+    
+    currentChannel = newChannel;
+}
 
 //- (id)initWithFrame:(NSRect)frame
 //{
@@ -91,6 +117,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         
         /* Create sub-sample array */
         
+        AudioSampleType *frameStart = audioFrames + (frameCount * (channelCount-1));
         Float32 *viewFloats;
         int offset = dirtyRect.origin.x;
         if( offset < 0 ) offset = 0;
@@ -103,7 +130,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         {
             free( previousBuffer );
             viewFloats = malloc(sizeof(Float32)*width);
-            SamplesSamples_max( sampleRate, viewFloats, &(audioFrames[offset]), scale, width, frameCount-offset);
+            SamplesSamples_max( sampleRate, viewFloats, &(frameStart[offset]), scale, width, frameCount-offset);
             previousBuffer = viewFloats;
             previousOffset = offset;
             previousBoundsWidth = currentBoundsWidth;
@@ -218,6 +245,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"];
     [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
     [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
+    [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
     
     if( audioFrames != nil )
         free( audioFrames );
@@ -248,7 +276,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         newObject = [change objectForKey:@"new"];
         if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != lowCycle)
         {
-            self.needsAnaylyzation= YES;
+            self.needsAnaylyzation = YES;
             [self setNeedsDisplay:YES];
         }
         
@@ -260,7 +288,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         newObject = [change objectForKey:@"new"];
         if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != highCycle)
         {
-            self.needsAnaylyzation= YES;
+            self.needsAnaylyzation = YES;
             [self setNeedsDisplay:YES];
         }
         
@@ -272,7 +300,19 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         newObject = [change objectForKey:@"new"];
         if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != resyncThresholdHertz)
         {
-            self.needsAnaylyzation= YES;
+            self.needsAnaylyzation = YES;
+            [self setNeedsDisplay:YES];
+        }
+        
+        return;
+    }
+
+    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"])
+    {
+        newObject = [change objectForKey:@"new"];
+        if ([newObject respondsToSelector:@selector(intValue)] && [newObject intValue] != currentChannel)
+        {
+            self.needsAnaylyzation = YES;
             [self setNeedsDisplay:YES];
         }
         
@@ -299,11 +339,14 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle" options:NSKeyValueChangeSetting context:nil];
     [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle" options:NSKeyValueChangeSetting context:nil];
     [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
-
+    [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel" options:NSKeyValueChangeSetting context:nil];
+    
     lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"] floatValue];
     highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"] floatValue];
     vDSP_Length i;
     int zc_count;
+    
+    AudioSampleType *frameStart = audioFrames + (frameCount * (channelCount-1));
     
     unsigned long max_possible_zero_crossings = (frameCount / 2) + 1;
     float *zero_crossings = malloc(sizeof(float)*max_possible_zero_crossings);
@@ -315,12 +358,12 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         vDSP_Length crossing;
         vDSP_Length total;
         
-        vDSP_nzcros(audioFrames+i, 1, 1, &crossing, &total, frameCount-i);
+        vDSP_nzcros(frameStart+i, 1, 1, &crossing, &total, frameCount-i);
         
         if( crossing == 0 ) break;
         
         zero_crossings[zc_count++] = i+crossing;
-        //zero_crossings[zc_count++] = XIntercept(i+crossing-1, audioFrames[i+crossing-1], i+crossing, audioFrames[i+crossing]);
+        //zero_crossings[zc_count++] = XIntercept(i+crossing-1, frameStart[i+crossing-1], i+crossing, frameStart[i+crossing]);
         
         i += crossing-1;
     }
@@ -484,15 +527,6 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )
     
     return (-b)/m;
 }
-
-OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData);
-
-typedef struct
-{
-	AudioSampleType *inBuffer;
-    UInt32 count;
-    BOOL done;
-} AudioFileIO;
 
 void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
 {

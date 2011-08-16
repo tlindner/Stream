@@ -3,7 +3,7 @@
 //  Stream
 //
 //  Created by tim lindner on 8/12/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2011 org.macmess. All rights reserved.
 //
 
 #import "StAnaylizer.h"

@@ -3,7 +3,7 @@
 //  Stream
 //
 //  Created by tim lindner on 7/31/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 org.macmess. All rights reserved.
 //
 
 #import "AudioAnaylizer.h"
@@ -20,8 +20,6 @@
 @synthesize slider;
 @synthesize newConstraints;
 @synthesize objectValue;
-@synthesize channelCount;
-@synthesize currentChannel;
 
 + (void)initialize {
     if (self == [AudioAnaylizer class]) {
@@ -104,63 +102,77 @@
     WaveFormView *wfv = [self.scroller documentView];
     self.objectValue = [[[self superview] superview] valueForKey:@"objectValue"];
     [self.objectValue addSubOptionsDictionary:[AudioAnaylizer anaylizerKey] withDictionary:[AudioAnaylizer defaultOptions]];
-      
-    [data release];
-    data = [inData retain];
+    UInt32 propSize;
+    OSStatus myErr;
+   
+    if( inData != data )
+    {
+        [data release];
+        data = [inData retain];
+    }
     
     if( data != nil )
     {
-        /* Convert data to samples */
-        OSStatus err;
-        ExtAudioFileRef af;
-        
         NSManagedObject *parentStream = [self.objectValue valueForKeyPath:@"parentStream"];
         NSURL *fileURL = [parentStream valueForKey:@"sourceURL"];
+
+        /* Convert data to samples */
+        ExtAudioFileRef af;
+        myErr = ExtAudioFileOpenURL((CFURLRef)fileURL, &af);
         
-        err = ExtAudioFileOpenURL((CFURLRef)fileURL, &af);
-        
-        if (err == noErr)
+        if (myErr == noErr)
         {
-            UInt32 propSize;
             SInt64 fileFrameCount;
             
             AudioStreamBasicDescription clientFormat;
             propSize = sizeof(clientFormat);
             
-            err = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileDataFormat, &propSize, &clientFormat);
-            NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty1: returned %d", err );
+            myErr = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileDataFormat, &propSize, &clientFormat);
+            NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty1: returned %d", myErr );
             
-            channelCount = clientFormat.mChannelsPerFrame;
-            currentChannel = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+            wfv.channelCount = clientFormat.mChannelsPerFrame;
+            wfv.currentChannel = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+            wfv.sampleRate = clientFormat.mSampleRate;
             
-            if (currentChannel > channelCount)
+            /* Build array for channel popup list in accessory view */
+            if( wfv.channelCount > 1 )
             {
-                currentChannel = channelCount;
-                [self.objectValue setValue:[NSString stringWithFormat:@"%d", currentChannel] forKey:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
+                NSMutableArray *theChannelList = [[NSMutableArray alloc] init];
+                for( int i=1; i<=wfv.channelCount; i++ )
+                {
+                    [theChannelList addObject:[NSString stringWithFormat:@"%d", i]];
+                }
+                [self.objectValue setValue:theChannelList forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannelList"];
+                [theChannelList release];
             }
             
+            //[self.objectValue addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel" options:NSKeyValueChangeSetting context:nil];
+
             propSize = sizeof(SInt64);
-            err = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileLengthFrames, &propSize, &fileFrameCount);
-            NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty2: returned %d", err );
+            myErr = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileLengthFrames, &propSize, &fileFrameCount);
+            NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty2: returned %d", myErr );
             
-            wfv.sampleRate = clientFormat.mSampleRate;
-            SetCanonical(&clientFormat, 1, true);
-            
+            SetCanonical(&clientFormat, (UInt32)wfv.channelCount, YES);
+
             propSize = sizeof(clientFormat);
-            err = ExtAudioFileSetProperty(af, kExtAudioFileProperty_ClientDataFormat, propSize, &clientFormat);
-            NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", err );
-            
+            myErr = ExtAudioFileSetProperty(af, kExtAudioFileProperty_ClientDataFormat, propSize, &clientFormat);
+            NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", myErr );
+
             wfv.frameCount = fileFrameCount;
-            wfv.audioFrames = malloc(((UInt32)sizeof(AudioSampleType)) * wfv.frameCount);
+            
+            if (wfv.audioFrames != nil)
+                free(wfv.audioFrames);
+
+            wfv.audioFrames = malloc(((UInt32)sizeof(AudioSampleType)) * wfv.frameCount * wfv.channelCount);
             
             AudioBufferList bufList;
             bufList.mNumberBuffers = 1;
-            bufList.mBuffers[0].mNumberChannels = 1;
+            bufList.mBuffers[0].mNumberChannels = (UInt32)wfv.channelCount;
             bufList.mBuffers[0].mData = wfv.audioFrames;
-            bufList.mBuffers[0].mDataByteSize = (unsigned int)((sizeof(AudioSampleType)) * wfv.frameCount);
+            bufList.mBuffers[0].mDataByteSize = (unsigned int)((sizeof(AudioSampleType)) * wfv.frameCount * wfv.channelCount);
             UInt32 ioFrameCount = (unsigned int)fileFrameCount;
-            err = ExtAudioFileRead(af, &ioFrameCount, &bufList);
-            NSAssert( err == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", err );
+            myErr = ExtAudioFileRead(af, &ioFrameCount, &bufList);
+            NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
             
             self.slider.maxValue = wfv.frameCount;
             self.slider.minValue = [[[self scroller] contentView] frame].size.width / MAXZOOM;
@@ -190,7 +202,8 @@
             [wfv anaylizeAudioDataWithOptions:self.objectValue];
         }
         
-        ExtAudioFileDispose(af);
+        myErr = ExtAudioFileDispose(af);
+        NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
     }
     else
     {
@@ -203,21 +216,24 @@
     }
 }
 
-- (void)prepareAccessoryView: (NSView *)baseView
-{
-    NSPopUpButton *channelsPopup = [baseView viewWithTag:6809];
-    
-    NSLog( @"Why call me?" );
-    [channelsPopup setEnabled:YES];
-    [channelsPopup removeAllItems];
-    
-    for( int i=1; i<=channelCount; i++ )
-    {
-        [channelsPopup addItemWithTitle:[NSString stringWithFormat:@"%d", i]];
-    }
-}
+//- (void)prepareAccessoryView: (NSView *)baseView
+//{
+//    NSPopUpButton *channelsPopup = [baseView viewWithTag:6809];
+//    WaveFormView *wfv = [self.scroller documentView];
+//        
+//    [channelsPopup setEnabled:YES];
+//    [channelsPopup removeAllItems];
+//    
+//    for( int i=1; i<=wfv.channelCount; i++ )
+//    {
+//        [channelsPopup addItemWithTitle:[NSString stringWithFormat:@"%d", i]];
+//    }
+//}
 
-- (void)dealloc {
+- (void)dealloc
+{
+    [self.objectValue unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
+    
     self.data = nil;
     self.result = nil;
     [self.scroller removeFromSuperview];
@@ -269,6 +285,25 @@
     [clipView setBounds:boundsRect];
 }
 
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+//{
+//    //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
+//    id newObject;
+//    
+//    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"])
+//    {
+//        newObject = [change objectForKey:@"new"];
+//        if ([newObject respondsToSelector:@selector(intValue)] && [newObject intValue] != currentChannel)
+//        {
+//            [self setData:data];
+//        }
+//        
+//        return;
+//    }
+//    
+//    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+//}
+
 + (NSArray *)anaylizerUTIs
 {
     return [NSArray arrayWithObject:@"public.audio"];
@@ -292,7 +327,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:-1.0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:-1.0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", nil] autorelease];
 }
 
 @end

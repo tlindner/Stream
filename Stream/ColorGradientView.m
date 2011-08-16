@@ -3,7 +3,7 @@
 //  Stream
 //
 //  Created by tim lindner on 7/28/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 org.macmess. All rights reserved.
 //
 
 #import "ColorGradientView.h"
@@ -86,24 +86,30 @@
 - (IBAction)doPopOver:(id)sender
 {
     NSError *err;
-
+    NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];;
+    
     if( self.subMOC == nil )
     {
-        NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
-//        [parentContext save:&err];
-//        NSAssert(err==nil, @"Saving managed object content failed: %@", err);
-        
         self.subMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
         [subMOC setParentContext:parentContext];
     }
-    
-    NSManagedObjectID *objectValueID = [[[self superview] valueForKey:@"objectValue"] objectID];
+
     err = nil;
+
+    if( [parentContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:[[self superview] valueForKey:@"objectValue"]] error:&err] == NO )
+    {
+        NSLog( @"obtainPermanentIDsForObjects Error: %@", err );
+    }
+
+    NSManagedObjectID *objectValueID = [[[self superview] valueForKey:@"objectValue"] objectID];
+    
+
     self.subObjectValue = [subMOC existingObjectWithID:objectValueID error:&err];
     
     if( err != nil )
     {
         /* lets do this the hard way */
+        NSLog( @"Doing it the hard way" );
         NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"StAnaylizer" inManagedObjectContext:subMOC];
         [request setEntity:entity];
@@ -113,7 +119,7 @@
         
         err = nil;
         NSArray *array = [subMOC executeFetchRequest:request error:&err];
-        if (array != nil)
+        if (array != nil && [array count] > 0)
         {
             self.subObjectValue = [array objectAtIndex:0];
         }
@@ -124,6 +130,11 @@
         }
     }
     
+    if( self.subObjectValue == [[self superview] valueForKey:@"objectValue"] )
+    {
+        NSLog(@"Tried to create editable child object, but they are the same object.");
+    }
+    
     if( self.actionPopOverNib == nil )
     {
         self.actionPopOverNib = [[[NSNib alloc] initWithNibNamed:@"AnaylizerSettingPopover" bundle:nil] autorelease];
@@ -131,6 +142,7 @@
         if (![self.actionPopOverNib instantiateNibWithOwner:self topLevelObjects:nil])
         {
             NSLog(@"Warning! Could not load nib file.\n");
+            return;
         }
 
         self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
@@ -139,7 +151,6 @@
     }
     
     [utiTextField bind:@"value" toObject:self.subObjectValue withKeyPath:@"parentStream.sourceUTI" options:nil];
-    
     [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
     [editorPopup bind:@"selectedObject" toObject:self.subObjectValue withKeyPath:@"currentEditorView" options:nil];
 
@@ -169,7 +180,9 @@
             [self.avc setRepresentedObject:nil];
         
         self.avc = [[[AnaylizerSettingPopOverAccessoryViewController alloc] initWithNibName:nibName bundle:nil] autorelease];
-        [self.avc setRepresentedObject:[[self superview] valueForKey:@"objectValue"]];
+        //[self.avc setRepresentedObject:[[self superview] valueForKey:@"objectValue"]];
+        [self.avc setRepresentedObject:self.subObjectValue];
+        
         [self.avc loadView];
         
         newSubViewHeight = [[self.avc view] frame].size.height;

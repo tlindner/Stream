@@ -3,7 +3,7 @@
 //  Stream
 //
 //  Created by tim lindner on 7/31/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 org.macmess. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -27,9 +27,6 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 @property(nonatomic, assign) NSSlider *slider;
 @property(nonatomic, retain) NSMutableArray *newConstraints;
 @property(nonatomic, assign) StAnaylizer *objectValue;
-
-@property(nonatomic, assign) NSInteger channelCount;
-@property(nonatomic, assign) NSInteger currentChannel;
 
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;
