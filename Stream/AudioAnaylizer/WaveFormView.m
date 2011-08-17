@@ -11,9 +11,10 @@
 #import "Accelerate/Accelerate.h"
 #import "AudioToolbox/AudioConverter.h"
 
-void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
-void SamplesSamples_avg( Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
-void SamplesSamples_1to1(Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
+void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
+void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
+void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
+void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData);
 
@@ -22,6 +23,7 @@ typedef struct
 	AudioSampleType *inBuffer;
     UInt32 count;
     BOOL done;
+    vDSP_Stride stride;
 } AudioFileIO;
 
 @implementation WaveFormView
@@ -34,6 +36,9 @@ typedef struct
 @synthesize char_count;
 @synthesize coalescedCharacters;
 @synthesize coa_char_count;
+@synthesize channelCount;
+@synthesize currentChannel;
+@synthesize previousCurrentChannel;
 @synthesize previousBoundsWidth;
 @synthesize previousFrameWidth;
 @synthesize previousOffset;
@@ -45,24 +50,6 @@ typedef struct
 @synthesize anaylizationError;
 @synthesize errorString;
 @synthesize needsAnaylyzation;
-@synthesize channelCount;
-@dynamic currentChannel;
-
-- (NSUInteger) currentChannel
-{
-    return currentChannel;
-}
-
-- (void) setCurrentChannel: (NSUInteger)newChannel
-{
-    if( newChannel < 1 )
-        return;
-    
-    if( newChannel > channelCount )
-        return;
-    
-    currentChannel = newChannel;
-}
 
 //- (id)initWithFrame:(NSRect)frame
 //{
@@ -85,6 +72,11 @@ typedef struct
 {
     AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
     [aa.objectValue setValue:[NSNumber numberWithFloat:[[self superview] bounds].origin.x] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"];
+
+    currentChannel = [[aa.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+    
+    if( currentChannel > channelCount ) currentChannel = channelCount;
+    if( currentChannel < 1 ) currentChannel = 1;
     
     if( needsAnaylyzation ) [self anaylizeAudioDataWithOptions:nil];
     
@@ -117,12 +109,12 @@ typedef struct
         
         /* Create sub-sample array */
         
-        AudioSampleType *frameStart = audioFrames + (frameCount * (channelCount-1));
         Float32 *viewFloats;
         int offset = dirtyRect.origin.x;
         if( offset < 0 ) offset = 0;
-        
-        if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) )
+        AudioSampleType *frameStart = audioFrames + (offset * channelCount) + (currentChannel-1); // Interleaved samples
+       
+        if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) && (previousCurrentChannel == currentChannel) )
         {
             viewFloats = previousBuffer;
         }
@@ -130,11 +122,12 @@ typedef struct
         {
             free( previousBuffer );
             viewFloats = malloc(sizeof(Float32)*width);
-            SamplesSamples_max( sampleRate, viewFloats, &(frameStart[offset]), scale, width, frameCount-offset);
+            SamplesSamples_max( sampleRate, channelCount, viewFloats, frameStart, scale, width, frameCount-offset);
             previousBuffer = viewFloats;
             previousOffset = offset;
             previousBoundsWidth = currentBoundsWidth;
             previousFrameWidth = currentFrameWidth;
+            previousCurrentChannel = currentChannel;
         }
 
         /* Blank background */
@@ -242,11 +235,11 @@ typedef struct
 
 - (void)dealloc
 {
-    [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"];
-    [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
-    [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
-    [self.cachedAnaylizer unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
-    
+    [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"];
+    [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
+    [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
+    [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
+
     if( audioFrames != nil )
         free( audioFrames );
     
@@ -267,7 +260,7 @@ typedef struct
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
+    //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
     
     id newObject;
     
@@ -335,6 +328,11 @@ typedef struct
         return;
     }
     
+    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+    
+    if( currentChannel > channelCount ) currentChannel = channelCount;
+    if( currentChannel < 1 ) currentChannel = 1;
+
     /* setup observations */
     [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle" options:NSKeyValueChangeSetting context:nil];
     [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle" options:NSKeyValueChangeSetting context:nil];
@@ -346,7 +344,7 @@ typedef struct
     vDSP_Length i;
     int zc_count;
     
-    AudioSampleType *frameStart = audioFrames + (frameCount * (channelCount-1));
+    AudioSampleType *frameStart = audioFrames + (currentChannel-1);
     
     unsigned long max_possible_zero_crossings = (frameCount / 2) + 1;
     float *zero_crossings = malloc(sizeof(float)*max_possible_zero_crossings);
@@ -357,8 +355,9 @@ typedef struct
     {
         vDSP_Length crossing;
         vDSP_Length total;
+        const vDSP_Length findOneCrossing = 1;
         
-        vDSP_nzcros(frameStart+i, 1, 1, &crossing, &total, frameCount-i);
+        vDSP_nzcros(frameStart+(i*channelCount), channelCount, findOneCrossing, &crossing, &total, frameCount-i);
         
         if( crossing == 0 ) break;
         
@@ -528,82 +527,137 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )
     return (-b)/m;
 }
 
-void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
+void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
 {
     if (sampleSize < 1.0)
     {
-        /* resample data to fit in the view width */
-        AudioConverterRef inAudioRef;
-        
-        AudioStreamBasicDescription inSourceFormat;
-        AudioStreamBasicDescription inDestinationFormat;
-        
-        UInt32 ioOutputDataPacketSize = (UInt32)viewWidth;
-        AudioBufferList outOutputData;
-        AudioStreamPacketDescription outPacketDescription;
-        
-        inSourceFormat.mSampleRate = sampleRate;
-        SetCanonical(&inSourceFormat, 1, false);
-        
-        inDestinationFormat.mSampleRate = sampleRate / sampleSize;
-        SetCanonical(&inDestinationFormat, 1, false);
-
-        OSStatus myErr = AudioConverterNew( &inSourceFormat, &inDestinationFormat, &inAudioRef );
-        
-        if( myErr != noErr )
-            fprintf(stderr, "Error in AudioConverterNew: %d", myErr );
-        
-        outOutputData.mNumberBuffers = 1;
-        outOutputData.mBuffers[0].mNumberChannels = 1;
-        outOutputData.mBuffers[0].mDataByteSize = sizeof(Float32)*(unsigned int)viewWidth;
-        outOutputData.mBuffers[0].mData = outBuffer;
-
-        outPacketDescription.mStartOffset = 0;
-        outPacketDescription.mVariableFramesInPacket = 0;
-        outPacketDescription.mDataByteSize = sizeof(Float32)*(unsigned int)viewWidth;
-        
-        AudioFileIO afio;
-        afio.inBuffer = inBuffer;
-        afio.count = viewWidth / sampleSize;
-        afio.done = NO;
-        
-        if( afio.count >= maxOffset ) afio.count = (UInt32)maxOffset;
-        
-        myErr = AudioConverterFillComplexBuffer( inAudioRef,
-                                                EncoderDataProc,
-                                                &afio,
-                                                &ioOutputDataPacketSize,
-                                                &outOutputData,
-                                                &outPacketDescription);
-
-        if( myErr != noErr )
-            fprintf(stderr, "Error in AudioConverterFillComplexBuffer: %d", myErr );
-
-        myErr = AudioConverterDispose( inAudioRef );
-
-        if( myErr != noErr )
-            fprintf(stderr, "Error in AudioConverterDispose: %d", myErr );
+        SamplesSamples_resample( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, maxOffset );
+    }
+    else if (sampleSize == 1.0 )
+    {
+        SamplesSamples_1to1( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, maxOffset );
     }
     else
     {
         /* find maximum sample in each group */
         for( int i=0; i<viewWidth; i++ )
         {
-            int j = i*sampleSize;
+            int j = (i*stride)*sampleSize;
+            j += (j % stride);
             
-            if( j+sampleSize < maxOffset )
-                vDSP_maxv( &(inBuffer[j]), 1, &(outBuffer[i]), sampleSize );
+            if( j+(sampleSize*stride) < (maxOffset*stride) )
+                vDSP_maxv( &(inBuffer[j]), stride, &(outBuffer[i]), sampleSize );
             else
             {
                 NSLog( @"reading past array" );
                 outBuffer[i] = 0;
             }
-            
         }
     }
 }
 
-/* Data provider for resampling routine in SamplesSamples_max() */
+void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
+{
+    if (sampleSize < 1.0)
+    {
+        SamplesSamples_resample( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, maxOffset );
+    }
+    else if (sampleSize == 1.0 )
+    {
+        SamplesSamples_1to1( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, maxOffset );
+    }
+    else
+    {
+        /* find average sample in each group */
+        for( int i=0, j; i<viewWidth; i++ )
+        {
+            AudioSampleType curValue = 0.0;
+            for( j=0; j<sampleSize; j++ )
+            {
+                NSUInteger bufPointer = i*sampleSize+j;
+                
+                if( bufPointer < maxOffset )
+                {
+                    curValue += inBuffer[bufPointer];
+                }
+            }
+            
+            outBuffer[i] = curValue/sampleSize;
+        }
+
+        // Should move to this: Vector mean magnitude; single precision.
+        // vDSP_meamgv( float * __vDSP_A, vDSP_Stride __vDSP_I float * __vDSP_C, vDSP_Length __vDSP_N);
+    }
+}
+
+void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
+{
+    /* De-stride input */
+    
+    vDSP_Length inputLength = viewWidth / sampleSize;
+    AudioSampleType *destrideBuffer = malloc(sizeof(AudioSampleType)*inputLength);
+    
+    for( int i=0; i<inputLength; i++ )
+    {
+        destrideBuffer[i] = inBuffer[i*stride];
+    }
+    
+    /* resample data to fit in the view width */
+    AudioConverterRef inAudioRef;
+    
+    AudioStreamBasicDescription inSourceFormat;
+    AudioStreamBasicDescription inDestinationFormat;
+    
+    UInt32 ioOutputDataPacketSize = (UInt32)viewWidth;
+    AudioBufferList outOutputData;
+    AudioStreamPacketDescription outPacketDescription;
+    
+    inSourceFormat.mSampleRate = sampleRate;
+    SetCanonical(&inSourceFormat, 1, false);
+    
+    inDestinationFormat.mSampleRate = sampleRate / sampleSize;
+    SetCanonical(&inDestinationFormat, 1, false);
+    
+    OSStatus myErr = AudioConverterNew( &inSourceFormat, &inDestinationFormat, &inAudioRef );
+    
+    if( myErr != noErr )
+        fprintf(stderr, "Error in AudioConverterNew: %d", myErr );
+    
+    outOutputData.mNumberBuffers = 1;
+    outOutputData.mBuffers[0].mNumberChannels = 1;
+    outOutputData.mBuffers[0].mDataByteSize = sizeof(Float32)*(unsigned int)viewWidth;
+    outOutputData.mBuffers[0].mData = outBuffer;
+    
+    outPacketDescription.mStartOffset = 0;
+    outPacketDescription.mVariableFramesInPacket = 0;
+    outPacketDescription.mDataByteSize = sizeof(Float32)*(unsigned int)viewWidth;
+    
+    AudioFileIO afio;
+    afio.inBuffer = destrideBuffer;
+    afio.count = (UInt32)inputLength;
+    afio.done = NO;
+    
+    if( afio.count >= maxOffset ) afio.count = (UInt32)maxOffset;
+    
+    myErr = AudioConverterFillComplexBuffer( inAudioRef,
+                                            EncoderDataProc,
+                                            &afio,
+                                            &ioOutputDataPacketSize,
+                                            &outOutputData,
+                                            &outPacketDescription);
+    
+    if( myErr != noErr )
+        fprintf(stderr, "Error in AudioConverterFillComplexBuffer: %d", myErr );
+    
+    myErr = AudioConverterDispose( inAudioRef );
+    
+    if( myErr != noErr )
+        fprintf(stderr, "Error in AudioConverterDispose: %d", myErr );
+    
+    free( destrideBuffer );    
+}
+
+/* Data provider for resampling routine in SamplesSamples_resample() */
 OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData)
 {
 	AudioFileIO* afio = (AudioFileIO*)inUserData;
@@ -611,11 +665,6 @@ OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDat
     if( afio->done == YES )
     {
         *ioNumberDataPackets = 0;
-//        ioData->mNumberBuffers = 0;
-//        ioData->mBuffers[0].mData = 0;
-//        ioData->mBuffers[0].mDataByteSize = 0;
-//        ioData->mBuffers[0].mNumberChannels = 0;
-//        if (outDataPacketDescription) *outDataPacketDescription = NULL;
     }
     else
     {   /* Provide all data in one shot */
@@ -631,31 +680,10 @@ OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDat
     return noErr;
 }
 
-void SamplesSamples_avg( Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
-{
-    int i, j;
-    
-    for( i=0; i<viewWidth; i++ )
-    {
-        AudioSampleType curValue = 0.0;
-        for( j=0; j<sampleSize; j++ )
-        {
-            NSUInteger bufPointer = i*sampleSize+j;
-            
-            if( bufPointer < maxOffset )
-            {
-                curValue += inBuffer[bufPointer];
-            }
-        }
-        
-        outBuffer[i] = curValue/sampleSize;
-    }
-}
-
-void SamplesSamples_1to1(Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
+void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
 {
     for( int i = 0; i<viewWidth; i++ )
     {
-        outBuffer[i] = inBuffer[i];
+        outBuffer[i] = inBuffer[i*stride];
     }
 }

@@ -146,8 +146,6 @@
                 [theChannelList release];
             }
             
-            //[self.objectValue addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel" options:NSKeyValueChangeSetting context:nil];
-
             propSize = sizeof(SInt64);
             myErr = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileLengthFrames, &propSize, &fileFrameCount);
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty2: returned %d", myErr );
@@ -215,20 +213,6 @@
         wfv.frameCount = 0;
     }
 }
-
-//- (void)prepareAccessoryView: (NSView *)baseView
-//{
-//    NSPopUpButton *channelsPopup = [baseView viewWithTag:6809];
-//    WaveFormView *wfv = [self.scroller documentView];
-//        
-//    [channelsPopup setEnabled:YES];
-//    [channelsPopup removeAllItems];
-//    
-//    for( int i=1; i<=wfv.channelCount; i++ )
-//    {
-//        [channelsPopup addItemWithTitle:[NSString stringWithFormat:@"%d", i]];
-//    }
-//}
 
 - (void)dealloc
 {

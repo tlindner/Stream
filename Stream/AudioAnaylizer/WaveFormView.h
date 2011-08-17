@@ -20,9 +20,8 @@ typedef struct
 {
     AudioSampleType *audioFrames;
     NSUInteger frameCount;
-    NSUInteger channelCount;
-    NSUInteger currentChannel;
     Float64 sampleRate;
+    NSUInteger channelCount;
     
     charRef *coalescedCharacters;
     charRef *characters;
@@ -34,14 +33,15 @@ typedef struct
 @property(nonatomic, assign) AudioSampleType *audioFrames;
 @property(nonatomic, assign) NSUInteger frameCount;
 @property(nonatomic, assign) Float64 sampleRate;
-@property(nonatomic, assign) NSUInteger channelCount;
-@property(nonatomic, assign) NSUInteger currentChannel;
 @property(nonatomic, assign) charRef *characters;
 @property(nonatomic, assign) charRef *coalescedCharacters;
 @property(nonatomic, assign) unsigned char *character;
 @property(nonatomic, assign) NSUInteger char_count;
 @property(nonatomic, assign) NSUInteger coa_char_count;
 
+@property(nonatomic, assign) NSUInteger channelCount;
+@property(nonatomic, assign) NSUInteger currentChannel;
+@property(nonatomic, assign) NSUInteger previousCurrentChannel;
 @property(nonatomic, assign) CGFloat previousBoundsWidth;
 @property(nonatomic, assign) CGFloat previousFrameWidth;
 @property(nonatomic, assign) int previousOffset;

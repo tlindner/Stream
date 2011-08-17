@@ -148,6 +148,7 @@
 -(void)dealloc
 {
     [self removeObserver:self forKeyPath:@"objectValue.currentEditorView"];
+    
     if( self.editorSubView != nil )
     {
         [self.editorSubView removeFromSuperview];

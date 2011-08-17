@@ -286,8 +286,9 @@
     [utiTextField unbind:@"value"];
     [editorPopup unbind:@"contentObjects"];
     [editorPopup unbind:@"selectedObject"];
-    [self.subObjectValue unbind:@"currentEditorView"];
-    [self.subObjectValue unbind:@"parentStream.sourceUTI"];
+
+    [self.subObjectValue removeObserver:self forKeyPath:@"currentEditorView"];
+    [self.subObjectValue removeObserver:self forKeyPath:@"parentStream.sourceUTI"];
     
     [actionPopOver performClose:self];
 }
@@ -297,9 +298,10 @@
     [utiTextField unbind:@"value"];
     [editorPopup unbind:@"contentObjects"];
     [editorPopup unbind:@"selectedObject"];
-    [self.subObjectValue unbind:@"currentEditorView"];
-    [self.subObjectValue unbind:@"parentStream.sourceUTI"];
-    
+
+    [self.subObjectValue removeObserver:self forKeyPath:@"currentEditorView"];
+    [self.subObjectValue removeObserver:self forKeyPath:@"parentStream.sourceUTI"];
+
     [actionPopOver performClose:self];
 }
 
