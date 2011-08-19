@@ -16,17 +16,18 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 {
     NSData *data;
     NSData *result;
-    NSScrollView *scroller;
-    NSSlider *slider;
     NSMutableArray *newConstraints;
 }
 
 @property(nonatomic, retain) NSData *data;
 @property(nonatomic, retain) NSData *result;
-@property(nonatomic, assign) NSScrollView *scroller;
-@property(nonatomic, assign) NSSlider *slider;
 @property(nonatomic, retain) NSMutableArray *newConstraints;
 @property(nonatomic, assign) StAnaylizer *objectValue;
+
+/* UI */
+@property(nonatomic, assign) NSScrollView *scroller;
+@property(nonatomic, assign) NSSlider *slider;
+@property(nonatomic, assign) NSSegmentedControl *toolSegment;
 
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;

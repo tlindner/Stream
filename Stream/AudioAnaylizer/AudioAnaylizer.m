@@ -20,6 +20,7 @@
 @synthesize slider;
 @synthesize newConstraints;
 @synthesize objectValue;
+@synthesize toolSegment;
 
 + (void)initialize {
     if (self == [AudioAnaylizer class]) {
@@ -37,7 +38,23 @@
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setAutoresizesSubviews:YES];
         
-        NSRect sliderRect = NSMakeRect(1.0f, 2.0, frame.size.width-2, 15.0f);
+        NSRect buttonRect = NSMakeRect(1.0, 1.0, 100*3, 15);
+        toolSegment = [[NSSegmentedControl alloc] initWithFrame:buttonRect];
+        [self.toolSegment setSegmentCount:3];
+        [[self.toolSegment cell] setControlSize:NSMiniControlSize];
+        [self.toolSegment setFont:[NSFont controlContentFontOfSize:[NSFont smallSystemFontSize]]];
+        [self.toolSegment setLabel:@"Arrow" forSegment:0];
+        [self.toolSegment setLabel:@"Hand" forSegment:1];
+        [self.toolSegment setLabel:@"Lupe" forSegment:2];
+        [self.toolSegment setImage:[NSImage imageNamed:@"AnaylizerArrow"] forSegment:0];
+        [self.toolSegment setImage:[NSImage imageNamed:@"AnaylizerHand"] forSegment:1];
+        [self.toolSegment setImage:[NSImage imageNamed:@"AnaylizerLupe"] forSegment:2];
+        [self.toolSegment setImageScaling:NSImageScaleProportionallyDown forSegment:0];
+        [self.toolSegment setImageScaling:NSImageScaleProportionallyDown forSegment:1];
+        [self.toolSegment setImageScaling:NSImageScaleProportionallyDown forSegment:2];
+        [self addSubview:toolSegment];
+        
+        NSRect sliderRect = NSMakeRect(2.0f+(100*3), 2.0, frame.size.width-3.0-(100*3), 15.0f);
         NSAssert(self.slider == nil, @"self.slider should be nil here");
         self.slider = [[[NSSlider alloc] initWithFrame:sliderRect] autorelease];
         
