@@ -46,6 +46,7 @@
         [self.toolSegment setLabel:@"Arrow" forSegment:0];
         [self.toolSegment setLabel:@"Hand" forSegment:1];
         [self.toolSegment setLabel:@"Lupe" forSegment:2];
+        
         [self.toolSegment setImage:[NSImage imageNamed:@"AnaylizerArrow"] forSegment:0];
         [self.toolSegment setImage:[NSImage imageNamed:@"AnaylizerHand"] forSegment:1];
         [self.toolSegment setImage:[NSImage imageNamed:@"AnaylizerLupe"] forSegment:2];
