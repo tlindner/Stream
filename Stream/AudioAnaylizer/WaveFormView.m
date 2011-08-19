@@ -214,6 +214,22 @@ typedef struct
                 lastHeight = thisHeight;
             }
             
+            /* Draw dots */
+            if( scale <= 0.5 )
+            {
+                CGFloat x = floor(origin);
+                i = 0;
+                
+                
+                while( x<(origin+width) )
+                {
+                    rect = NSMakeRect(x-1.0, 25.0+(viewheight/2.0)+(frameStart[i]*(viewheight/2.0))-1.0, 3.0, 3.0);
+                    NSRectFill(rect);
+                    x += 1.0/scale;
+                    i += channelCount;
+                }
+                
+            }
         }
         else
         {
