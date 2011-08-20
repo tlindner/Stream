@@ -531,6 +531,11 @@ typedef struct
     self.coalescedCharacters = realloc(coalescedCharacters, sizeof(charRef)*coa_char_count);
 }
 
+- (IBAction)chooseTool:(id)sender
+{
+    NSLog( @"Wha?" );
+}
+
 @end
 
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )

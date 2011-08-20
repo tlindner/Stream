@@ -32,7 +32,8 @@
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         
         [self setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -43,10 +44,9 @@
         [self.toolSegment setSegmentCount:3];
         [[self.toolSegment cell] setControlSize:NSMiniControlSize];
         [self.toolSegment setFont:[NSFont controlContentFontOfSize:[NSFont smallSystemFontSize]]];
-        [self.toolSegment setLabel:@"Arrow" forSegment:0];
-        [self.toolSegment setLabel:@"Hand" forSegment:1];
+        [self.toolSegment setLabel:@"Selection" forSegment:0];
+        [self.toolSegment setLabel:@"Pan" forSegment:1];
         [self.toolSegment setLabel:@"Lupe" forSegment:2];
-        
         [self.toolSegment setImage:[NSImage imageNamed:@"AnaylizerArrow"] forSegment:0];
         [self.toolSegment setImage:[NSImage imageNamed:@"AnaylizerHand"] forSegment:1];
         [self.toolSegment setImage:[NSImage imageNamed:@"AnaylizerLupe"] forSegment:2];
@@ -54,8 +54,11 @@
         [self.toolSegment setImageScaling:NSImageScaleProportionallyDown forSegment:1];
         [self.toolSegment setImageScaling:NSImageScaleProportionallyDown forSegment:2];
         [self addSubview:toolSegment];
+        [self.toolSegment sizeToFit];
+        [self.toolSegment setSelectedSegment:0];
         
-        NSRect sliderRect = NSMakeRect(2.0f+(100*3), 2.0, frame.size.width-3.0-(100*3), 15.0f);
+        CGFloat segWidth = [self.toolSegment frame].size.width;
+        NSRect sliderRect = NSMakeRect(segWidth+2.0, 2.0, frame.size.width-3.0-segWidth, 15.0f);
         NSAssert(self.slider == nil, @"self.slider should be nil here");
         self.slider = [[[NSSlider alloc] initWithFrame:sliderRect] autorelease];
         
@@ -68,7 +71,6 @@
         [self.slider setNumberOfTickMarks:25];
         [self.slider setAction:@selector(updateSlider:)];
         [self.slider setTarget:self];
-        //[slider release];
         
         NSAssert(self.scroller == nil, @"self.scroller should be nil here");
         NSRect scrollerRect = NSMakeRect(1.0f,17,frame.size.width-3, frame.size.height-19.0f);
@@ -86,7 +88,6 @@
         [[self.scroller horizontalRulerView] setReservedThicknessForAccessoryView:0];
         [[self.scroller horizontalRulerView] setReservedThicknessForMarkers:0];
         [self addSubview:self.scroller];
-        //[self.scroller release];
         
         NSRect contentRect = NSMakeRect(0, 0, 0, 0);
         
@@ -96,7 +97,10 @@
         [wfv setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
         [self.scroller setDocumentView:wfv];
         [wfv release];
-        
+ 
+        [self.toolSegment setAction:@selector(chooseTool:)];
+        [self.toolSegment setTarget:[self.scroller documentView]];
+
         //        NSDictionary *views = [NSDictionary dictionaryWithObjectsAndKeys:self.slider, @"slider", self.scroller, @"scroller", [self.scroller documentView], @"docView", nil];
         //        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-2-[slider]-2-|" options:0 metrics:nil views:views]];
         //[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-1-[scroller]-1-|" options:0 metrics:nil views:views]];

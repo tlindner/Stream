@@ -57,5 +57,6 @@ typedef struct
 @property(nonatomic, assign) BOOL needsAnaylyzation;
 
 - (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer;
+- (IBAction)chooseTool:(id)sender;
 
 @end
