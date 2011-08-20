@@ -11,6 +11,10 @@
 #import "Accelerate/Accelerate.h"
 #import "AudioToolbox/AudioConverter.h"
 
+#define WFVSelection 0
+#define WFVPan 1
+#define WFVLupe 2
+
 void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
@@ -255,6 +259,12 @@ typedef struct
     [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
     [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
     [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
+
+    if( panMomentumTimer != nil )
+    {
+        [panMomentumTimer invalidate];
+        [panMomentumTimer release];
+    }
 
     if( audioFrames != nil )
         free( audioFrames );
@@ -533,7 +543,78 @@ typedef struct
 
 - (IBAction)chooseTool:(id)sender
 {
-    NSLog( @"Wha?" );
+    NSSegmentedControl *seggy = sender;
+    
+    toolMode = [seggy selectedSegment];
+}
+
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
+}
+
+- (void) mouseDown:(NSEvent *)theEvent
+{
+    locationPrevious = locationNow = locationInSelf = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
+    startOrigin = [[self superview] bounds].origin;
+    
+    if( panMomentumTimer != nil )
+    {
+        [panMomentumTimer invalidate];
+        [panMomentumTimer release];
+        panMomentumTimer = nil;
+    }
+    
+    //[super mouseDown:theEvent];
+}
+
+- (void) mouseDragged:(NSEvent *)theEvent
+{
+    locationPrevious = locationNow;
+    locationNow = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
+    
+//    NSLog( @"location in self: %f", locationInSelf.x );
+//    NSLog( @"location now    : %f", locationNow.x );
+//    NSLog( @"start origin    : %f", startOrigin.x );
+    
+    if( toolMode == WFVPan )
+    {
+        CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
+        CGFloat currentFrameWidth = [[self superview] frame].size.width;
+        CGFloat scale = currentBoundsWidth/currentFrameWidth;
+
+        [self scrollPoint:NSMakePoint(startOrigin.x+((locationInSelf.x-locationNow.x)*scale), startOrigin.y)];
+    }
+    
+//    [super mouseDragged:theEvent];
+}
+
+- (void)mouseUp:(NSEvent *)theEvent
+{
+    NSPoint locationUp = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
+    panMomentumValue = locationPrevious.x - locationUp.x;
+    
+    if( (toolMode == WFVPan) && (fabs(panMomentumValue) > 10.0) )
+    {
+        panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
+    }
+}
+
+- (void)mouseMomentum:(NSTimer*)theTimer
+{
+    startOrigin = [[self superview] bounds].origin;
+    CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
+    CGFloat currentFrameWidth = [[self superview] frame].size.width;
+    CGFloat scale = currentBoundsWidth/currentFrameWidth;
+    [self scrollPoint:NSMakePoint(startOrigin.x+(panMomentumValue*scale), startOrigin.y)];
+    
+    panMomentumValue /= 1.1;
+    
+    if (fabs(panMomentumValue) < 2.0)
+    {
+        panMomentumValue = 0;
+        [theTimer invalidate];
+    }
 }
 
 @end

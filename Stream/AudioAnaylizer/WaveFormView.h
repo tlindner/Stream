@@ -23,6 +23,12 @@ typedef struct
     Float64 sampleRate;
     NSUInteger channelCount;
     
+    NSInteger toolMode;
+    NSPoint locationInSelf, locationNow, locationPrevious;
+    NSPoint startOrigin;
+    NSTimer *panMomentumTimer;
+    CGFloat panMomentumValue;
+    
     charRef *coalescedCharacters;
     charRef *characters;
     unsigned char *character;
