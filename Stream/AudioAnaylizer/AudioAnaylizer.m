@@ -100,15 +100,6 @@
  
         [self.toolSegment setAction:@selector(chooseTool:)];
         [self.toolSegment setTarget:[self.scroller documentView]];
-
-        //        NSDictionary *views = [NSDictionary dictionaryWithObjectsAndKeys:self.slider, @"slider", self.scroller, @"scroller", [self.scroller documentView], @"docView", nil];
-        //        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-2-[slider]-2-|" options:0 metrics:nil views:views]];
-        //[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-1-[scroller]-1-|" options:0 metrics:nil views:views]];
-        // [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[scroller(>=10)]-0-[slider(==15)]-2-|" options:0 metrics:nil views:views]];
-        
-        //        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[docView]-0-|" options:0 metrics:nil views:views]];
-        //        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[docView]-0-|" options:0 metrics:nil views:views]];
-        
     }
     
     return self;
@@ -210,14 +201,16 @@
             {
                 [self.objectValue setValue:[NSNumber numberWithFloat:self.slider.floatValue] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
             }
-            else
-            {
-                self.slider.floatValue = retrieveScale;
-                [self updateSlider:self];
-            }
+            
+            [self.slider setFloatValue:retrieveScale];
+            //[self.slider bind:@"floatValue" toObject:self.objectValue withKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale" options:nil];
             
             float retrieveOrigin = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"] floatValue];
-                [[self.scroller contentView] scrollToPoint:NSMakePoint(retrieveOrigin, 0.0f)];
+            [[self.scroller documentView] scrollPoint:NSMakePoint(retrieveOrigin, 0.0f)];
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clipViewBoundsChanged:) name:NSViewBoundsDidChangeNotification object:nil];
+            [clipView setPostsBoundsChangedNotifications:YES];
+            
             
             [wfv anaylizeAudioDataWithOptions:self.objectValue];
         }
@@ -236,8 +229,21 @@
     }
 }
 
+- (void)clipViewBoundsChanged:(NSNotification *)notification
+{
+    NSView *theView = [notification object];
+    
+    if( [self.scroller contentView] == theView )
+    {
+        [self.objectValue setValue:[NSNumber numberWithFloat:[theView bounds].origin.x] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"];
+    }
+}
+
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    //[self.slider unbind:@"floatValue"];
     [self.objectValue unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
     
     self.data = nil;
@@ -289,26 +295,8 @@
     boundsRect.size.width = newWidth;
     boundsRect.origin.x += (width-newWidth)/ratio;
     [clipView setBounds:boundsRect];
+    [self.objectValue setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
 }
-
-//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-//{
-//    //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
-//    id newObject;
-//    
-//    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"])
-//    {
-//        newObject = [change objectForKey:@"new"];
-//        if ([newObject respondsToSelector:@selector(intValue)] && [newObject intValue] != currentChannel)
-//        {
-//            [self setData:data];
-//        }
-//        
-//        return;
-//    }
-//    
-//    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-//}
 
 + (NSArray *)anaylizerUTIs
 {
@@ -333,7 +321,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:-1.0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", nil] autorelease];
 }
 
 @end

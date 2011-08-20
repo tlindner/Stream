@@ -75,7 +75,6 @@ typedef struct
 - (void)drawRect:(NSRect)dirtyRect
 {
     AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
-    [aa.objectValue setValue:[NSNumber numberWithFloat:[[self superview] bounds].origin.x] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"];
 
     currentChannel = [[aa.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
     
@@ -598,6 +597,19 @@ typedef struct
     {
         panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
     }
+    else if( (toolMode == WFVLupe) && (locationUp.x == locationPrevious.x) )
+    {
+        CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
+        CGFloat currentFrameWidth = [[self superview] frame].size.width;
+        CGFloat scale = currentBoundsWidth/currentFrameWidth;
+        AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
+        NSUInteger flags = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
+
+        if( flags == NSAlternateKeyMask )
+            [aa deltaSlider:500.0*scale fromPoint:locationUp];
+        else
+            [aa deltaSlider:-500.0*scale fromPoint:locationUp];
+   }
 }
 
 - (void)mouseMomentum:(NSTimer*)theTimer
