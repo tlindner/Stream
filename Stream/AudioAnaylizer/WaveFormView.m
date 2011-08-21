@@ -15,6 +15,8 @@
 #define WFVPan 1
 #define WFVLupe 2
 
+#define DOT_SCALE 0.5
+
 void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
@@ -99,13 +101,14 @@ typedef struct
         CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
         CGFloat currentFrameWidth = [[self superview] frame].size.width;
         CGFloat scale = currentBoundsWidth/currentFrameWidth;
-        //NSLog( @"%f", scale );
         
         NSAffineTransform *at = [NSAffineTransform transform];
         [at scaleXBy:scale yBy:1.0f];
         [at concat];
         
-        NSInteger viewheight = [self frame].size.height-25;
+        CGFloat viewHeight = [self frame].size.height;
+        CGFloat viewWaveHeight = viewHeight - 19.0;
+        CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
         float origin = dirtyRect.origin.x / scale;
         float width = dirtyRect.size.width / scale;
@@ -144,19 +147,19 @@ typedef struct
         if( ((sampleRate / 2400.0) * 8 / scale) > 9.5)
         {
             /* we're zoomed enought to draw segemented frames around byte groups and actual values */
-            while ( i< char_count && characters[i].start < dirtyRect.origin.x) i++;
+            while ( i < char_count && characters[i].start < dirtyRect.origin.x) i++;
             
             if( i>0 ) i--;
             
-            NSColor *lightColor = [NSColor colorWithCalibratedWhite:0.4 alpha:0.5];
-            NSColor *darkColor = [NSColor colorWithCalibratedWhite:0.6 alpha:0.5];
+            NSColor *lightColor = [NSColor colorWithCalibratedWhite:0.8 alpha:0.5];
+            NSColor *darkColor = [NSColor colorWithCalibratedWhite:0.65 alpha:0.5];
             while( i < char_count && characters[i].start < dirtyRect.origin.x+dirtyRect.size.width )
             {
                 /* Draw decoded values */
                 [[NSColor blackColor] set];
                 NSString *string = [NSString stringWithFormat:@"%2.2X" , character[i]];
                 NSSize charWidth = [string sizeWithAttributes:nil];
-                NSPoint thePoint = NSMakePoint((characters[i].start+(characters[i].length/2)-(charWidth.width/2))/scale, 11);
+                NSPoint thePoint = NSMakePoint((characters[i].start+(characters[i].length/2)-(charWidth.width/2))/scale, viewHeight-17.0);
                 [string drawAtPoint:thePoint withAttributes:nil];
                 
                 /* Draw byte grouping */
@@ -165,7 +168,7 @@ typedef struct
                 else
                     [darkColor set];
                 
-                NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect((characters[i].start)/scale, 25.0, ((characters[i].length)/scale), viewheight-1) xRadius:5.0*scale yRadius:5.0];
+                NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect((characters[i].start)/scale, 0.0, ((characters[i].length)/scale), viewWaveHeight) xRadius:5.0 yRadius:5.0];
                 [aPath fill];
                 i++;
             }
@@ -177,16 +180,18 @@ typedef struct
             
             if( i>0 ) i--;
             
+            NSColor *aLightGrey = [NSColor colorWithCalibratedWhite:0.85 alpha:1.0];
+            [aLightGrey set];
+            
             while( (i < coa_char_count) && (coalescedCharacters[i].start < dirtyRect.origin.x+dirtyRect.size.width) )
             {
                 /* Draw backound grouping */
-                [[NSColor lightGrayColor] set];
-                rect = NSMakeRect((coalescedCharacters[i].start)/scale, 25.0, ((coalescedCharacters[i].length)/scale), viewheight-1);
+                rect = NSMakeRect((coalescedCharacters[i].start)/scale, 0, ((coalescedCharacters[i].length)/scale), viewWaveHeight);
                 NSRectFill(rect);
                 
                 /* Draw value bar */
-                rect.origin.y = 14;
-                rect.size.height = 10;
+                rect.origin.y = viewWaveHeight+2.0;
+                rect.size.height = 13;
                 NSRectFill(rect);
                 i++;
             }
@@ -194,7 +199,7 @@ typedef struct
         
         /* Draw zero line */
         [[NSColor grayColor] set];
-        rect = NSMakeRect(dirtyRect.origin.x/scale, (viewheight/2)+25, dirtyRect.size.width/scale, 1);
+        rect = NSMakeRect(dirtyRect.origin.x/scale, viewWaveHalfHeight, dirtyRect.size.width/scale, 1);
         NSRectFill(rect);
         
         /* Draw wave form */
@@ -203,22 +208,22 @@ typedef struct
         if( scale < 3.0 )
         {
             /* Near 1:1 zoom, draw vertical lines connecting points to points */
-            CGFloat lastHeight = (viewheight/2)+25, thisHeight;
+            CGFloat lastHeight = viewWaveHalfHeight, thisHeight;
             for( i=0; i<width; i++ )
             {
-                thisHeight = (viewheight/2)+(viewFloats[i]*(viewheight/2));
+                thisHeight = viewWaveHalfHeight+(viewFloats[i]*viewWaveHalfHeight);
 
                 if (thisHeight > lastHeight)
-                    rect = NSMakeRect(i+origin, lastHeight+25, 1, thisHeight - lastHeight);
+                    rect = NSMakeRect(i+origin, lastHeight, 1, thisHeight - lastHeight);
                 else
-                    rect = NSMakeRect(i+origin, thisHeight+25, 1, lastHeight - thisHeight);
+                    rect = NSMakeRect(i+origin, thisHeight, 1, lastHeight - thisHeight);
                 
                 NSRectFill(rect);
                 lastHeight = thisHeight;
             }
             
             /* Draw dots */
-            if( scale <= 0.5 )
+            if( scale <= DOT_SCALE )
             {
                 CGFloat x = floor(origin);
                 i = 0;
@@ -226,7 +231,7 @@ typedef struct
                 
                 while( x<(origin+width) )
                 {
-                    rect = NSMakeRect(x-1.0, 25.0+(viewheight/2.0)+(frameStart[i]*(viewheight/2.0))-1.0, 3.0, 3.0);
+                    rect = NSMakeRect(x-1.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-1.0, 3.0, 3.0);
                     NSRectFill(rect);
                     x += 1.0/scale;
                     i += channelCount;
@@ -239,7 +244,7 @@ typedef struct
             /* Zoomed out, draw maxed values, reflected across zero */
             for( i=0; i<width; i++ )
             {
-                rect = NSMakeRect(i+origin, (viewheight/2) - (viewFloats[i]*(viewheight/2))+25, 1, (viewFloats[i]*(viewheight)) );
+                rect = NSMakeRect(i+origin, viewWaveHalfHeight - (viewFloats[i]*viewWaveHalfHeight), 1, (viewFloats[i]*(viewWaveHeight)) );
                 NSRectFill(rect);
             }
         }
@@ -571,6 +576,17 @@ typedef struct
         [panMomentumTimer invalidate];
         [panMomentumTimer release];
         panMomentumTimer = nil;
+    }
+    
+    CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
+    CGFloat currentFrameWidth = [[self superview] frame].size.width;
+    CGFloat scale = currentBoundsWidth/currentFrameWidth;
+
+    if( toolMode == WFVSelection && scale < DOT_SCALE )
+    {
+        
+        
+        
     }
     
     //[super mouseDown:theEvent];
