@@ -279,6 +279,21 @@
     [self.objectValue setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
 }
 
+- (void)updateBounds:(NSRect)inRect
+{
+    CGFloat minimumWidth = [self.slider minValue];
+    NSView *clipView = [[self.scroller documentView] superview];
+    NSRect newBoundsRect = [clipView bounds];
+    newBoundsRect.origin.x = inRect.origin.x;
+    
+    if( inRect.size.width < minimumWidth ) inRect.size.width = minimumWidth;
+    
+    newBoundsRect.size.width = inRect.size.width;
+    [clipView setBounds:newBoundsRect];
+    [self.objectValue setValue:[NSNumber numberWithFloat:newBoundsRect.size.width] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+    [self.slider setFloatValue:newBoundsRect.size.width];
+}
+
 - (void)deltaSlider:(float)delta fromPoint:(NSPoint)point
 {
     CGFloat scale = [[self.scroller contentView] bounds].size.width / [[self.scroller contentView] frame].size.width;

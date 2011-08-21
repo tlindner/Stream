@@ -38,5 +38,6 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 - (void)clipViewBoundsChanged:(NSNotification *)notification;
 - (IBAction)updateSlider:(id)sender;
 - (void)deltaSlider:(float)delta fromPoint:(NSPoint)point;
+- (void)updateBounds:(NSRect)inRect;
 
 @end

@@ -24,10 +24,12 @@ typedef struct
     NSUInteger channelCount;
     
     NSInteger toolMode;
-    NSPoint locationInSelf, locationNow, locationPrevious;
+    NSPoint locationMouseDown, locationNow, locationPrevious;
     NSPoint startOrigin;
     NSTimer *panMomentumTimer;
     CGFloat panMomentumValue;
+    BOOL mouseDown;
+    NSRect dragRect;
     
     charRef *coalescedCharacters;
     charRef *characters;

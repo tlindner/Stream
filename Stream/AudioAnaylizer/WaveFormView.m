@@ -93,7 +93,7 @@ typedef struct
         [[NSColor grayColor] set];
         NSRectFill(dirtyRect);
     }
-    
+ 
     if( audioFrames != nil )
     {
         CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
@@ -243,6 +243,14 @@ typedef struct
                 NSRectFill(rect);
             }
         }
+        
+        /* Draw lupe rect */
+        
+        if( toolMode == WFVLupe && mouseDown == YES )
+        {
+            NSDottedFrameRect(NSMakeRect(dragRect.origin.x/scale, dragRect.origin.y, dragRect.size.width/scale, dragRect.size.height));
+        }
+        
     }
     else
     {
@@ -554,9 +562,10 @@ typedef struct
 
 - (void) mouseDown:(NSEvent *)theEvent
 {
-    locationPrevious = locationNow = locationInSelf = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
+    mouseDown = YES;
+    locationPrevious = locationNow = locationMouseDown = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
     startOrigin = [[self superview] bounds].origin;
-    
+
     if( panMomentumTimer != nil )
     {
         [panMomentumTimer invalidate];
@@ -582,7 +591,18 @@ typedef struct
         CGFloat currentFrameWidth = [[self superview] frame].size.width;
         CGFloat scale = currentBoundsWidth/currentFrameWidth;
 
-        [self scrollPoint:NSMakePoint(startOrigin.x+((locationInSelf.x-locationNow.x)*scale), startOrigin.y)];
+        [self scrollPoint:NSMakePoint(startOrigin.x+((locationMouseDown.x-locationNow.x)*scale), startOrigin.y)];
+    }
+    else if( toolMode == WFVLupe )
+    {
+        NSPoint locationMouseDownSelf = [self convertPoint:locationMouseDown fromView:nil];
+        NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
+        NSRect rectA = NSMakeRect(locationMouseDownSelf.x, startOrigin.y + locationMouseDownSelf.y, 1, 1);
+        NSRect rectB = NSMakeRect(locationNowSelf.x, startOrigin.y + locationNowSelf.y, 1, 1);
+
+        dragRect = NSUnionRect(rectA, rectB);
+         
+        [self setNeedsDisplay:YES];
     }
     
 //    [super mouseDragged:theEvent];
@@ -597,19 +617,29 @@ typedef struct
     {
         panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
     }
-    else if( (toolMode == WFVLupe) && (locationUp.x == locationPrevious.x) )
+    else if( toolMode == WFVLupe )
     {
-        CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
-        CGFloat currentFrameWidth = [[self superview] frame].size.width;
-        CGFloat scale = currentBoundsWidth/currentFrameWidth;
-        AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
-        NSUInteger flags = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
+        if( locationUp.x == locationPrevious.x ) /* no dragging, just simple click */
+        {
+            CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
+            CGFloat currentFrameWidth = [[self superview] frame].size.width;
+            CGFloat scale = currentBoundsWidth/currentFrameWidth;
+            AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
+            NSUInteger flags = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
 
-        if( flags == NSAlternateKeyMask )
-            [aa deltaSlider:500.0*scale fromPoint:locationUp];
-        else
-            [aa deltaSlider:-500.0*scale fromPoint:locationUp];
+            if( flags == NSAlternateKeyMask )
+                [aa deltaSlider:500.0*scale fromPoint:locationUp];
+            else
+                [aa deltaSlider:-500.0*scale fromPoint:locationUp];
+        }
+        else /* drag lupe */
+        {
+            AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
+            [aa updateBounds:dragRect];
+        }
    }
+    
+    mouseDown = NO;
 }
 
 - (void)mouseMomentum:(NSTimer*)theTimer
