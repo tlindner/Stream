@@ -58,16 +58,19 @@ typedef struct
 @synthesize errorString;
 @synthesize needsAnaylyzation;
 
-//- (id)initWithFrame:(NSRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        //NSLog( @"init Frame: %@", NSStringFromRect(frame ));
-//        // Initialization code here.
-//    }
-//    
-//    return self;
-//}
+- (id)initWithFrame:(NSRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        //NSLog( @"init Frame: %@", NSStringFromRect(frame ));
+        // Initialization code here.
+    }
+    
+    selectedSample = NSUIntegerMax;
+    selectedSampleLength = 1;
+    
+    return self;
+}
 
 //- (void) setFrame:(NSRect)frameRect
 //{
@@ -230,10 +233,14 @@ resample:   free( previousBuffer );
             {
                 CGFloat x = floor(origin);
                 i = 0;
+                int countDown = 0;
                 
                 while( x<(origin+width) )
                 {
-                    if( offset+i == selectedSample )
+                    if( (selectedSample != NSUIntegerMax) && (offset+i == selectedSample) )
+                        countDown = selectedSampleLength;
+                        
+                    if( countDown-- > 0 )
                     {
                         rect = NSMakeRect(x-2.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-2.0, 4.0, 4.0);
                         [[NSBezierPath bezierPathWithRect:rect] stroke];
@@ -243,6 +250,7 @@ resample:   free( previousBuffer );
                         rect = NSMakeRect(x-1.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-1.0, 3.0, 3.0);
                         NSRectFill(rect);
                     }
+                    
                     x += 1.0/scale;
                     i += channelCount;
                 }
@@ -258,13 +266,15 @@ resample:   free( previousBuffer );
             }
         }
         
-        /* Draw lupe rect */
+        /* Draw lupe & selection rect */
         
-        if( toolMode == WFVLupe && mouseDown == YES )
+        if( mouseDownOnPoint == NO )
         {
-            NSDottedFrameRect(NSMakeRect(dragRect.origin.x/scale, dragRect.origin.y, dragRect.size.width/scale, dragRect.size.height));
+            if( (toolMode == WFVSelection || toolMode == WFVLupe) && mouseDown == YES )
+            {
+                NSDottedFrameRect(NSMakeRect(dragRect.origin.x/scale, dragRect.origin.y, dragRect.size.width/scale, dragRect.size.height));
+            }
         }
-        
     }
     else
     {
@@ -577,6 +587,7 @@ resample:   free( previousBuffer );
 - (void) mouseDown:(NSEvent *)theEvent
 {
     mouseDown = YES;
+    mouseDownOnPoint = NO;
     locationPrevious = locationNow = locationMouseDown = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
     startOrigin = [[self superview] bounds].origin;
 
@@ -604,11 +615,11 @@ resample:   free( previousBuffer );
         CGFloat thePoint = viewWaveHalfHeight+(frameStart[0]*viewWaveHalfHeight);
         NSRect sampleRect = NSMakeRect(selectedSample-6.0, thePoint-6.0, 12, 12);
         
-        if (!NSPointInRect(locationNowSelf, sampleRect))
-        {
-             mouseDown = NO;
-        }
+        if (NSPointInRect(locationNowSelf, sampleRect))
+            mouseDownOnPoint = YES;
     }
+    else if( toolMode == WFVSelection && scale > DOT_SCALE )
+        mouseDown = NO;
 }
 
 - (void) mouseDragged:(NSEvent *)theEvent
@@ -635,22 +646,38 @@ resample:   free( previousBuffer );
          
         [self setNeedsDisplay:YES];
     }
-    else if( toolMode == WFVSelection && mouseDown == YES )
+    else if( toolMode == WFVSelection )
     {
-        
-        NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
+        if( mouseDownOnPoint == YES )
+        {
+            NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
 
-        CGFloat viewHeight = [self frame].size.height;
-        CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
-        CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
-        
-        AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
-        frameStart[0] = (locationNowSelf.y - viewWaveHalfHeight) / viewWaveHalfHeight;
-        
-        if( frameStart[0] > 1.0 ) frameStart[0] = 1.0;
-        if( frameStart[0] < -1.0 ) frameStart[0] = -1.0;
-        
-        [self setNeedsDisplay:YES];
+            CGFloat viewHeight = [self frame].size.height;
+            CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
+            CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
+            
+            AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
+            frameStart[0] = (locationNowSelf.y - viewWaveHalfHeight) / viewWaveHalfHeight;
+            
+            if( frameStart[0] > 1.0 ) frameStart[0] = 1.0;
+            if( frameStart[0] < -1.0 ) frameStart[0] = -1.0;
+            
+            [self setNeedsDisplay:YES];
+        }
+        else if( mouseDown == YES)
+        {
+            NSPoint locationMouseDownSelf = [self convertPoint:locationMouseDown fromView:nil];
+            NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
+            NSRect rectA = NSMakeRect(locationMouseDownSelf.x-0.5, startOrigin.y + locationMouseDownSelf.y-0.5, 1, 1);
+            NSRect rectB = NSMakeRect(locationNowSelf.x-0.5, startOrigin.y + locationNowSelf.y-0.5, 1, 1);
+            
+            dragRect = NSUnionRect(rectA, rectB);
+            
+            selectedSample = ceil(dragRect.origin.x);
+            selectedSampleLength = dragRect.size.width + 0.25;
+
+            [self setNeedsDisplay:YES];
+        }
     }
 }
 
@@ -684,8 +711,18 @@ resample:   free( previousBuffer );
             [aa updateBounds:dragRect];
         }
     }
-    else if( toolMode == WFVSelection && mouseDown == YES )
+    else if( toolMode == WFVSelection && mouseDownOnPoint == NO )
     {
+        if( locationUp.x == locationPrevious.x ) /* no dragging, just simple click */
+        {
+            selectedSample = NSUIntegerMax;
+            selectedSampleLength = 1;
+        }
+ 
+        [self setNeedsDisplay:YES];
+    }
+    else if( toolMode == WFVSelection && mouseDownOnPoint == YES )
+    {   
         needsAnaylyzation = YES;
         [self setNeedsDisplay:YES];
     }

@@ -25,11 +25,12 @@ typedef struct
     
     NSInteger toolMode;
     NSUInteger selectedSample;
+    NSUInteger selectedSampleLength;
     NSPoint locationMouseDown, locationNow, locationPrevious;
     NSPoint startOrigin;
     NSTimer *panMomentumTimer;
     CGFloat panMomentumValue;
-    BOOL mouseDown;
+    BOOL mouseDown, mouseDownOnPoint;
     NSRect dragRect;
     
     charRef *coalescedCharacters;
