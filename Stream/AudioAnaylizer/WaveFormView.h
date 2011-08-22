@@ -24,6 +24,7 @@ typedef struct
     NSUInteger channelCount;
     
     NSInteger toolMode;
+    NSUInteger selectedSample;
     NSPoint locationMouseDown, locationNow, locationPrevious;
     NSPoint startOrigin;
     NSTimer *panMomentumTimer;

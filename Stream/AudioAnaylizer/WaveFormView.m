@@ -16,6 +16,7 @@
 #define WFVLupe 2
 
 #define DOT_SCALE 0.5
+#define DATA_SPACE 19.0
 
 void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
@@ -107,7 +108,7 @@ typedef struct
         [at concat];
         
         CGFloat viewHeight = [self frame].size.height;
-        CGFloat viewWaveHeight = viewHeight - 19.0;
+        CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
         CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
         float origin = dirtyRect.origin.x / scale;
@@ -120,13 +121,15 @@ typedef struct
         if( offset < 0 ) offset = 0;
         AudioSampleType *frameStart = audioFrames + (offset * channelCount) + (currentChannel-1); // Interleaved samples
        
+        if( toolMode == WFVSelection && mouseDown == YES ) goto resample;
+
         if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) && (previousCurrentChannel == currentChannel) )
         {
             viewFloats = previousBuffer;
         }
         else
         {
-            free( previousBuffer );
+resample:   free( previousBuffer );
             viewFloats = malloc(sizeof(Float32)*width);
             SamplesSamples_max( sampleRate, channelCount, viewFloats, frameStart, scale, width, frameCount-offset);
             previousBuffer = viewFloats;
@@ -159,7 +162,7 @@ typedef struct
                 [[NSColor blackColor] set];
                 NSString *string = [NSString stringWithFormat:@"%2.2X" , character[i]];
                 NSSize charWidth = [string sizeWithAttributes:nil];
-                NSPoint thePoint = NSMakePoint((characters[i].start+(characters[i].length/2)-(charWidth.width/2))/scale, viewHeight-17.0);
+                NSPoint thePoint = NSMakePoint((characters[i].start+(characters[i].length/2)-(charWidth.width/2))/scale, viewHeight-(DATA_SPACE+2.0));
                 [string drawAtPoint:thePoint withAttributes:nil];
                 
                 /* Draw byte grouping */
@@ -228,15 +231,21 @@ typedef struct
                 CGFloat x = floor(origin);
                 i = 0;
                 
-                
                 while( x<(origin+width) )
                 {
-                    rect = NSMakeRect(x-1.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-1.0, 3.0, 3.0);
-                    NSRectFill(rect);
+                    if( offset+i == selectedSample )
+                    {
+                        rect = NSMakeRect(x-2.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-2.0, 4.0, 4.0);
+                        [[NSBezierPath bezierPathWithRect:rect] stroke];
+                    }
+                    else
+                    {
+                        rect = NSMakeRect(x-1.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-1.0, 3.0, 3.0);
+                        NSRectFill(rect);
+                    }
                     x += 1.0/scale;
                     i += channelCount;
                 }
-                
             }
         }
         else
@@ -584,23 +593,29 @@ typedef struct
 
     if( toolMode == WFVSelection && scale < DOT_SCALE )
     {
+        NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
+        selectedSample = locationNowSelf.x;
         
+        CGFloat viewHeight = [self frame].size.height;
+        CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
+        CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
+        AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
+        CGFloat thePoint = viewWaveHalfHeight+(frameStart[0]*viewWaveHalfHeight);
+        NSRect sampleRect = NSMakeRect(selectedSample-6.0, thePoint-6.0, 12, 12);
         
+        if (!NSPointInRect(locationNowSelf, sampleRect))
+        {
+             mouseDown = NO;
+        }
     }
-    
-    //[super mouseDown:theEvent];
 }
 
 - (void) mouseDragged:(NSEvent *)theEvent
 {
     locationPrevious = locationNow;
     locationNow = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
-    
-//    NSLog( @"location in self: %f", locationInSelf.x );
-//    NSLog( @"location now    : %f", locationNow.x );
-//    NSLog( @"start origin    : %f", startOrigin.x );
-    
+
     if( toolMode == WFVPan )
     {
         CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
@@ -620,8 +635,23 @@ typedef struct
          
         [self setNeedsDisplay:YES];
     }
-    
-//    [super mouseDragged:theEvent];
+    else if( toolMode == WFVSelection && mouseDown == YES )
+    {
+        
+        NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
+
+        CGFloat viewHeight = [self frame].size.height;
+        CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
+        CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
+        
+        AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
+        frameStart[0] = (locationNowSelf.y - viewWaveHalfHeight) / viewWaveHalfHeight;
+        
+        if( frameStart[0] > 1.0 ) frameStart[0] = 1.0;
+        if( frameStart[0] < -1.0 ) frameStart[0] = -1.0;
+        
+        [self setNeedsDisplay:YES];
+    }
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
@@ -642,7 +672,7 @@ typedef struct
             CGFloat scale = currentBoundsWidth/currentFrameWidth;
             AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
             NSUInteger flags = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
-
+            
             if( flags == NSAlternateKeyMask )
                 [aa deltaSlider:500.0*scale fromPoint:locationUp];
             else
@@ -653,25 +683,33 @@ typedef struct
             AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
             [aa updateBounds:dragRect];
         }
-   }
+    }
+    else if( toolMode == WFVSelection && mouseDown == YES )
+    {
+        needsAnaylyzation = YES;
+        [self setNeedsDisplay:YES];
+    }
     
     mouseDown = NO;
 }
 
 - (void)mouseMomentum:(NSTimer*)theTimer
 {
-    startOrigin = [[self superview] bounds].origin;
-    CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
-    CGFloat currentFrameWidth = [[self superview] frame].size.width;
-    CGFloat scale = currentBoundsWidth/currentFrameWidth;
-    [self scrollPoint:NSMakePoint(startOrigin.x+(panMomentumValue*scale), startOrigin.y)];
-    
-    panMomentumValue /= 1.1;
-    
-    if (fabs(panMomentumValue) < 2.0)
+    if( toolMode == WFVPan )
     {
-        panMomentumValue = 0;
-        [theTimer invalidate];
+        startOrigin = [[self superview] bounds].origin;
+        CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
+        CGFloat currentFrameWidth = [[self superview] frame].size.width;
+        CGFloat scale = currentBoundsWidth/currentFrameWidth;
+        [self scrollPoint:NSMakePoint(startOrigin.x+(panMomentumValue*scale), startOrigin.y)];
+        
+        panMomentumValue /= 1.1;
+        
+        if (fabs(panMomentumValue) < 2.0)
+        {
+            panMomentumValue = 0;
+            [theTimer invalidate];
+        }
     }
 }
 
