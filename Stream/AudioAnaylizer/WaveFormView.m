@@ -165,7 +165,7 @@ resample:   free( previousBuffer );
                 [[NSColor blackColor] set];
                 NSString *string = [NSString stringWithFormat:@"%2.2X" , character[i]];
                 NSSize charWidth = [string sizeWithAttributes:nil];
-                NSPoint thePoint = NSMakePoint((characters[i].start+(characters[i].length/2)-(charWidth.width/2))/scale, viewHeight-(DATA_SPACE+2.0));
+                NSPoint thePoint = NSMakePoint((characters[i].start+(characters[i].length/2)-(charWidth.width/2))/scale, viewHeight-(DATA_SPACE)+1.0);
                 [string drawAtPoint:thePoint withAttributes:nil];
                 
                 /* Draw byte grouping */
@@ -233,7 +233,7 @@ resample:   free( previousBuffer );
             {
                 CGFloat x = floor(origin);
                 i = 0;
-                int countDown = 0;
+                long countDown = 0;
                 
                 while( x<(origin+width) )
                 {
@@ -242,8 +242,16 @@ resample:   free( previousBuffer );
                         
                     if( countDown-- > 0 )
                     {
-                        rect = NSMakeRect(x-2.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-2.0, 4.0, 4.0);
-                        [[NSBezierPath bezierPathWithRect:rect] stroke];
+                        if( selectedSampleUnderMouse == offset+i )
+                        {
+                            rect = NSMakeRect(x-4.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-4.0, 8.0, 8.0);
+                            NSRectFill(rect);
+                        }
+                        else
+                        {
+                            rect = NSMakeRect(x-2.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-2.0, 4.0, 4.0);
+                            [[NSBezierPath bezierPathWithRect:rect] stroke];
+                        }
                     }
                     else
                     {
@@ -297,6 +305,9 @@ resample:   free( previousBuffer );
         [panMomentumTimer release];
     }
 
+    if( storedSamples != nil )
+        free( storedSamples );
+    
     if( audioFrames != nil )
         free( audioFrames );
     
@@ -604,22 +615,49 @@ resample:   free( previousBuffer );
 
     if( toolMode == WFVSelection && scale < DOT_SCALE )
     {
+        /* Find sample under mouse click */
         NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
-        selectedSample = locationNowSelf.x;
+        selectedSampleUnderMouse = locationNowSelf.x;
         
         CGFloat viewHeight = [self frame].size.height;
         CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
         CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
-        AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
+        AudioSampleType *frameStart = audioFrames + (selectedSampleUnderMouse * channelCount) + (currentChannel-1); // Interleaved samples
         CGFloat thePoint = viewWaveHalfHeight+(frameStart[0]*viewWaveHalfHeight);
-        NSRect sampleRect = NSMakeRect(selectedSample-6.0, thePoint-6.0, 12, 12);
+        NSRect sampleRect = NSMakeRect(selectedSampleUnderMouse-6.0, thePoint-6.0, 12, 12);
         
+        /* Check if a sample is near the mouse down */
         if (NSPointInRect(locationNowSelf, sampleRect))
+        {
             mouseDownOnPoint = YES;
+
+            /* check if mouse down sample is in selection */
+            if( (selectedSampleUnderMouse >= selectedSample) && (selectedSampleUnderMouse < selectedSample + selectedSampleLength) )
+            {
+                /* yes, mouse down in selection */
+            }
+            else
+            {
+                /* nope, select this one sample */
+                selectedSample = selectedSampleUnderMouse;
+                selectedSampleLength = 1;
+            }
+            
+            /* make copy of selected samples */
+            if( storedSamples != nil ) free( storedSamples );
+            
+            AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
+            storedSamples = malloc( sizeof(AudioSampleType)*selectedSampleLength );
+            
+            for( unsigned long i = 0; i<selectedSampleLength; i++ )
+            {
+                storedSamples[i] = frameStart[i*channelCount];
+            }
+        }
     }
     else if( toolMode == WFVSelection && scale > DOT_SCALE )
-        mouseDown = NO;
+        mouseDown = NO; /* no selecting samples if zoomed out too far */
 }
 
 - (void) mouseDragged:(NSEvent *)theEvent
@@ -650,17 +688,44 @@ resample:   free( previousBuffer );
     {
         if( mouseDownOnPoint == YES )
         {
+            NSPoint locationMouseDownSelf = [self convertPoint:locationMouseDown fromView:nil];
             NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
+
+            cancelDrag = NO;
 
             CGFloat viewHeight = [self frame].size.height;
             CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
             CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
             
             AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
-            frameStart[0] = (locationNowSelf.y - viewWaveHalfHeight) / viewWaveHalfHeight;
             
-            if( frameStart[0] > 1.0 ) frameStart[0] = 1.0;
-            if( frameStart[0] < -1.0 ) frameStart[0] = -1.0;
+            AudioSampleType delta = (locationNowSelf.y - locationMouseDownSelf.y) / viewWaveHalfHeight;
+
+            /* adjust sample up or down depending on mouse */
+            for( unsigned long i=0; i<selectedSampleLength; i++ )
+            {
+                frameStart[i*channelCount] = storedSamples[i] + delta;
+                
+                /* Check for clipping, and possible canceling */
+                if( frameStart[i*channelCount] > 1.5 )
+                    cancelDrag = YES;
+                else if( frameStart[i*channelCount] > 1.0 )
+                    frameStart[i*channelCount] = 1.0;
+                
+                if( frameStart[i*channelCount] < -1.5 )
+                    cancelDrag = YES;
+                else if( frameStart[i*channelCount] < -1.0 )
+                    frameStart[i*channelCount] = -1.0;
+            }
+            
+            if( cancelDrag )
+            {
+                /* reset all samples */
+                for( unsigned long i=0; i<selectedSampleLength; i++ )
+                {
+                    frameStart[i*channelCount] = storedSamples[i];
+                }
+            }
             
             [self setNeedsDisplay:YES];
         }
@@ -723,8 +788,22 @@ resample:   free( previousBuffer );
     }
     else if( toolMode == WFVSelection && mouseDownOnPoint == YES )
     {   
-        needsAnaylyzation = YES;
-        [self setNeedsDisplay:YES];
+        if( cancelDrag == NO )
+        {
+            NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
+            NSData *previousSamples = [NSData dataWithBytes:storedSamples length:sizeof(AudioSampleType)*selectedSampleLength];
+            NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", [NSNumber numberWithUnsignedInteger:selectedSample], @"selectedSample", [NSNumber numberWithUnsignedInteger:selectedSampleLength], @"selectedSampleLength", [NSNumber numberWithUnsignedInteger:currentChannel], @"currentChannel", nil];
+            
+            [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
+            
+            if( selectedSampleLength == 1 )
+                [[parentContext undoManager] setActionName:@"Move Sample"];
+            else
+                [[parentContext undoManager] setActionName:@"Move Samples"];
+
+            needsAnaylyzation = YES;
+            [self setNeedsDisplay:YES];
+        }
     }
     
     mouseDown = NO;
@@ -748,6 +827,25 @@ resample:   free( previousBuffer );
             [theTimer invalidate];
         }
     }
+}
+
+- (void) setPreviousState:(NSDictionary *)previousState
+{
+    AudioSampleType *previousSamples = (AudioSampleType *)[[previousState objectForKey:@"data"] bytes];
+    NSUInteger storedSelectedSample = [[previousState objectForKey:@"selectedSample"] unsignedIntegerValue];
+    NSUInteger storedSelectedSampleLength = [[previousState objectForKey:@"selectedSampleLength"] unsignedIntegerValue];
+    NSUInteger storedCurrentChannel = [[previousState objectForKey:@"currentChannel"] unsignedIntegerValue];
+    
+    AudioSampleType *frameStart = audioFrames + (storedSelectedSample * channelCount) + (storedCurrentChannel-1); // Interleaved samples
+    
+    for( unsigned long i = 0; i < storedSelectedSampleLength; i++ )
+    {
+        frameStart[i*channelCount] = previousSamples[i];
+    }
+    
+    previousOffset = !previousOffset; /* force resample */
+    needsAnaylyzation = YES;
+    [self setNeedsDisplay:YES];
 }
 
 @end

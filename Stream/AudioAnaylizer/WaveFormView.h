@@ -24,8 +24,10 @@ typedef struct
     NSUInteger channelCount;
     
     NSInteger toolMode;
-    NSUInteger selectedSample;
+    NSUInteger selectedSample, selectedSampleUnderMouse;
     NSUInteger selectedSampleLength;
+    AudioSampleType *storedSamples;
+    BOOL cancelDrag;
     NSPoint locationMouseDown, locationNow, locationPrevious;
     NSPoint startOrigin;
     NSTimer *panMomentumTimer;
@@ -68,5 +70,6 @@ typedef struct
 
 - (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer;
 - (IBAction)chooseTool:(id)sender;
+- (void) setPreviousState:(NSDictionary *)previousState;
 
 @end

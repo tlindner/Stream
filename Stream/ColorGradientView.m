@@ -86,7 +86,7 @@
 - (IBAction)doPopOver:(id)sender
 {
     NSError *err;
-    NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];;
+    NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
     
     if( self.subMOC == nil )
     {
