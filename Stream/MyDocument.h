@@ -14,6 +14,8 @@
 
 }
 
+@property(nonatomic, retain) NSCursor *zoomCursor;
+
 - (IBAction)add:(id)sender;
 
 @end

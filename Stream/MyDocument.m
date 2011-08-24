@@ -11,6 +11,8 @@
 
 @implementation MyDocument
 
+@synthesize zoomCursor;
+
 - (id)init
 {
     self = [super init];
@@ -37,6 +39,7 @@
     NSManagedObjectContext *newMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
     [newMOC setPersistentStoreCoordinator:psc];
     [self setManagedObjectContext:newMOC];
+    self.zoomCursor = [[[NSCursor alloc] initWithImage:[NSImage imageNamed:@"Zoom"] hotSpot:NSMakePoint(5.0, 5.0)] autorelease];
 }
 
 + (BOOL)autosavesInPlace
@@ -92,5 +95,11 @@
 - (BOOL)selectionShouldChangeInTableView:(NSTableView *)aTableView
 {
     return NO;
+}
+
+- (void)dealloc
+{
+    self.zoomCursor = nil;
+    [super dealloc];
 }
 @end

@@ -21,6 +21,7 @@
 @synthesize newConstraints;
 @synthesize objectValue;
 @synthesize toolSegment;
+@synthesize trackingArea;
 
 + (void)initialize {
     if (self == [AudioAnaylizer class]) {
@@ -100,6 +101,9 @@
  
         [self.toolSegment setAction:@selector(chooseTool:)];
         [self.toolSegment setTarget:[self.scroller documentView]];
+        
+        trackingArea = [[[NSTrackingArea alloc] initWithRect:scrollerRect options:NSTrackingCursorUpdate+NSTrackingActiveAlways owner:[self.scroller documentView] userInfo:nil] autorelease];
+        [self addTrackingArea:trackingArea];
     }
     
     return self;

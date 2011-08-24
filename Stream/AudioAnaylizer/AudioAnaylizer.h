@@ -28,6 +28,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 @property(nonatomic, assign) NSScrollView *scroller;
 @property(nonatomic, assign) NSSlider *slider;
 @property(nonatomic, assign) NSSegmentedControl *toolSegment;
+@property(nonatomic, assign) NSTrackingArea *trackingArea;
 
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;

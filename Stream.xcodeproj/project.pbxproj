@@ -46,6 +46,7 @@
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
 		77C8DE1613E6F2C000AD079E /* Analyzation.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C8DE1513E6F2C000AD079E /* Analyzation.m */; };
+		77CB933F1404AE7F0032F56F /* Zoom.tif in Resources */ = {isa = PBXBuildFile; fileRef = 77CB933E1404AE7F0032F56F /* Zoom.tif */; };
 		77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D94C8B13E8F704009192BA /* DragRegionView.m */; };
 		77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */; };
 		77F2045613DD3AD000FA5B1F /* HFBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FC13DD3ACF00FA5B1F /* HFBTree.m */; };
@@ -177,6 +178,7 @@
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
 		77C8DE1413E6F2C000AD079E /* Analyzation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Analyzation.h; sourceTree = "<group>"; };
 		77C8DE1513E6F2C000AD079E /* Analyzation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Analyzation.m; sourceTree = "<group>"; };
+		77CB933E1404AE7F0032F56F /* Zoom.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Zoom.tif; sourceTree = "<group>"; };
 		77D94C8A13E8F704009192BA /* DragRegionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DragRegionView.h; path = Stream/DragRegionView.h; sourceTree = "<group>"; };
 		77D94C8B13E8F704009192BA /* DragRegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DragRegionView.m; path = Stream/DragRegionView.m; sourceTree = "<group>"; };
 		77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerSettingPopover.xib; path = Stream/AnaylizerSettingPopover.xib; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 		7759CF3D13DBA1A300789DB3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				77CB933E1404AE7F0032F56F /* Zoom.tif */,
 				7759CF3E13DBA1A300789DB3 /* Stream-Info.plist */,
 				7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */,
 				7759CF4213DBA1A300789DB3 /* main.m */,
@@ -678,6 +681,7 @@
 				772C658F13FEC0960060AB7F /* AnaylizerArrow.tiff in Resources */,
 				772C659013FEC0960060AB7F /* AnaylizerHand.tiff in Resources */,
 				772C659113FEC0960060AB7F /* AnaylizerLupe.tiff in Resources */,
+				77CB933F1404AE7F0032F56F /* Zoom.tif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

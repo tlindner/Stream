@@ -10,6 +10,7 @@
 #import "AudioAnaylizer.h"
 #import "Accelerate/Accelerate.h"
 #import "AudioToolbox/AudioConverter.h"
+#import "MyDocument.h"
 
 #define WFVSelection 0
 #define WFVPan 1
@@ -63,22 +64,14 @@ typedef struct
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
-        //NSLog( @"init Frame: %@", NSStringFromRect(frame ));
-        // Initialization code here.
+    if (self)
+    {
+        selectedSample = NSUIntegerMax;
+        selectedSampleLength = 1;
     }
-    
-    selectedSample = NSUIntegerMax;
-    selectedSampleLength = 1;
-    
+
     return self;
 }
-
-//- (void) setFrame:(NSRect)frameRect
-//{
-//    NSLog( @"set Frame: %@", NSStringFromRect(frameRect ));
-//    [super setFrame:frameRect];
-//}
 
 - (void)drawRect:(NSRect)dirtyRect
 {
@@ -583,9 +576,42 @@ typedef struct
 
 - (IBAction)chooseTool:(id)sender
 {
+//    NSScrollView *scrollView = (NSScrollView *)[[self superview] superview];
     NSSegmentedControl *seggy = sender;
     
+//    NSLog( @"Doing it" );
     toolMode = [seggy selectedSegment];
+//    
+//    if( toolMode == WFVSelection )
+//    {
+//        [scrollView setDocumentCursor:[NSCursor arrowCursor]];
+//    }
+//    else if( toolMode == WFVPan )
+//    {
+//        [scrollView setDocumentCursor:[NSCursor openHandCursor]];
+//    }
+//    else if( toolMode == WFVLupe )
+//    {
+//        MyDocument *ourDoc = [[[self window] windowController] document];
+//        [scrollView setDocumentCursor:[ourDoc zoomCursor]];
+//    }
+}
+
+-(void)cursorUpdate:(NSEvent *)theEvent
+{
+    if( toolMode == WFVSelection )
+    {
+        [[NSCursor arrowCursor] set];
+    }
+    else if( toolMode == WFVPan )
+    {
+        [[NSCursor openHandCursor] set];
+    }
+    else if( toolMode == WFVLupe )
+    {
+        MyDocument *ourDoc = [[[self window] windowController] document];
+        [[ourDoc zoomCursor] set];
+    }
 }
 
 - (BOOL)acceptsFirstResponder
