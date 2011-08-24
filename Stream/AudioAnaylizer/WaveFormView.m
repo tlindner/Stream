@@ -15,7 +15,7 @@
 #define WFVPan 1
 #define WFVLupe 2
 
-#define DOT_SCALE 0.5
+#define DOT_HANDLE_SCALE 0.5
 #define DATA_SPACE 19.0
 
 void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
@@ -24,6 +24,8 @@ void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBu
 void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData);
+double CubicHermite(double t, double p0, double p1, double m0, double m1);
+double Interpolate( double timeToAccel, double timeCruising, double timeToDecel, double finalPosition, double currentTime);
 
 typedef struct
 {
@@ -81,7 +83,7 @@ typedef struct
 - (void)drawRect:(NSRect)dirtyRect
 {
     AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
-
+    
     currentChannel = [[aa.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
     
     if( currentChannel > channelCount ) currentChannel = channelCount;
@@ -93,13 +95,13 @@ typedef struct
     if( anaylizationError == YES )
     {
         if (errorString == nil) self.errorString = @"No error message set!";
-
+        
         [errorString drawInRect:dirtyRect withAttributes:nil];
         
         [[NSColor grayColor] set];
         NSRectFill(dirtyRect);
     }
- 
+    
     if( audioFrames != nil )
     {
         CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
@@ -123,16 +125,16 @@ typedef struct
         int offset = dirtyRect.origin.x;
         if( offset < 0 ) offset = 0;
         AudioSampleType *frameStart = audioFrames + (offset * channelCount) + (currentChannel-1); // Interleaved samples
-       
+        
         if( toolMode == WFVSelection && mouseDown == YES ) goto resample;
-
+        
         if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) && (previousCurrentChannel == currentChannel) )
         {
             viewFloats = previousBuffer;
         }
         else
         {
-resample:   free( previousBuffer );
+        resample:   free( previousBuffer );
             viewFloats = malloc(sizeof(Float32)*width);
             SamplesSamples_max( sampleRate, channelCount, viewFloats, frameStart, scale, width, frameCount-offset);
             previousBuffer = viewFloats;
@@ -141,7 +143,7 @@ resample:   free( previousBuffer );
             previousFrameWidth = currentFrameWidth;
             previousCurrentChannel = currentChannel;
         }
-
+        
         /* Blank background */
         NSRect rect;
         [[NSColor colorWithCalibratedWhite:0.95 alpha:1.0] set];
@@ -218,7 +220,7 @@ resample:   free( previousBuffer );
             for( i=0; i<width; i++ )
             {
                 thisHeight = viewWaveHalfHeight+(viewFloats[i]*viewWaveHalfHeight);
-
+                
                 if (thisHeight > lastHeight)
                     rect = NSMakeRect(i+origin, lastHeight, 1, thisHeight - lastHeight);
                 else
@@ -228,33 +230,29 @@ resample:   free( previousBuffer );
                 lastHeight = thisHeight;
             }
             
-            /* Draw dots */
-            if( scale <= DOT_SCALE )
+            /* draw handles */
+            if( scale <= DOT_HANDLE_SCALE )
             {
                 CGFloat x = floor(origin);
                 i = 0;
-                long countDown = 0;
                 
                 while( x<(origin+width) )
                 {
-                    if( (selectedSample != NSUIntegerMax) && (offset+i == selectedSample) )
-                        countDown = selectedSampleLength;
-                        
-                    if( countDown-- > 0 )
+                    if( selectedSample == NSUIntegerMax)
                     {
-                        if( selectedSampleUnderMouse == offset+i )
-                        {
-                            rect = NSMakeRect(x-4.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-4.0, 8.0, 8.0);
-                            NSRectFill(rect);
-                        }
-                        else
-                        {
-                            rect = NSMakeRect(x-2.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-2.0, 4.0, 4.0);
-                            [[NSBezierPath bezierPathWithRect:rect] stroke];
-                        }
+                        /* no selected samples, draw all normally */
+                        rect = NSMakeRect(x-1.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-1.0, 3.0, 3.0);
+                        NSRectFill(rect);
+                    }
+                    else if( offset+i >= selectedSample && offset+i < selectedSample+selectedSampleLength )
+                    {
+                        /* this is a selected sample, draw outline frame */
+                        rect = NSMakeRect(x-2.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-2.0, 4.0, 4.0);
+                        [[NSBezierPath bezierPathWithRect:rect] stroke];
                     }
                     else
                     {
+                        /* non selected sample, filled square */
                         rect = NSMakeRect(x-1.0, (viewWaveHalfHeight+(frameStart[i]*viewWaveHalfHeight))-1.0, 3.0, 3.0);
                         NSRectFill(rect);
                     }
@@ -298,13 +296,13 @@ resample:   free( previousBuffer );
     [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
     [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
     [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
-
+    
     if( panMomentumTimer != nil )
     {
         [panMomentumTimer invalidate];
         [panMomentumTimer release];
     }
-
+    
     if( storedSamples != nil )
         free( storedSamples );
     
@@ -367,7 +365,7 @@ resample:   free( previousBuffer );
         
         return;
     }
-
+    
     if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"])
     {
         newObject = [change objectForKey:@"new"];
@@ -379,7 +377,7 @@ resample:   free( previousBuffer );
         
         return;
     }
-
+    
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
@@ -400,7 +398,7 @@ resample:   free( previousBuffer );
     
     if( currentChannel > channelCount ) currentChannel = channelCount;
     if( currentChannel < 1 ) currentChannel = 1;
-
+    
     /* setup observations */
     [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle" options:NSKeyValueChangeSetting context:nil];
     [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle" options:NSKeyValueChangeSetting context:nil];
@@ -558,9 +556,9 @@ resample:   free( previousBuffer );
             char_count++;
         }
     }
-
+    
     free(zero_crossings);
-
+    
     /* shirnk buffers to actual size */
     self.characters = realloc(characters, sizeof(charRef)*char_count);
     self.character = realloc(character, sizeof(unsigned char)*char_count);
@@ -601,7 +599,7 @@ resample:   free( previousBuffer );
     mouseDownOnPoint = NO;
     locationPrevious = locationNow = locationMouseDown = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
     startOrigin = [[self superview] bounds].origin;
-
+    
     if( panMomentumTimer != nil )
     {
         [panMomentumTimer invalidate];
@@ -612,8 +610,8 @@ resample:   free( previousBuffer );
     CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
     CGFloat currentFrameWidth = [[self superview] frame].size.width;
     CGFloat scale = currentBoundsWidth/currentFrameWidth;
-
-    if( toolMode == WFVSelection && scale < DOT_SCALE )
+    
+    if( toolMode == WFVSelection && scale < DOT_HANDLE_SCALE )
     {
         /* Find sample under mouse click */
         NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
@@ -631,7 +629,7 @@ resample:   free( previousBuffer );
         if (NSPointInRect(locationNowSelf, sampleRect))
         {
             mouseDownOnPoint = YES;
-
+            
             /* check if mouse down sample is in selection */
             if( (selectedSampleUnderMouse >= selectedSample) && (selectedSampleUnderMouse < selectedSample + selectedSampleLength) )
             {
@@ -656,7 +654,7 @@ resample:   free( previousBuffer );
             }
         }
     }
-    else if( toolMode == WFVSelection && scale > DOT_SCALE )
+    else if( toolMode == WFVSelection && scale > DOT_HANDLE_SCALE )
         mouseDown = NO; /* no selecting samples if zoomed out too far */
 }
 
@@ -664,13 +662,13 @@ resample:   free( previousBuffer );
 {
     locationPrevious = locationNow;
     locationNow = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
-
+    
     if( toolMode == WFVPan )
     {
         CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
         CGFloat currentFrameWidth = [[self superview] frame].size.width;
         CGFloat scale = currentBoundsWidth/currentFrameWidth;
-
+        
         [self scrollPoint:NSMakePoint(startOrigin.x+((locationMouseDown.x-locationNow.x)*scale), startOrigin.y)];
     }
     else if( toolMode == WFVLupe )
@@ -679,9 +677,9 @@ resample:   free( previousBuffer );
         NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
         NSRect rectA = NSMakeRect(locationMouseDownSelf.x, startOrigin.y + locationMouseDownSelf.y, 1, 1);
         NSRect rectB = NSMakeRect(locationNowSelf.x, startOrigin.y + locationNowSelf.y, 1, 1);
-
+        
         dragRect = NSUnionRect(rectA, rectB);
-         
+        
         [self setNeedsDisplay:YES];
     }
     else if( toolMode == WFVSelection )
@@ -690,9 +688,9 @@ resample:   free( previousBuffer );
         {
             NSPoint locationMouseDownSelf = [self convertPoint:locationMouseDown fromView:nil];
             NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
-
+            
             cancelDrag = NO;
-
+            
             CGFloat viewHeight = [self frame].size.height;
             CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
             CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
@@ -700,7 +698,7 @@ resample:   free( previousBuffer );
             AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
             
             AudioSampleType delta = (locationNowSelf.y - locationMouseDownSelf.y) / viewWaveHalfHeight;
-
+            
             /* adjust sample up or down depending on mouse */
             for( unsigned long i=0; i<selectedSampleLength; i++ )
             {
@@ -740,7 +738,7 @@ resample:   free( previousBuffer );
             
             selectedSample = ceil(dragRect.origin.x);
             selectedSampleLength = dragRect.size.width + 0.25;
-
+            
             [self setNeedsDisplay:YES];
         }
     }
@@ -753,27 +751,68 @@ resample:   free( previousBuffer );
     
     if( (toolMode == WFVPan) && (fabs(panMomentumValue) > 10.0) )
     {
-        panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
+        panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.030 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
     }
     else if( toolMode == WFVLupe )
     {
         if( locationUp.x == locationPrevious.x ) /* no dragging, just simple click */
         {
-            CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
-            CGFloat currentFrameWidth = [[self superview] frame].size.width;
+            NSView *clipView = [self superview];
+            CGFloat currentBoundsWidth = [clipView bounds].size.width;
+            CGFloat currentFrameWidth = [clipView frame].size.width;
             CGFloat scale = currentBoundsWidth/currentFrameWidth;
-            AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
             NSUInteger flags = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
             
+            float delta;
+            
             if( flags == NSAlternateKeyMask )
-                [aa deltaSlider:500.0*scale fromPoint:locationUp];
+                delta = 1000.0*scale;
             else
-                [aa deltaSlider:-500.0*scale fromPoint:locationUp];
+                delta = -1000.0*scale;
+            
+            NSPoint point = [[clipView superview] convertPoint:locationUp fromView:nil];
+            point.x *= scale;
+            float ratio = 1.0 / (point.x / currentBoundsWidth);
+            
+            dragRect = [clipView bounds];
+            float width = dragRect.size.width;
+            float newWidth = width + delta;
+            dragRect.size.width = newWidth;
+            dragRect.origin.x += (width - newWidth) / ratio;
+            
+            NSRect currentBounds = [clipView bounds];
+            double timeToAccel = ZOOM_FRAMES/3.0;
+            double timeCruising = ZOOM_FRAMES/3.0;
+            double timeToDecel = ZOOM_FRAMES/3.0;
+            double finalPositionOrigin = dragRect.origin.x - currentBounds.origin.x;
+            double finalPositionWidth = dragRect.size.width - currentBounds.size.width;
+            
+            for( int currentTime=0; currentTime<ZOOM_FRAMES; currentTime++ )
+            {
+                originFrames[currentTime] = currentBounds.origin.x + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionOrigin, currentTime);
+                sizeFrames[currentTime] = currentBounds.size.width + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionWidth, currentTime);
+            }
+            
+            currentFrame = 0;
+            panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
         }
         else /* drag lupe */
         {
-            AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
-            [aa updateBounds:dragRect];
+            NSRect currentBounds = [[self superview] bounds];
+            double timeToAccel = ZOOM_FRAMES/3.0;
+            double timeCruising = ZOOM_FRAMES/3.0;
+            double timeToDecel = ZOOM_FRAMES/3.0;
+            double finalPositionOrigin = dragRect.origin.x - currentBounds.origin.x;
+            double finalPositionWidth = dragRect.size.width - currentBounds.size.width;
+            
+            for( int currentTime=0; currentTime<ZOOM_FRAMES; currentTime++ )
+            {
+                originFrames[currentTime] = currentBounds.origin.x + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionOrigin, currentTime);
+                sizeFrames[currentTime] = currentBounds.size.width + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionWidth, currentTime);
+            }
+            
+            currentFrame = 0;
+            panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
         }
     }
     else if( toolMode == WFVSelection && mouseDownOnPoint == NO )
@@ -783,7 +822,7 @@ resample:   free( previousBuffer );
             selectedSample = NSUIntegerMax;
             selectedSampleLength = 1;
         }
- 
+        
         [self setNeedsDisplay:YES];
     }
     else if( toolMode == WFVSelection && mouseDownOnPoint == YES )
@@ -800,7 +839,7 @@ resample:   free( previousBuffer );
                 [[parentContext undoManager] setActionName:@"Move Sample"];
             else
                 [[parentContext undoManager] setActionName:@"Move Samples"];
-
+            
             needsAnaylyzation = YES;
             [self setNeedsDisplay:YES];
         }
@@ -826,6 +865,23 @@ resample:   free( previousBuffer );
             panMomentumValue = 0;
             [theTimer invalidate];
         }
+    }
+    else if( toolMode == WFVLupe )
+    {
+        AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
+        NSRect currentBounds = [[self superview] bounds];
+        
+        if (currentFrame == ZOOM_FRAMES)
+        {
+            [theTimer invalidate];
+            return;
+        }
+        
+        currentBounds.origin.x = originFrames[currentFrame];
+        currentBounds.size.width = sizeFrames[currentFrame];
+        [aa updateBounds:currentBounds];
+        
+        currentFrame++;
     }
 }
 
@@ -917,7 +973,7 @@ void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuf
             
             outBuffer[i] = curValue/sampleSize;
         }
-
+        
         // Should move to this: Vector mean magnitude; single precision.
         // vDSP_meamgv( float * __vDSP_A, vDSP_Stride __vDSP_I float * __vDSP_C, vDSP_Length __vDSP_N);
     }
@@ -1020,3 +1076,48 @@ void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBu
         outBuffer[i] = inBuffer[i*stride];
     }
 }
+
+/* Credit to Roman Zenka, Stackover question #3367308 */
+double CubicHermite(double t, double p0, double p1, double m0, double m1)
+{
+    double t2 = t*t;
+    double t3 = t2*t;
+    return (2.0*t3 - 3.0*t2 + 1.0)*p0 + (t3-2.0*t2+t)*m0 + (-2.0*t3+3.0*t2)*p1 + (t3-t2)*m1;
+}
+
+double Interpolate( double timeToAccel, double timeCruising, double timeToDecel, double finalPosition, double currentTime)
+{    
+    double t1 = timeToAccel;
+    double t2 = timeCruising;
+    double t3 = timeToDecel;
+    double x = finalPosition;
+    double t = currentTime;
+    
+    double v = x / (t1/2.0 + t2 + t3/2.0);
+    double x1 = v * t1 / 2.0;
+    double x2 = v * t2;
+    //    double x3 = v * t3 / 2.0;
+    
+    if(t <= t1)
+    {
+        // Acceleration
+        return CubicHermite(t/t1, 0.0, x1, 0.0, x2/t2*t1);
+    }
+    else if(t <= t1+t2)
+    {
+        // Cruising
+        return x1 + x2 * (t-t1) / t2;
+    }
+    else
+    {
+        // Deceleration
+        return CubicHermite((t-t1-t2)/t3, x1+x2, x, x2/t2*t3, 0.0);
+    }
+}
+
+
+
+
+
+
+

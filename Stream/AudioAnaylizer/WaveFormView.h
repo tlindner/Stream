@@ -10,6 +10,8 @@
 #import "StAnaylizer.h"
 #import "CoreAudio/CoreAudioTypes.h"
 
+#define ZOOM_FRAMES 20
+
 typedef struct
 {
     NSUInteger start;
@@ -34,6 +36,9 @@ typedef struct
     CGFloat panMomentumValue;
     BOOL mouseDown, mouseDownOnPoint;
     NSRect dragRect;
+    CGFloat originFrames[ZOOM_FRAMES];
+    CGFloat sizeFrames[ZOOM_FRAMES];
+    int currentFrame;
     
     charRef *coalescedCharacters;
     charRef *characters;
