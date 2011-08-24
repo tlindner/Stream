@@ -119,15 +119,13 @@ typedef struct
         if( offset < 0 ) offset = 0;
         AudioSampleType *frameStart = audioFrames + (offset * channelCount) + (currentChannel-1); // Interleaved samples
         
-        if( toolMode == WFVSelection && mouseDown == YES ) goto resample;
-        
         if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) && (previousCurrentChannel == currentChannel) )
         {
             viewFloats = previousBuffer;
         }
         else
         {
-        resample:   free( previousBuffer );
+            free( previousBuffer );
             viewFloats = malloc(sizeof(Float32)*width);
             SamplesSamples_max( sampleRate, channelCount, viewFloats, frameStart, scale, width, frameCount-offset);
             previousBuffer = viewFloats;
@@ -751,6 +749,7 @@ typedef struct
                 }
             }
             
+            previousOffset = !previousOffset; /* force resample */
             [self setNeedsDisplay:YES];
         }
         else if( mouseDown == YES)

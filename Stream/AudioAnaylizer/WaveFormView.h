@@ -10,7 +10,7 @@
 #import "StAnaylizer.h"
 #import "CoreAudio/CoreAudioTypes.h"
 
-#define ZOOM_FRAMES 20
+#define ZOOM_FRAMES 10
 
 typedef struct
 {
