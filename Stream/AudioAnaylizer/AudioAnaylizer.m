@@ -16,7 +16,6 @@
 @implementation AudioAnaylizer
 
 @dynamic data;
-@synthesize result;
 @synthesize scroller;
 @synthesize slider;
 @synthesize newConstraints;
@@ -27,7 +26,6 @@
 + (void)initialize {
     if (self == [AudioAnaylizer class]) {
         [self exposeBinding:@"data"];
-        [self exposeBinding:@"result"];
     }
 }
 
@@ -99,13 +97,16 @@
         [wfv setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
         [self.scroller setDocumentView:wfv];
         [wfv release];
- 
+        
         [self.toolSegment setAction:@selector(chooseTool:)];
         [self.toolSegment setTarget:[self.scroller documentView]];
         
         trackingArea = [[[NSTrackingArea alloc] initWithRect:scrollerRect options:NSTrackingCursorUpdate+NSTrackingActiveAlways owner:[self.scroller documentView] userInfo:nil] autorelease];
         [self addTrackingArea:trackingArea];
-    }
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clipViewBoundsChanged:) name:NSViewBoundsDidChangeNotification object:nil];
+        [[self.scroller contentView] setPostsBoundsChangedNotifications:YES];
+}
     
     return self;
 }
@@ -122,24 +123,47 @@
     [self.objectValue addSubOptionsDictionary:[AudioAnaylizer anaylizerKey] withDictionary:[AudioAnaylizer defaultOptions]];
     UInt32 propSize;
     OSStatus myErr;
-   
+    
+    wfv.cachedAnaylizer = self.objectValue;
+    
     if( inData != data )
     {
         [data release];
         data = [inData retain];
     }
     
-    if( data != nil )
+    if( [[self.objectValue valueForKey:@"initializedOD"] boolValue] == YES )
+    {
+        /* Read in options data */
+        
+        NSMutableData *characterObject = [self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.characterObject"];
+        NSMutableData *coalescedObject = [self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
+        
+        wfv.channelCount = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.channelCount"] unsignedIntegerValue];
+        wfv.currentChannel = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+        wfv.sampleRate = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.sampleRate"] doubleValue];
+        wfv.frameCount = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameCount"] unsignedLongLongValue];
+        wfv.audioFrames = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
+        wfv.coalescedCharacters = [coalescedObject mutableBytes];
+        wfv.characters = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"] mutableBytes];
+        wfv.character = [characterObject mutableBytes];
+        [self.objectValue setValue:characterObject forKeyPath:@"parentStream.bytesAfterTransform"];
+        
+        wfv.char_count = [characterObject length];
+        wfv.coa_char_count = [coalescedObject length]/sizeof(charRef);
+    }
+    else if( data != nil )
     {
         NSManagedObject *parentStream = [self.objectValue valueForKeyPath:@"parentStream"];
         NSURL *fileURL = [parentStream valueForKey:@"sourceURL"];
-
+        
         /* Convert data to samples */
         ExtAudioFileRef af;
         myErr = ExtAudioFileOpenURL((CFURLRef)fileURL, &af);
         
         if (myErr == noErr)
         {
+            [self.objectValue willChangeValueForKey:@"optionsDictionary"];
             SInt64 fileFrameCount;
             
             AudioStreamBasicDescription clientFormat;
@@ -149,8 +173,12 @@
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty1: returned %d", myErr );
             
             wfv.channelCount = clientFormat.mChannelsPerFrame;
+            [self.objectValue setValue:[NSNumber numberWithUnsignedInt:clientFormat.mChannelsPerFrame] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.channelCount"];
+            
             wfv.currentChannel = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+            
             wfv.sampleRate = clientFormat.mSampleRate;
+            [self.objectValue setValue:[NSNumber numberWithDouble:clientFormat.mSampleRate] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.sampleRate"];
             
             /* Build array for channel popup list in accessory view */
             if( wfv.channelCount > 1 )
@@ -160,9 +188,7 @@
                 {
                     [theChannelList addObject:[NSString stringWithFormat:@"%d", i]];
                 }
-                [self.objectValue willChangeValueForKey:@"optionsDictionary"];
                 [self.objectValue setValue:theChannelList forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannelList"];
-                [self.objectValue didChangeValueForKey:@"optionsDictionary"];
                 [theChannelList release];
             }
             
@@ -171,18 +197,17 @@
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty2: returned %d", myErr );
             
             SetCanonical(&clientFormat, (UInt32)wfv.channelCount, YES);
-
+            
             propSize = sizeof(clientFormat);
             myErr = ExtAudioFileSetProperty(af, kExtAudioFileProperty_ClientDataFormat, propSize, &clientFormat);
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", myErr );
-
-            wfv.frameCount = fileFrameCount;
             
-            if (wfv.audioFrames != nil)
-                free(wfv.audioFrames);
-
+            wfv.frameCount = fileFrameCount;
+            [self.objectValue setValue:[NSNumber numberWithUnsignedLongLong:fileFrameCount] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameCount"];
+            
             size_t frameBufferSize = sizeof(AudioSampleType) * wfv.frameCount * wfv.channelCount;
-            wfv.audioFrames = malloc(frameBufferSize);
+            NSMutableData *frameBufferObject = [NSMutableData dataWithLength:frameBufferSize];
+            wfv.audioFrames = [frameBufferObject mutableBytes];
             
             AudioBufferList bufList;
             bufList.mNumberBuffers = 1;
@@ -193,48 +218,46 @@
             myErr = ExtAudioFileRead(af, &ioFrameCount, &bufList);
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
             
-            self.slider.maxValue = wfv.frameCount;
-            self.slider.minValue = [[[self scroller] contentView] frame].size.width / MAXZOOM;
-            self.slider.floatValue = wfv.frameCount;
-            
-            [wfv setAutoresizingMask:NSViewHeightSizable];
-            [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount, [self.scroller contentSize].height)];
-                        
-            float retrieveScale = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"] floatValue];
-            if( isnan(retrieveScale) )
-            {
-                [self.objectValue willChangeValueForKey:@"optionsDictionary"];
-                [self.objectValue setValue:[NSNumber numberWithFloat:self.slider.floatValue] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
-                [self.objectValue didChangeValueForKey:@"optionsDictionary"];
-            }
-            else
-                [self.slider setFloatValue:retrieveScale];
-            
-            float retrieveOrigin = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"] floatValue];
-            
-            NSView *clipView = [self.scroller contentView];
-            NSRect clipViewBounds = [clipView frame];
-            
-            [clipView setBounds:NSMakeRect(retrieveOrigin, clipViewBounds.origin.y, [[self slider] floatValue], clipViewBounds.size.height)];
+            [self.objectValue setValue:frameBufferObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"];
+            [self.objectValue didChangeValueForKey:@"optionsDictionary"];
+            [wfv anaylizeAudioData];
 
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clipViewBoundsChanged:) name:NSViewBoundsDidChangeNotification object:nil];
-            [clipView setPostsBoundsChangedNotifications:YES];
+            [self.objectValue setValue:[NSNumber numberWithBool:YES] forKey:@"initializedOD"];
             
-            [wfv anaylizeAudioDataWithOptions:self.objectValue];
+            myErr = ExtAudioFileDispose(af);
+            NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
         }
-        
-        myErr = ExtAudioFileDispose(af);
-        NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
+        else
+        {
+            NSLog(@"CoCoAudioAnaylizer: ExtAudioFileOpenURL: could not open file");
+            return;
+        }
     }
     else
     {
-        if( wfv.audioFrames != nil )
-        {
-            free(wfv.audioFrames);
-            wfv.audioFrames = nil;
-        }
+        if( wfv.audioFrames != nil ) wfv.audioFrames = nil;
         wfv.frameCount = 0;
     }
+
+    NSView *clipView = [self.scroller contentView];
+    self.slider.maxValue = wfv.frameCount;
+    self.slider.minValue = [clipView frame].size.width / MAXZOOM;
+    self.slider.floatValue = wfv.frameCount;
+    
+    [wfv setAutoresizingMask:NSViewHeightSizable];
+    [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount, [self.scroller contentSize].height)];
+    
+    float retrieveScale = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"] floatValue];
+    
+    if( isnan(retrieveScale) )
+        [self.objectValue setValue:[NSNumber numberWithFloat:self.slider.floatValue] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+    else
+        [self.slider setFloatValue:retrieveScale];
+    
+    float retrieveOrigin = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"] floatValue];
+    
+    NSRect clipViewBounds = [clipView frame];
+    [clipView setBounds:NSMakeRect(retrieveOrigin, clipViewBounds.origin.y, [[self slider] floatValue], clipViewBounds.size.height)];
 }
 
 - (void)clipViewBoundsChanged:(NSNotification *)notification
@@ -243,38 +266,29 @@
     
     if( [self.scroller contentView] == theView )
     {
-        [self.objectValue willChangeValueForKey:@"optionsDictionary"];
+//        [self.objectValue willChangeValueForKey:@"optionsDictionary"]; /* This is causing a repeatable crash */
         [self.objectValue setValue:[NSNumber numberWithFloat:[theView bounds].origin.x] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"];
-        [self.objectValue didChangeValueForKey:@"optionsDictionary"];
+//        [self.objectValue didChangeValueForKey:@"optionsDictionary"];
     }
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    //[self.slider unbind:@"floatValue"];
-    [self.objectValue unbind:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
+
+    [self removeTrackingArea:self.trackingArea];
+    self.trackingArea = nil;
     
     self.data = nil;
-    self.result = nil;
     [self.scroller removeFromSuperview];
     self.scroller = nil;
     [self.slider removeFromSuperview];
     self.slider = nil;
+    [self.toolSegment removeFromSuperview];
+    self.toolSegment = nil;
     
     [super dealloc];
 }
-
-//- (void)setFrame:(NSRect)frameRect
-//{
-//    [super setFrame:frameRect];
-//    self.slider.minValue = [[[self scroller] contentView] frame].size.width / MAXZOOM;
-//    
-//    NSView *clipView = [[self.scroller documentView] superview];
-//    NSSize clipViewFrameSize = [clipView frame].size;
-//    [clipView setBoundsSize:NSMakeSize((CGFloat)[[self slider] intValue], clipViewFrameSize.height)];
-//}
 
 - (IBAction)updateSlider:(id)sender
 {
@@ -289,7 +303,7 @@
     [self.objectValue willChangeValueForKey:@"optionsDictionary"];
     [self.objectValue setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
     [self.objectValue didChangeValueForKey:@"optionsDictionary"];
-
+    
 }
 
 - (void)updateBounds:(NSRect)inRect
@@ -315,12 +329,12 @@
     point = [self convertPoint:point fromView:nil];
     point.x *= scale;
     float ratio = 1.0 / (point.x / [[self.scroller contentView] bounds].size.width);
-
+    
     NSView *clipView = [[self.scroller documentView] superview];
     NSRect boundsRect = [clipView bounds];
     float width = boundsRect.size.width;
     [self.slider setFloatValue:[self.slider floatValue]+delta];
-
+    
     float newWidth = [[self slider] floatValue];
     boundsRect.size.width = newWidth;
     boundsRect.origin.x += (width-newWidth)/ratio;
@@ -353,7 +367,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"frameCount", [NSNull null], @"coalescedObject", [NSNull null], @"charactersObject", [NSNull null], @"frameBufferObject", nil] autorelease];
 }
 
 @end

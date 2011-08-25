@@ -10,17 +10,21 @@
 #import "StAnaylizer.h"
 #include "AudioToolbox/AudioToolbox.h"
 
+typedef struct
+{
+    NSUInteger start;
+    NSUInteger length;
+} charRef;
+
 void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved);
 
 @interface AudioAnaylizer : NSView
 {
     NSData *data;
-    NSData *result;
     NSMutableArray *newConstraints;
 }
 
 @property(nonatomic, retain) NSData *data;
-@property(nonatomic, retain) NSData *result;
 @property(nonatomic, retain) NSMutableArray *newConstraints;
 @property(nonatomic, assign) StAnaylizer *objectValue;
 

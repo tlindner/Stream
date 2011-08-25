@@ -7,7 +7,6 @@
 //
 
 #import "WaveFormView.h"
-#import "AudioAnaylizer.h"
 #import "Accelerate/Accelerate.h"
 #import "AudioToolbox/AudioConverter.h"
 #import "MyDocument.h"
@@ -82,7 +81,7 @@ typedef struct
     if( currentChannel > channelCount ) currentChannel = channelCount;
     if( currentChannel < 1 ) currentChannel = 1;
     
-    if( needsAnaylyzation ) [self anaylizeAudioDataWithOptions:nil];
+    if( needsAnaylyzation ) [self anaylizeAudioData];
     
     // Drawing code here.
     if( anaylizationError == YES )
@@ -136,7 +135,7 @@ typedef struct
             previousCurrentChannel = currentChannel;
         }
         
-        /* Blank background */
+        /* blank background */
         NSRect rect;
         [[NSColor colorWithCalibratedWhite:0.95 alpha:1.0] set];
         rect = NSMakeRect(dirtyRect.origin.x/scale, dirtyRect.origin.y, dirtyRect.size.width/scale, dirtyRect.size.height);
@@ -301,14 +300,14 @@ typedef struct
     if( audioFrames != nil )
         free( audioFrames );
     
-    if( characters != nil )
-        free( characters );
-    
-    if( character != nil )
-        free( character );
-    
-    if( coalescedCharacters != nil )
-        free( coalescedCharacters );
+//    if( characters != nil )
+//        free( characters );
+//    
+//    if( character != nil )
+//        free( character );
+//    
+//    if( coalescedCharacters != nil )
+//        free( coalescedCharacters );
     
     if( previousBuffer != nil )
         free( previousBuffer );
@@ -373,19 +372,13 @@ typedef struct
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-- (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer
+- (void) anaylizeAudioData
 {
+    NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
+    
     needsAnaylyzation = NO;
     anaylizationError = NO;
-    
-    if( self.cachedAnaylizer == nil && anaylizer != nil)
-        self.cachedAnaylizer = anaylizer;
-    else if( self.cachedAnaylizer == nil && anaylizer == nil )
-    {
-        NSLog( @"anaylizeAudioDataWithOptions: no anaylizer avaiable" );
-        return;
-    }
-    
+
     currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
     
     if( currentChannel > channelCount ) currentChannel = channelCount;
@@ -430,18 +423,20 @@ typedef struct
     
     /* Scan zero crossings looking for valid data */
     
-    if( self.characters != nil )
-        free(self.characters);
-    
-    if( self.character != nil )
-        free(self.character);
-    
-    if( self.coalescedCharacters != nil )
-        free(self.coalescedCharacters);
+//    if( self.characters != nil )
+//        free(self.characters);
+//    
+//    if( self.character != nil )
+//        free(self.character);
+//    
+//    if( self.coalescedCharacters != nil )
+//        free(self.coalescedCharacters);
     
     int max_possible_characters = (zc_count*2*8)+1;
-    self.characters = malloc( sizeof(charRef)*max_possible_characters );
-    self.character = malloc( sizeof(unsigned char)*max_possible_characters );
+    NSMutableData *charactersObject = [NSMutableData dataWithLength:sizeof(charRef)*max_possible_characters];
+    self.characters = [charactersObject mutableBytes];
+    NSMutableData *characterObject = [NSMutableData dataWithLength:sizeof(unsigned char)*max_possible_characters];
+    self.character = [characterObject mutableBytes];
     self.char_count = 0;
     
     zc_count -= 1;
@@ -552,10 +547,17 @@ typedef struct
     free(zero_crossings);
     
     /* shirnk buffers to actual size */
-    self.characters = realloc(characters, sizeof(charRef)*char_count);
-    self.character = realloc(character, sizeof(unsigned char)*char_count);
-    
-    self.coalescedCharacters = malloc( sizeof(charRef)*char_count );
+    //self.characters = realloc(characters, sizeof(charRef)*char_count);
+    //self.character = realloc(character, sizeof(unsigned char)*char_count);
+    [charactersObject setLength:sizeof(charRef)*char_count];
+    [characterObject setLength:sizeof(unsigned char)*char_count];
+    NSAssert( self.characters == [charactersObject mutableBytes], @"Characters moved!" );
+    NSAssert( self.character == [characterObject mutableBytes], @"Character moved!" );
+
+    //self.coalescedCharacters = malloc( sizeof(charRef)*char_count );
+    NSMutableData *coalescedObject = [NSMutableData dataWithLength:sizeof(charRef)*char_count];
+    self.coalescedCharacters = [coalescedObject mutableBytes];
+
     coalescedCharacters[0] = characters[0];
     self.coa_char_count = 1;
     
@@ -570,7 +572,18 @@ typedef struct
     }
     
     /* shirnk buffer to actual size */
-    self.coalescedCharacters = realloc(coalescedCharacters, sizeof(charRef)*coa_char_count);
+    //self.coalescedCharacters = realloc(coalescedCharacters, sizeof(charRef)*coa_char_count);
+    [coalescedObject setLength:sizeof(charRef)*coa_char_count];
+    NSAssert( self.coalescedCharacters == [coalescedObject mutableBytes], @"coalescedObject bytes moved!" );
+    
+    /* Store NSMutableData Objects away */
+    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
+    [self.cachedAnaylizer setValue:coalescedObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
+    [self.cachedAnaylizer setValue:charactersObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"];
+    [self.cachedAnaylizer setValue:characterObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.characterObject"];
+    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
+    
+    [self.cachedAnaylizer setValue:characterObject forKeyPath:@"parentStream.bytesAfterTransform"];
 }
 
 - (IBAction)chooseTool:(id)sender
@@ -838,6 +851,12 @@ typedef struct
     {   
         if( cancelDrag == NO )
         {
+            NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
+            [mo willChangeValueForKey:@"bytesAfterTransform"];
+            [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
+            [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
+            [mo didChangeValueForKey:@"bytesAfterTransform"];
+
             NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
             NSData *previousSamples = [NSData dataWithBytes:storedSamples length:sizeof(AudioSampleType)*selectedSampleLength];
             NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", [NSNumber numberWithUnsignedInteger:selectedSample], @"selectedSample", [NSNumber numberWithUnsignedInteger:selectedSampleLength], @"selectedSampleLength", [NSNumber numberWithUnsignedInteger:currentChannel], @"currentChannel", nil];
@@ -911,6 +930,12 @@ typedef struct
     previousOffset = !previousOffset; /* force resample */
     needsAnaylyzation = YES;
     [self setNeedsDisplay:YES];
+
+    NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
+    [mo willChangeValueForKey:@"bytesAfterTransform"];
+    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
+    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
+    [mo didChangeValueForKey:@"bytesAfterTransform"];
 }
 
 @end

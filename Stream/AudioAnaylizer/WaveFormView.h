@@ -9,14 +9,9 @@
 #import <Cocoa/Cocoa.h>
 #import "StAnaylizer.h"
 #import "CoreAudio/CoreAudioTypes.h"
+#import "AudioAnaylizer.h"
 
 #define ZOOM_FRAMES 10
-
-typedef struct
-{
-    NSUInteger start;
-    NSUInteger length;
-} charRef;
 
 @interface WaveFormView : NSView
 {
@@ -73,7 +68,7 @@ typedef struct
 @property(nonatomic, retain) NSString *errorString;
 @property(nonatomic, assign) BOOL needsAnaylyzation;
 
-- (void) anaylizeAudioDataWithOptions:(StAnaylizer *)anaylizer;
+- (void) anaylizeAudioData;
 - (IBAction)chooseTool:(id)sender;
 - (void) setPreviousState:(NSDictionary *)previousState;
 
