@@ -9,6 +9,7 @@
 #import "AudioAnaylizer.h"
 #import "WaveFormView.h"
 #import "AudioAnaScrollView.h"
+#include <malloc/malloc.h>
 
 #define MAXZOOM 16.0
 
@@ -159,7 +160,9 @@
                 {
                     [theChannelList addObject:[NSString stringWithFormat:@"%d", i]];
                 }
+                [self.objectValue willChangeValueForKey:@"optionsDictionary"];
                 [self.objectValue setValue:theChannelList forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannelList"];
+                [self.objectValue didChangeValueForKey:@"optionsDictionary"];
                 [theChannelList release];
             }
             
@@ -178,7 +181,8 @@
             if (wfv.audioFrames != nil)
                 free(wfv.audioFrames);
 
-            wfv.audioFrames = malloc(((UInt32)sizeof(AudioSampleType)) * wfv.frameCount * wfv.channelCount);
+            size_t frameBufferSize = sizeof(AudioSampleType) * wfv.frameCount * wfv.channelCount;
+            wfv.audioFrames = malloc(frameBufferSize);
             
             AudioBufferList bufList;
             bufList.mNumberBuffers = 1;
@@ -195,26 +199,26 @@
             
             [wfv setAutoresizingMask:NSViewHeightSizable];
             [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount, [self.scroller contentSize].height)];
-            
-            NSView *clipView = [[self.scroller documentView] superview];
-            NSSize clipViewFrameSize = [clipView frame].size;
-            [clipView setBoundsSize:NSMakeSize([[self slider] floatValue], clipViewFrameSize.height)];
-            
+                        
             float retrieveScale = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"] floatValue];
             if( isnan(retrieveScale) )
             {
+                [self.objectValue willChangeValueForKey:@"optionsDictionary"];
                 [self.objectValue setValue:[NSNumber numberWithFloat:self.slider.floatValue] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+                [self.objectValue didChangeValueForKey:@"optionsDictionary"];
             }
-            
-            [self.slider setFloatValue:retrieveScale];
-            //[self.slider bind:@"floatValue" toObject:self.objectValue withKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale" options:nil];
+            else
+                [self.slider setFloatValue:retrieveScale];
             
             float retrieveOrigin = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"] floatValue];
-            [[self.scroller documentView] scrollPoint:NSMakePoint(retrieveOrigin, 0.0f)];
             
+            NSView *clipView = [self.scroller contentView];
+            NSRect clipViewBounds = [clipView frame];
+            
+            [clipView setBounds:NSMakeRect(retrieveOrigin, clipViewBounds.origin.y, [[self slider] floatValue], clipViewBounds.size.height)];
+
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clipViewBoundsChanged:) name:NSViewBoundsDidChangeNotification object:nil];
             [clipView setPostsBoundsChangedNotifications:YES];
-            
             
             [wfv anaylizeAudioDataWithOptions:self.objectValue];
         }
@@ -239,7 +243,9 @@
     
     if( [self.scroller contentView] == theView )
     {
+        [self.objectValue willChangeValueForKey:@"optionsDictionary"];
         [self.objectValue setValue:[NSNumber numberWithFloat:[theView bounds].origin.x] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"];
+        [self.objectValue didChangeValueForKey:@"optionsDictionary"];
     }
 }
 
@@ -260,15 +266,15 @@
     [super dealloc];
 }
 
-- (void)setFrame:(NSRect)frameRect
-{
-    [super setFrame:frameRect];
-    self.slider.minValue = [[[self scroller] contentView] frame].size.width / MAXZOOM;
-    
-    NSView *clipView = [[self.scroller documentView] superview];
-    NSSize clipViewFrameSize = [clipView frame].size;
-    [clipView setBoundsSize:NSMakeSize((CGFloat)[[self slider] intValue], clipViewFrameSize.height)];
-}
+//- (void)setFrame:(NSRect)frameRect
+//{
+//    [super setFrame:frameRect];
+//    self.slider.minValue = [[[self scroller] contentView] frame].size.width / MAXZOOM;
+//    
+//    NSView *clipView = [[self.scroller documentView] superview];
+//    NSSize clipViewFrameSize = [clipView frame].size;
+//    [clipView setBoundsSize:NSMakeSize((CGFloat)[[self slider] intValue], clipViewFrameSize.height)];
+//}
 
 - (IBAction)updateSlider:(id)sender
 {
@@ -280,7 +286,10 @@
     boundsRect.size.width = newWidth;
     boundsRect.origin.x += (width-newWidth)/2.0;
     [clipView setBounds:boundsRect];
+    [self.objectValue willChangeValueForKey:@"optionsDictionary"];
     [self.objectValue setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+    [self.objectValue didChangeValueForKey:@"optionsDictionary"];
+
 }
 
 - (void)updateBounds:(NSRect)inRect
@@ -294,7 +303,9 @@
     
     newBoundsRect.size.width = inRect.size.width;
     [clipView setBounds:newBoundsRect];
+    [self.objectValue willChangeValueForKey:@"optionsDictionary"];
     [self.objectValue setValue:[NSNumber numberWithFloat:newBoundsRect.size.width] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+    [self.objectValue didChangeValueForKey:@"optionsDictionary"];
     [self.slider setFloatValue:newBoundsRect.size.width];
 }
 
@@ -314,7 +325,9 @@
     boundsRect.size.width = newWidth;
     boundsRect.origin.x += (width-newWidth)/ratio;
     [clipView setBounds:boundsRect];
+    [self.objectValue willChangeValueForKey:@"optionsDictionary"];
     [self.objectValue setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+    [self.objectValue didChangeValueForKey:@"optionsDictionary"];
 }
 
 + (NSArray *)anaylizerUTIs

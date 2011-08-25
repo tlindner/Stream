@@ -19,10 +19,10 @@
 #define DOT_HANDLE_SCALE 0.5
 #define DATA_SPACE 19.0
 
-void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
-void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
-void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
-void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset );
+void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
+void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
+void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
+void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData);
 double CubicHermite(double t, double p0, double p1, double m0, double m1);
@@ -127,7 +127,8 @@ typedef struct
         {
             free( previousBuffer );
             viewFloats = malloc(sizeof(Float32)*width);
-            SamplesSamples_max( sampleRate, channelCount, viewFloats, frameStart, scale, width, frameCount-offset);
+
+            SamplesSamples_max( sampleRate, channelCount, viewFloats, frameStart, scale, width, &(audioFrames[frameCount*channelCount]) );
             previousBuffer = viewFloats;
             previousOffset = offset;
             previousBoundsWidth = currentBoundsWidth;
@@ -574,25 +575,8 @@ typedef struct
 
 - (IBAction)chooseTool:(id)sender
 {
-//    NSScrollView *scrollView = (NSScrollView *)[[self superview] superview];
     NSSegmentedControl *seggy = sender;
-    
-//    NSLog( @"Doing it" );
     toolMode = [seggy selectedSegment];
-//    
-//    if( toolMode == WFVSelection )
-//    {
-//        [scrollView setDocumentCursor:[NSCursor arrowCursor]];
-//    }
-//    else if( toolMode == WFVPan )
-//    {
-//        [scrollView setDocumentCursor:[NSCursor openHandCursor]];
-//    }
-//    else if( toolMode == WFVLupe )
-//    {
-//        MyDocument *ourDoc = [[[self window] windowController] document];
-//        [scrollView setDocumentCursor:[ourDoc zoomCursor]];
-//    }
 }
 
 -(void)cursorUpdate:(NSEvent *)theEvent
@@ -941,15 +925,15 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )
     return (-b)/m;
 }
 
-void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
+void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
     if (sampleSize < 1.0)
     {
-        SamplesSamples_resample( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, maxOffset );
+        SamplesSamples_resample( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
     }
     else if (sampleSize == 1.0 )
     {
-        SamplesSamples_1to1( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, maxOffset );
+        SamplesSamples_1to1( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
     }
     else
     {
@@ -959,26 +943,26 @@ void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuf
             int j = (i*stride)*sampleSize;
             j += (j % stride);
             
-            if( j+(sampleSize*stride) < (maxOffset*stride) )
+            if( &(inBuffer[j+(long)sampleSize-1]) < lastFrame )
                 vDSP_maxv( &(inBuffer[j]), stride, &(outBuffer[i]), sampleSize );
             else
             {
-                NSLog( @"reading past array" );
+                //NSLog( @"reading past array, %p > %p", &(inBuffer[j+(long)sampleSize-1]), lastFrame );
                 outBuffer[i] = 0;
             }
         }
     }
 }
 
-void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
+void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
     if (sampleSize < 1.0)
     {
-        SamplesSamples_resample( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, maxOffset );
+        SamplesSamples_resample( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
     }
     else if (sampleSize == 1.0 )
     {
-        SamplesSamples_1to1( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, maxOffset );
+        SamplesSamples_1to1( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
     }
     else
     {
@@ -990,10 +974,12 @@ void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuf
             {
                 NSUInteger bufPointer = i*sampleSize+j;
                 
-                if( bufPointer < maxOffset )
+                if( &(inBuffer[bufPointer]) < lastFrame )
                 {
                     curValue += inBuffer[bufPointer];
                 }
+                else
+                    NSLog( @"SamplesSamples_avg: reading past sample buffer" );
             }
             
             outBuffer[i] = curValue/sampleSize;
@@ -1004,7 +990,7 @@ void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuf
     }
 }
 
-void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
+void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
     /* De-stride input */
     
@@ -1013,7 +999,10 @@ void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *o
     
     for( int i=0; i<inputLength; i++ )
     {
-        destrideBuffer[i] = inBuffer[i*stride];
+        if( &(inBuffer[i*stride]) < lastFrame )
+            destrideBuffer[i] = inBuffer[i*stride];
+        else
+            destrideBuffer[i] = 0;
     }
     
     /* resample data to fit in the view width */
@@ -1051,7 +1040,7 @@ void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *o
     afio.count = (UInt32)inputLength;
     afio.done = NO;
     
-    if( afio.count >= maxOffset ) afio.count = (UInt32)maxOffset;
+//    if( afio.count >= maxOffset ) afio.count = (UInt32)maxOffset;
     
     myErr = AudioConverterFillComplexBuffer( inAudioRef,
                                             EncoderDataProc,
@@ -1094,7 +1083,7 @@ OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDat
     return noErr;
 }
 
-void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, NSUInteger maxOffset )
+void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
     for( int i = 0; i<viewWidth; i++ )
     {
