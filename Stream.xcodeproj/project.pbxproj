@@ -42,6 +42,10 @@
 		776139AF13E1BA4200CA80BB /* ColorGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776139AE13E1BA4200CA80BB /* ColorGradientView.m */; };
 		7768590613F0FF92006BE753 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7768590513F0FF92006BE753 /* Accelerate.framework */; };
 		777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 777984BC13E99E96007198EE /* StreamsTreeController.m */; };
+		778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */; };
+		778A597E140703DB00B68EB4 /* StStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597D140703DB00B68EB4 /* StStream.m */; };
+		778A5981140706E500B68EB4 /* StBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A5980140706E500B68EB4 /* StBlock.m */; };
+		778A5984140719BA00B68EB4 /* StRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A5983140719BA00B68EB4 /* StRange.m */; };
 		7799CD2213E5C691007D5B8E /* AudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
@@ -171,6 +175,14 @@
 		7768590513F0FF92006BE753 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		777984BB13E99E96007198EE /* StreamsTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamsTreeController.h; sourceTree = "<group>"; };
 		777984BC13E99E96007198EE /* StreamsTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamsTreeController.m; sourceTree = "<group>"; };
+		778A59791406EE7600B68EB4 /* CoCoCassetteBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoCassetteBlocker.h; path = Stream/CoCoBlockers/CoCoCassetteBlocker.h; sourceTree = "<group>"; };
+		778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoCassetteBlocker.m; path = Stream/CoCoBlockers/CoCoCassetteBlocker.m; sourceTree = "<group>"; };
+		778A597C140703DB00B68EB4 /* StStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StStream.h; sourceTree = "<group>"; };
+		778A597D140703DB00B68EB4 /* StStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StStream.m; sourceTree = "<group>"; };
+		778A597F140706E500B68EB4 /* StBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StBlock.h; path = Stream/StBlock.h; sourceTree = "<group>"; };
+		778A5980140706E500B68EB4 /* StBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StBlock.m; path = Stream/StBlock.m; sourceTree = "<group>"; };
+		778A5982140719BA00B68EB4 /* StRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StRange.h; sourceTree = "<group>"; };
+		778A5983140719BA00B68EB4 /* StRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StRange.m; sourceTree = "<group>"; };
 		7799CD2013E5C691007D5B8E /* AudioAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaylizer.h; path = Stream/AudioAnaylizer/AudioAnaylizer.h; sourceTree = "<group>"; };
 		7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaylizer.m; path = Stream/AudioAnaylizer/AudioAnaylizer.m; sourceTree = "<group>"; };
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -317,6 +329,7 @@
 				774A181613FAB01500510032 /* LICENSE */,
 				775ED2CD13DCF86500BC96C9 /* README */,
 				7799CD1E13E5C651007D5B8E /* AudioAnaylizer */,
+				778A59771406EE0700B68EB4 /* CoCoBlockers */,
 				77F203F913DD3A5F00FA5B1F /* HexFiend */,
 				77614F3413DC9B6C00041279 /* Models */,
 				7788588B13EDC1B30057E042 /* AnaylizerUI */,
@@ -439,6 +452,12 @@
 			isa = PBXGroup;
 			children = (
 				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
+				778A5982140719BA00B68EB4 /* StRange.h */,
+				778A5983140719BA00B68EB4 /* StRange.m */,
+				778A597F140706E500B68EB4 /* StBlock.h */,
+				778A5980140706E500B68EB4 /* StBlock.m */,
+				778A597C140703DB00B68EB4 /* StStream.h */,
+				778A597D140703DB00B68EB4 /* StStream.m */,
 				77FEA6D613F57D4B0082B946 /* StAnaylizer.h */,
 				77FEA6D713F57D4B0082B946 /* StAnaylizer.m */,
 			);
@@ -463,6 +482,15 @@
 				77263A8913F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m */,
 			);
 			name = AnaylizerUI;
+			sourceTree = "<group>";
+		};
+		778A59771406EE0700B68EB4 /* CoCoBlockers */ = {
+			isa = PBXGroup;
+			children = (
+				778A59791406EE7600B68EB4 /* CoCoCassetteBlocker.h */,
+				778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */,
+			);
+			name = CoCoBlockers;
 			sourceTree = "<group>";
 		};
 		7799CD1E13E5C651007D5B8E /* AudioAnaylizer */ = {
@@ -782,6 +810,10 @@
 				77FEA6D813F57D4B0082B946 /* StAnaylizer.m in Sources */,
 				77263A8413F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m in Sources */,
 				77263A8B13F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m in Sources */,
+				778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */,
+				778A597E140703DB00B68EB4 /* StStream.m in Sources */,
+				778A5981140706E500B68EB4 /* StBlock.m in Sources */,
+				778A5984140719BA00B68EB4 /* StRange.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

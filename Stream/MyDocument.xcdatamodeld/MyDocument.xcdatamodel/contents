@@ -8,19 +8,22 @@
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream"/>
     </entity>
-    <entity name="StBlock">
+    <entity name="StBlock" representedClassName="StBlock">
         <attribute name="anaylizerKind" optional="YES" attributeType="String"/>
         <attribute name="expectedSize" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <attribute name="name" attributeType="String"/>
-        <relationship name="attributeRanges" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StRange" inverseName="parentBlock" inverseEntity="StRange"/>
-        <relationship name="dataRanges" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StRange" inverseName="parentBlock" inverseEntity="StRange"/>
-        <relationship name="dependantRanges" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StRange" inverseName="parentBlock" inverseEntity="StRange"/>
+        <relationship name="attributeRanges" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StRange"/>
+        <relationship name="dataRanges" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StRange"/>
+        <relationship name="dependantRanges" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StRange"/>
         <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="blocks" inverseEntity="StStream"/>
     </entity>
-    <entity name="StRange">
+    <entity name="StRange" representedClassName="StRange">
+        <attribute name="checkbytes" optional="YES" attributeType="Binary"/>
         <attribute name="length" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
+        <attribute name="name" attributeType="String"/>
         <attribute name="offset" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
-        <relationship name="parentBlock" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StBlock" inverseName="dependantRanges" inverseEntity="StBlock"/>
+        <attribute name="uiName" optional="YES" attributeType="String"/>
+        <relationship name="parentBlock" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StBlock"/>
     </entity>
     <entity name="StStream" representedClassName="">
         <attribute name="bytesAfterTransform" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
@@ -41,7 +44,7 @@
     <elements>
         <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="135"/>
         <element name="StBlock" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StRange" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StRange" positionX="0" positionY="0" width="0" height="135"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="255"/>
     </elements>
 </model>

@@ -297,18 +297,6 @@ typedef struct
     if( storedSamples != nil )
         free( storedSamples );
     
-    if( audioFrames != nil )
-        free( audioFrames );
-    
-//    if( characters != nil )
-//        free( characters );
-//    
-//    if( character != nil )
-//        free( character );
-//    
-//    if( coalescedCharacters != nil )
-//        free( coalescedCharacters );
-    
     if( previousBuffer != nil )
         free( previousBuffer );
     
@@ -422,15 +410,6 @@ typedef struct
     zero_crossings = realloc(zero_crossings, sizeof(float)*zc_count);
     
     /* Scan zero crossings looking for valid data */
-    
-//    if( self.characters != nil )
-//        free(self.characters);
-//    
-//    if( self.character != nil )
-//        free(self.character);
-//    
-//    if( self.coalescedCharacters != nil )
-//        free(self.coalescedCharacters);
     
     int max_possible_characters = (zc_count*2*8)+1;
     NSMutableData *charactersObject = [NSMutableData dataWithLength:sizeof(charRef)*max_possible_characters];
