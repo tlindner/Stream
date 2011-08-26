@@ -20,11 +20,13 @@
     return self;
 }
 
-- (void) makeBlocks:(StStream *)stream
++ (void) makeBlocks:(StStream *)stream
 {
-    NSAssert( [stream respondsToSelector:@selector(blockNamed:)], @"CoCoCassetteBlocker: Incompatiable stream" );
+    NSLog( @"stream: %@", stream );
     
-    NSData  *streamBytesObject = [stream blockedNamed:@"stream"];
+    NSAssert( [stream respondsToSelector:@selector(blockNamed:)] == YES, @"CoCoCassetteBlocker: Incompatiable stream" );
+    
+    NSData  *streamBytesObject = [stream blockNamed:@"stream"];
     NSAssert( streamBytesObject != nil, @"CoCoCassetteBlocker: no stream object" );
     
     unsigned char *streamBytes = (unsigned char *)[streamBytesObject bytes];
@@ -51,7 +53,7 @@
         {
             /* we found a header */
             
-            StBlock *newBlock = [stream startNewBlockNamed:[NSString stringWithFormat:@"Block %d", blockName++]];
+            StBlock *newBlock = [stream startNewBlockNamed:[NSString stringWithFormat:@"Block %d", blockName++] owner:[CoCoCassetteBlocker anaylizerKey]];
             
             //unsigned char blockType = streamBytes[i+1];
             unsigned char checksumCheck = 0x55;

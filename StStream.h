@@ -31,8 +31,8 @@
 @property (nonatomic, retain) NSSet *childStreams;
 @property (nonatomic, retain) StStream *parentStream;
 
-- (NSData *)blockedNamed:(NSString *)name;
-- (StBlock *)startNewBlockNamed:(NSString *)name;
+- (NSData *)blockNamed:(NSString *)name;
+- (StBlock *)startNewBlockNamed:(NSString *)name owner:(NSString *)owner;
 
 @end
 

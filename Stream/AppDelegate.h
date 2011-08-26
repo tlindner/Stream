@@ -1,5 +1,5 @@
 //
-//  CoCoCassetteBlocker.h
+//  AppDelegate.h
 //  Stream
 //
 //  Created by tim lindner on 8/25/11.
@@ -7,16 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "StStream.h"
-#import "AppDelegate.h"
 
-@interface CoCoCassetteBlocker : NSObject <BlockerProtocol>
+@class StStream;
 
+@interface AppDelegate : NSObject
+{
+    NSMenu *blocksMenu;
+}
+
+@property (assign) IBOutlet NSMenu *blocksMenu;
+
+@end
+
+@protocol BlockerProtocol <NSObject>
+@optional
 + (NSString *)anayliserName;
 + (NSString *)anaylizerKey;
 + (NSString *)AnaylizerPopoverAccessoryViewNib;
 + (NSMutableDictionary *)defaultOptions;
-
 + (void) makeBlocks:(StStream *)stream;
-
 @end

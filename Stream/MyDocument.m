@@ -7,7 +7,9 @@
 //
 
 #import "MyDocument.h"
-
+#import "StStream.h"
+#import "StAnaylizer.h"
+#import "AppDelegate.h"
 
 @implementation MyDocument
 
@@ -72,8 +74,8 @@
                 /* Setup first anaylizer */
                 NSMutableOrderedSet *theSet = [newObject mutableOrderedSetValueForKey:@"anaylizers"];
                 
-                 NSManagedObject *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
-                [newAnaylizer setValue:@"base anaylizer" forKey:@"anaylizerKind"];
+                 StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
+                newAnaylizer.anaylizerKind = @"base anaylizer";
                 [theSet addObject:newAnaylizer];
              
                 [streamTreeControler addObject:newObject];
@@ -82,6 +84,33 @@
      };
 
     [myOpenPanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
+}
+
+- (IBAction)makeNewBlocker:(id)sender
+{
+    NSLog( @"Yo!: %@", sender );
+    
+    Class <BlockerProtocol> class = [sender representedObject];
+    
+    NSLog( @"class: %@", class );
+    
+    NSArray *selectedObjects = [streamTreeControler selectedObjects];
+    
+    if( [selectedObjects count] > 0 )
+    {
+        StStream *selectedStream = [selectedObjects objectAtIndex:0];
+        NSLog( @"Stream: %@", selectedStream );
+    
+        [class makeBlocks:selectedStream];
+        
+        /* Setup anaylizer */
+        NSMutableOrderedSet *theSet = [selectedStream mutableOrderedSetValueForKey:@"anaylizers"];
+        
+        StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
+        newAnaylizer.anaylizerKind = [class anayliserName];
+        newAnaylizer.currentEditorView = @"Blocker View";
+        [theSet addObject:newAnaylizer];
+    }
 }
 
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row

@@ -25,6 +25,7 @@ static Analyzation *sharedSingleton;
         sharedSingleton = [[Analyzation alloc] init];
         [sharedSingleton addAnalyzer:@"AudioAnaylizer"];
         [sharedSingleton addAnalyzer:@"HFTextView"];
+        [sharedSingleton addAnalyzer:@"BlockerView"];
 //        [sharedSingleton addAnalyzer:@"NSTextView"];
     }
 }

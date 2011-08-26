@@ -25,7 +25,7 @@
 @dynamic childStreams;
 @dynamic parentStream;
 
-- (NSData *)blockedNamed:(NSString *)name
+- (NSData *)blockNamed:(NSString *)name
 {
     NSData *result = nil;
     
@@ -48,7 +48,7 @@
     return result;
 }
 
-- (StBlock *)startNewBlockNamed:(NSString *)name
+- (StBlock *)startNewBlockNamed:(NSString *)name owner:(NSString *)owner
 {
     if( [name isEqualToString:@"stream"] )
     {
@@ -72,7 +72,8 @@
         {
             /* ok, create new block */
             StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-            [newBlock setValue:name forKey:@"name"];
+            newBlock.name = name;
+            newBlock.anaylizerKind = owner;
             [self addBlocksObject:newBlock];
             return newBlock;
         }
