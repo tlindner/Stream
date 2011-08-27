@@ -27,7 +27,7 @@
 @interface NSView(AnaylizationExtensions)
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;
-- (void)setData:(NSData *)data;
+- (void)setRepresentedObject:(id)representedObject;
 + (NSString *)anaylizerKey;
 + (NSString *)AnaylizerPopoverAccessoryViewNib;
 + (NSMutableDictionary *)defaultOptions;

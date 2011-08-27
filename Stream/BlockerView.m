@@ -7,22 +7,66 @@
 //
 
 #import "BlockerView.h"
+#import "Analyzation.h"
+#import "AppDelegate.h"
 
 @implementation BlockerView
+@synthesize treeController;
+@synthesize baseView;
+@synthesize objectValue;
+@dynamic managedObjectContext;
 
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code here.
+    if (self)
+    {
+        [NSBundle loadNibNamed:@"BlockerView" owner:self];
+        [baseView setFrame:NSMakeRect(0, 0, frame.size.width, frame.size.height)];
+        [self addSubview:baseView];        
     }
     
     return self;
 }
 
+- (void)dealloc
+{
+    [baseView removeFromSuperview];
+    self.baseView = nil;
+    self.treeController = nil;
+    
+    [super dealloc];
+}
+
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Drawing code here.
+}
+
+- (void)setRepresentedObject:(id)representedObject
+{
+    self.objectValue = representedObject;
+
+    if( [[self.objectValue valueForKey:@"initializedOD"] boolValue] == YES )
+    {
+    }
+    else
+    {
+        Class <BlockerProtocol> class = NSClassFromString([self.objectValue valueForKey:@"anaylizerKind"]);
+        
+        if (class != nil )
+        {
+            [class makeBlocks:self.objectValue.parentStream];
+            [self.objectValue setValue:[NSNumber numberWithBool:YES] forKey:@"initializedOD"];
+        }
+        else
+            NSLog( @"Could not create class: %@", [self.objectValue valueForKey:@"anaylizerKind"] );
+    }
+}
+
+- (NSManagedObjectContext *)managedObjectContext
+{
+    return [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
 }
 
 + (NSArray *)anaylizerUTIs

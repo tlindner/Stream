@@ -101,13 +101,11 @@
         StStream *selectedStream = [selectedObjects objectAtIndex:0];
         NSLog( @"Stream: %@", selectedStream );
     
-        [class makeBlocks:selectedStream];
-        
         /* Setup anaylizer */
         NSMutableOrderedSet *theSet = [selectedStream mutableOrderedSetValueForKey:@"anaylizers"];
         
         StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
-        newAnaylizer.anaylizerKind = [class anayliserName];
+        newAnaylizer.anaylizerKind = [class anaylizerKey];
         newAnaylizer.currentEditorView = @"Blocker View";
         [theSet addObject:newAnaylizer];
     }

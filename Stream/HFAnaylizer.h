@@ -7,7 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "HFTextView.h"
+#import "StAnaylizer.h"
 
 @interface HFAnaylizer : NSView
+{
+    HFTextView *hexView;
+}
+
+@property (assign) StAnaylizer *objectValue;
 
 @end

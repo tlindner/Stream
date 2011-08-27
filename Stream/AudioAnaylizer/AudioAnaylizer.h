@@ -20,11 +20,9 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 
 @interface AudioAnaylizer : NSView
 {
-    NSData *data;
     NSMutableArray *newConstraints;
 }
 
-@property(nonatomic, retain) NSData *data;
 @property(nonatomic, retain) NSMutableArray *newConstraints;
 @property(nonatomic, assign) StAnaylizer *objectValue;
 

@@ -16,8 +16,6 @@
 			<string>NSCustomObject</string>
 			<string>NSMenu</string>
 			<string>NSArrayController</string>
-			<string>NSSegmentedControl</string>
-			<string>NSSegmentedCell</string>
 			<string>NSPopUpButton</string>
 			<string>NSCustomView</string>
 			<string>NSPopUpButtonCell</string>
@@ -348,57 +346,6 @@
 				<bool key="NSSelectsInsertedObjects">YES</bool>
 				<bool key="NSFilterRestrictsInsertion">YES</bool>
 				<bool key="NSClearsFilterPredicateOnInsertion">YES</bool>
-			</object>
-			<object class="NSSegmentedControl" id="293076767">
-				<nil key="NSNextResponder"/>
-				<int key="NSvFlags">268</int>
-				<string key="NSFrameSize">{376, 17}</string>
-				<string key="NSReuseIdentifierKey">_NS:1766</string>
-				<bool key="NSEnabled">YES</bool>
-				<object class="NSSegmentedCell" key="NSCell" id="923462851">
-					<int key="NSCellFlags">67239424</int>
-					<int key="NSCellFlags2">262144</int>
-					<object class="NSFont" key="NSSupport">
-						<string key="NSName">LucidaGrande</string>
-						<double key="NSSize">9</double>
-						<int key="NSfFlags">3614</int>
-					</object>
-					<string key="NSCellIdentifier">_NS:1766</string>
-					<reference key="NSControlView" ref="293076767"/>
-					<object class="NSMutableArray" key="NSSegmentImages">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSSegmentItem">
-							<double key="NSSegmentItemWidth">61</double>
-							<object class="NSCustomResource" key="NSSegmentItemImage">
-								<string key="NSClassName">NSImage</string>
-								<string key="NSResourceName">AnaylizerArrow</string>
-							</object>
-							<string key="NSSegmentItemLabel">Arrow</string>
-							<int key="NSSegmentItemImageScaling">0</int>
-						</object>
-						<object class="NSSegmentItem">
-							<double key="NSSegmentItemWidth">61</double>
-							<int key="NSSegmentItemTag">1</int>
-							<int key="NSSegmentItemImageScaling">0</int>
-						</object>
-						<object class="NSSegmentItem">
-							<double key="NSSegmentItemWidth">62</double>
-							<int key="NSSegmentItemImageScaling">0</int>
-						</object>
-						<object class="NSSegmentItem">
-							<double key="NSSegmentItemWidth">62</double>
-							<int key="NSSegmentItemImageScaling">0</int>
-						</object>
-						<object class="NSSegmentItem">
-							<double key="NSSegmentItemWidth">62</double>
-							<int key="NSSegmentItemImageScaling">0</int>
-						</object>
-						<object class="NSSegmentItem">
-							<double key="NSSegmentItemWidth">61</double>
-							<int key="NSSegmentItemImageScaling">0</int>
-						</object>
-					</object>
-				</object>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -732,20 +679,6 @@
 						<reference key="object" ref="548046416"/>
 						<reference key="parent" ref="0"/>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">107</int>
-						<reference key="object" ref="293076767"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="923462851"/>
-						</object>
-						<reference key="parent" ref="0"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">108</int>
-						<reference key="object" ref="923462851"/>
-						<reference key="parent" ref="293076767"/>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -756,9 +689,6 @@
 					<string>-2.IBPluginDependency</string>
 					<string>-3.IBPluginDependency</string>
 					<string>1.IBPluginDependency</string>
-					<string>107.IBPluginDependency</string>
-					<string>108.IBNSSegmentedControlInspectorSelectedSegmentMetadataKey</string>
-					<string>108.IBPluginDependency</string>
 					<string>14.IBPluginDependency</string>
 					<string>15.IBPluginDependency</string>
 					<string>16.IBPluginDependency</string>
@@ -790,9 +720,6 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="0"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -856,9 +783,5 @@
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
-		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">AnaylizerArrow</string>
-			<string key="NS.object.0">{16, 16}</string>
-		</object>
 	</data>
 </archive>

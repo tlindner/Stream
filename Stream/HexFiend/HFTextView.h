@@ -25,9 +25,6 @@
     NSData *cachedData;
 }
 
-+ (NSArray *)anaylizerUTIs;
-+ (NSString *)anayliserName;
-
 /*! @name Accessing MVC components
 */
 //@{

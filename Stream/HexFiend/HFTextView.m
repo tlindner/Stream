@@ -19,31 +19,6 @@
 
 @implementation HFTextView
 
-+ (NSArray *)anaylizerUTIs
-{
-    return [NSArray arrayWithObject:@"public.data"];
-}
-
-+ (NSString *)anayliserName
-{
-    return @"Hex Editor";
-}
-
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
-{
-    return @"HFAccessoryView";
-}
-
-+ (NSString *)anaylizerKey;
-{
-    return @"HFHexEditor";
-}
-
-+ (NSMutableDictionary *)defaultOptions
-{
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"showOffset", nil] autorelease];
-}
-
 - (void)_sharedInitHFTextViewWithMutableData:(NSMutableData *)mutableData {
     HFBTreeByteArray *byteArray = [[HFBTreeByteArray alloc] init];
     if (mutableData) {

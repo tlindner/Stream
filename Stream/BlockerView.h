@@ -7,7 +7,17 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "StAnaylizer.h"
 
-@interface BlockerView : NSView
+@interface BlockerView : NSView {
+    NSView *baseView;
+    NSTreeController *treeController;
+}
+
+@property (assign) IBOutlet NSTreeController *treeController;
+@property (assign) IBOutlet NSView *baseView;
+@property (assign) StAnaylizer *objectValue;
+@property (readonly) NSManagedObjectContext *managedObjectContext;
 
 @end
+

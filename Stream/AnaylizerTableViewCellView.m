@@ -89,8 +89,9 @@
         if( newConstraints != nil )
             [self updateConstraints];
         
-        //[self.editorSubView setData:[self.objectValue valueForKeyPath:@"parentStream.bytesCache"]];      
-        [editorSubView setData:[self.objectValue valueForKeyPath:@"parentStream.bytesCache"]];      
+        //[self.editorSubView setData:[self.objectValue valueForKeyPath:@"parentStream.bytesCache"]];  
+        [editorSubView setRepresentedObject:self.objectValue];
+        //[editorSubView setData:[self.objectValue valueForKeyPath:@"parentStream.bytesCache"]];      
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

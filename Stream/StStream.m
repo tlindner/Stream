@@ -66,7 +66,7 @@
     NSError *error = nil;
     NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
 
-    if( error != nil )
+    if( error == nil )
     {
         if( result != nil && [result count] == 0 )
         {
@@ -81,7 +81,7 @@
             NSLog( @"startNewBlockNamed: block already exists: %@", name );
     }
     else
-        NSLog(@"fetch error: %@", error);
+        NSLog(@"startNewBlockNamed: fetch error: %@", error);
     
     return nil;
 }

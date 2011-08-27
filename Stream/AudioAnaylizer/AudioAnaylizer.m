@@ -15,19 +15,12 @@
 
 @implementation AudioAnaylizer
 
-@dynamic data;
 @synthesize scroller;
 @synthesize slider;
 @synthesize newConstraints;
 @synthesize objectValue;
 @synthesize toolSegment;
 @synthesize trackingArea;
-
-+ (void)initialize {
-    if (self == [AudioAnaylizer class]) {
-        [self exposeBinding:@"data"];
-    }
-}
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -111,27 +104,16 @@
     return self;
 }
 
-- (NSData *)data
-{
-    return data;
-}
-
-- (void)setData:(NSData *)inData
+- (void)setRepresentedObject:(id)representedObject
 {
     WaveFormView *wfv = [self.scroller documentView];
-    self.objectValue = [[[self superview] superview] valueForKey:@"objectValue"];
+    self.objectValue = representedObject;
     [self.objectValue addSubOptionsDictionary:[AudioAnaylizer anaylizerKey] withDictionary:[AudioAnaylizer defaultOptions]];
     UInt32 propSize;
     OSStatus myErr;
     
     wfv.cachedAnaylizer = self.objectValue;
-    
-    if( inData != data )
-    {
-        [data release];
-        data = [inData retain];
-    }
-    
+
     if( [[self.objectValue valueForKey:@"initializedOD"] boolValue] == YES )
     {
         /* Read in options data */
@@ -152,7 +134,7 @@
         wfv.char_count = [characterObject length];
         wfv.coa_char_count = [coalescedObject length]/sizeof(charRef);
     }
-    else if( data != nil )
+    else
     {
         NSManagedObject *parentStream = [self.objectValue valueForKeyPath:@"parentStream"];
         NSURL *fileURL = [parentStream valueForKey:@"sourceURL"];
@@ -233,11 +215,6 @@
             return;
         }
     }
-    else
-    {
-        if( wfv.audioFrames != nil ) wfv.audioFrames = nil;
-        wfv.frameCount = 0;
-    }
 
     NSView *clipView = [self.scroller contentView];
     self.slider.maxValue = wfv.frameCount;
@@ -279,7 +256,6 @@
     [self removeTrackingArea:self.trackingArea];
     self.trackingArea = nil;
     
-    self.data = nil;
     [self.scroller removeFromSuperview];
     self.scroller = nil;
     [self.slider removeFromSuperview];
