@@ -63,6 +63,7 @@
 @property(nonatomic, assign) float lowCycle;
 @property(nonatomic, assign) float highCycle;
 @property(nonatomic, assign) float resyncThresholdHertz;
+@property(nonatomic, assign) BOOL observationsActive;
 
 @property(nonatomic, assign) BOOL anaylizationError;
 @property(nonatomic, retain) NSString *errorString;

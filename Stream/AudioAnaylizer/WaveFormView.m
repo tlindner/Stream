@@ -59,6 +59,7 @@ typedef struct
 @synthesize anaylizationError;
 @synthesize errorString;
 @synthesize needsAnaylyzation;
+@synthesize observationsActive;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -83,7 +84,7 @@ typedef struct
     
     if( needsAnaylyzation ) [self anaylizeAudioData];
     
-    // Drawing code here.
+    /* Drawing code here. */
     if( anaylizationError == YES )
     {
         if (errorString == nil) self.errorString = @"No error message set!";
@@ -283,10 +284,13 @@ typedef struct
 
 - (void)dealloc
 {
-    [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"];
-    [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
-    [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
-    [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
+    if( observationsActive )
+    {
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
+    } 
     
     if( panMomentumTimer != nil )
     {
@@ -305,8 +309,6 @@ typedef struct
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
-    
     id newObject;
     
     if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"])
@@ -371,13 +373,7 @@ typedef struct
     
     if( currentChannel > channelCount ) currentChannel = channelCount;
     if( currentChannel < 1 ) currentChannel = 1;
-    
-    /* setup observations */
-    [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle" options:NSKeyValueChangeSetting context:nil];
-    [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle" options:NSKeyValueChangeSetting context:nil];
-    [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
-    [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel" options:NSKeyValueChangeSetting context:nil];
-    
+        
     lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"] floatValue];
     highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"] floatValue];
     vDSP_Length i;
@@ -406,7 +402,7 @@ typedef struct
         i += crossing-1;
     }
     
-    /* removed unused space in zero crossing array */
+    /* remove unused space in zero crossing array */
     zero_crossings = realloc(zero_crossings, sizeof(float)*zc_count);
     
     /* Scan zero crossings looking for valid data */
@@ -526,14 +522,11 @@ typedef struct
     free(zero_crossings);
     
     /* shirnk buffers to actual size */
-    //self.characters = realloc(characters, sizeof(charRef)*char_count);
-    //self.character = realloc(character, sizeof(unsigned char)*char_count);
     [charactersObject setLength:sizeof(charRef)*char_count];
     [characterObject setLength:sizeof(unsigned char)*char_count];
     NSAssert( self.characters == [charactersObject mutableBytes], @"Characters moved!" );
     NSAssert( self.character == [characterObject mutableBytes], @"Character moved!" );
 
-    //self.coalescedCharacters = malloc( sizeof(charRef)*char_count );
     NSMutableData *coalescedObject = [NSMutableData dataWithLength:sizeof(charRef)*char_count];
     self.coalescedCharacters = [coalescedObject mutableBytes];
 
@@ -551,7 +544,6 @@ typedef struct
     }
     
     /* shirnk buffer to actual size */
-    //self.coalescedCharacters = realloc(coalescedCharacters, sizeof(charRef)*coa_char_count);
     [coalescedObject setLength:sizeof(charRef)*coa_char_count];
     NSAssert( self.coalescedCharacters == [coalescedObject mutableBytes], @"coalescedObject bytes moved!" );
     
@@ -996,7 +988,7 @@ void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuf
 
 void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
-    /* De-stride input */
+    /* de-stride input */
     
     vDSP_Length inputLength = viewWidth / sampleSize;
     AudioSampleType *destrideBuffer = malloc(sizeof(AudioSampleType)*inputLength);
@@ -1044,8 +1036,6 @@ void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *o
     afio.count = (UInt32)inputLength;
     afio.done = NO;
     
-//    if( afio.count >= maxOffset ) afio.count = (UInt32)maxOffset;
-    
     myErr = AudioConverterFillComplexBuffer( inAudioRef,
                                             EncoderDataProc,
                                             &afio,
@@ -1064,7 +1054,7 @@ void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *o
     free( destrideBuffer );    
 }
 
-/* Data provider for resampling routine in SamplesSamples_resample() */
+/* data provider for resampling routine in SamplesSamples_resample() */
 OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData)
 {
 	AudioFileIO* afio = (AudioFileIO*)inUserData;
@@ -1095,7 +1085,7 @@ void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBu
     }
 }
 
-/* Credit to Roman Zenka, Stackover question #3367308 */
+/* credit to Roman Zenka, stackover question #3367308 */
 double CubicHermite(double t, double p0, double p1, double m0, double m1)
 {
     double t2 = t*t;
@@ -1114,28 +1104,20 @@ double Interpolate( double timeToAccel, double timeCruising, double timeToDecel,
     double v = x / (t1/2.0 + t2 + t3/2.0);
     double x1 = v * t1 / 2.0;
     double x2 = v * t2;
-    //    double x3 = v * t3 / 2.0;
     
     if(t <= t1)
     {
-        // Acceleration
+        /* acceleration */
         return CubicHermite(t/t1, 0.0, x1, 0.0, x2/t2*t1);
     }
     else if(t <= t1+t2)
     {
-        // Cruising
+        /* cruising */
         return x1 + x2 * (t-t1) / t2;
     }
     else
     {
-        // Deceleration
+        /* deceleration */
         return CubicHermite((t-t1-t2)/t3, x1+x2, x, x2/t2*t3, 0.0);
     }
 }
-
-
-
-
-
-
-

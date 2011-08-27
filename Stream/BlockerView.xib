@@ -19,6 +19,7 @@
 			<string>NSTreeController</string>
 			<string>NSCustomView</string>
 			<string>NSTableColumn</string>
+			<string>NSUserDefaultsController</string>
 			<string>NSScroller</string>
 			<string>NSCustomObject</string>
 		</object>
@@ -89,7 +90,7 @@
 															<object class="NSTableColumn" id="446702694">
 																<double key="NSWidth">293</double>
 																<double key="NSMinWidth">16</double>
-																<double key="NSMaxWidth">1000</double>
+																<double key="NSMaxWidth">64000</double>
 																<object class="NSTableHeaderCell" key="NSHeaderCell">
 																	<int key="NSCellFlags">75628096</int>
 																	<int key="NSCellFlags2">2048</int>
@@ -143,6 +144,11 @@
 																<bool key="NSIsResizeable">YES</bool>
 																<bool key="NSIsEditable">YES</bool>
 																<reference key="NSTableView" ref="1001255841"/>
+																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype">
+																	<string key="NSKey">name</string>
+																	<bool key="NSAscending">YES</bool>
+																	<string key="NSSelector">localizedStandardCompare:</string>
+																</object>
 															</object>
 														</object>
 														<double key="NSIntercellSpacingWidth">3</double>
@@ -253,8 +259,6 @@
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSTreeController" id="394668255">
-				<bool key="NSEditable">YES</bool>
-				<bool key="NSAutomaticallyPreparesContent">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy">
 					<string key="NSEntityName">StBlock</string>
 				</object>
@@ -263,6 +267,9 @@
 				<bool key="NSPreservesSelection">YES</bool>
 				<bool key="NSSelectsInsertedObjects">YES</bool>
 				<string key="NSTreeContentChildrenKey">dataRanges</string>
+			</object>
+			<object class="NSUserDefaultsController" id="953814796">
+				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -409,6 +416,12 @@
 						<int key="objectID">65</int>
 						<reference key="object" ref="394668255"/>
 						<reference key="parent" ref="0"/>
+						<string key="objectName">Tree Controller</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">74</int>
+						<reference key="object" ref="953814796"/>
+						<reference key="parent" ref="0"/>
 					</object>
 				</object>
 			</object>
@@ -430,9 +443,11 @@
 					<string>58.IBPluginDependency</string>
 					<string>61.IBPluginDependency</string>
 					<string>65.IBPluginDependency</string>
+					<string>74.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -461,7 +476,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">73</int>
+			<int key="maxID">77</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

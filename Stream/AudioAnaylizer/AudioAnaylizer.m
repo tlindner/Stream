@@ -216,6 +216,13 @@
         }
     }
 
+    /* setup observations */
+    [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle" options:NSKeyValueChangeSetting context:nil];
+    [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle" options:NSKeyValueChangeSetting context:nil];
+    [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
+    [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel" options:NSKeyValueChangeSetting context:nil];
+    wfv.observationsActive = YES;
+    
     NSView *clipView = [self.scroller contentView];
     self.slider.maxValue = wfv.frameCount;
     self.slider.minValue = [clipView frame].size.width / MAXZOOM;
