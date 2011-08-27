@@ -80,7 +80,7 @@
 
 + (NSString *)anaylizerKey
 {
-    return @"ColorComputerCassetteBlocker";
+    return @"CoCoCassetteBlocker";
 }
 
 + (NSString *)AnaylizerPopoverAccessoryViewNib

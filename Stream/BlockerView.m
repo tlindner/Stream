@@ -21,6 +21,9 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        [self setAutoresizesSubviews:YES];
+        [self setAutoresizingMask:(NSViewWidthSizable|NSViewHeightSizable)];
+
         [NSBundle loadNibNamed:@"BlockerView" owner:self];
         [baseView setFrame:NSMakeRect(0, 0, frame.size.width, frame.size.height)];
         [self addSubview:baseView];        
@@ -66,7 +69,13 @@
 
 - (NSManagedObjectContext *)managedObjectContext
 {
-    return [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
+    NSManagedObjectContext *result = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
+    return result;
+}
+
+- (void)viewDidMoveToWindow
+{
+    [treeController setManagedObjectContext:[self managedObjectContext]];    
 }
 
 + (NSArray *)anaylizerUTIs

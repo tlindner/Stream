@@ -88,19 +88,14 @@
 
 - (IBAction)makeNewBlocker:(id)sender
 {
-    NSLog( @"Yo!: %@", sender );
-    
     Class <BlockerProtocol> class = [sender representedObject];
-    
-    NSLog( @"class: %@", class );
-    
+
     NSArray *selectedObjects = [streamTreeControler selectedObjects];
     
     if( [selectedObjects count] > 0 )
     {
         StStream *selectedStream = [selectedObjects objectAtIndex:0];
-        NSLog( @"Stream: %@", selectedStream );
-    
+
         /* Setup anaylizer */
         NSMutableOrderedSet *theSet = [selectedStream mutableOrderedSetValueForKey:@"anaylizers"];
         

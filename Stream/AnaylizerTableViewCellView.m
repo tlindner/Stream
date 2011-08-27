@@ -7,7 +7,7 @@
 //
 
 #import "AnaylizerTableViewCellView.h"
-#import "HFTextView.h"
+#import "HFAnaylizer.h"
 #import "AudioAnaylizer.h"
 #import "Analyzation.h"
 
@@ -75,7 +75,7 @@
         Class editorViewClass = [[Analyzation sharedInstance] anaylizerClassforName:[change objectForKey:@"new"]];
         
         if (editorViewClass == nil)
-            editorViewClass = [HFTextView class];
+            editorViewClass = [HFAnaylizer class];
 
         NSRect adjustedFrame = [_customView frame];
         //adjustedFrame.size.height = [[self valueForKeyPath:@"objectValue.anaylizerHeight"] floatValue] - 19.0f - 6.0f;
