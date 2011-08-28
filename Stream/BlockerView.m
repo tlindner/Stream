@@ -61,12 +61,18 @@
         if (class != nil )
         {
             [class makeBlocks:self.objectValue.parentStream];
-            
 
             [self.objectValue setValue:[NSNumber numberWithBool:YES] forKey:@"initializedOD"];
+
+            NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+            NSArray *sortDescriptors = [NSArray arrayWithObject:nameDescriptor];
+            [treeController setSortDescriptors:(NSArray *)sortDescriptors];
+            [treeController prepareContent];
+            [dataViewController startObserving];
         }
         else
             NSLog( @"Could not create class: %@", [self.objectValue valueForKey:@"anaylizerKind"] );
+
     }
 }
 
@@ -76,13 +82,13 @@
     return result;
 }
 
-- (void)viewDidMoveToWindow
-{
-    NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:nameDescriptor];
-    [treeController setSortDescriptors:(NSArray *)sortDescriptors];
-    [treeController prepareContent];
-}
+//- (void)viewDidMoveToWindow
+//{
+//    NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+//    NSArray *sortDescriptors = [NSArray arrayWithObject:nameDescriptor];
+//    [treeController setSortDescriptors:(NSArray *)sortDescriptors];
+//    [treeController prepareContent];
+//}
 
 + (NSArray *)anaylizerUTIs
 {

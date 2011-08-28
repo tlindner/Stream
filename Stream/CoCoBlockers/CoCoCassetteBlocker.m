@@ -67,7 +67,10 @@
             [newBlock addDataRange:@"stream" start:i+3 length:blockLength];
             
             i += 1 + blockLength + 2;
+            
+            NSLog( @"New block created: %@", newBlock );
         }
+        
     }
 }
 

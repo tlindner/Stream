@@ -19,5 +19,9 @@
 
 @property (assign) IBOutlet BlockerView *parentView;
 @property (assign) IBOutlet NSTreeController *treeController;
+@property (assign) BOOL observing;
+
+- (void) startObserving;
+- (void) stopObserving;
 
 @end

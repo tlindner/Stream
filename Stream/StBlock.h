@@ -32,9 +32,12 @@
 @property (nonatomic, retain) StBlock *parentBlock;
 @property (nonatomic, retain) NSSet *blocks;
 
+- (StStream *)getStream;
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name;
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify;
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length;
+
+- (NSData *)getData;
 
 @end
 

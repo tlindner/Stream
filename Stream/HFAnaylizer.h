@@ -8,13 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 #import "HFTextView.h"
-#import "StAnaylizer.h"
 
 @interface HFAnaylizer : NSView
 {
     HFTextView *hexView;
 }
 
-@property (assign) StAnaylizer *objectValue;
+@property (assign) id objectValue;
+
+- (void)setRepresentedObject:(id)representedObject;
 
 @end

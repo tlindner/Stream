@@ -35,19 +35,38 @@
         {
             if( anAna.resultingData != nil )
             {
-                result = [[anAna.resultingData copy] autorelease];
+                result = anAna.resultingData;
             }
         }
         
         if( result == nil )
-            result = [[self.bytesCache copy] autorelease];
+            result = self.bytesCache;
         
         return result;
     }
     else
     {
-        /* find block and returned autoreleased copy */
-        NSLog( @"Finding custom block not implemented yet" );
+        /* find block and returned it's data */
+        NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        [request setEntity:entity];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (name == %@)", self, name ];
+        [request setPredicate:predicate];
+        NSError *error = nil;
+        NSArray *resultBlockArray = [self.managedObjectContext executeFetchRequest:request error:&error];
+        
+        if( error == nil )
+        {
+            if( resultBlockArray != nil && [resultBlockArray count] == 1 )
+            {
+                StBlock *theBlock = [resultBlockArray objectAtIndex:0];
+                return [theBlock getData];
+            }
+            else
+                NSLog( @"blockNamed: zero, or more than one blocks found: %@", resultBlockArray );
+        }
+        else
+            NSLog( @"blockNamed: Error fetching block: %@", error );
     }
     
     return result;
@@ -63,7 +82,7 @@
     
     /* See if named block already exists */
     
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
     [request setEntity:entity];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (name == %@)", self, name ];

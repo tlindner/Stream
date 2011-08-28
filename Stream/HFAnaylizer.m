@@ -7,6 +7,8 @@
 //
 
 #import "HFAnaylizer.h"
+#import "StAnaylizer.h"
+#import "StBlock.h"
 
 @implementation HFAnaylizer
 
@@ -38,14 +40,31 @@
 {
     self.objectValue = representedObject;
     
-    [hexView setData:[objectValue.parentStream valueForKey:@"bytesCache"]];      
-
-    if( [[self.objectValue valueForKey:@"initializedOD"] boolValue] == YES )
+    if( [self.objectValue isKindOfClass:[StAnaylizer class]] )
     {
+        StAnaylizer *object = self.objectValue;
+        [hexView setData:[object.parentStream valueForKey:@"bytesCache"]];      
+        
+        if( [[object valueForKey:@"initializedOD"] boolValue] == YES )
+        {
+        }
+        else
+        {
+        }
+    }
+    else if( [self.objectValue isKindOfClass:[StBlock class]] )
+    {
+        StBlock *theBlock = self.objectValue;
+        NSData *theData = [theBlock getData];
+        [hexView setData:theData];
+    }
+    else if( [self.objectValue isKindOfClass:[NSData class]] )
+    {
+        NSData *theData = self.objectValue;
+        [hexView setData:theData];
     }
     else
-    {
-    }
+        NSLog( @"HFAnaylizer: Unknown type of represented object" );
 }
 
 + (NSArray *)anaylizerUTIs
