@@ -77,18 +77,10 @@
 
 - (void)viewDidMoveToWindow
 {
-    [treeController setManagedObjectContext:[self managedObjectContext]];    
     NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
     NSArray *sortDescriptors = [NSArray arrayWithObject:nameDescriptor];
     [treeController setSortDescriptors:(NSArray *)sortDescriptors];
     [treeController prepareContent];
-}
-
-- (void)viewWillMoveToWindow:(NSWindow *)newWindow
-{
-    if (newWindow == nil) {
-        [treeController setManagedObjectContext:nil];
-    }
 }
 
 + (NSArray *)anaylizerUTIs
@@ -109,7 +101,7 @@
 
 + (NSString *)AnaylizerPopoverAccessoryViewNib
 {
-    return nil;
+    return @"BlockerViewAccessory";
 }
 
 + (NSMutableDictionary *)defaultOptions

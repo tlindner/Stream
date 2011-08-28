@@ -22,8 +22,6 @@
 
 + (void) makeBlocks:(StStream *)stream
 {
-    NSLog( @"stream: %@", stream );
-    
     NSAssert( [stream respondsToSelector:@selector(blockNamed:)] == YES, @"CoCoCassetteBlocker: Incompatiable stream" );
     
     NSData  *streamBytesObject = [stream blockNamed:@"stream"];

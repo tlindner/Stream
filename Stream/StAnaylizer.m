@@ -14,6 +14,7 @@
 @dynamic currentEditorView;
 @dynamic optionsDictionary;
 @dynamic parentStream;
+@dynamic resultingData;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions
 {

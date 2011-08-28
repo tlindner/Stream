@@ -16,7 +16,6 @@
 @private
 }
 
-@property (nonatomic, retain) NSData * bytesAfterTransform;
 @property (nonatomic, retain) NSData * bytesCache;
 @property (nonatomic, retain) NSData * changedBytes;
 @property (nonatomic) float customeSortOrder;

@@ -551,10 +551,8 @@ typedef struct
     [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
     [self.cachedAnaylizer setValue:coalescedObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
     [self.cachedAnaylizer setValue:charactersObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"];
-    [self.cachedAnaylizer setValue:characterObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.characterObject"];
     [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
-    
-    [self.cachedAnaylizer setValue:characterObject forKeyPath:@"parentStream.bytesAfterTransform"];
+    [self.cachedAnaylizer setValue:characterObject forKeyPath:@"resultingData"];
 }
 
 - (IBAction)chooseTool:(id)sender

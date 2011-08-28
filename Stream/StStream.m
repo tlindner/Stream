@@ -10,7 +10,6 @@
 
 @implementation StStream
 
-@dynamic bytesAfterTransform;
 @dynamic bytesCache;
 @dynamic changedBytes;
 @dynamic customeSortOrder;
@@ -31,18 +30,25 @@
     
     if( [name isEqualToString:@"stream"] )
     {
-        if( self.bytesAfterTransform != nil )
+        NSOrderedSet *anaylizers = [self.anaylizers reversedOrderedSet];
+        
+        for (StAnaylizer *anAna in anaylizers)
         {
-            result = [[self.bytesAfterTransform copy] autorelease];
+            if( anAna.resultingData != nil )
+            {
+                result = [[anAna.resultingData copy] autorelease];
+            }
         }
-        else
-        {
+        
+        if( result == nil )
             result = [[self.bytesCache copy] autorelease];
-        }
+        
+        return result;
     }
     else
     {
         /* find block and returned autoreleased copy */
+        NSLog( @"Finding custom block not implemented yet" );
     }
     
     return result;
@@ -61,7 +67,7 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
     [request setEntity:entity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parent == %@) AND (name == %@)", self, name ];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (name == %@)", self, name ];
     [request setPredicate:predicate];
     NSError *error = nil;
     NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
@@ -75,6 +81,25 @@
             newBlock.name = name;
             newBlock.anaylizerKind = owner;
             [self addBlocksObject:newBlock];
+//            newBlock.parentStream = self;
+//            newBlock.parentBlock = nil;
+ 
+            StBlock *newDataBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+            newDataBlock.name = @"data";
+            [newBlock addBlocksObject:newDataBlock];
+            
+            StBlock *newAttributeBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+            newAttributeBlock.name = @"attributes";
+            [newBlock addBlocksObject:newAttributeBlock];
+            
+            StBlock *newdependenciesBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+            newdependenciesBlock.name = @"dependencies";
+            [newBlock addBlocksObject:newdependenciesBlock];
+            
+            StBlock *newIntrinsicsBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+            newIntrinsicsBlock.name = @"intrinsic";
+            [newBlock addBlocksObject:newIntrinsicsBlock];
+            
             return newBlock;
         }
         else

@@ -118,8 +118,8 @@
     {
         /* Read in options data */
         
-        NSMutableData *characterObject = [self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.characterObject"];
         NSMutableData *coalescedObject = [self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
+        NSMutableData *characters = [self.objectValue valueForKeyPath:@"resultingData"];
         
         wfv.channelCount = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.channelCount"] unsignedIntegerValue];
         wfv.currentChannel = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
@@ -128,10 +128,8 @@
         wfv.audioFrames = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
         wfv.coalescedCharacters = [coalescedObject mutableBytes];
         wfv.characters = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"] mutableBytes];
-        wfv.character = [characterObject mutableBytes];
-        [self.objectValue setValue:characterObject forKeyPath:@"parentStream.bytesAfterTransform"];
-        
-        wfv.char_count = [characterObject length];
+        wfv.character = [characters mutableBytes];
+        wfv.char_count = [characters length];
         wfv.coa_char_count = [coalescedObject length]/sizeof(charRef);
     }
     else
@@ -350,7 +348,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"frameCount", [NSNull null], @"coalescedObject", [NSNull null], @"charactersObject", [NSNull null], @"frameBufferObject", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"frameCount", [NSNull null], @"coalescedObject", [NSNull null], @"frameBufferObject", nil] autorelease];
 }
 
 @end
