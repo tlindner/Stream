@@ -87,6 +87,7 @@
 {
     NSError *err;
     NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
+    StAnaylizer *anaylizer = [[self superview] valueForKey:@"objectValue"];
     
     if( self.subMOC == nil )
     {
@@ -96,25 +97,24 @@
 
     err = nil;
 
-    if( [parentContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:[[self superview] valueForKey:@"objectValue"]] error:&err] == NO )
+    if( [parentContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:anaylizer] error:&err] == NO )
     {
         NSLog( @"obtainPermanentIDsForObjects Error: %@", err );
     }
 
-    NSManagedObjectID *objectValueID = [[[self superview] valueForKey:@"objectValue"] objectID];
+    NSManagedObjectID *objectValueID = [anaylizer objectID];
     
 
-    self.subObjectValue = [subMOC existingObjectWithID:objectValueID error:&err];
+    self.subObjectValue = (StAnaylizer *)[subMOC existingObjectWithID:objectValueID error:&err];
     
     if( err != nil )
     {
         /* lets do this the hard way */
-        NSLog( @"Doing it the hard way" );
         NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"StAnaylizer" inManagedObjectContext:subMOC];
         [request setEntity:entity];
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self == %@", [[self superview] valueForKey:@"objectValue"]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self == %@", anaylizer];
         [request setPredicate:predicate];
         
         err = nil;
@@ -130,11 +130,11 @@
         }
     }
     
-    if( self.subObjectValue == [[self superview] valueForKey:@"objectValue"] )
+    if( self.subObjectValue == anaylizer )
     {
         NSLog(@"Tried to create editable child object, but they are the same object.");
     }
-    
+
     if( self.actionPopOverNib == nil )
     {
         self.actionPopOverNib = [[[NSNib alloc] initWithNibNamed:@"AnaylizerSettingPopover" bundle:nil] autorelease];
@@ -166,7 +166,7 @@
     /* ask current anaylization the name of it accessory nib */
     Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:[editorPopup titleOfSelectedItem]];
     NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");
-    [[[self superview] valueForKey:@"objectValue"] addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
+    [anaylizer addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
     
     NSString *nibName = [anaClass AnaylizerPopoverAccessoryViewNib];
     
@@ -180,7 +180,7 @@
             [self.avc setRepresentedObject:nil];
         
         self.avc = [[[AnaylizerSettingPopOverAccessoryViewController alloc] initWithNibName:nibName bundle:nil] autorelease];
-        //[self.avc setRepresentedObject:[[self superview] valueForKey:@"objectValue"]];
+        //[self.avc setRepresentedObject:anaylizer];
         [self.avc setRepresentedObject:self.subObjectValue];
         
         [self.avc loadView];
@@ -212,6 +212,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    StAnaylizer *anaylizer = [[self superview] valueForKey:@"objectValue"];
     //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
     if( [keyPath isEqualToString:@"currentEditorView"] )
     {
@@ -224,7 +225,7 @@
         /* ask current anaylization the name of it accessory nib */
         Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:[editorPopup titleOfSelectedItem]];
         NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");
-        [[[self superview] valueForKey:@"objectValue"] addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
+        [anaylizer addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
         NSString *nibName = [anaClass AnaylizerPopoverAccessoryViewNib];
         
         /* record some geometry */
@@ -239,7 +240,7 @@
                 [self.avc setRepresentedObject:nil];
             
             self.avc = [[[AnaylizerSettingPopOverAccessoryViewController alloc] initWithNibName:nibName bundle:nil] autorelease];
-            [self.avc setRepresentedObject:[[self superview] valueForKey:@"objectValue"]];
+            [self.avc setRepresentedObject:anaylizer];
             [self.avc loadView];
             
             newSubViewHeight = [[self.avc view] frame].size.height;
@@ -279,18 +280,26 @@
 
 - (IBAction)popOverOK:(id)sender
 {
-    NSError *err;
-    
+    NSError *err = nil;
+   
+    StAnaylizer *anaylizer = [[self superview] valueForKey:@"objectValue"];
+
     [subMOC save:&err];
+    
+    if (err != nil)
+        NSLog( @"Error saving subMOC: %@", err );
+    
+    [[anaylizer managedObjectContext] refreshObject:anaylizer mergeChanges:YES];
 
     [utiTextField unbind:@"value"];
     [editorPopup unbind:@"contentObjects"];
     [editorPopup unbind:@"selectedObject"];
-
+    
     [self.subObjectValue removeObserver:self forKeyPath:@"currentEditorView"];
     [self.subObjectValue removeObserver:self forKeyPath:@"parentStream.sourceUTI"];
     
     [actionPopOver performClose:self];
+    self.subObjectValue = nil;
 }
 
 - (IBAction)popOverCancel:(id)sender
@@ -303,6 +312,8 @@
     [self.subObjectValue removeObserver:self forKeyPath:@"parentStream.sourceUTI"];
 
     [actionPopOver performClose:self];
+    self.subObjectValue = nil;
+
 }
 
 - (void)dealloc {

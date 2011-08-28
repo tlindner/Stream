@@ -11,7 +11,6 @@
 @implementation StStream
 
 @dynamic bytesCache;
-@dynamic changedBytes;
 @dynamic customeSortOrder;
 @dynamic displayName;
 @dynamic modificationDateofURL;
@@ -81,23 +80,25 @@
             newBlock.name = name;
             newBlock.anaylizerKind = owner;
             [self addBlocksObject:newBlock];
-//            newBlock.parentStream = self;
-//            newBlock.parentBlock = nil;
  
             StBlock *newDataBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
             newDataBlock.name = @"data";
+            newDataBlock.sourceUTI = @"public.data";
             [newBlock addBlocksObject:newDataBlock];
             
             StBlock *newAttributeBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
             newAttributeBlock.name = @"attributes";
-            [newBlock addBlocksObject:newAttributeBlock];
+            newAttributeBlock.sourceUTI = @"org.macmess.stream.attribute";
+           [newBlock addBlocksObject:newAttributeBlock];
             
             StBlock *newdependenciesBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
             newdependenciesBlock.name = @"dependencies";
+            newdependenciesBlock.sourceUTI = @"public.data";
             [newBlock addBlocksObject:newdependenciesBlock];
             
             StBlock *newIntrinsicsBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
             newIntrinsicsBlock.name = @"intrinsic";
+            newIntrinsicsBlock.sourceUTI = @"public.data";
             [newBlock addBlocksObject:newIntrinsicsBlock];
             
             return newBlock;

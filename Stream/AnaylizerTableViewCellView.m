@@ -62,36 +62,37 @@
 {
     if ([keyPath isEqualToString:@"objectValue.currentEditorView"])
     {
-        //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
-        //NSLog( @"us: %@", [self valueForKeyPath:@"objectValue"]);
+        // Create sub view editor.
+        Class editorViewClass = [[Analyzation sharedInstance] anaylizerClassforName:[change objectForKey:@"new"]];
+
         if( self.editorSubView != nil )
         {
+//            if( [self.editorSubView class] == editorViewClass )
+//            {
+//                NSLog( @"change, no change editor view" );
+//                return;
+//            }
+            
             //teardown exiting sub view editor
             [self.editorSubView removeFromSuperview];
             self.editorSubView = nil;
         }
         
-        // Create sub view editor.
-        Class editorViewClass = [[Analyzation sharedInstance] anaylizerClassforName:[change objectForKey:@"new"]];
         
         if (editorViewClass == nil)
             editorViewClass = [HFAnaylizer class];
 
         NSRect adjustedFrame = [_customView frame];
-        //adjustedFrame.size.height = [[self valueForKeyPath:@"objectValue.anaylizerHeight"] floatValue] - 19.0f - 6.0f;
         adjustedFrame.origin.x = 0;
         adjustedFrame.origin.y = 0;
         self.editorSubView = [[[editorViewClass alloc] initWithFrame:adjustedFrame] autorelease];
         
-//        [self setAutoresizesSubviews:YES];
         [_customView addSubview:self.editorSubView];
 
         if( newConstraints != nil )
             [self updateConstraints];
         
-        //[self.editorSubView setData:[self.objectValue valueForKeyPath:@"parentStream.bytesCache"]];  
         [editorSubView setRepresentedObject:self.objectValue];
-        //[editorSubView setData:[self.objectValue valueForKeyPath:@"parentStream.bytesCache"]];      
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

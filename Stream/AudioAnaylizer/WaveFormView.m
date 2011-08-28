@@ -37,14 +37,14 @@ typedef struct
 
 @implementation WaveFormView
 
-@synthesize audioFrames;
+//@synthesize audioFrames;
 @synthesize frameCount;
 @synthesize sampleRate;
-@synthesize characters;
-@synthesize character;
-@synthesize char_count;
-@synthesize coalescedCharacters;
-@synthesize coa_char_count;
+//@synthesize characters;
+//@synthesize character;
+//@synthesize char_count;
+//@synthesize coalescedCharacters;
+//@synthesize coa_char_count;
 @synthesize channelCount;
 @synthesize currentChannel;
 @synthesize previousCurrentChannel;
@@ -75,14 +75,25 @@ typedef struct
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
+    NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
     
-    currentChannel = [[aa.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+    if( needsAnaylyzation ) [self anaylizeAudioData];
+    
+    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+
+    NSMutableData *coalescedObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
+    NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"];
+    NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
+
+    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
+    charRef *coalescedCharacters = [coalescedObject mutableBytes];
+    charRef *characters = [charactersObject mutableBytes];
+    unsigned char *character = [characterObject mutableBytes];
+    NSUInteger char_count = [characterObject length];
+    NSUInteger coa_char_count = [coalescedObject length]/sizeof(charRef);
     
     if( currentChannel > channelCount ) currentChannel = channelCount;
     if( currentChannel < 1 ) currentChannel = 1;
-    
-    if( needsAnaylyzation ) [self anaylizeAudioData];
     
     /* Drawing code here. */
     if( anaylizationError == YES )
@@ -379,6 +390,7 @@ typedef struct
     vDSP_Length i;
     int zc_count;
     
+    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
     AudioSampleType *frameStart = audioFrames + (currentChannel-1);
     
     unsigned long max_possible_zero_crossings = (frameCount / 2) + 1;
@@ -409,10 +421,10 @@ typedef struct
     
     int max_possible_characters = (zc_count*2*8)+1;
     NSMutableData *charactersObject = [NSMutableData dataWithLength:sizeof(charRef)*max_possible_characters];
-    self.characters = [charactersObject mutableBytes];
+    charRef *characters = [charactersObject mutableBytes];
     NSMutableData *characterObject = [NSMutableData dataWithLength:sizeof(unsigned char)*max_possible_characters];
-    self.character = [characterObject mutableBytes];
-    self.char_count = 0;
+    unsigned char *character = [characterObject mutableBytes];
+    NSUInteger char_count = 0;
     
     zc_count -= 1;
     unsigned short even_parity = 0, odd_parity = 0;
@@ -524,14 +536,18 @@ typedef struct
     /* shirnk buffers to actual size */
     [charactersObject setLength:sizeof(charRef)*char_count];
     [characterObject setLength:sizeof(unsigned char)*char_count];
-    NSAssert( self.characters == [charactersObject mutableBytes], @"Characters moved!" );
-    NSAssert( self.character == [characterObject mutableBytes], @"Character moved!" );
+
+    if( characters != [charactersObject mutableBytes] )
+        characters = [charactersObject mutableBytes];
+
+    if( character != [characterObject mutableBytes] )
+        character = [characterObject mutableBytes];
 
     NSMutableData *coalescedObject = [NSMutableData dataWithLength:sizeof(charRef)*char_count];
-    self.coalescedCharacters = [coalescedObject mutableBytes];
+    charRef *coalescedCharacters = [coalescedObject mutableBytes];
 
     coalescedCharacters[0] = characters[0];
-    self.coa_char_count = 1;
+    NSUInteger coa_char_count = 1;
     
     /* coalesce nearby found byte rectangles into single continous rectangle */
     /* this greatly speeds up the "found data" tint when zoomed out */
@@ -545,14 +561,16 @@ typedef struct
     
     /* shirnk buffer to actual size */
     [coalescedObject setLength:sizeof(charRef)*coa_char_count];
-    NSAssert( self.coalescedCharacters == [coalescedObject mutableBytes], @"coalescedObject bytes moved!" );
-    
+    if( coalescedCharacters != [coalescedObject mutableBytes] )
+        coalescedCharacters = [coalescedObject mutableBytes];
+
     /* Store NSMutableData Objects away */
     [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
     [self.cachedAnaylizer setValue:coalescedObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
     [self.cachedAnaylizer setValue:charactersObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"];
     [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
-    [self.cachedAnaylizer setValue:characterObject forKeyPath:@"resultingData"];
+    
+    [self.cachedAnaylizer setValue:characterObject forKey:@"resultingData"];
 }
 
 - (IBAction)chooseTool:(id)sender
@@ -611,6 +629,7 @@ typedef struct
         CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
         CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
+        AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
         AudioSampleType *frameStart = audioFrames + (selectedSampleUnderMouse * channelCount) + (currentChannel-1); // Interleaved samples
         CGFloat thePoint = viewWaveHalfHeight+(frameStart[0]*viewWaveHalfHeight);
         NSRect sampleRect = NSMakeRect(selectedSampleUnderMouse-6.0, thePoint-6.0, 12, 12);
@@ -685,6 +704,7 @@ typedef struct
             CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
             CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
             
+            AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
             AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
             
             AudioSampleType delta = (locationNowSelf.y - locationMouseDownSelf.y) / viewWaveHalfHeight;
@@ -865,7 +885,6 @@ typedef struct
     }
     else if( toolMode == WFVLupe )
     {
-        AudioAnaylizer *aa = (AudioAnaylizer *)[[[self superview] superview] superview];
         NSRect currentBounds = [[self superview] bounds];
         
         if (currentFrame == ZOOM_FRAMES)
@@ -876,7 +895,7 @@ typedef struct
         
         currentBounds.origin.x = originFrames[currentFrame];
         currentBounds.size.width = sizeFrames[currentFrame];
-        [aa updateBounds:currentBounds];
+        [(AudioAnaylizer *)[[[self superview] superview] superview] updateBounds:currentBounds];
         
         currentFrame++;
     }
@@ -889,6 +908,7 @@ typedef struct
     NSUInteger storedSelectedSampleLength = [[previousState objectForKey:@"selectedSampleLength"] unsignedIntegerValue];
     NSUInteger storedCurrentChannel = [[previousState objectForKey:@"currentChannel"] unsignedIntegerValue];
     
+    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
     AudioSampleType *frameStart = audioFrames + (storedSelectedSample * channelCount) + (storedCurrentChannel-1); // Interleaved samples
     
     for( unsigned long i = 0; i < storedSelectedSampleLength; i++ )

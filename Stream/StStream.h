@@ -17,7 +17,6 @@
 }
 
 @property (nonatomic, retain) NSData * bytesCache;
-@property (nonatomic, retain) NSData * changedBytes;
 @property (nonatomic) float customeSortOrder;
 @property (nonatomic, retain) NSString * displayName;
 @property (nonatomic) NSTimeInterval modificationDateofURL;

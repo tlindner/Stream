@@ -118,19 +118,19 @@
     {
         /* Read in options data */
         
-        NSMutableData *coalescedObject = [self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
-        NSMutableData *characters = [self.objectValue valueForKeyPath:@"resultingData"];
+//        NSMutableData *coalescedObject = [self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
+//        NSMutableData *characters = [self.objectValue valueForKeyPath:@"resultingData"];
         
         wfv.channelCount = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.channelCount"] unsignedIntegerValue];
         wfv.currentChannel = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
         wfv.sampleRate = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.sampleRate"] doubleValue];
         wfv.frameCount = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameCount"] unsignedLongLongValue];
-        wfv.audioFrames = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
-        wfv.coalescedCharacters = [coalescedObject mutableBytes];
-        wfv.characters = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"] mutableBytes];
-        wfv.character = [characters mutableBytes];
-        wfv.char_count = [characters length];
-        wfv.coa_char_count = [coalescedObject length]/sizeof(charRef);
+//        wfv.audioFrames = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
+//        wfv.coalescedCharacters = [coalescedObject mutableBytes];
+//        wfv.characters = [[self.objectValue valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"] mutableBytes];
+//        wfv.character = [characters mutableBytes];
+//        wfv.char_count = [characters length];
+//        wfv.coa_char_count = [coalescedObject length]/sizeof(charRef);
     }
     else
     {
@@ -187,12 +187,12 @@
             
             size_t frameBufferSize = sizeof(AudioSampleType) * wfv.frameCount * wfv.channelCount;
             NSMutableData *frameBufferObject = [NSMutableData dataWithLength:frameBufferSize];
-            wfv.audioFrames = [frameBufferObject mutableBytes];
+            AudioSampleType *audioFrames = [frameBufferObject mutableBytes];
             
             AudioBufferList bufList;
             bufList.mNumberBuffers = 1;
             bufList.mBuffers[0].mNumberChannels = (UInt32)wfv.channelCount;
-            bufList.mBuffers[0].mData = wfv.audioFrames;
+            bufList.mBuffers[0].mData = audioFrames;
             bufList.mBuffers[0].mDataByteSize = (unsigned int)((sizeof(AudioSampleType)) * wfv.frameCount * wfv.channelCount);
             UInt32 ioFrameCount = (unsigned int)fileFrameCount;
             myErr = ExtAudioFileRead(af, &ioFrameCount, &bufList);
@@ -215,11 +215,14 @@
     }
 
     /* setup observations */
-    [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle" options:NSKeyValueChangeSetting context:nil];
-    [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle" options:NSKeyValueChangeSetting context:nil];
-    [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
-    [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel" options:NSKeyValueChangeSetting context:nil];
-    wfv.observationsActive = YES;
+    if( wfv.observationsActive == NO )
+    {
+        [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle" options:NSKeyValueChangeSetting context:nil];
+        [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle" options:NSKeyValueChangeSetting context:nil];
+        [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
+        [self.objectValue addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel" options:NSKeyValueChangeSetting context:nil];
+        wfv.observationsActive = YES;
+    }
     
     NSView *clipView = [self.scroller contentView];
     self.slider.maxValue = wfv.frameCount;

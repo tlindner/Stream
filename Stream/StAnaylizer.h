@@ -21,7 +21,7 @@
 @property (nonatomic, retain) NSString * currentEditorView;
 @property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
 @property (nonatomic, retain) StStream *parentStream;
-@property (nonatomic, retain) NSData *resultingData;
+@property (nonatomic, retain) NSMutableData *resultingData;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 

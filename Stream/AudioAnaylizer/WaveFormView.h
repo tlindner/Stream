@@ -15,7 +15,7 @@
 
 @interface WaveFormView : NSView
 {
-    AudioSampleType *audioFrames;
+//    AudioSampleType *audioFrames;
     NSUInteger frameCount;
     Float64 sampleRate;
     NSUInteger channelCount;
@@ -35,21 +35,21 @@
     CGFloat sizeFrames[ZOOM_FRAMES];
     int currentFrame;
     
-    charRef *coalescedCharacters;
-    charRef *characters;
-    unsigned char *character;
-    NSUInteger char_count;
-    NSUInteger coa_char_count;
+//    charRef *coalescedCharacters;
+//    charRef *characters;
+//    unsigned char *character;
+//    NSUInteger char_count;
+//    NSUInteger coa_char_count;
 }
 
-@property(nonatomic, assign) AudioSampleType *audioFrames;
+//@property(nonatomic, assign) AudioSampleType *audioFrames;
 @property(nonatomic, assign) NSUInteger frameCount;
 @property(nonatomic, assign) Float64 sampleRate;
-@property(nonatomic, assign) charRef *characters;
-@property(nonatomic, assign) charRef *coalescedCharacters;
-@property(nonatomic, assign) unsigned char *character;
-@property(nonatomic, assign) NSUInteger char_count;
-@property(nonatomic, assign) NSUInteger coa_char_count;
+//@property(nonatomic, assign) charRef *characters;
+//@property(nonatomic, assign) charRef *coalescedCharacters;
+//@property(nonatomic, assign) unsigned char *character;
+//@property(nonatomic, assign) NSUInteger char_count;
+//@property(nonatomic, assign) NSUInteger coa_char_count;
 
 @property(nonatomic, assign) NSUInteger channelCount;
 @property(nonatomic, assign) NSUInteger currentChannel;

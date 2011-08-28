@@ -6,7 +6,7 @@
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
         <attribute name="initializedOD" attributeType="Boolean" defaultValueString="NO"/>
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
-        <attribute name="resultingData" optional="YES" attributeType="Binary"/>
+        <attribute name="resultingData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="resultingUTI" attributeType="String" defaultValueString="public.data"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream"/>
     </entity>
@@ -28,7 +28,6 @@
     </entity>
     <entity name="StStream" representedClassName="StStream">
         <attribute name="bytesCache" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
-        <attribute name="changedBytes" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="customeSortOrder" attributeType="Float" defaultValueString="500"/>
         <attribute name="displayName" attributeType="String" defaultValueString="Untitled"/>
         <attribute name="modificationDateofURL" attributeType="Date"/>

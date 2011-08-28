@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 
 @implementation BlockerView
+@synthesize dataViewController;
 @synthesize treeController;
 @synthesize baseView;
 @synthesize objectValue;
