@@ -20,3 +20,21 @@
 + (void) makeBlocks:(StStream *)stream;
 
 @end
+
+@interface RSDOSStringTransformer : NSValueTransformer
+{
+}
+- (id)reverseTransformedValue:(id)value ofSize:(size_t)size;
+@end
+
+@interface UnsignedBigEndianTransformer : NSValueTransformer
+{
+}
+- (id)reverseTransformedValue:(id)value ofSize:(size_t)size;
+@end
+
+@interface UnsignedLittleEndianTransformer : NSValueTransformer
+{
+}
+- (id)reverseTransformedValue:(id)value ofSize:(size_t)size;
+@end

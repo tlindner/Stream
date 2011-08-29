@@ -26,6 +26,7 @@
 @dynamic parentBlock;
 @dynamic blocks;
 @dynamic sourceUTI;
+@dynamic currentEditorView;
 
 - (StStream *)getStream
 {
@@ -37,28 +38,17 @@
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name
 {
-    [self addAttributeRange:blockName start:start length:length name:name verification:nil];
+    [self addAttributeRange:blockName start:start length:length name:name verification:nil transformation:nil];
 }
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify
 {
-    void *predicate = ^(id obj, BOOL *stop)
-    {
-        StBlock *test = (StBlock *)obj;
-        
-        if ([test.name isEqualToString:@"attributes"])
-        {
-            *stop = YES;
-            return YES;
-        }
-        
-        return NO;
-    };
-    
-    NSSet *attributeBlockSet = [self.blocks objectsPassingTest:predicate];
-    NSAssert( [attributeBlockSet count] == 1, @"addAttributeRange: could not find attribute block" );
-    StBlock *attributeBlock = [attributeBlockSet anyObject];
-    
+    [self addAttributeRange:blockName start:start length:length name:name verification:verify transformation:nil];
+}
+
+- (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
+{
+    StBlock *attributeBlock = [self blockNamed:@"attributes"];
     StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
     newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", attrIndex, blockName, start, length];
     newBlock.source = blockName;
@@ -67,18 +57,73 @@
     newBlock.length = length;
     newBlock.index = attrIndex++;
     newBlock.checkBytes = verify;
+    newBlock.valueTransformer = transform;
     [attributeBlock addBlocksObject:newBlock];
-    //    newBlock.parentStream = nil;
-    //    newBlock.parentBlock = self;
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length
+{
+    [self addDataRange:blockName start:start length:length name:nil verification:nil transformation:nil];
+}
+
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name
+{
+    [self addDataRange:blockName start:start length:length name:name verification:nil transformation:nil];
+}
+
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify
+{
+    [self addDataRange:blockName start:start length:length name:name verification:verify transformation:nil];
+}
+
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name transformation:(NSString *)transform
+{
+    [self addDataRange:blockName start:start length:length name:name verification:nil transformation:transform];
+}
+
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
+{
+    StBlock *dataBlock = [self blockNamed:@"data"];
+    StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+    newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
+    newBlock.uiName = name;
+    newBlock.source = blockName;
+    newBlock.offset = start;
+    newBlock.length = length;
+    newBlock.index = dataIndex++;
+    newBlock.checkBytes = verify;
+    newBlock.valueTransformer = transform;
+    
+    if( name != nil || verify != nil || transform != nil )
+        newBlock.sourceUTI = @"org.macmess.stream.attribute";
+         
+    [dataBlock addBlocksObject:newBlock];
+    self.expectedSize += length;
+}
+
+- (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
+{
+    StBlock *depBlock = [self blockNamed:@"dependencies"];
+    StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+    newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
+    newBlock.uiName = name;
+    newBlock.source = blockName;
+    newBlock.offset = start;
+    newBlock.length = length;
+    newBlock.index = depIndex++;
+    newBlock.checkBytes = verify;
+    newBlock.valueTransformer = transform;
+    [depBlock addBlocksObject:newBlock];
+    self.expectedSize += length;
+}
+
+- (StBlock *)blockNamed:(NSString *)inName
 {
     void *predicate = ^(id obj, BOOL *stop)
     {
         StBlock *test = (StBlock *)obj;
         
-        if ([test.name isEqualToString:@"data"])
+        if ([test.name isEqualToString:inName])
         {
             *stop = YES;
             return YES;
@@ -88,54 +133,24 @@
     };
     
     NSSet *dataBlockSet = [self.blocks objectsPassingTest:predicate];
-    NSAssert( [dataBlockSet count] == 1, @"addDataRange: could not find data block" );
-    StBlock *dataBlock = [dataBlockSet anyObject];
-    
-    StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-    newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
-    newBlock.source = blockName;
-    newBlock.offset = start;
-    newBlock.length = length;
-    newBlock.index = dataIndex++;
-    [dataBlock addBlocksObject:newBlock];
-    self.expectedSize += length;
-    //    newBlock.parentStream = nil;
-    //    newBlock.parentBlock = self;
+    NSAssert( [dataBlockSet count] == 1, @"StBlock: blockNamed: could not find block named: %@", inName );
+    return [dataBlockSet anyObject];
 }
 
 - (NSData *)getData
 {
     NSMutableData *result;
-    
-    
+
     if( self.source == nil )
     {
         if( self.parentStream != nil )
         {
             /* This is a top level block, return data from data block */
-            
-            void *predicate = ^(id obj, BOOL *stop)
-            {
-                StBlock *test = (StBlock *)obj;
-                
-                if ([test.name isEqualToString:@"data"])
-                {
-                    *stop = YES;
-                    return YES;
-                }
-                
-                return NO;
-            };
-            
-            NSSet *dataBlockSet = [self.blocks objectsPassingTest:predicate];
-            NSAssert( [dataBlockSet count] == 1, @"getData: could not find data block" );
-            StBlock *dataBlock = [dataBlockSet anyObject];
-            
-            return [dataBlock getData];
+            return [[self blockNamed:@"data"] getData];
         }
         else
         {
-            /* This is a midlevel block, return it's data */
+            /* This is a midlevel block, return it's accumulated blocks */
 
             StStream *ourStream = [self getStream];
             result = [[[NSMutableData alloc] init] autorelease];

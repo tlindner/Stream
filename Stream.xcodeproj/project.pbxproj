@@ -502,9 +502,9 @@
 				776139AE13E1BA4200CA80BB /* ColorGradientView.m */,
 				77263A8113F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.h */,
 				77263A8213F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m */,
-				77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */,
 				77263A8813F734EC00EBD507 /* AnaylizerSettingPopOverViewController.h */,
 				77263A8913F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m */,
+				77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */,
 			);
 			name = AnaylizerUI;
 			sourceTree = "<group>";

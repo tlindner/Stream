@@ -17,6 +17,7 @@
     NSUInteger dataIndex, attrIndex, depIndex; 
 }
 @property (nonatomic, retain) NSString * anaylizerKind;
+@property (nonatomic, retain) NSString * currentEditorView;
 @property (nonatomic) int64_t expectedSize;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic) int32_t type;
@@ -33,11 +34,21 @@
 @property (nonatomic, retain) NSSet *blocks;
 
 - (StStream *)getStream;
+
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name;
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify;
+- (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
+
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length;
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name;
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify;
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name transformation:(NSString *)transform;
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
+
+- (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
 
 - (NSData *)getData;
+- (StBlock *)blockNamed:(NSString *)inName;
 
 @end
 

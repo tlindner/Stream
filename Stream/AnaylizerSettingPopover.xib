@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">11A511</string>
+		<string key="IBDocument.SystemVersion">11B26</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1617</string>
 		<string key="IBDocument.AppKitVersion">1138</string>
 		<string key="IBDocument.HIToolboxVersion">566.00</string>
@@ -83,7 +83,7 @@
 						<string key="NSReuseIdentifierKey">_NS:161</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="426670816">
-							<int key="NSCellFlags">67239424</int>
+							<int key="NSCellFlags">604110336</int>
 							<int key="NSCellFlags2">134348800</int>
 							<string key="NSContents">Cancel</string>
 							<object class="NSFont" key="NSSupport" id="26">
@@ -107,7 +107,6 @@
 						<string key="NSFrame">{{234, 13}, {82, 28}}</string>
 						<reference key="NSSuperview" ref="487033926"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:161</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="836107377">
@@ -386,6 +385,22 @@
 						<reference key="destination" ref="979818446"/>
 					</object>
 					<int key="connectionID">407</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">labelUTI</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="409689703"/>
+					</object>
+					<int key="connectionID">408</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">labelEditor</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="52657636"/>
+					</object>
+					<int key="connectionID">409</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1134,7 +1149,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">407</int>
+			<int key="maxID">409</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1239,6 +1254,8 @@
 							<string>accessoryView</string>
 							<string>actionPopOver</string>
 							<string>editorPopup</string>
+							<string>labelEditor</string>
+							<string>labelUTI</string>
 							<string>tlAction</string>
 							<string>tlDisclosure</string>
 							<string>tlTitle</string>
@@ -1249,6 +1266,8 @@
 							<string>NSView</string>
 							<string>NSPopover</string>
 							<string>NSPopUpButton</string>
+							<string>NSTextField</string>
+							<string>NSTextField</string>
 							<string>NSButton</string>
 							<string>NSButton</string>
 							<string>NSButton</string>
@@ -1262,6 +1281,8 @@
 							<string>accessoryView</string>
 							<string>actionPopOver</string>
 							<string>editorPopup</string>
+							<string>labelEditor</string>
+							<string>labelUTI</string>
 							<string>tlAction</string>
 							<string>tlDisclosure</string>
 							<string>tlTitle</string>
@@ -1280,6 +1301,14 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">editorPopup</string>
 								<string key="candidateClassName">NSPopUpButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">labelEditor</string>
+								<string key="candidateClassName">NSTextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">labelUTI</string>
+								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">tlAction</string>
