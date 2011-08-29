@@ -173,7 +173,7 @@
     
     /* ask current anaylization the name of it accessory nib */
     Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:[editorPopup titleOfSelectedItem]];
-    NSLog( @"anaClass: %@", anaClass );
+    //NSLog( @"anaClass: %@", anaClass );
     
     NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");
     [anaylizer addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
@@ -234,7 +234,7 @@
         
         /* ask current anaylization the name of it accessory nib */
         Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:[editorPopup titleOfSelectedItem]];
-        NSLog( @"anaClass: %@", anaClass );
+        //NSLog( @"anaClass: %@", anaClass );
         NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");
         [anaylizer addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
         NSString *nibName = [anaClass AnaylizerPopoverAccessoryViewNib];
@@ -246,7 +246,7 @@
         
         if( nibName != nil && ![nibName isEqualToString:@""] )
         {
-            NSLog( @"nibnamed: %@", nibName );
+            //NSLog( @"nibnamed: %@", nibName );
             /* load and link new nib view hirearchy */
             if( self.avc != nil )
                 [self.avc setRepresentedObject:nil];

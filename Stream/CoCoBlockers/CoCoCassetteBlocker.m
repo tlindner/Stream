@@ -81,18 +81,18 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
             
             for( NSUInteger j=i+1; j<i+2+blockLength; j++ ) checksumCheck += streamBytes[j];
             
-            [newBlock addAttributeRange:@"stream" start:i length:1 name:@"Block Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
-            [newBlock addAttributeRange:@"stream" start:i+blockLength+1 length:1 name:@"Check Sum" verification:[NSData dataWithBytes:&checksumCheck length:1] transformation:@"BlocksUnsignedBigEndian"];
-            [newBlock addAttributeRange:@"stream" start:i+blockLength+2 length:1 name:@"Fixed" verification:[NSData dataWithBytes:&fixed length:1] transformation:@"BlocksUnsignedBigEndian"];
+            [newBlock addAttributeRange:@"stream" start:i+1 length:1 name:@"Block Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
+            [newBlock addAttributeRange:@"stream" start:i+blockLength+3 length:1 name:@"Check Sum" verification:[NSData dataWithBytes:&checksumCheck length:1] transformation:@"BlocksUnsignedBigEndian"];
+            [newBlock addAttributeRange:@"stream" start:i+blockLength+4 length:1 name:@"Fixed" verification:[NSData dataWithBytes:&fixed length:1] transformation:@"BlocksUnsignedBigEndian"];
             
             if( (blockType == 0) && (blockLength == 0x0f) )
             {
                 [newBlock addDataRange:@"stream" start:i+3 length:8 name:@"File Name" transformation:@"RSDOSString"];
-                [newBlock addDataRange:@"stream" start:i+3 length:1 name:@"File Type" transformation:@"BlocksUnsignedBigEndian"];
-                [newBlock addDataRange:@"stream" start:i+3 length:1 name:@"Data Type" transformation:@"BlocksUnsignedBigEndian"];
-                [newBlock addDataRange:@"stream" start:i+3 length:1 name:@"Gaps" transformation:@"BlocksUnsignedBigEndian"];
-                [newBlock addDataRange:@"stream" start:i+3 length:2 name:@"ML Load Address" transformation:@"BlocksUnsignedBigEndian"];
-                [newBlock addDataRange:@"stream" start:i+3 length:2 name:@"ML Exec Addr" transformation:@"BlocksUnsignedBigEndian"];
+                [newBlock addDataRange:@"stream" start:i+11 length:1 name:@"File Type" transformation:@"BlocksUnsignedBigEndian"];
+                [newBlock addDataRange:@"stream" start:i+12 length:1 name:@"Data Type" transformation:@"BlocksUnsignedBigEndian"];
+                [newBlock addDataRange:@"stream" start:i+13 length:1 name:@"Gaps" transformation:@"BlocksUnsignedBigEndian"];
+                [newBlock addDataRange:@"stream" start:i+14 length:2 name:@"ML Load Address" transformation:@"BlocksUnsignedBigEndian"];
+                [newBlock addDataRange:@"stream" start:i+16 length:2 name:@"ML Exec Addr" transformation:@"BlocksUnsignedBigEndian"];
             }
             else
                 [newBlock addDataRange:@"stream" start:i+3 length:blockLength];
