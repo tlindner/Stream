@@ -7,8 +7,11 @@
 //
 
 #import "ColorGradientView.h"
+#import "AnaylizerTableViewCellView.h"
+#import "BlockerView.h"
 #import "Analyzation.h"
 #import "StAnaylizer.h"
+#import "StBlock.h"
 
 @implementation ColorGradientView
 @synthesize labelUTI;
@@ -158,22 +161,49 @@
         [self.popupArrayController addObjects:stuff];
     }
     
-    [utiTextField bind:@"value" toObject:anaylizer withKeyPath:@"parentStream.sourceUTI" options:nil];
-    [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
-    [editorPopup bind:@"selectedObject" toObject:anaylizer withKeyPath:@"currentEditorView" options:nil];
+    NSString *objectUTI;
+    
+    if( [anaylizer.currentEditorView isEqualToString:@"Blocker View"] )
+    {
+        AnaylizerTableViewCellView *anaTableViewCell = (AnaylizerTableViewCellView *)[self superview];
+        BlockerView *blockerView = (BlockerView *)anaTableViewCell.editorSubView;
+        NSArray *selectedObjects = [blockerView.treeController selectedObjects];
+        
+        if( [selectedObjects count] == 1 )
+        {
+            StBlock *theBlock = [selectedObjects objectAtIndex:0];
+            objectUTI = theBlock.sourceUTI;
+            observableSourceUTI = observableEditorView = theBlock;
+        }
+        else
+        {
+            NSLog( @"Multiple selection! Ohy, vey!" );
+            objectUTI = nil;
+            observableEditorView = nil;
+            observableSourceUTI = nil; 
+        }
 
-    [anaylizer addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:nil];
-    [anaylizer addObserver:self forKeyPath:@"parentStream.sourceUTI" options:NSKeyValueChangeSetting context:nil];
+    }
+    else
+    {
+        observableEditorView = anaylizer;
+        observableSourceUTI = anaylizer.parentStream;
+        objectUTI = [anaylizer valueForKeyPath:@"parentStream.sourceUTI"];
+    }
+
+    [utiTextField bind:@"value" toObject:observableSourceUTI withKeyPath:@"sourceUTI" options:nil];
+    [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
+    [editorPopup bind:@"selectedObject" toObject:observableEditorView withKeyPath:@"currentEditorView" options:nil];
+
+    [observableEditorView addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:nil];
+    [observableSourceUTI addObserver:self forKeyPath:@"sourceUTI" options:NSKeyValueChangeSetting context:nil];
     
     /* Editview changed, update UI */
-    for (NSView *aSubView in [accessoryView subviews])
-    {
-        [aSubView removeFromSuperview];
-    }
-    
+    [[accessoryView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
     /* ask current anaylization the name of it accessory nib */
-    Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:[editorPopup titleOfSelectedItem]];
-    //NSLog( @"anaClass: %@", anaClass );
+    NSString *editorPopupTitle = [editorPopup titleOfSelectedItem];
+    Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:editorPopupTitle];
     
     NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");
     [anaylizer addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
@@ -292,41 +322,26 @@
 
 - (IBAction)popOverOK:(id)sender
 {
-    NSError *err = nil;
-   
-    StAnaylizer *anaylizer = [[self superview] valueForKey:@"objectValue"];
-
-    //[subMOC save:&err];
-    
-    if (err != nil)
-        NSLog( @"Error saving subMOC: %@", err );
-    
-    //[[anaylizer managedObjectContext] refreshObject:anaylizer mergeChanges:YES];
-
     [utiTextField unbind:@"value"];
     [editorPopup unbind:@"contentObjects"];
     [editorPopup unbind:@"selectedObject"];
     
-    [anaylizer removeObserver:self forKeyPath:@"currentEditorView"];
-    [anaylizer removeObserver:self forKeyPath:@"parentStream.sourceUTI"];
+    [observableEditorView removeObserver:self forKeyPath:@"currentEditorView"];
+    [observableSourceUTI removeObserver:self forKeyPath:@"sourceUTI"];
     
     [actionPopOver performClose:self];
-//    self.subObjectValue = nil;
 }
 
 - (IBAction)popOverCancel:(id)sender
 {
-    StAnaylizer *anaylizer = [[self superview] valueForKey:@"objectValue"];
-
     [utiTextField unbind:@"value"];
     [editorPopup unbind:@"contentObjects"];
     [editorPopup unbind:@"selectedObject"];
 
-    [anaylizer removeObserver:self forKeyPath:@"currentEditorView"];
-    [anaylizer removeObserver:self forKeyPath:@"parentStream.sourceUTI"];
+    [observableEditorView removeObserver:self forKeyPath:@"currentEditorView"];
+    [observableSourceUTI removeObserver:self forKeyPath:@"sourceUTI"];
 
     [actionPopOver performClose:self];
-//    self.subObjectValue = nil;
 
 }
 

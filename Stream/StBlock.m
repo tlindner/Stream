@@ -95,7 +95,7 @@
     newBlock.valueTransformer = transform;
     
     if( name != nil || verify != nil || transform != nil )
-        newBlock.sourceUTI = @"org.macmess.stream.attribute";
+        self.sourceUTI = @"org.macmess.stream.attribute";
          
     [dataBlock addBlocksObject:newBlock];
     self.expectedSize += length;

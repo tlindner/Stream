@@ -84,7 +84,7 @@
 
 + (NSString *)anaylizerKey;
 {
-    return @"HFHexEditor";
+    return @"HFAnaylizer";
 }
 
 + (NSMutableDictionary *)defaultOptions

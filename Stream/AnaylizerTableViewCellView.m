@@ -73,7 +73,7 @@
 //                return;
 //            }
             
-            //teardown exiting sub view editor
+            //teardown existing sub view editor
             [self.editorSubView removeFromSuperview];
             self.editorSubView = nil;
         }

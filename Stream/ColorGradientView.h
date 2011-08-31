@@ -21,7 +21,11 @@
     NSArrayController *popupArrayController;
     NSTextField *labelUTI;
     NSTextField *labelEditor;
+
+    id observableEditorView;
+    id observableSourceUTI;
 }
+
 @property (assign) IBOutlet NSTextField *labelUTI;
 @property (assign) IBOutlet NSTextField *labelEditor;
 
