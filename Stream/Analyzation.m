@@ -7,7 +7,7 @@
 //
 
 #import "Analyzation.h"
-#import <HFTextView.h>
+#import "HexFiendAnaylizerController.h"
 
 static Analyzation *sharedSingleton;
 
@@ -23,9 +23,9 @@ static Analyzation *sharedSingleton;
     {
         initialized = YES;
         sharedSingleton = [[Analyzation alloc] init];
-        [sharedSingleton addAnalyzer:@"AudioAnaylizer"];
-        [sharedSingleton addAnalyzer:@"HFAnaylizer"];
-        [sharedSingleton addAnalyzer:@"BlockerView"];
+        [sharedSingleton addAnalyzer:@"AudioAnaylizerViewController"];
+        [sharedSingleton addAnalyzer:@"BlockAttributeViewController"];
+        [sharedSingleton addAnalyzer:@"HexFiendAnaylizerController"];
 //        [sharedSingleton addAnalyzer:@"NSTextView"];
     }
 }
@@ -95,7 +95,7 @@ static Analyzation *sharedSingleton;
     }
     
     if( [resultArray count] == 0 )
-        [resultArray addObject:[HFTextView anayliserName]];
+        [resultArray addObject:[HexFiendAnaylizerController anayliserName]];
     
     return [resultArray autorelease];
 }

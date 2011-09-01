@@ -80,12 +80,16 @@
             if( anaClass == nil )
                 anaClass = [HFAnaylizer class];
             
-            NSView *editorView = [[anaClass alloc] initWithFrame:NSMakeRect(0, 0, theFrame.size.width, theFrame.size.height)];
-            [[self view] addSubview:editorView];
-            [editorView release];
-            
-            [editorView setRepresentedObject:theBlock];
-            [self startObservingBlockEditor:theBlock];
+//            NSViewController *editorController = [[anaClass alloc] initWithNibName:nil bundle:nil];
+//            [editorController setRepresentedObject:theBlock];
+//            
+//            
+//            NSViewController *editorController = [[anaClass alloc] initWithFrame:NSMakeRect(0, 0, theFrame.size.width, theFrame.size.height)];
+//            [[self view] addSubview:editorView];
+//            [editorView release];
+//            
+//            [editorView setRepresentedObject:theBlock];
+//            [self startObservingBlockEditor:theBlock];
         }
     }
     else

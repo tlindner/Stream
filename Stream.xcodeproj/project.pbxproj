@@ -54,6 +54,12 @@
 		7799CD2213E5C691007D5B8E /* AudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
+		77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */; };
+		77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */; };
+		77C17FBD140F450100E23921 /* HexFiendAnaylizerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */; };
+		77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */; };
+		77C17FC3140F469700E23921 /* AudioAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */; };
+		77C17FC4140F469700E23921 /* AudioAnaylizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */; };
 		77C8DE1613E6F2C000AD079E /* Analyzation.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C8DE1513E6F2C000AD079E /* Analyzation.m */; };
 		77CB933F1404AE7F0032F56F /* Zoom.tif in Resources */ = {isa = PBXBuildFile; fileRef = 77CB933E1404AE7F0032F56F /* Zoom.tif */; };
 		77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D94C8B13E8F704009192BA /* DragRegionView.m */; };
@@ -201,6 +207,15 @@
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7799CD2913E63C1F007D5B8E /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnaylizer/WaveFormView.h; sourceTree = "<group>"; };
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
+		77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeViewController.h; path = Stream/BlockAttributeViewController.h; sourceTree = "<group>"; };
+		77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewController.m; path = Stream/BlockAttributeViewController.m; sourceTree = "<group>"; };
+		77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewController.xib; path = Stream/BlockAttributeViewController.xib; sourceTree = "<group>"; };
+		77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnaylizerController.h; path = Stream/HexFiendAnaylizerController.h; sourceTree = "<group>"; };
+		77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnaylizerController.m; path = Stream/HexFiendAnaylizerController.m; sourceTree = "<group>"; };
+		77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HexFiendAnaylizerController.xib; path = Stream/HexFiendAnaylizerController.xib; sourceTree = "<group>"; };
+		77C17FC0140F469700E23921 /* AudioAnaylizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaylizerViewController.h; path = Stream/AudioAnaylizer/AudioAnaylizerViewController.h; sourceTree = "<group>"; };
+		77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaylizerViewController.m; path = Stream/AudioAnaylizer/AudioAnaylizerViewController.m; sourceTree = "<group>"; };
+		77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnaylizerViewController.xib; path = Stream/AudioAnaylizer/AudioAnaylizerViewController.xib; sourceTree = "<group>"; };
 		77C8DE1413E6F2C000AD079E /* Analyzation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Analyzation.h; sourceTree = "<group>"; };
 		77C8DE1513E6F2C000AD079E /* Analyzation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Analyzation.m; sourceTree = "<group>"; };
 		77CB933E1404AE7F0032F56F /* Zoom.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Zoom.tif; sourceTree = "<group>"; };
@@ -343,6 +358,9 @@
 				772D952A14088181001A449B /* HFAnaylizer.h */,
 				772D952B14088181001A449B /* HFAnaylizer.m */,
 				77263A8613F721E400EBD507 /* HFAccessoryView.xib */,
+				77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */,
+				77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */,
+				77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */,
 			);
 			name = HexFiendAnaylizer;
 			sourceTree = "<group>";
@@ -352,6 +370,7 @@
 			children = (
 				774A181613FAB01500510032 /* LICENSE */,
 				775ED2CD13DCF86500BC96C9 /* README */,
+				77ABAD8B140F31CE002F03BB /* BlockAttributeView */,
 				778A598C1407516500B68EB4 /* BlockerView */,
 				7799CD1E13E5C651007D5B8E /* AudioAnaylizer */,
 				778A59771406EE0700B68EB4 /* CoCoBlockers */,
@@ -544,8 +563,21 @@
 				772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */,
 				772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */,
 				772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */,
+				77C17FC0140F469700E23921 /* AudioAnaylizerViewController.h */,
+				77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */,
+				77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */,
 			);
 			name = AudioAnaylizer;
+			sourceTree = "<group>";
+		};
+		77ABAD8B140F31CE002F03BB /* BlockAttributeView */ = {
+			isa = PBXGroup;
+			children = (
+				77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */,
+				77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */,
+				77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */,
+			);
+			name = BlockAttributeView;
 			sourceTree = "<group>";
 		};
 		77F203F913DD3A5F00FA5B1F /* HexFiend */ = {
@@ -749,6 +781,9 @@
 				77CB933F1404AE7F0032F56F /* Zoom.tif in Resources */,
 				778A59911407524900B68EB4 /* BlockerView.xib in Resources */,
 				776014621409C20D00777D60 /* BlockerViewAccessory.xib in Resources */,
+				77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */,
+				77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */,
+				77C17FC4140F469700E23921 /* AudioAnaylizerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -856,6 +891,9 @@
 				772D952C14088181001A449B /* HFAnaylizer.m in Sources */,
 				77601460140987A600777D60 /* StBlock.m in Sources */,
 				770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */,
+				77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */,
+				77C17FBD140F450100E23921 /* HexFiendAnaylizerController.m in Sources */,
+				77C17FC3140F469700E23921 /* AudioAnaylizerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

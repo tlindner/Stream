@@ -24,7 +24,7 @@
 
 @end
 
-@interface NSView(AnaylizationExtensions)
+@interface NSViewController(AnaylizationExtensions)
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;
 - (void)setRepresentedObject:(id)representedObject;

@@ -37,6 +37,7 @@ typedef struct
 
 @implementation WaveFormView
 
+@synthesize viewController;
 //@synthesize audioFrames;
 @synthesize frameCount;
 @synthesize sampleRate;
@@ -895,7 +896,9 @@ typedef struct
         
         currentBounds.origin.x = originFrames[currentFrame];
         currentBounds.size.width = sizeFrames[currentFrame];
-        [(AudioAnaylizer *)[[[self superview] superview] superview] updateBounds:currentBounds];
+        
+        [viewController updateBounds:currentBounds];
+        //[(AudioAnaylizer *)[[[self superview] superview] superview] updateBounds:currentBounds];
         
         currentFrame++;
     }

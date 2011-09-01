@@ -28,6 +28,13 @@
 @dynamic sourceUTI;
 @dynamic currentEditorView;
 
+@dynamic data;
+
+- (NSData *)data
+{
+    return [self getData];
+}
+
 - (StStream *)getStream
 {
     if( self.parentStream != nil )

@@ -8,12 +8,12 @@
 
 #import "AnaylizerTableViewCellView.h"
 #import "HFAnaylizer.h"
-#import "AudioAnaylizer.h"
+#import "HexFiendAnaylizerController.h"
 #import "Analyzation.h"
 
 @implementation AnaylizerTableViewCellView
 
-@synthesize editorSubView;
+@synthesize editorController;
 @synthesize newConstraints;
 
 - (id)init
@@ -65,7 +65,7 @@
         // Create sub view editor.
         Class editorViewClass = [[Analyzation sharedInstance] anaylizerClassforName:[change objectForKey:@"new"]];
 
-        if( self.editorSubView != nil )
+        if( self.editorController != nil )
         {
 //            if( [self.editorSubView class] == editorViewClass )
 //            {
@@ -74,26 +74,28 @@
 //            }
             
             //teardown existing sub view editor
-            [self.editorSubView removeFromSuperview];
-            self.editorSubView = nil;
+            [[self.editorController view] removeFromSuperview];
+            self.editorController = nil;
         }
         
         
         if (editorViewClass == nil)
-            editorViewClass = [HFAnaylizer class];
+            editorViewClass = [HexFiendAnaylizerController class];
 
         NSRect adjustedFrame = [_customView frame];
         adjustedFrame.origin.x = 0;
         adjustedFrame.origin.y = 0;
-        self.editorSubView = [[[editorViewClass alloc] initWithFrame:adjustedFrame] autorelease];
+        self.editorController = [[[editorViewClass alloc] initWithNibName:nil bundle:nil] autorelease];
+        [self.editorController loadView];
+        [[self.editorController view] setFrame:adjustedFrame];
         
-        [_customView addSubview:self.editorSubView];
+        [self.editorController setRepresentedObject:self.objectValue];
 
+        [_customView addSubview:[self.editorController view]];
+        
         if( newConstraints != nil )
             [self updateConstraints];
-        
-        [editorSubView setRepresentedObject:self.objectValue];
-    }
+   }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -151,11 +153,12 @@
 {
     [self removeObserver:self forKeyPath:@"objectValue.currentEditorView"];
     
-    if( self.editorSubView != nil )
+    if( self.editorController != nil )
     {
-        [self.editorSubView removeFromSuperview];
-        self.editorSubView = nil;
+        [[self.editorController view] removeFromSuperview];
+        self.editorController = nil;
     }
+    
     self.newConstraints= nil;
     [super dealloc];
 }

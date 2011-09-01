@@ -33,6 +33,8 @@
 @property (nonatomic, retain) StBlock *parentBlock;
 @property (nonatomic, retain) NSSet *blocks;
 
+@property (nonatomic, readonly) NSData *data;
+
 - (StStream *)getStream;
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name;

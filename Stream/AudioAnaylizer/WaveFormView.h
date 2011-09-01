@@ -10,8 +10,11 @@
 #import "StAnaylizer.h"
 #import "CoreAudio/CoreAudioTypes.h"
 #import "AudioAnaylizer.h"
+#import "AudioAnaylizerViewController.h"
 
 #define ZOOM_FRAMES 10
+
+@class AudioAnaylizerViewController;
 
 @interface WaveFormView : NSView
 {
@@ -41,6 +44,8 @@
 //    NSUInteger char_count;
 //    NSUInteger coa_char_count;
 }
+
+@property (nonatomic, assign) AudioAnaylizerViewController *viewController;
 
 //@property(nonatomic, assign) AudioSampleType *audioFrames;
 @property(nonatomic, assign) NSUInteger frameCount;

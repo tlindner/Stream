@@ -104,6 +104,14 @@
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string></string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>org.macmess.stream.block</string>
+		</dict>
+		<dict>
 			<key>UTTypeDescription</key>
 			<string>Type/Value Pairs</string>
 			<key>UTTypeConformsTo</key>
