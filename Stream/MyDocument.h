@@ -12,10 +12,12 @@
 
     IBOutlet NSTreeController *streamTreeControler;
 
+    NSTableColumn *tableColumn;
 }
 
 @property(nonatomic, retain) NSCursor *zoomCursor;
 
 - (IBAction)add:(id)sender;
+@property (assign) IBOutlet NSTableColumn *tableColumn;
 
 @end

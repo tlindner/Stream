@@ -7,6 +7,7 @@
 //
 
 #import "AudioAnaylizerViewController.h"
+#import "Analyzation.h"
 
 #define MAXZOOM 16.0
 
@@ -40,7 +41,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
 
     WaveFormView *wfv = [self.scroller documentView];
 
-    [representedObject addSubOptionsDictionary:[AudioAnaylizer anaylizerKey] withDictionary:[AudioAnaylizer defaultOptions]];
+    [representedObject addSubOptionsDictionary:[AudioAnaylizerViewController anaylizerKey] withDictionary:[AudioAnaylizerViewController defaultOptions]];
     UInt32 propSize;
     OSStatus myErr;
     
@@ -50,10 +51,10 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
     {
         /* Read in options data */
         
-        wfv.channelCount = [[representedObject valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.channelCount"] unsignedIntegerValue];
-        wfv.currentChannel = [[representedObject valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
-        wfv.sampleRate = [[representedObject valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.sampleRate"] doubleValue];
-        wfv.frameCount = [[representedObject valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameCount"] unsignedLongLongValue];
+        wfv.channelCount = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"] unsignedIntegerValue];
+        wfv.currentChannel = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
+        wfv.sampleRate = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
+        wfv.frameCount = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
     }
     else
     {
@@ -76,12 +77,12 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty1: returned %d", myErr );
             
             wfv.channelCount = clientFormat.mChannelsPerFrame;
-            [representedObject setValue:[NSNumber numberWithUnsignedInt:clientFormat.mChannelsPerFrame] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.channelCount"];
+            [representedObject setValue:[NSNumber numberWithUnsignedInt:clientFormat.mChannelsPerFrame] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"];
             
-            wfv.currentChannel = [[representedObject valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+            wfv.currentChannel = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
             
             wfv.sampleRate = clientFormat.mSampleRate;
-            [representedObject setValue:[NSNumber numberWithDouble:clientFormat.mSampleRate] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.sampleRate"];
+            [representedObject setValue:[NSNumber numberWithDouble:clientFormat.mSampleRate] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"];
             
             /* Build array for channel popup list in accessory view */
             if( wfv.channelCount > 1 )
@@ -92,7 +93,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
                     [theChannelList addObject:[NSString stringWithFormat:@"%d", i]];
                 }
                 
-                [representedObject setValue:theChannelList forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannelList"];
+                [representedObject setValue:theChannelList forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannelList"];
                 [theChannelList release];
             }
             
@@ -107,7 +108,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", myErr );
             
             wfv.frameCount = fileFrameCount;
-            [representedObject setValue:[NSNumber numberWithUnsignedLongLong:fileFrameCount] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameCount"];
+            [representedObject setValue:[NSNumber numberWithUnsignedLongLong:fileFrameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
             
             size_t frameBufferSize = sizeof(AudioSampleType) * wfv.frameCount * wfv.channelCount;
             NSMutableData *frameBufferObject = [NSMutableData dataWithLength:frameBufferSize];
@@ -122,7 +123,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
             myErr = ExtAudioFileRead(af, &ioFrameCount, &bufList);
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
             
-            [representedObject setValue:frameBufferObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"];
+            [representedObject setValue:frameBufferObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
             [representedObject didChangeValueForKey:@"optionsDictionary"];
             [wfv anaylizeAudioData];
             
@@ -141,10 +142,10 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
     /* setup observations */
     if( wfv.observationsActive == NO )
     {
-        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle" options:NSKeyValueChangeSetting context:nil];
-        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle" options:NSKeyValueChangeSetting context:nil];
-        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
-        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel" options:NSKeyValueChangeSetting context:nil];
+        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
+        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
+        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
+        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
         wfv.observationsActive = YES;
     }
     
@@ -156,14 +157,14 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
     [wfv setAutoresizingMask:NSViewHeightSizable];
     [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount, [self.scroller contentSize].height)];
     
-    float retrieveScale = [[representedObject valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"] floatValue];
+    float retrieveScale = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"] floatValue];
     
     if( isnan(retrieveScale) )
-        [representedObject setValue:[NSNumber numberWithFloat:self.slider.floatValue] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+        [representedObject setValue:[NSNumber numberWithFloat:self.slider.floatValue] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
     else
         [self.slider setFloatValue:retrieveScale];
     
-    float retrieveOrigin = [[representedObject valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"] floatValue];
+    float retrieveOrigin = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scrollOrigin"] floatValue];
     
     NSRect clipViewBounds = [clipView frame];
     [clipView setBounds:NSMakeRect(retrieveOrigin, clipViewBounds.origin.y, [[self slider] floatValue], clipViewBounds.size.height)];
@@ -175,7 +176,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
     
     if( [self.scroller contentView] == theView )
     {
-        [[self representedObject] setValue:[NSNumber numberWithFloat:[theView bounds].origin.x] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scrollOrigin"];
+        [[self representedObject] setValue:[NSNumber numberWithFloat:[theView bounds].origin.x] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scrollOrigin"];
     }
 }
 
@@ -200,7 +201,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
     boundsRect.origin.x += (width-newWidth)/2.0;
     [clipView setBounds:boundsRect];
     [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
-    [[self representedObject] setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+    [[self representedObject] setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
     [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
     
 }
@@ -217,7 +218,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
     newBoundsRect.size.width = inRect.size.width;
     [clipView setBounds:newBoundsRect];
     [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
-    [[self representedObject] setValue:[NSNumber numberWithFloat:newBoundsRect.size.width] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+    [[self representedObject] setValue:[NSNumber numberWithFloat:newBoundsRect.size.width] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
     [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
     [self.slider setFloatValue:newBoundsRect.size.width];
 }
@@ -239,7 +240,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
     boundsRect.origin.x += (width-newWidth)/ratio;
     [clipView setBounds:boundsRect];
     [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
-    [[self representedObject] setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.scale"];
+    [[self representedObject] setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
     [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
 }
 

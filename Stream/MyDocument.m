@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 
 @implementation MyDocument
+@synthesize tableColumn;
 
 @synthesize zoomCursor;
 
@@ -84,6 +85,9 @@
      };
 
     [myOpenPanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
+    
+    NSTableView *tableView = [tableColumn tableView];
+    [tableColumn setWidth:[tableView frame].size.width-25.0];
 }
 
 - (IBAction)makeNewBlocker:(id)sender

@@ -31,6 +31,7 @@
 @property (nonatomic) int64_t index;
 @property (nonatomic, retain) StStream *parentStream;
 @property (nonatomic, retain) StBlock *parentBlock;
+@property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
 @property (nonatomic, retain) NSSet *blocks;
 
 @property (nonatomic, readonly) NSData *data;

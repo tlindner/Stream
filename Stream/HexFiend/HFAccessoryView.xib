@@ -15,8 +15,11 @@
 			<string>NSTextField</string>
 			<string>NSCustomObject</string>
 			<string>NSTextFieldCell</string>
+			<string>NSMenu</string>
+			<string>NSPopUpButton</string>
 			<string>NSCustomView</string>
 			<string>NSButtonCell</string>
+			<string>NSPopUpButtonCell</string>
 			<string>NSButton</string>
 			<string>NSUserDefaultsController</string>
 			<string>NSBox</string>
@@ -61,16 +64,16 @@
 									<object class="NSButton" id="376831280">
 										<reference key="NSNextResponder" ref="822699293"/>
 										<int key="NSvFlags">268</int>
-										<string key="NSFrame">{{15, 39}, {92, 18}}</string>
+										<string key="NSFrame">{{15, 37}, {95, 18}}</string>
 										<reference key="NSSuperview" ref="822699293"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="90738698"/>
+										<reference key="NSNextKeyView" ref="1053652282"/>
 										<string key="NSReuseIdentifierKey">_NS:239</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSButtonCell" key="NSCell" id="246301412">
 											<int key="NSCellFlags">-2080244224</int>
 											<int key="NSCellFlags2">131072</int>
-											<string key="NSContents">Show Offsets</string>
+											<string key="NSContents">Show Offsets:</string>
 											<object class="NSFont" key="NSSupport" id="26">
 												<string key="NSName">LucidaGrande</string>
 												<double key="NSSize">11</double>
@@ -96,7 +99,7 @@
 									<object class="NSTextField" id="90738698">
 										<reference key="NSNextResponder" ref="822699293"/>
 										<int key="NSvFlags">268</int>
-										<string key="NSFrame">{{15, 16}, {79, 14}}</string>
+										<string key="NSFrame">{{15, 14}, {96, 14}}</string>
 										<reference key="NSSuperview" ref="822699293"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="546662774"/>
@@ -132,7 +135,7 @@
 									<object class="NSTextField" id="546662774">
 										<reference key="NSNextResponder" ref="822699293"/>
 										<int key="NSvFlags">268</int>
-										<string key="NSFrame">{{128, 14}, {181, 19}}</string>
+										<string key="NSFrame">{{116, 12}, {193, 19}}</string>
 										<reference key="NSSuperview" ref="822699293"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView"/>
@@ -163,15 +166,56 @@
 											</object>
 										</object>
 									</object>
+									<object class="NSPopUpButton" id="1053652282">
+										<reference key="NSNextResponder" ref="822699293"/>
+										<int key="NSvFlags">268</int>
+										<string key="NSFrame">{{113, 34}, {199, 22}}</string>
+										<reference key="NSSuperview" ref="822699293"/>
+										<reference key="NSWindow"/>
+										<reference key="NSNextKeyView" ref="90738698"/>
+										<string key="NSReuseIdentifierKey">_NS:179</string>
+										<bool key="NSEnabled">YES</bool>
+										<object class="NSPopUpButtonCell" key="NSCell" id="265306015">
+											<int key="NSCellFlags">-2076049856</int>
+											<int key="NSCellFlags2">133120</int>
+											<reference key="NSSupport" ref="26"/>
+											<string key="NSCellIdentifier">_NS:179</string>
+											<reference key="NSControlView" ref="1053652282"/>
+											<int key="NSButtonFlags">109199615</int>
+											<int key="NSButtonFlags2">129</int>
+											<string key="NSAlternateContents"/>
+											<string key="NSKeyEquivalent"/>
+											<int key="NSPeriodicDelay">400</int>
+											<int key="NSPeriodicInterval">75</int>
+											<nil key="NSMenuItem"/>
+											<bool key="NSMenuItemRespectAlignment">YES</bool>
+											<object class="NSMenu" key="NSMenu" id="1005810413">
+												<string key="NSTitle">OtherViews</string>
+												<object class="NSMutableArray" key="NSMenuItems">
+													<bool key="EncodedWithXMLCoder">YES</bool>
+												</object>
+												<object class="NSFont" key="NSMenuFont">
+													<string key="NSName">LucidaGrande</string>
+													<double key="NSSize">13</double>
+													<int key="NSfFlags">1044</int>
+												</object>
+											</object>
+											<int key="NSSelectedIndex">-1</int>
+											<int key="NSPreferredEdge">1</int>
+											<bool key="NSUsesItemFromMenu">YES</bool>
+											<bool key="NSAltersState">YES</bool>
+											<int key="NSArrowPosition">2</int>
+										</object>
+									</object>
 								</object>
-								<string key="NSFrame">{{1, 1}, {327, 65}}</string>
+								<string key="NSFrame">{{1, 1}, {327, 63}}</string>
 								<reference key="NSSuperview" ref="491045693"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="376831280"/>
 								<string key="NSReuseIdentifierKey">_NS:11</string>
 							</object>
 						</object>
-						<string key="NSFrame">{{1, 2}, {329, 81}}</string>
+						<string key="NSFrame">{{1, 1}, {329, 79}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="822699293"/>
@@ -195,7 +239,7 @@
 						<bool key="NSTransparent">NO</bool>
 					</object>
 				</object>
-				<string key="NSFrameSize">{331, 85}</string>
+				<string key="NSFrameSize">{331, 82}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="491045693"/>
@@ -231,6 +275,87 @@
 						</object>
 					</object>
 					<int key="connectionID">18</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: representedObject.optionsDictionary.HexFiendAnaylizerController.showOffset</string>
+						<reference key="source" ref="376831280"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="376831280"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: representedObject.optionsDictionary.HexFiendAnaylizerController.showOffset</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.HexFiendAnaylizerController.showOffset</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">28</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: representedObject.resultingUTI</string>
+						<reference key="source" ref="546662774"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="546662774"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: representedObject.resultingUTI</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">representedObject.resultingUTI</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">32</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">content: representedObject.optionsDictionary.HexFiendAnaylizerController.offsetBaseOptions</string>
+						<reference key="source" ref="265306015"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="265306015"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">content: representedObject.optionsDictionary.HexFiendAnaylizerController.offsetBaseOptions</string>
+							<string key="NSBinding">content</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.HexFiendAnaylizerController.offsetBaseOptions</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">33</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentValues: representedObject.optionsDictionary.HexFiendAnaylizerController.offsetBaseOptions</string>
+						<reference key="source" ref="1053652282"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector" id="312866194">
+							<reference key="NSSource" ref="1053652282"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">contentValues: representedObject.optionsDictionary.HexFiendAnaylizerController.offsetBaseOptions</string>
+							<string key="NSBinding">contentValues</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.HexFiendAnaylizerController.offsetBaseOptions</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">42</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedValue: representedObject.optionsDictionary.HexFiendAnaylizerController.offsetBase</string>
+						<reference key="source" ref="1053652282"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1053652282"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">selectedValue: representedObject.optionsDictionary.HexFiendAnaylizerController.offsetBase</string>
+							<string key="NSBinding">selectedValue</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.HexFiendAnaylizerController.offsetBase</string>
+							<reference key="NSPreviousConnector" ref="312866194"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">43</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -282,6 +407,7 @@
 							<reference ref="376831280"/>
 							<reference ref="90738698"/>
 							<reference ref="546662774"/>
+							<reference ref="1053652282"/>
 						</object>
 						<reference key="parent" ref="1005"/>
 					</object>
@@ -327,6 +453,33 @@
 						<reference key="object" ref="246301412"/>
 						<reference key="parent" ref="376831280"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">20</int>
+						<reference key="object" ref="1053652282"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="265306015"/>
+						</object>
+						<reference key="parent" ref="491045693"/>
+						<string key="objectName">Pop Up Button</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">21</int>
+						<reference key="object" ref="265306015"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="1005810413"/>
+						</object>
+						<reference key="parent" ref="1053652282"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">22</int>
+						<reference key="object" ref="1005810413"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<reference key="parent" ref="265306015"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -341,6 +494,9 @@
 					<string>11.IBPluginDependency</string>
 					<string>12.IBPluginDependency</string>
 					<string>19.IBPluginDependency</string>
+					<string>20.IBPluginDependency</string>
+					<string>21.IBPluginDependency</string>
+					<string>22.IBPluginDependency</string>
 					<string>4.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
@@ -348,6 +504,9 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -374,7 +533,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">19</int>
+			<int key="maxID">43</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

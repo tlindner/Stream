@@ -71,7 +71,7 @@
         if( [selectedObjects count] > 0 )
         {
             StBlock *theBlock = [selectedObjects objectAtIndex:0];
-            NSRect theFrame = [[self view] frame];
+//            NSRect theFrame = [[self view] frame];
             
             [[[self view] subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             

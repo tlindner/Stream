@@ -27,8 +27,35 @@
 @dynamic blocks;
 @dynamic sourceUTI;
 @dynamic currentEditorView;
+@dynamic optionsDictionary;
 
 @dynamic data;
+
+- (void)awakeFromInsert
+{
+    self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
+}
+
+- (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions
+{
+    NSMutableDictionary *ourOptDict = self.optionsDictionary;
+    
+    if( [ourOptDict valueForKey:subOptionsID] == nil )
+    {
+        [ourOptDict setObject:newOptions forKey:subOptionsID];
+        return;
+    }
+    
+    NSMutableDictionary *dict = [ourOptDict objectForKey:subOptionsID];
+    
+    for (NSString *key in [newOptions allKeys])
+    {
+        id value = [dict objectForKey:key];
+        
+        if( value == nil )
+            [dict setObject:[newOptions objectForKey:key] forKey:key];
+    }
+}
 
 - (NSData *)data
 {

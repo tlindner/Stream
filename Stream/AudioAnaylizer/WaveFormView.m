@@ -80,13 +80,13 @@ typedef struct
     
     if( needsAnaylyzation ) [self anaylizeAudioData];
     
-    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
 
-    NSMutableData *coalescedObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
-    NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"];
+    NSMutableData *coalescedObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
+    NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
     NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
 
-    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
+    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
     charRef *coalescedCharacters = [coalescedObject mutableBytes];
     charRef *characters = [charactersObject mutableBytes];
     unsigned char *character = [characterObject mutableBytes];
@@ -298,10 +298,10 @@ typedef struct
 {
     if( observationsActive )
     {
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"];
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"];
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"];
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
     } 
     
     if( panMomentumTimer != nil )
@@ -323,7 +323,7 @@ typedef struct
 {
     id newObject;
     
-    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"])
+    if ([keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"])
     {
         newObject = [change objectForKey:@"new"];
         if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != lowCycle)
@@ -335,7 +335,7 @@ typedef struct
         return;
     }
     
-    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"])
+    if ([keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"])
     {
         newObject = [change objectForKey:@"new"];
         if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != highCycle)
@@ -347,7 +347,7 @@ typedef struct
         return;
     }
     
-    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"])
+    if ([keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"])
     {
         newObject = [change objectForKey:@"new"];
         if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != resyncThresholdHertz)
@@ -359,7 +359,7 @@ typedef struct
         return;
     }
     
-    if ([keyPath isEqualToString:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"])
+    if ([keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"])
     {
         newObject = [change objectForKey:@"new"];
         if ([newObject respondsToSelector:@selector(intValue)] && [newObject intValue] != currentChannel)
@@ -381,17 +381,17 @@ typedef struct
     needsAnaylyzation = NO;
     anaylizationError = NO;
 
-    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.audioChannel"] intValue];
+    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
     
     if( currentChannel > channelCount ) currentChannel = channelCount;
     if( currentChannel < 1 ) currentChannel = 1;
         
-    lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.lowCycle"] floatValue];
-    highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.highCycle"] floatValue];
+    lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] floatValue];
+    highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
     vDSP_Length i;
     int zc_count;
     
-    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
+    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
     AudioSampleType *frameStart = audioFrames + (currentChannel-1);
     
     unsigned long max_possible_zero_crossings = (frameCount / 2) + 1;
@@ -430,7 +430,7 @@ typedef struct
     zc_count -= 1;
     unsigned short even_parity = 0, odd_parity = 0;
     double dataThreashold = ((sampleRate/lowCycle) + (sampleRate/highCycle)) / 2.0, test1, test2;
-    resyncThresholdHertz = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold"] floatValue];
+    resyncThresholdHertz = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"] floatValue];
     
     if( resyncThresholdHertz > lowCycle/2.0 )
     {
@@ -567,8 +567,8 @@ typedef struct
 
     /* Store NSMutableData Objects away */
     [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
-    [self.cachedAnaylizer setValue:coalescedObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.coalescedObject"];
-    [self.cachedAnaylizer setValue:charactersObject forKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.charactersObject"];
+    [self.cachedAnaylizer setValue:coalescedObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
+    [self.cachedAnaylizer setValue:charactersObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
     [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
     
     [self.cachedAnaylizer setValue:characterObject forKey:@"resultingData"];
@@ -630,7 +630,7 @@ typedef struct
         CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
         CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
-        AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
+        AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
         AudioSampleType *frameStart = audioFrames + (selectedSampleUnderMouse * channelCount) + (currentChannel-1); // Interleaved samples
         CGFloat thePoint = viewWaveHalfHeight+(frameStart[0]*viewWaveHalfHeight);
         NSRect sampleRect = NSMakeRect(selectedSampleUnderMouse-6.0, thePoint-6.0, 12, 12);
@@ -705,7 +705,7 @@ typedef struct
             CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
             CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
             
-            AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
+            AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
             AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
             
             AudioSampleType delta = (locationNowSelf.y - locationMouseDownSelf.y) / viewWaveHalfHeight;
@@ -911,7 +911,7 @@ typedef struct
     NSUInteger storedSelectedSampleLength = [[previousState objectForKey:@"selectedSampleLength"] unsignedIntegerValue];
     NSUInteger storedCurrentChannel = [[previousState objectForKey:@"currentChannel"] unsignedIntegerValue];
     
-    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.ColorComputerAudioAnaylizer.frameBufferObject"] mutableBytes];
+    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
     AudioSampleType *frameStart = audioFrames + (storedSelectedSample * channelCount) + (storedCurrentChannel-1); // Interleaved samples
     
     for( unsigned long i = 0; i < storedSelectedSampleLength; i++ )

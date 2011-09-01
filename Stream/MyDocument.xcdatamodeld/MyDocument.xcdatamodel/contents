@@ -16,9 +16,11 @@
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
         <attribute name="expectedSize" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <attribute name="index" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="initializedOD" optional="YES" attributeType="Boolean"/>
         <attribute name="length" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <attribute name="name" attributeType="String" defaultValueString="untitled"/>
         <attribute name="offset" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <attribute name="source" optional="YES" attributeType="String"/>
         <attribute name="sourceUTI" attributeType="String" defaultValueString="public.data"/>
         <attribute name="uiName" optional="YES" attributeType="String" defaultValueString="uiDeault"/>
@@ -43,7 +45,7 @@
     </entity>
     <elements>
         <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="165"/>
-        <element name="StBlock" positionX="0" positionY="0" width="0" height="270"/>
+        <element name="StBlock" positionX="0" positionY="0" width="0" height="300"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="255"/>
     </elements>
 </model>

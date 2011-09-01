@@ -7,7 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "HFLineCountingRepresenter.h"
 
 @interface HexFiendAnaylizerController : NSViewController
+{
+    BOOL observationsActive;
+    HFLineCountingRepresenter *lcRepresenter;
+}
+
+- (void) setupRepresentedObject;
+- (void) setLineNumberFormatString:(NSString *)inFormat;
 
 @end
