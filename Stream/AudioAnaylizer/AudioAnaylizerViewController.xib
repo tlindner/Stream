@@ -37,19 +37,19 @@
 			</object>
 			<object class="NSCustomView" id="1005">
 				<reference key="NSNextResponder"/>
-				<int key="NSvFlags">268</int>
+				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSSlider" id="1041854765">
 						<reference key="NSNextResponder" ref="1005"/>
 						<int key="NSvFlags">294</int>
-						<string key="NSFrame">{{166, 3}, {310, 16}}</string>
+						<string key="NSFrame">{{166, 3}, {329, 16}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:51</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSSliderCell" key="NSCell" id="847919976">
-							<int key="NSCellFlags">-2080244224</int>
+							<int key="NSCellFlags">-2079981824</int>
 							<int key="NSCellFlags2">262144</int>
 							<string key="NSContents"/>
 							<string key="NSCellIdentifier">_NS:51</string>
@@ -126,14 +126,14 @@
 									<object class="NSView" id="283917336">
 										<reference key="NSNextResponder" ref="863597547"/>
 										<int key="NSvFlags">274</int>
-										<string key="NSFrameSize">{463, 235}</string>
+										<string key="NSFrameSize">{483, 235}</string>
 										<reference key="NSSuperview" ref="863597547"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="639938493"/>
 										<string key="NSReuseIdentifierKey">_NS:414</string>
 									</object>
 								</array>
-								<string key="NSFrame">{{1, 1}, {478, 250}}</string>
+								<string key="NSFrame">{{1, 1}, {498, 250}}</string>
 								<reference key="NSSuperview" ref="1030351950"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="283917336"/>
@@ -166,7 +166,7 @@
 							<object class="NSScroller" id="639938493">
 								<reference key="NSNextResponder" ref="1030351950"/>
 								<int key="NSvFlags">256</int>
-								<string key="NSFrame">{{1, 236}, {478, 15}}</string>
+								<string key="NSFrame">{{1, 236}, {498, 15}}</string>
 								<reference key="NSSuperview" ref="1030351950"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="463031836"/>
@@ -177,7 +177,7 @@
 								<double key="NSPercent">0.99583333333333335</double>
 							</object>
 						</array>
-						<string key="NSFrame">{{0, 20}, {480, 252}}</string>
+						<string key="NSFrame">{{0, 20}, {500, 252}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="926612283"/>
@@ -188,7 +188,7 @@
 						<reference key="NSContentView" ref="863597547"/>
 					</object>
 				</array>
-				<string key="NSFrameSize">{480, 272}</string>
+				<string key="NSFrameSize">{500, 272}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="1030351950"/>
@@ -283,6 +283,7 @@
 							<reference ref="283917336"/>
 						</array>
 						<reference key="parent" ref="1005"/>
+						<string key="objectName">Audio Ana Scroll View - Wave Form View</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">5</int>
@@ -335,6 +336,7 @@
 				<string key="10.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="11.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="4.CustomClassName">AudioAnaScrollView</string>
+				<dictionary class="NSMutableDictionary" key="4.IBAttributePlaceholdersKey"/>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>

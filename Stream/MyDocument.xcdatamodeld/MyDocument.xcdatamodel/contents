@@ -4,7 +4,6 @@
         <attribute name="anaylizerHeight" attributeType="Float" minValueString="0" defaultValueString="207"/>
         <attribute name="anaylizerKind" attributeType="String" indexed="YES"/>
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
-        <attribute name="initializedOD" attributeType="Boolean" defaultValueString="NO"/>
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <attribute name="resultingData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="resultingUTI" attributeType="String" defaultValueString="public.data"/>
@@ -16,7 +15,6 @@
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
         <attribute name="expectedSize" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <attribute name="index" attributeType="Integer 64" defaultValueString="0"/>
-        <attribute name="initializedOD" optional="YES" attributeType="Boolean"/>
         <attribute name="length" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <attribute name="name" attributeType="String" defaultValueString="untitled"/>
         <attribute name="offset" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
@@ -44,8 +42,8 @@
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
     </entity>
     <elements>
-        <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="165"/>
-        <element name="StBlock" positionX="0" positionY="0" width="0" height="300"/>
+        <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="150"/>
+        <element name="StBlock" positionX="0" positionY="0" width="0" height="285"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="255"/>
     </elements>
 </model>

@@ -7,11 +7,10 @@
 //
 
 #import "AudioAnaylizerViewController.h"
+#include "AudioToolbox/AudioToolbox.h"
 #import "Analyzation.h"
 
 #define MAXZOOM 16.0
-
-void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved);
 
 @implementation AudioAnaylizerViewController
 @synthesize slider;
@@ -22,14 +21,6 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-//        trackingArea = [[[NSTrackingArea alloc] initWithRect:scrollerRect options:NSTrackingCursorUpdate+NSTrackingActiveAlways owner:[self.scroller documentView] userInfo:nil] autorelease];
-//        [self addTrackingArea:trackingArea];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clipViewBoundsChanged:) name:NSViewBoundsDidChangeNotification object:nil];
-        [[self.scroller contentView] setPostsBoundsChangedNotifications:YES];
-        
-        WaveFormView *wfv = [self.scroller documentView];
-        wfv.viewController = self;
     }
     
     return self;
@@ -39,15 +30,24 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
 {
     [super setRepresentedObject:representedObject];
 
+    //        trackingArea = [[[NSTrackingArea alloc] initWithRect:scrollerRect options:NSTrackingCursorUpdate+NSTrackingActiveAlways owner:[self.scroller documentView] userInfo:nil] autorelease];
+    //        [self addTrackingArea:trackingArea];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clipViewBoundsChanged:) name:NSViewBoundsDidChangeNotification object:nil];
+    [[self.scroller contentView] setPostsBoundsChangedNotifications:YES];
+    
     WaveFormView *wfv = [self.scroller documentView];
+    wfv.viewController = self;
+    self.scroller.viewController = self;
 
-    [representedObject addSubOptionsDictionary:[AudioAnaylizerViewController anaylizerKey] withDictionary:[AudioAnaylizerViewController defaultOptions]];
+    NSString *key = [AudioAnaylizerViewController anaylizerKey];
+    [representedObject addSubOptionsDictionary:key withDictionary:[AudioAnaylizerViewController defaultOptions]];
     UInt32 propSize;
     OSStatus myErr;
     
     wfv.cachedAnaylizer = representedObject;
-    
-    if( [[representedObject valueForKey:@"initializedOD"] boolValue] == YES )
+
+    if( [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"] boolValue] == YES )
     {
         /* Read in options data */
         
@@ -101,7 +101,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
             myErr = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileLengthFrames, &propSize, &fileFrameCount);
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty2: returned %d", myErr );
             
-            SetCanonical_CoCo(&clientFormat, (UInt32)wfv.channelCount, YES);
+            SetCanonical(&clientFormat, (UInt32)wfv.channelCount, YES);
             
             propSize = sizeof(clientFormat);
             myErr = ExtAudioFileSetProperty(af, kExtAudioFileProperty_ClientDataFormat, propSize, &clientFormat);
@@ -127,7 +127,7 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
             [representedObject didChangeValueForKey:@"optionsDictionary"];
             [wfv anaylizeAudioData];
             
-            [representedObject setValue:[NSNumber numberWithBool:YES] forKey:@"initializedOD"];
+            [representedObject setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"];
             
             myErr = ExtAudioFileDispose(af);
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
@@ -272,14 +272,14 @@ void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChanne
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"frameCount", [NSNull null], @"coalescedObject", [NSNull null], @"frameBufferObject", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"frameCount", [NSNull null], @"coalescedObject", [NSNull null], @"frameBufferObject",[NSNumber numberWithBool:NO], @"initializedOD", nil] autorelease];
 }
 
 @end
 
 /* taken from: /Developer/Extras/CoreAudio/PublicUtility/CAStreamBasicDescription.h */
 
-void SetCanonical_CoCo(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved)
+void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved)
 // note: leaves sample rate untouched
 {
     clientFormat->mFormatID = kAudioFormatLinearPCM;

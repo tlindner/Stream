@@ -67,13 +67,6 @@
         [[hexView layoutRepresenter] addRepresenter:lcRepresenter];
     }
 
-    if( [[[self representedObject] valueForKey:@"initializedOD"] boolValue] == YES )
-    {}
-    else
-    {
-        [[self representedObject] setValue:[NSNumber numberWithBool:YES] forKey:@"initializedOD"];
-    }
-    
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset" options:NSKeyValueChangeSetting context:nil];
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase" options:NSKeyValueChangeSetting context:nil];
     observationsActive = YES;

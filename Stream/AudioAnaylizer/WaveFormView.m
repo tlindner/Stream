@@ -898,7 +898,6 @@ typedef struct
         currentBounds.size.width = sizeFrames[currentFrame];
         
         [viewController updateBounds:currentBounds];
-        //[(AudioAnaylizer *)[[[self superview] superview] superview] updateBounds:currentBounds];
         
         currentFrame++;
     }

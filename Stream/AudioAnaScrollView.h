@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AudioAnaylizerViewController.h"
+
+@class AudioAnaylizerViewController;
 
 @interface AudioAnaScrollView : NSScrollView
+
+@property (nonatomic, assign) AudioAnaylizerViewController * viewController;
 
 @end

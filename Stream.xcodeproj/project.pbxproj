@@ -17,7 +17,6 @@
 		772C658F13FEC0960060AB7F /* AnaylizerArrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */; };
 		772C659013FEC0960060AB7F /* AnaylizerHand.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */; };
 		772C659113FEC0960060AB7F /* AnaylizerLupe.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */; };
-		772D952C14088181001A449B /* HFAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 772D952B14088181001A449B /* HFAnaylizer.m */; };
 		773F17C813E4F77E002606A0 /* AnaylizerTableViewCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */; };
 		7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
 		7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */; };
@@ -49,9 +48,7 @@
 		778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */; };
 		778A597E140703DB00B68EB4 /* StStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597D140703DB00B68EB4 /* StStream.m */; };
 		778A598B14072E6A00B68EB4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A598A14072E6A00B68EB4 /* AppDelegate.m */; };
-		778A598F140751C900B68EB4 /* BlockerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A598E140751C900B68EB4 /* BlockerView.m */; };
-		778A59911407524900B68EB4 /* BlockerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778A59901407524900B68EB4 /* BlockerView.xib */; };
-		7799CD2213E5C691007D5B8E /* AudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */; };
+		778A59911407524900B68EB4 /* BlockerDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778A59901407524900B68EB4 /* BlockerDataViewController.xib */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
 		77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */; };
@@ -145,8 +142,6 @@
 		772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerArrow.tiff; path = Stream/AudioAnaylizer/AnaylizerArrow.tiff; sourceTree = "<group>"; };
 		772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerHand.tiff; path = Stream/AudioAnaylizer/AnaylizerHand.tiff; sourceTree = "<group>"; };
 		772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerLupe.tiff; path = Stream/AudioAnaylizer/AnaylizerLupe.tiff; sourceTree = "<group>"; };
-		772D952A14088181001A449B /* HFAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HFAnaylizer.h; path = Stream/HFAnaylizer.h; sourceTree = "<group>"; };
-		772D952B14088181001A449B /* HFAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HFAnaylizer.m; path = Stream/HFAnaylizer.m; sourceTree = "<group>"; };
 		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerTableViewCellView.h; path = Stream/AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
 		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerTableViewCellView.m; path = Stream/AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
 		774A181613FAB01500510032 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -199,11 +194,7 @@
 		778A597D140703DB00B68EB4 /* StStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StStream.m; path = Stream/StStream.m; sourceTree = "<group>"; };
 		778A598914072E6A00B68EB4 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		778A598A14072E6A00B68EB4 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		778A598D140751C900B68EB4 /* BlockerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerView.h; path = Stream/BlockerView.h; sourceTree = "<group>"; };
-		778A598E140751C900B68EB4 /* BlockerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerView.m; path = Stream/BlockerView.m; sourceTree = "<group>"; };
-		778A59901407524900B68EB4 /* BlockerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockerView.xib; path = Stream/BlockerView.xib; sourceTree = "<group>"; };
-		7799CD2013E5C691007D5B8E /* AudioAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaylizer.h; path = Stream/AudioAnaylizer/AudioAnaylizer.h; sourceTree = "<group>"; };
-		7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaylizer.m; path = Stream/AudioAnaylizer/AudioAnaylizer.m; sourceTree = "<group>"; };
+		778A59901407524900B68EB4 /* BlockerDataViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockerDataViewController.xib; path = Stream/BlockerDataViewController.xib; sourceTree = "<group>"; };
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7799CD2913E63C1F007D5B8E /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnaylizer/WaveFormView.h; sourceTree = "<group>"; };
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
@@ -355,8 +346,6 @@
 			isa = PBXGroup;
 			children = (
 				77F203F913DD3A5F00FA5B1F /* HexFiend */,
-				772D952A14088181001A449B /* HFAnaylizer.h */,
-				772D952B14088181001A449B /* HFAnaylizer.m */,
 				77263A8613F721E400EBD507 /* HFAccessoryView.xib */,
 				77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */,
 				77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */,
@@ -540,10 +529,8 @@
 		778A598C1407516500B68EB4 /* BlockerView */ = {
 			isa = PBXGroup;
 			children = (
-				778A598D140751C900B68EB4 /* BlockerView.h */,
-				778A598E140751C900B68EB4 /* BlockerView.m */,
-				778A59901407524900B68EB4 /* BlockerView.xib */,
 				776014611409C20D00777D60 /* BlockerViewAccessory.xib */,
+				778A59901407524900B68EB4 /* BlockerDataViewController.xib */,
 				770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */,
 				770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */,
 			);
@@ -553,8 +540,6 @@
 		7799CD1E13E5C651007D5B8E /* AudioAnaylizer */ = {
 			isa = PBXGroup;
 			children = (
-				7799CD2013E5C691007D5B8E /* AudioAnaylizer.h */,
-				7799CD2113E5C691007D5B8E /* AudioAnaylizer.m */,
 				7799CD2913E63C1F007D5B8E /* WaveFormView.h */,
 				7799CD2A13E63C1F007D5B8E /* WaveFormView.m */,
 				771DC21913F0374800579077 /* AudioAnaScrollView.h */,
@@ -779,7 +764,7 @@
 				772C659013FEC0960060AB7F /* AnaylizerHand.tiff in Resources */,
 				772C659113FEC0960060AB7F /* AnaylizerLupe.tiff in Resources */,
 				77CB933F1404AE7F0032F56F /* Zoom.tif in Resources */,
-				778A59911407524900B68EB4 /* BlockerView.xib in Resources */,
+				778A59911407524900B68EB4 /* BlockerDataViewController.xib in Resources */,
 				776014621409C20D00777D60 /* BlockerViewAccessory.xib in Resources */,
 				77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */,
 				77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */,
@@ -874,7 +859,6 @@
 				77F2048113DD3AD000FA5B1F /* HFVerticalScrollerRepresenter.m in Sources */,
 				776139AF13E1BA4200CA80BB /* ColorGradientView.m in Sources */,
 				773F17C813E4F77E002606A0 /* AnaylizerTableViewCellView.m in Sources */,
-				7799CD2213E5C691007D5B8E /* AudioAnaylizer.m in Sources */,
 				7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */,
 				77C8DE1613E6F2C000AD079E /* Analyzation.m in Sources */,
 				77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */,
@@ -887,8 +871,6 @@
 				778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */,
 				778A597E140703DB00B68EB4 /* StStream.m in Sources */,
 				778A598B14072E6A00B68EB4 /* AppDelegate.m in Sources */,
-				778A598F140751C900B68EB4 /* BlockerView.m in Sources */,
-				772D952C14088181001A449B /* HFAnaylizer.m in Sources */,
 				77601460140987A600777D60 /* StBlock.m in Sources */,
 				770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */,
 				77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */,

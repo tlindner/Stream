@@ -10,6 +10,10 @@
 #import "AudioAnaScrollView.h"
 #import "WaveFormView.h"
 
+void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, bool interleaved);
+
+@class AudioAnaScrollView;
+
 @interface AudioAnaylizerViewController : NSViewController {
     AudioAnaScrollView *scroller;
     NSSlider *slider;

@@ -8,7 +8,7 @@
 
 #import "ColorGradientView.h"
 #import "AnaylizerTableViewCellView.h"
-#import "BlockerView.h"
+#import "BlockAttributeViewController.h"
 #import "Analyzation.h"
 #import "StAnaylizer.h"
 #import "StBlock.h"
@@ -166,8 +166,8 @@
     if( [anaylizer.currentEditorView isEqualToString:@"Blocker View"] )
     {
         AnaylizerTableViewCellView *anaTableViewCell = (AnaylizerTableViewCellView *)[self superview];
-        BlockerView *blockerView = (BlockerView *)anaTableViewCell.editorController.view;
-        NSArray *selectedObjects = [blockerView.treeController selectedObjects];
+        BlockAttributeViewController *blockerController = (BlockAttributeViewController *)anaTableViewCell.editorController;
+        NSArray *selectedObjects = [blockerController.arrayController selectedObjects];
         
         if( [selectedObjects count] == 1 )
         {

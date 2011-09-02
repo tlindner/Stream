@@ -7,7 +7,6 @@
 //
 
 #import "AnaylizerTableViewCellView.h"
-#import "HFAnaylizer.h"
 #import "HexFiendAnaylizerController.h"
 #import "Analyzation.h"
 

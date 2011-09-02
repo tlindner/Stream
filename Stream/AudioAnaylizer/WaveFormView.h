@@ -9,10 +9,15 @@
 #import <Cocoa/Cocoa.h>
 #import "StAnaylizer.h"
 #import "CoreAudio/CoreAudioTypes.h"
-#import "AudioAnaylizer.h"
 #import "AudioAnaylizerViewController.h"
 
 #define ZOOM_FRAMES 10
+
+typedef struct
+{
+    NSUInteger start;
+    NSUInteger length;
+} charRef;
 
 @class AudioAnaylizerViewController;
 

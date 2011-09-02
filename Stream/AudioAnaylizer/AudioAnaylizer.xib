@@ -444,54 +444,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.lowCycle</string>
-						<reference key="source" ref="82769792"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="82769792"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.lowCycle</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.ColorComputerAudioAnaylizer.lowCycle</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">32</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.highCycle</string>
-						<reference key="source" ref="8948794"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="8948794"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.highCycle</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.ColorComputerAudioAnaylizer.highCycle</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">34</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold</string>
-						<reference key="source" ref="6837610"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="6837610"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.ColorComputerAudioAnaylizer.resyncThreashold</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">36</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">content: arrangedObjects</string>
 						<reference key="source" ref="400938819"/>
 						<reference key="destination" ref="548046416"/>
@@ -524,23 +476,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedObject: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.audioChannel</string>
-						<reference key="source" ref="400938819"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="400938819"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">selectedObject: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.audioChannel</string>
-							<string key="NSBinding">selectedObject</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.ColorComputerAudioAnaylizer.audioChannel</string>
-							<reference key="NSPreviousConnector" ref="571216539"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">98</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: representedObject.resultingUTI</string>
 						<reference key="source" ref="957882405"/>
 						<reference key="destination" ref="1001"/>
@@ -554,6 +489,71 @@
 						</object>
 					</object>
 					<int key="connectionID">130</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: representedObject.optionsDictionary.AudioAnaylizerViewController.resyncThreashold</string>
+						<reference key="source" ref="6837610"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="6837610"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: representedObject.optionsDictionary.AudioAnaylizerViewController.resyncThreashold</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.AudioAnaylizerViewController.resyncThreashold</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">133</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: representedObject.optionsDictionary.AudioAnaylizerViewController.lowCycle</string>
+						<reference key="source" ref="82769792"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="82769792"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: representedObject.optionsDictionary.AudioAnaylizerViewController.lowCycle</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.AudioAnaylizerViewController.lowCycle</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">137</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: representedObject.optionsDictionary.AudioAnaylizerViewController.highCycle</string>
+						<reference key="source" ref="8948794"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="8948794"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: representedObject.optionsDictionary.AudioAnaylizerViewController.highCycle</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.AudioAnaylizerViewController.highCycle</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">139</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedObject: representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannel</string>
+						<reference key="source" ref="400938819"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="400938819"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">selectedObject: representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannel</string>
+							<string key="NSBinding">selectedObject</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannel</string>
+							<reference key="NSPreviousConnector" ref="571216539"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">141</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -905,7 +905,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">131</int>
+			<int key="maxID">141</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

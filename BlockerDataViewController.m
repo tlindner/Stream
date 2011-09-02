@@ -7,14 +7,16 @@
 //
 
 #import "BlockerDataViewController.h"
-#import "HFAnaylizer.h"
+#import "AppDelegate.h"
+#import "HexFiendAnaylizerController.h"
 #import "Analyzation.h"
+#import "StAnaylizer.h"
 
 @implementation BlockerDataViewController
-@synthesize parentView;
 @synthesize treeController;
 @synthesize observing;
 @synthesize observingBlock;
+@dynamic managedObjectContext;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -24,6 +26,40 @@
     }
     
     return self;
+}
+
+- (void)setRepresentedObject:(id)representedObject
+{
+    [super setRepresentedObject:representedObject];
+    
+    if( [[representedObject valueForKey:@"optionsDictionary.BlockerDataViewController.initializedOD"] boolValue] == YES )
+    {
+    }
+    else
+    {
+        Class <BlockerProtocol> class = NSClassFromString([representedObject valueForKey:@"anaylizerKind"]);
+        
+        if (class != nil )
+        {
+            StAnaylizer *theAna = representedObject;
+            [class makeBlocks:theAna.parentStream];
+            [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"];
+            NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+            NSArray *sortDescriptors = [NSArray arrayWithObject:nameDescriptor];
+            [treeController setSortDescriptors:(NSArray *)sortDescriptors];
+            [treeController prepareContent];
+            [self startObserving];
+        }
+        else
+            NSLog( @"Could not create class: %@", [representedObject valueForKey:@"anaylizerKind"] );
+        
+    }
+}
+
+- (NSManagedObjectContext *)managedObjectContext
+{
+    NSManagedObjectContext *result = [(NSPersistentDocument *)[[[[self view] window] windowController] document] managedObjectContext];
+    return result;
 }
 
 - (void) startObserving
@@ -78,7 +114,7 @@
             Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:theBlock.currentEditorView];
             
             if( anaClass == nil )
-                anaClass = [HFAnaylizer class];
+                anaClass = [HexFiendAnaylizerController class];
             
 //            NSViewController *editorController = [[anaClass alloc] initWithNibName:nil bundle:nil];
 //            [editorController setRepresentedObject:theBlock];
@@ -102,4 +138,35 @@
     [self stopObservingBlockEditor];
     [super dealloc];
 }
++ (NSArray *)anaylizerUTIs
+{
+    return [NSArray arrayWithObject:@"public.data"];
+}
+
++ (NSString *)anayliserName
+{
+    return @"Blocker View";
+}
+
+/* Used for KVC and KVO in anaylizer options dictionary */
++ (NSString *)anaylizerKey;
+{
+    return @"BlockerDataViewController";
+}
+
++ (NSString *)AnaylizerPopoverAccessoryViewNib
+{
+    return @"BlockerViewAccessory";
+}
+
++ (NSMutableDictionary *)defaultOptions
+{
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"initializedOD", nil] autorelease];
+}
+
+-(NSString *)nibName
+{
+    return @"BlockerDataViewController";
+}
+
 @end

@@ -7,20 +7,17 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "BlockerView.h"
 #import "StBlock.h"
 
 @class BlockerView;
 
 @interface BlockerDataViewController : NSViewController {
-    BlockerView *parentView;
-    NSTreeController *treeController;
 }
 
-@property (assign) IBOutlet BlockerView *parentView;
 @property (assign) IBOutlet NSTreeController *treeController;
 @property (assign) BOOL observing;
 @property (assign) StBlock *observingBlock;
+@property (readonly) NSManagedObjectContext *managedObjectContext;
 
 - (void) startObserving;
 - (void) stopObserving;
