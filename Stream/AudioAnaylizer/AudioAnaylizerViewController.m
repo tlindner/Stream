@@ -26,10 +26,15 @@
     return self;
 }
 
-- (void)setRepresentedObject:(id)representedObject
-{
-    [super setRepresentedObject:representedObject];
+//- (void)setRepresentedObject:(id)representedObject
+//{
+//    [super setRepresentedObject:representedObject];
+//
+//}
 
+-(void)loadView
+{
+    [super loadView];
     //        trackingArea = [[[NSTrackingArea alloc] initWithRect:scrollerRect options:NSTrackingCursorUpdate+NSTrackingActiveAlways owner:[self.scroller documentView] userInfo:nil] autorelease];
     //        [self addTrackingArea:trackingArea];
     
@@ -41,24 +46,24 @@
     self.scroller.viewController = self;
 
     NSString *key = [AudioAnaylizerViewController anaylizerKey];
-    [representedObject addSubOptionsDictionary:key withDictionary:[AudioAnaylizerViewController defaultOptions]];
+    [[self representedObject] addSubOptionsDictionary:key withDictionary:[AudioAnaylizerViewController defaultOptions]];
     UInt32 propSize;
     OSStatus myErr;
     
-    wfv.cachedAnaylizer = representedObject;
+    wfv.cachedAnaylizer = [self representedObject];
 
-    if( [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"] boolValue] == YES )
+    if( [[[self representedObject] valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"] boolValue] == YES )
     {
         /* Read in options data */
         
-        wfv.channelCount = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"] unsignedIntegerValue];
-        wfv.currentChannel = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
-        wfv.sampleRate = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
-        wfv.frameCount = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
+        wfv.channelCount = [[[self representedObject] valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"] unsignedIntegerValue];
+        wfv.currentChannel = [[[self representedObject] valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
+        wfv.sampleRate = [[[self representedObject] valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
+        wfv.frameCount = [[[self representedObject] valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
     }
     else
     {
-        NSManagedObject *parentStream = [representedObject valueForKeyPath:@"parentStream"];
+        NSManagedObject *parentStream = [[self representedObject] valueForKeyPath:@"parentStream"];
         NSURL *fileURL = [parentStream valueForKey:@"sourceURL"];
         
         /* Convert data to samples */
@@ -67,7 +72,7 @@
         
         if (myErr == noErr)
         {
-            [representedObject willChangeValueForKey:@"optionsDictionary"];
+            [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
             SInt64 fileFrameCount;
             
             AudioStreamBasicDescription clientFormat;
@@ -77,12 +82,12 @@
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty1: returned %d", myErr );
             
             wfv.channelCount = clientFormat.mChannelsPerFrame;
-            [representedObject setValue:[NSNumber numberWithUnsignedInt:clientFormat.mChannelsPerFrame] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"];
+            [[self representedObject] setValue:[NSNumber numberWithUnsignedInt:clientFormat.mChannelsPerFrame] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"];
             
-            wfv.currentChannel = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
+            wfv.currentChannel = [[[self representedObject] valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
             
             wfv.sampleRate = clientFormat.mSampleRate;
-            [representedObject setValue:[NSNumber numberWithDouble:clientFormat.mSampleRate] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"];
+            [[self representedObject] setValue:[NSNumber numberWithDouble:clientFormat.mSampleRate] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"];
             
             /* Build array for channel popup list in accessory view */
             if( wfv.channelCount > 1 )
@@ -93,7 +98,7 @@
                     [theChannelList addObject:[NSString stringWithFormat:@"%d", i]];
                 }
                 
-                [representedObject setValue:theChannelList forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannelList"];
+                [[self representedObject] setValue:theChannelList forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannelList"];
                 [theChannelList release];
             }
             
@@ -108,7 +113,7 @@
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", myErr );
             
             wfv.frameCount = fileFrameCount;
-            [representedObject setValue:[NSNumber numberWithUnsignedLongLong:fileFrameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
+            [[self representedObject] setValue:[NSNumber numberWithUnsignedLongLong:fileFrameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
             
             size_t frameBufferSize = sizeof(AudioSampleType) * wfv.frameCount * wfv.channelCount;
             NSMutableData *frameBufferObject = [NSMutableData dataWithLength:frameBufferSize];
@@ -123,11 +128,11 @@
             myErr = ExtAudioFileRead(af, &ioFrameCount, &bufList);
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
             
-            [representedObject setValue:frameBufferObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
-            [representedObject didChangeValueForKey:@"optionsDictionary"];
+            [[self representedObject] setValue:frameBufferObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+            [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
             [wfv anaylizeAudioData];
             
-            [representedObject setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"];
+            [[self representedObject] setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"];
             
             myErr = ExtAudioFileDispose(af);
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
@@ -142,10 +147,10 @@
     /* setup observations */
     if( wfv.observationsActive == NO )
     {
-        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
-        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
-        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
-        [representedObject addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
+        [[self representedObject] addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
+        [[self representedObject] addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
+        [[self representedObject] addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
+        [[self representedObject] addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
         wfv.observationsActive = YES;
     }
     
@@ -157,14 +162,14 @@
     [wfv setAutoresizingMask:NSViewHeightSizable];
     [[self.scroller documentView] setFrameSize:NSMakeSize(wfv.frameCount, [self.scroller contentSize].height)];
     
-    float retrieveScale = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"] floatValue];
+    float retrieveScale = [[[self representedObject] valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"] floatValue];
     
     if( isnan(retrieveScale) )
-        [representedObject setValue:[NSNumber numberWithFloat:self.slider.floatValue] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
+        [[self representedObject] setValue:[NSNumber numberWithFloat:self.slider.floatValue] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
     else
         [self.slider setFloatValue:retrieveScale];
     
-    float retrieveOrigin = [[representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scrollOrigin"] floatValue];
+    float retrieveOrigin = [[[self representedObject] valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scrollOrigin"] floatValue];
     
     NSRect clipViewBounds = [clipView frame];
     [clipView setBounds:NSMakeRect(retrieveOrigin, clipViewBounds.origin.y, [[self slider] floatValue], clipViewBounds.size.height)];

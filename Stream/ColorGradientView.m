@@ -222,9 +222,8 @@
         self.avc = [[[AnaylizerSettingPopOverAccessoryViewController alloc] initWithNibName:nibName bundle:nil] autorelease];
         //[self.avc setRepresentedObject:anaylizer];
         [self.avc setRepresentedObject:anaylizer];
-        
         [self.avc loadView];
-        
+
         newSubViewHeight = [[self.avc view] frame].size.height;
         accessoryFrame.size = [[self.avc view] frame].size;
         [accessoryView setFrame:accessoryFrame];

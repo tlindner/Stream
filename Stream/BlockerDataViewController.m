@@ -10,13 +10,15 @@
 #import "AppDelegate.h"
 #import "HexFiendAnaylizerController.h"
 #import "Analyzation.h"
+#import "StStream.h"
 #import "StAnaylizer.h"
 
 @implementation BlockerDataViewController
 @synthesize treeController;
 @synthesize observing;
 @synthesize observingBlock;
-@dynamic managedObjectContext;
+@synthesize editorView;
+@synthesize editorViewController;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -28,38 +30,29 @@
     return self;
 }
 
-- (void)setRepresentedObject:(id)representedObject
+- (void)loadView
 {
-    [super setRepresentedObject:representedObject];
+    [super loadView];
     
-    if( [[representedObject valueForKey:@"optionsDictionary.BlockerDataViewController.initializedOD"] boolValue] == YES )
+    if( [[[self representedObject] valueForKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"] boolValue] == YES )
     {
     }
     else
     {
-        Class <BlockerProtocol> class = NSClassFromString([representedObject valueForKey:@"anaylizerKind"]);
+        Class <BlockerProtocol> blockerClass = NSClassFromString([[self representedObject] valueForKey:@"anaylizerKind"]);
         
-        if (class != nil )
+        if (blockerClass != nil )
         {
-            StAnaylizer *theAna = representedObject;
-            [class makeBlocks:theAna.parentStream];
+            StAnaylizer *theAna = [self representedObject];
+            [blockerClass makeBlocks:theAna.parentStream];
             [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"];
-            NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
-            NSArray *sortDescriptors = [NSArray arrayWithObject:nameDescriptor];
-            [treeController setSortDescriptors:(NSArray *)sortDescriptors];
-            [treeController prepareContent];
+
+            [treeController setContent:[theAna.parentStream blocksWithKey:[blockerClass anaylizerKey]]];
             [self startObserving];
         }
         else
-            NSLog( @"Could not create class: %@", [representedObject valueForKey:@"anaylizerKind"] );
-        
+            NSLog( @"Could not create class: %@", [[self representedObject] valueForKey:@"anaylizerKind"] );
     }
-}
-
-- (NSManagedObjectContext *)managedObjectContext
-{
-    NSManagedObjectContext *result = [(NSPersistentDocument *)[[[[self view] window] windowController] document] managedObjectContext];
-    return result;
 }
 
 - (void) startObserving
@@ -103,29 +96,31 @@
     if( [keyPath isEqualToString:@"selectedObjects"] || [keyPath isEqualToString:@"currentEditorView"] )
     {
         NSArray *selectedObjects = [object selectedObjects];
+        [self stopObservingBlockEditor];
         
         if( [selectedObjects count] > 0 )
         {
             StBlock *theBlock = [selectedObjects objectAtIndex:0];
-//            NSRect theFrame = [[self view] frame];
+            NSRect theFrame = [self.editorView frame];
             
-            [[[self view] subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-            
+            if( self.editorViewController != nil )
+            {
+                [[self.editorViewController view] removeFromSuperview];
+                self.editorViewController = nil;
+            }
+             
             Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:theBlock.currentEditorView];
             
             if( anaClass == nil )
                 anaClass = [HexFiendAnaylizerController class];
-            
-//            NSViewController *editorController = [[anaClass alloc] initWithNibName:nil bundle:nil];
-//            [editorController setRepresentedObject:theBlock];
-//            
-//            
-//            NSViewController *editorController = [[anaClass alloc] initWithFrame:NSMakeRect(0, 0, theFrame.size.width, theFrame.size.height)];
-//            [[self view] addSubview:editorView];
-//            [editorView release];
-//            
-//            [editorView setRepresentedObject:theBlock];
-//            [self startObservingBlockEditor:theBlock];
+             
+            theFrame.origin.y = theFrame.origin.x = 0;
+            self.editorViewController = [[[anaClass alloc] initWithNibName:nil bundle:nil] autorelease];
+            [self.editorViewController setRepresentedObject:theBlock];
+            [self.editorViewController loadView];
+            [[self.editorViewController view] setFrame:theFrame];
+            [self.editorView addSubview:[self.editorViewController view]];
+            [self startObservingBlockEditor:theBlock];
         }
     }
     else
@@ -136,6 +131,7 @@
 {
     [self stopObserving];
     [self stopObservingBlockEditor];
+    self.editorViewController = nil;
     [super dealloc];
 }
 + (NSArray *)anaylizerUTIs

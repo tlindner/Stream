@@ -127,8 +127,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockerDataViewController.h; sourceTree = "<group>"; };
-		770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockerDataViewController.m; sourceTree = "<group>"; };
+		770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataViewController.h; path = Stream/BlockerDataViewController.h; sourceTree = "<group>"; };
+		770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataViewController.m; path = Stream/BlockerDataViewController.m; sourceTree = "<group>"; };
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
 		7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewAutoLayoutSubView.m; path = Stream/ViewAutoLayoutSubView.m; sourceTree = "<group>"; };
 		771C998413F624DC00C3A263 /* AudioAnaylizer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnaylizer.xib; path = Stream/AudioAnaylizer/AudioAnaylizer.xib; sourceTree = "<group>"; };
@@ -360,7 +360,7 @@
 				774A181613FAB01500510032 /* LICENSE */,
 				775ED2CD13DCF86500BC96C9 /* README */,
 				77ABAD8B140F31CE002F03BB /* BlockAttributeView */,
-				778A598C1407516500B68EB4 /* BlockerView */,
+				778A598C1407516500B68EB4 /* BlockerDataView */,
 				7799CD1E13E5C651007D5B8E /* AudioAnaylizer */,
 				778A59771406EE0700B68EB4 /* CoCoBlockers */,
 				772D952814088129001A449B /* HexFiendAnaylizer */,
@@ -526,7 +526,7 @@
 			name = CoCoBlockers;
 			sourceTree = "<group>";
 		};
-		778A598C1407516500B68EB4 /* BlockerView */ = {
+		778A598C1407516500B68EB4 /* BlockerDataView */ = {
 			isa = PBXGroup;
 			children = (
 				776014611409C20D00777D60 /* BlockerViewAccessory.xib */,
@@ -534,7 +534,7 @@
 				770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */,
 				770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */,
 			);
-			name = BlockerView;
+			name = BlockerDataView;
 			sourceTree = "<group>";
 		};
 		7799CD1E13E5C651007D5B8E /* AudioAnaylizer */ = {

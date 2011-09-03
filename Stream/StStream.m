@@ -131,4 +131,23 @@
     return nil;
 }
 
+- (NSArray *)blocksWithKey:(NSString *)key
+{
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+    [request setEntity:entity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (anaylizerKind == %@)", self, key ];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
+  
+    if( error == nil )
+        return result;
+    else
+    {
+        NSLog( @"Error during blocksWithKey fetch: %@", key );
+        return nil;
+    }    
+}
+
 @end

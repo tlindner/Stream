@@ -31,6 +31,7 @@
 
 - (NSData *)blockNamed:(NSString *)name;
 - (StBlock *)startNewBlockNamed:(NSString *)name owner:(NSString *)owner;
+- (NSSet *)blocksWithKey:(NSString *)key;
 
 @end
 

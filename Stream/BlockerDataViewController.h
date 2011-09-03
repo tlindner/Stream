@@ -12,12 +12,14 @@
 @class BlockerView;
 
 @interface BlockerDataViewController : NSViewController {
+    NSView *editorView;
 }
 
+@property (assign) IBOutlet NSView *editorView;
 @property (assign) IBOutlet NSTreeController *treeController;
 @property (assign) BOOL observing;
 @property (assign) StBlock *observingBlock;
-@property (readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) NSViewController *editorViewController;
 
 - (void) startObserving;
 - (void) stopObserving;

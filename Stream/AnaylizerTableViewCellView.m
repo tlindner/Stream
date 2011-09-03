@@ -80,15 +80,17 @@
         
         if (editorViewClass == nil)
             editorViewClass = [HexFiendAnaylizerController class];
-
+        
+        //NSLog( @"name: %@, class: %@", [change objectForKey:@"new"], editorViewClass );
+        
         NSRect adjustedFrame = [_customView frame];
         adjustedFrame.origin.x = 0;
         adjustedFrame.origin.y = 0;
         self.editorController = [[[editorViewClass alloc] initWithNibName:nil bundle:nil] autorelease];
+        [self.editorController setRepresentedObject:self.objectValue];
         [self.editorController loadView];
         [[self.editorController view] setFrame:adjustedFrame];
         
-        [self.editorController setRepresentedObject:self.objectValue];
 
         [_customView addSubview:[self.editorController view]];
         

@@ -24,28 +24,34 @@
     return self;
 }
 
-- (void)setRepresentedObject:(id)representedObject
+//- (void)setRepresentedObject:(id)representedObject
+//{
+//    [super setRepresentedObject:representedObject];
+//}
+
+- (void)loadView
 {
-    [super setRepresentedObject:representedObject];
+    [super loadView];
+    
     HFTextView *hexView = (HFTextView *)[self view];
     
-    if( [representedObject isKindOfClass:[StAnaylizer class]] )
+    if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
     {
-        StAnaylizer *object = representedObject;
+        StAnaylizer *object = [self representedObject];
         [object addSubOptionsDictionary:[HexFiendAnaylizerController anaylizerKey] withDictionary:[HexFiendAnaylizerController defaultOptions]];
         [hexView setData:[object.parentStream valueForKey:@"bytesCache"]];      
         [self setupRepresentedObject];
     }
-    else if( [representedObject isKindOfClass:[StBlock class]] )
+    else if( [[self representedObject] isKindOfClass:[StBlock class]] )
     {
-        StBlock *theBlock = representedObject;
+        StBlock *theBlock = [self representedObject];
         NSData *theData = [theBlock getData];
         [hexView setData:theData];
         [self setupRepresentedObject];
     }
-    else if( [representedObject isKindOfClass:[NSData class]] )
+    else if( [[self representedObject] isKindOfClass:[NSData class]] )
     {
-        NSData *theData = representedObject;
+        NSData *theData = [self representedObject];
         [hexView setData:theData];
     }
     else
