@@ -558,9 +558,9 @@
 		77ABAD8B140F31CE002F03BB /* BlockAttributeView */ = {
 			isa = PBXGroup;
 			children = (
+				77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */,
 				77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */,
 				77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */,
-				77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */,
 			);
 			name = BlockAttributeView;
 			sourceTree = "<group>";

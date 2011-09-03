@@ -33,7 +33,8 @@
 @property (nonatomic, retain) StBlock *parentBlock;
 @property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
 @property (nonatomic, retain) NSSet *blocks;
-
+@property (nonatomic, readonly) NSDictionary *dataForUI;
+@property (nonatomic, readonly) NSDictionary *checkBytesForUI;
 @property (nonatomic, readonly) NSData *data;
 
 - (StStream *)getStream;
@@ -62,4 +63,12 @@
 - (void)addBlocks:(NSSet *)values;
 - (void)removeBlocks:(NSSet *)values;
 
+@end
+
+@interface StBlockFormatter : NSFormatter {
+@private
+
+}
+- (NSString *)stringForObjectValue:(id)anObject;
+- (BOOL)getObjectValue:(id *)anObject forString:(NSString *)string errorDescription:(NSString **)error;
 @end

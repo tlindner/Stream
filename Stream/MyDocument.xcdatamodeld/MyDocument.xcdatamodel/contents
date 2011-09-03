@@ -12,7 +12,9 @@
     <entity name="StBlock" representedClassName="StBlock">
         <attribute name="anaylizerKind" optional="YES" attributeType="String"/>
         <attribute name="checkBytes" optional="YES" attributeType="Binary"/>
+        <attribute name="checkBytesForUI" optional="YES" transient="YES" attributeType="Transformable"/>
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
+        <attribute name="dataForUI" optional="YES" transient="YES" attributeType="Transformable"/>
         <attribute name="expectedSize" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <attribute name="index" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="length" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
@@ -43,7 +45,7 @@
     </entity>
     <elements>
         <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="150"/>
-        <element name="StBlock" positionX="0" positionY="0" width="0" height="285"/>
+        <element name="StBlock" positionX="0" positionY="0" width="0" height="315"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="255"/>
     </elements>
 </model>

@@ -24,15 +24,21 @@
     return self;
 }
 
-- (void)setRepresentedObject:(id)representedObject
-{
-    [super setRepresentedObject:representedObject];
-    StBlock *theBlock = representedObject;
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-    NSArray *subBlocks = [theBlock.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+//- (void)setRepresentedObject:(id)representedObject
+//{
+//    [super setRepresentedObject:representedObject];
+//}
 
-    [arrayController addObjects:subBlocks];
-}
+//- (void) loadView
+//{
+//    [super loadView];
+//    
+////    StBlock *theBlock = [self representedObject];
+////    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+////    NSArray *subBlocks = [theBlock.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+////    
+////    [arrayController addObjects:subBlocks];
+//}
 
 + (NSArray *)anaylizerUTIs
 {

@@ -30,6 +30,8 @@
 @dynamic optionsDictionary;
 
 @dynamic data;
+@dynamic dataForUI;
+@dynamic checkBytesForUI;
 
 - (void)awakeFromInsert
 {
@@ -129,8 +131,11 @@
     newBlock.valueTransformer = transform;
     
     if( name != nil || verify != nil || transform != nil )
-        self.sourceUTI = @"org.macmess.stream.attribute";
-         
+    {
+        dataBlock.sourceUTI = @"org.macmess.stream.attribute";
+        dataBlock.currentEditorView = @"Block Attribute View";
+    }
+    
     [dataBlock addBlocksObject:newBlock];
     self.expectedSize += length;
 }
@@ -174,7 +179,7 @@
 - (NSData *)getData
 {
     NSMutableData *result;
-
+    
     if( self.source == nil )
     {
         if( self.parentStream != nil )
@@ -185,7 +190,7 @@
         else
         {
             /* This is a midlevel block, return it's accumulated blocks */
-
+            
             StStream *ourStream = [self getStream];
             result = [[[NSMutableData alloc] init] autorelease];
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
@@ -210,6 +215,61 @@
     }
     
     return result;
+}
+
+- (NSDictionary *)dataForUI
+{
+    NSDictionary *result = nil;
+    
+    if( self.data != nil )
+        result = [NSDictionary dictionaryWithObjectsAndKeys: self.data, @"value", self.valueTransformer, @"valueTransformer", @"data", @"key", [self objectID], @"objectID", nil];
+    
+    return result;
+}
+
+- (NSDictionary *)checkBytesForUI
+{
+    NSDictionary *result = nil;
+    
+    if( self.checkBytes != nil )
+        result = [NSDictionary dictionaryWithObjectsAndKeys: self.checkBytes, @"value", self.valueTransformer, @"valueTransformer", @"checkBytes", @"key", [self objectID], @"objectID", nil];
+    
+    return result;
+}
+
+@end
+
+@implementation StBlockFormatter
+
+- (NSString *)stringForObjectValue:(id)anObject
+{
+    id result;
+    
+    if( [anObject isKindOfClass:[NSDictionary class]] )
+    {
+        
+        NSDictionary *inDict = anObject;
+        
+        NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:[inDict objectForKey:@"valueTransformer"]];
+        result = [vt transformedValue:[inDict objectForKey:@"value"]];
+        
+        if( ![result isKindOfClass:[NSString class]] )
+            result = [result stringValue];
+        
+    }
+    else if( [anObject isKindOfClass:[NSString class]] )
+    {
+        result = anObject;
+    }
+    else
+        result = nil;
+    
+    return result;
+}
+
+- (BOOL)getObjectValue:(id *)anObject forString:(NSString *)string errorDescription:(NSString **)error
+{
+    return YES;
 }
 
 @end

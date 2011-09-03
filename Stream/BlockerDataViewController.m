@@ -19,12 +19,15 @@
 @synthesize observingBlock;
 @synthesize editorView;
 @synthesize editorViewController;
+@synthesize sortDescriptors;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Initialization code here.
+    if (self)
+    {
+        NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+        self.sortDescriptors = [NSArray arrayWithObject:sd];
     }
     
     return self;
@@ -46,8 +49,6 @@
             StAnaylizer *theAna = [self representedObject];
             [blockerClass makeBlocks:theAna.parentStream];
             [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"];
-
-            [treeController setContent:[theAna.parentStream blocksWithKey:[blockerClass anaylizerKey]]];
             [self startObserving];
         }
         else
@@ -95,7 +96,7 @@
     //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
     if( [keyPath isEqualToString:@"selectedObjects"] || [keyPath isEqualToString:@"currentEditorView"] )
     {
-        NSArray *selectedObjects = [object selectedObjects];
+        NSArray *selectedObjects = [[self treeController] selectedObjects];
         [self stopObservingBlockEditor];
         
         if( [selectedObjects count] > 0 )
@@ -132,6 +133,7 @@
     [self stopObserving];
     [self stopObservingBlockEditor];
     self.editorViewController = nil;
+    self.sortDescriptors = nil;
     [super dealloc];
 }
 + (NSArray *)anaylizerUTIs

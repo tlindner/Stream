@@ -8,7 +8,7 @@
 
 #import "ColorGradientView.h"
 #import "AnaylizerTableViewCellView.h"
-#import "BlockAttributeViewController.h"
+#import "BlockerDataViewController.h"
 #import "Analyzation.h"
 #import "StAnaylizer.h"
 #import "StBlock.h"
@@ -90,56 +90,8 @@
 
 - (IBAction)doPopOver:(id)sender
 {
-    //    NSError *err;
-    //    NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
     StAnaylizer *anaylizer = [[self superview] valueForKey:@"objectValue"];
-    
-    //    if( self.subMOC == nil )
-    //    {
-    //        self.subMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
-    //        [subMOC setParentContext:parentContext];
-    //    }
-    //
-    //    err = nil;
-    //
-    //    if( [parentContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:anaylizer] error:&err] == NO )
-    //    {
-    //        NSLog( @"obtainPermanentIDsForObjects Error: %@", err );
-    //    }
-    //
-    //    NSManagedObjectID *objectValueID = [anaylizer objectID];
-    //    
-    //
-    //    self.subObjectValue = (StAnaylizer *)[subMOC existingObjectWithID:objectValueID error:&err];
-    //    
-    //    if( err != nil )
-    //    {
-    //        /* lets do this the hard way */
-    //        NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-    //        NSEntityDescription *entity = [NSEntityDescription entityForName:@"StAnaylizer" inManagedObjectContext:subMOC];
-    //        [request setEntity:entity];
-    //        
-    //        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self == %@", anaylizer];
-    //        [request setPredicate:predicate];
-    //        
-    //        err = nil;
-    //        NSArray *array = [subMOC executeFetchRequest:request error:&err];
-    //        if (array != nil && [array count] > 0)
-    //        {
-    //            self.subObjectValue = [array objectAtIndex:0];
-    //        }
-    //        else
-    //        {
-    //            NSLog( @"Could not get child managed object copy: %@", err );
-    //            return;
-    //        }
-    //    }
-    //    
-    //    if( self.subObjectValue == anaylizer )
-    //    {
-    //        NSLog(@"Tried to create editable child object, but they are the same object.");
-    //    }
-    
+
     if( self.actionPopOverNib == nil )
     {
         self.actionPopOverNib = [[[NSNib alloc] initWithNibNamed:@"AnaylizerSettingPopover" bundle:nil] autorelease];
@@ -149,31 +101,26 @@
             NSLog(@"Warning! Could not load nib file.\n");
             return;
         }
-        
-        if( [anaylizer.currentEditorView isEqualToString:@"Blocker View"] )
-        {
-            [self.labelUTI setStringValue:@"Block UTI:"];
-            [self.labelEditor setStringValue:@"Block Editor:"];
-        }
-        
-        self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
-        NSArray *stuff = [[Analyzation sharedInstance] anaylizersforUTI:[anaylizer valueForKeyPath:@"parentStream.sourceUTI"]];
-        [self.popupArrayController addObjects:stuff];
     }
     
+    NSArray *stuff = nil;
     NSString *objectUTI;
     
     if( [anaylizer.currentEditorView isEqualToString:@"Blocker View"] )
     {
+        [self.labelUTI setStringValue:@"Block UTI:"];
+        [self.labelEditor setStringValue:@"Block Editor:"];
+
         AnaylizerTableViewCellView *anaTableViewCell = (AnaylizerTableViewCellView *)[self superview];
-        BlockAttributeViewController *blockerController = (BlockAttributeViewController *)anaTableViewCell.editorController;
-        NSArray *selectedObjects = [blockerController.arrayController selectedObjects];
+        BlockerDataViewController *blockerController = (BlockerDataViewController *)anaTableViewCell.editorController;
+        NSArray *selectedObjects = [blockerController.treeController selectedObjects];
         
         if( [selectedObjects count] == 1 )
         {
             StBlock *theBlock = [selectedObjects objectAtIndex:0];
             objectUTI = theBlock.sourceUTI;
             observableSourceUTI = observableEditorView = theBlock;
+            stuff = [[Analyzation sharedInstance] anaylizersforUTI:[theBlock valueForKey:@"sourceUTI"]];
         }
         else
         {
@@ -182,15 +129,18 @@
             observableEditorView = nil;
             observableSourceUTI = nil; 
         }
-        
     }
     else
     {
         observableEditorView = anaylizer;
         observableSourceUTI = anaylizer.parentStream;
         objectUTI = [anaylizer valueForKeyPath:@"parentStream.sourceUTI"];
-    }
+        stuff = [[Analyzation sharedInstance] anaylizersforUTI:[anaylizer valueForKeyPath:@"parentStream.sourceUTI"]];
+   }
     
+    self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
+    [self.popupArrayController addObjects:stuff];
+
     [utiTextField bind:@"value" toObject:observableSourceUTI withKeyPath:@"sourceUTI" options:nil];
     [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
     [editorPopup bind:@"selectedObject" toObject:observableEditorView withKeyPath:@"currentEditorView" options:nil];

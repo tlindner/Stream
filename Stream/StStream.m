@@ -89,7 +89,7 @@
     [request setPredicate:predicate];
     NSError *error = nil;
     NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
-
+    
     if( error == nil )
     {
         if( result != nil && [result count] == 0 )
@@ -99,7 +99,7 @@
             newBlock.name = name;
             newBlock.anaylizerKind = owner;
             [self addBlocksObject:newBlock];
- 
+            
             StBlock *newDataBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
             newDataBlock.name = @"data";
             newDataBlock.sourceUTI = @"public.data";
@@ -108,7 +108,8 @@
             StBlock *newAttributeBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
             newAttributeBlock.name = @"attributes";
             newAttributeBlock.sourceUTI = @"org.macmess.stream.attribute";
-           [newBlock addBlocksObject:newAttributeBlock];
+            newAttributeBlock.currentEditorView = @"Block Attribute View";
+            [newBlock addBlocksObject:newAttributeBlock];
             
             StBlock *newdependenciesBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
             newdependenciesBlock.name = @"dependencies";
@@ -140,7 +141,7 @@
     [request setPredicate:predicate];
     NSError *error = nil;
     NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
-  
+    
     if( error == nil )
         return result;
     else

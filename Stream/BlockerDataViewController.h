@@ -20,6 +20,7 @@
 @property (assign) BOOL observing;
 @property (assign) StBlock *observingBlock;
 @property (nonatomic, retain) NSViewController *editorViewController;
+@property (nonatomic, retain) NSArray *sortDescriptors;
 
 - (void) startObserving;
 - (void) stopObserving;
