@@ -249,14 +249,20 @@
     
     if( [anObject isKindOfClass:[NSDictionary class]] )
     {
-        
         NSDictionary *inDict = anObject;
         
         NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:[inDict objectForKey:@"valueTransformer"]];
         result = [vt transformedValue:[inDict objectForKey:@"value"]];
         
         if( ![result isKindOfClass:[NSString class]] )
-            result = [result stringValue];
+        {
+            if( [self.mode isEqualToString:@"Decimal"] )
+                result = [result stringValue];
+            else
+            {
+                result = [NSString stringWithFormat:@"0x%x", [result intValue]];
+            }
+        }
         
     }
     else if( [anObject isKindOfClass:[NSString class]] )

@@ -10,6 +10,7 @@
 #import "StBlock.h"
 
 @implementation BlockAttributeViewController
+@synthesize tableView;
 @synthesize arrayController;
 @synthesize blockFormatter;
 
@@ -40,7 +41,10 @@
     //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
     if( [keyPath isEqualToString:@"optionsDictionary.BlockAttributeViewController.numericDisplay"] )
     {
-        NSLog( @"Changed" );
+        StBlock *theBlock = [self representedObject];
+        NSString *currentMode = [theBlock valueForKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
+        blockFormatter.mode = currentMode;
+        [tableView reloadData];
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

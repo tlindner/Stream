@@ -12,8 +12,10 @@
 @interface BlockAttributeViewController : NSViewController {
     NSArrayController *arrayController;
     StBlockFormatter *blockFormatter;
+    NSTableView *tableView;
 }
 
+@property (assign) IBOutlet NSTableView *tableView;
 @property (assign) IBOutlet NSArrayController *arrayController;
 @property (assign) IBOutlet StBlockFormatter *blockFormatter;
 
