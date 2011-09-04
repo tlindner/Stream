@@ -241,6 +241,10 @@
     [[self representedObject] setValue:[NSNumber numberWithFloat:newBoundsRect.size.width] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
     [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
     [self.slider setFloatValue:newBoundsRect.size.width];
+
+    NSRect rect = [[self.scroller documentView] frame];
+    rect.size.height = newBoundsRect.size.height;
+    [[self.scroller documentView] setFrame:rect];
 }
 
 - (void)deltaSlider:(float)delta fromPoint:(NSPoint)point
@@ -262,6 +266,10 @@
     [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
     [[self representedObject] setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
     [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
+
+    NSRect rect = [[self.scroller documentView] frame];
+    rect.size.height = boundsRect.size.height;
+    [[self.scroller documentView] setFrame:rect];
 }
 
 + (NSArray *)anaylizerUTIs
