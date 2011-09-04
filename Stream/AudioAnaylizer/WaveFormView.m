@@ -38,14 +38,8 @@ typedef struct
 @implementation WaveFormView
 
 @synthesize viewController;
-//@synthesize audioFrames;
 @synthesize frameCount;
 @synthesize sampleRate;
-//@synthesize characters;
-//@synthesize character;
-//@synthesize char_count;
-//@synthesize coalescedCharacters;
-//@synthesize coa_char_count;
 @synthesize channelCount;
 @synthesize currentChannel;
 @synthesize previousCurrentChannel;

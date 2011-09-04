@@ -36,6 +36,15 @@
 {
     [super loadView];
     
+    [self.scroller setHasVerticalScroller:NO];
+    [self.scroller setHasHorizontalScroller:YES];
+    [self.scroller setHasVerticalRuler:NO];
+    [self.scroller setHasHorizontalRuler:YES];
+    [self.scroller setRulersVisible:YES];
+    [[self.scroller horizontalRulerView] setMeasurementUnits:@"Points"];
+    [[self.scroller horizontalRulerView] setReservedThicknessForAccessoryView:0];
+    [[self.scroller horizontalRulerView] setReservedThicknessForMarkers:0];
+    
     StAnaylizer *theAna = [self representedObject];
     
     //        trackingArea = [[[NSTrackingArea alloc] initWithRect:scrollerRect options:NSTrackingCursorUpdate+NSTrackingActiveAlways owner:[self.scroller documentView] userInfo:nil] autorelease];
@@ -206,11 +215,15 @@
     
     boundsRect.size.width = newWidth;
     boundsRect.origin.x += (width-newWidth)/2.0;
+    
     [clipView setBounds:boundsRect];
     [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
     [[self representedObject] setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
     [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
     
+    NSRect rect = [[self.scroller documentView] frame];
+    rect.size.height = boundsRect.size.height;
+    [[self.scroller documentView] setFrame:rect];
 }
 
 - (void)updateBounds:(NSRect)inRect
