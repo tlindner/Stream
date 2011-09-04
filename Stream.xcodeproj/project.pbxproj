@@ -44,6 +44,7 @@
 		776014621409C20D00777D60 /* BlockerViewAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 776014611409C20D00777D60 /* BlockerViewAccessory.xib */; };
 		776139AF13E1BA4200CA80BB /* ColorGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776139AE13E1BA4200CA80BB /* ColorGradientView.m */; };
 		7768590613F0FF92006BE753 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7768590513F0FF92006BE753 /* Accelerate.framework */; };
+		776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */; };
 		777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 777984BC13E99E96007198EE /* StreamsTreeController.m */; };
 		778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */; };
 		778A597E140703DB00B68EB4 /* StStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597D140703DB00B68EB4 /* StStream.m */; };
@@ -186,6 +187,7 @@
 		776139AD13E1BA4200CA80BB /* ColorGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorGradientView.h; path = Stream/ColorGradientView.h; sourceTree = "<group>"; };
 		776139AE13E1BA4200CA80BB /* ColorGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColorGradientView.m; path = Stream/ColorGradientView.m; sourceTree = "<group>"; };
 		7768590513F0FF92006BE753 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewAccessory.xib; path = Stream/BlockAttributeViewAccessory.xib; sourceTree = "<group>"; };
 		777984BB13E99E96007198EE /* StreamsTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamsTreeController.h; sourceTree = "<group>"; };
 		777984BC13E99E96007198EE /* StreamsTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamsTreeController.m; sourceTree = "<group>"; };
 		778A59791406EE7600B68EB4 /* CoCoCassetteBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoCassetteBlocker.h; path = Stream/CoCoBlockers/CoCoCassetteBlocker.h; sourceTree = "<group>"; };
@@ -559,6 +561,7 @@
 			isa = PBXGroup;
 			children = (
 				77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */,
+				776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */,
 				77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */,
 				77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */,
 			);
@@ -769,6 +772,7 @@
 				77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */,
 				77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */,
 				77C17FC4140F469700E23921 /* AudioAnaylizerViewController.xib in Resources */,
+				776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

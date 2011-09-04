@@ -37,6 +37,8 @@
 {
     [super loadView];
     
+    StBlock *theBlock = [self representedObject];
+    [theBlock addSubOptionsDictionary:[BlockerDataViewController anaylizerKey] withDictionary:[BlockerDataViewController defaultOptions]];
     if( [[[self representedObject] valueForKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"] boolValue] == YES )
     {
     }
@@ -49,11 +51,12 @@
             StAnaylizer *theAna = [self representedObject];
             [blockerClass makeBlocks:theAna.parentStream];
             [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"];
-            [self startObserving];
         }
         else
             NSLog( @"Could not create class: %@", [[self representedObject] valueForKey:@"anaylizerKind"] );
     }
+    
+    [self startObserving];
 }
 
 - (void) startObserving

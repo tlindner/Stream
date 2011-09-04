@@ -21,6 +21,7 @@
         <attribute name="name" attributeType="String" defaultValueString="untitled"/>
         <attribute name="offset" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
+        <attribute name="resultingUTI" optional="YES" attributeType="String"/>
         <attribute name="source" optional="YES" attributeType="String"/>
         <attribute name="sourceUTI" attributeType="String" defaultValueString="public.data"/>
         <attribute name="uiName" optional="YES" attributeType="String" defaultValueString="uiDeault"/>
@@ -45,7 +46,7 @@
     </entity>
     <elements>
         <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="150"/>
-        <element name="StBlock" positionX="0" positionY="0" width="0" height="315"/>
+        <element name="StBlock" positionX="0" positionY="0" width="0" height="330"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="255"/>
     </elements>
 </model>

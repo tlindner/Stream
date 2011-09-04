@@ -105,6 +105,7 @@
     
     NSArray *stuff = nil;
     NSString *objectUTI;
+    id ro = nil;
     
     if( [anaylizer.currentEditorView isEqualToString:@"Blocker View"] )
     {
@@ -121,6 +122,7 @@
             objectUTI = theBlock.sourceUTI;
             observableSourceUTI = observableEditorView = theBlock;
             stuff = [[Analyzation sharedInstance] anaylizersforUTI:[theBlock valueForKey:@"sourceUTI"]];
+            ro = theBlock;
         }
         else
         {
@@ -136,6 +138,7 @@
         observableSourceUTI = anaylizer.parentStream;
         objectUTI = [anaylizer valueForKeyPath:@"parentStream.sourceUTI"];
         stuff = [[Analyzation sharedInstance] anaylizersforUTI:[anaylizer valueForKeyPath:@"parentStream.sourceUTI"]];
+        ro = anaylizer;
    }
     
     self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
@@ -170,8 +173,7 @@
             [self.avc setRepresentedObject:nil];
         
         self.avc = [[[AnaylizerSettingPopOverAccessoryViewController alloc] initWithNibName:nibName bundle:nil] autorelease];
-        //[self.avc setRepresentedObject:anaylizer];
-        [self.avc setRepresentedObject:anaylizer];
+        [self.avc setRepresentedObject:ro];
         [self.avc loadView];
 
         newSubViewHeight = [[self.avc view] frame].size.height;
@@ -202,12 +204,22 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     id objectValue = [[self superview] valueForKey:@"objectValue"];
+    
     //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
     if( [keyPath isEqualToString:@"currentEditorView"] )
     {
         if( [[objectValue class] isSubclassOfClass:[StBlock class]] )
         {
-            /* dont need to do anything, BlockerDataViewController is observing this also */
+            AnaylizerTableViewCellView *anaTableViewCell = (AnaylizerTableViewCellView *)[self superview];
+            BlockerDataViewController *blockerController = (BlockerDataViewController *)anaTableViewCell.editorController;
+            NSArray *selectedObjects = [blockerController.treeController selectedObjects];
+            
+            if( [selectedObjects count] == 1 )
+            {
+                StBlock *theBlock = [selectedObjects objectAtIndex:0];
+                [self.avc setRepresentedObject:theBlock];
+            }
+            
             return;
         }
         else

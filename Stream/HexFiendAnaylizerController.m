@@ -45,6 +45,7 @@
     else if( [[self representedObject] isKindOfClass:[StBlock class]] )
     {
         StBlock *theBlock = [self representedObject];
+        [theBlock addSubOptionsDictionary:[HexFiendAnaylizerController anaylizerKey] withDictionary:[HexFiendAnaylizerController defaultOptions]];
         NSData *theData = [theBlock getData];
         [hexView setData:theData];
         [self setupRepresentedObject];

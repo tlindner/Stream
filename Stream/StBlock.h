@@ -51,6 +51,7 @@
 
 - (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
 
+- (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 - (NSData *)getData;
 - (StBlock *)blockNamed:(NSString *)inName;
 
@@ -67,8 +68,9 @@
 
 @interface StBlockFormatter : NSFormatter {
 @private
-
 }
+@property (nonatomic, retain) NSString *mode;
+
 - (NSString *)stringForObjectValue:(id)anObject;
 - (BOOL)getObjectValue:(id *)anObject forString:(NSString *)string errorDescription:(NSString **)error;
 @end

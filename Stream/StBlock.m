@@ -241,6 +241,8 @@
 
 @implementation StBlockFormatter
 
+@synthesize mode;
+
 - (NSString *)stringForObjectValue:(id)anObject
 {
     id result;

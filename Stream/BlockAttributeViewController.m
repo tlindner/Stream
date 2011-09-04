@@ -11,8 +11,7 @@
 
 @implementation BlockAttributeViewController
 @synthesize arrayController;
-
-//@synthesize tableView;
+@synthesize blockFormatter;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -24,21 +23,34 @@
     return self;
 }
 
-//- (void)setRepresentedObject:(id)representedObject
-//{
-//    [super setRepresentedObject:representedObject];
-//}
+-(void)loadView
+{
+    [super loadView];
+    
+    StBlock *theBlock = [self representedObject];
+    [theBlock addSubOptionsDictionary:[BlockAttributeViewController anaylizerKey] withDictionary:[BlockAttributeViewController defaultOptions]];
+    NSString *currentMode = [theBlock valueForKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
+    blockFormatter.mode = currentMode;
+    
+    [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:nil];
+}
 
-//- (void) loadView
-//{
-//    [super loadView];
-//    
-////    StBlock *theBlock = [self representedObject];
-////    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-////    NSArray *subBlocks = [theBlock.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-////    
-////    [arrayController addObjects:subBlocks];
-//}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
+    if( [keyPath isEqualToString:@"optionsDictionary.BlockAttributeViewController.numericDisplay"] )
+    {
+        NSLog( @"Changed" );
+    }
+    else
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (void)dealloc {
+    [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
+    
+    [super dealloc];
+}
 
 + (NSArray *)anaylizerUTIs
 {
@@ -51,14 +63,14 @@
 }
 
 /* Used for KVC and KVO in anaylizer options dictionary */
-+ (NSString *)anaylizerKey;
++ (NSString *)anaylizerKey
 {
     return @"BlockAttributeViewController";
 }
 
 + (NSString *)AnaylizerPopoverAccessoryViewNib
 {
-    return @"";
+    return @"BlockAttributeViewAccessory";
 }
 
 -(NSString *)nibName
@@ -68,7 +80,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] init] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Hexadecimal", @"numericDisplay", [NSArray arrayWithObjects:@"Hexadecimal", @"Decimal", nil], @"numericDisplayOptions", nil] autorelease];
 }
 
 @end
