@@ -15,16 +15,18 @@
     IBOutlet ColorGradientView *_cgv;
     IBOutlet NSView *_customView;
     IBOutlet NSView *dragThumbView;
+    IBOutlet NSButton *tlDisclosure;
     NSViewController *editorController;
     NSMutableArray *newConstraints;
     NSSize dragOffsetIntoGrowBox;
     BOOL dragging;
+    BOOL collapseState;
     float rowHeight;
 }
 
 @property(nonatomic, retain) NSViewController *editorController;
 @property(nonatomic, retain) NSMutableArray *newConstraints;
 
-
+- (IBAction)collapse:(id)sender;
 
 @end

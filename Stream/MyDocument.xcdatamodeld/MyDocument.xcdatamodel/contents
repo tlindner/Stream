@@ -3,8 +3,10 @@
     <entity name="StAnaylizer" representedClassName="StAnaylizer">
         <attribute name="anaylizerHeight" attributeType="Float" minValueString="0" defaultValueString="207"/>
         <attribute name="anaylizerKind" attributeType="String" indexed="YES"/>
+        <attribute name="collapse" attributeType="Boolean" defaultValueString="NO"/>
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
+        <attribute name="previousAnaylizerHeight" attributeType="Float" defaultValueString="207"/>
         <attribute name="resultingData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="resultingUTI" attributeType="String" defaultValueString="public.data"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream"/>
@@ -45,7 +47,7 @@
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
     </entity>
     <elements>
-        <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="150"/>
+        <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="180"/>
         <element name="StBlock" positionX="0" positionY="0" width="0" height="330"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="255"/>
     </elements>

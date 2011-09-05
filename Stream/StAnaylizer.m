@@ -18,6 +18,8 @@
 @dynamic resultingData;
 @dynamic sourceUTI;
 @dynamic resultingUTI;
+@dynamic previousAnaylizerHeight;
+@dynamic collapse;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions
 {
