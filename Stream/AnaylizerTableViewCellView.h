@@ -20,13 +20,11 @@
     NSMutableArray *newConstraints;
     NSSize dragOffsetIntoGrowBox;
     BOOL dragging;
-    BOOL collapseState;
+    BOOL ignoreEvent;
     float rowHeight;
 }
 
 @property(nonatomic, retain) NSViewController *editorController;
 @property(nonatomic, retain) NSMutableArray *newConstraints;
-
-- (IBAction)collapse:(id)sender;
 
 @end

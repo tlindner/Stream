@@ -11,6 +11,8 @@
 #import "Analyzation.h"
 #import "StAnaylizer.h"
 
+#define MINIMUM_HEIGHT 27.0
+
 @implementation AnaylizerTableViewCellView
 
 @synthesize editorController;
@@ -78,8 +80,7 @@
             [[self.editorController view] removeFromSuperview];
             self.editorController = nil;
         }
-        
-        
+
         if (editorViewClass == nil)
             editorViewClass = [HexFiendAnaylizerController class];
         
@@ -101,10 +102,9 @@
     }
     else if( [keyPath isEqualToString:@"objectValue.collapse"] )
     {
-        StAnaylizer *ana = (StAnaylizer *)[self objectValue];
-
-        if( [tlDisclosure intValue] == ana.collapse )
+        if( ignoreEvent == NO )
         {
+            StAnaylizer *ana = (StAnaylizer *)[self objectValue];
             NSTableView *tv = (NSTableView *)[[self superview] superview];
             
             if( ana.collapse == 1 )
@@ -112,22 +112,24 @@
                 ana.anaylizerHeight = ana.previousAnaylizerHeight;
                 [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
                 [_customView setHidden:NO];
-             }
+            }
             else
             {
                 ana.previousAnaylizerHeight = ana.anaylizerHeight;
-                ana.anaylizerHeight = 26.0;
+                ana.anaylizerHeight = MINIMUM_HEIGHT;
                 [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
                 [_customView setHidden:YES];  
             }
         }
         
+        ignoreEvent = NO;
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-- (BOOL)isFlipped {
+- (BOOL)isFlipped
+{
     return YES;
 }
 
@@ -193,18 +195,14 @@
             case NSLeftMouseDragged:
                 
                 distance = locationInSelf.y - dragOffsetIntoGrowBox.height + 6;
-                if( distance < 26.0 )
+                if( distance < MINIMUM_HEIGHT )
                 {
-                    distance = 26.0;
-                    [_customView setHidden:YES];  
-                    [tlDisclosure setIntValue:0];
+                    [_customView setHidden:YES];
+                    distance = MINIMUM_HEIGHT;
                 }
                 else
-                {
-                    [_customView setHidden:NO];  
-                    [tlDisclosure setIntValue:1];
-                }
-                
+                    [_customView setHidden:NO];
+
                 [self setValue:[NSNumber numberWithFloat:distance] forKeyPath:@"objectValue.anaylizerHeight"];
                 NSTableView *tv = (NSTableView *)[[self superview] superview];
                 NSAnimationContext *ac = [NSAnimationContext currentContext];
@@ -212,44 +210,23 @@
                 [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
                 [_customView layoutSubtreeIfNeeded];
                 break;
+                
             case NSLeftMouseUp:
+                
+                ignoreEvent = YES;
+                
+                if( distance <= MINIMUM_HEIGHT )
+                    ana.collapse = NO;
+                else
+                    ana.collapse = YES;
+ 
                 keepOn = NO;
                 break;
+                
             default:
                 /* Ignore any other kind of event. */
                 break;
         }
-        
-    };
-    
-    if( distance <= 26.0 )
-        ana.collapse = YES;
-    else
-        ana.collapse = NO;
-    
-    return;
-}
-
-- (IBAction)collapse:(id)sender
-{
-    NSButton *triangle = sender;
-    StAnaylizer *ana = (StAnaylizer *)[self objectValue];
-    NSTableView *tv = (NSTableView *)[[self superview] superview];
-    
-    if( [triangle intValue] == 1 )
-    {
-        ana.anaylizerHeight = ana.previousAnaylizerHeight;
-        [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
-        [_customView setHidden:NO];
-        ana.collapse = NO;
-    }
-    else
-    {
-        ana.previousAnaylizerHeight = ana.anaylizerHeight;
-        ana.anaylizerHeight = 26.0;
-        [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
-        [_customView setHidden:YES];  
-        ana.collapse = YES;
     }
 }
 
