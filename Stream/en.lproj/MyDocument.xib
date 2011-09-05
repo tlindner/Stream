@@ -592,7 +592,7 @@
 										<object class="NSButton" id="45438812">
 											<reference key="NSNextResponder" ref="301530206"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{7, 3}, {13, 17}}</string>
+											<string key="NSFrame">{{7, 2}, {13, 17}}</string>
 											<reference key="NSSuperview" ref="301530206"/>
 											<reference key="NSNextKeyView" ref="435843328"/>
 											<string key="NSReuseIdentifierKey">_NS:4024</string>
@@ -702,22 +702,6 @@
 					<int key="connectionID">102965</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">title: objectValue.currentEditorView</string>
-						<reference key="source" ref="435843328"/>
-						<reference key="destination" ref="16548953"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="435843328"/>
-							<reference key="NSDestination" ref="16548953"/>
-							<string key="NSLabel">title: objectValue.currentEditorView</string>
-							<string key="NSBinding">title</string>
-							<string key="NSKeyPath">objectValue.currentEditorView</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">102968</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">tableColumn</string>
 						<reference key="source" ref="512844837"/>
@@ -816,6 +800,22 @@
 						</object>
 					</object>
 					<int key="connectionID">103586</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">title: objectValue.title</string>
+						<reference key="source" ref="435843328"/>
+						<reference key="destination" ref="16548953"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="435843328"/>
+							<reference key="NSDestination" ref="16548953"/>
+							<string key="NSLabel">title: objectValue.title</string>
+							<string key="NSBinding">title</string>
+							<string key="NSKeyPath">objectValue.title</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">103588</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1119,7 +1119,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">103586</int>
+			<int key="maxID">103588</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">

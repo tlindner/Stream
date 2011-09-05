@@ -23,6 +23,7 @@
 @dynamic collapse;
 @dynamic removeEnabled;
 @dynamic blockSettingsHidden;
+@dynamic title;
 
 + (void)initialize
 {
@@ -122,6 +123,18 @@
         result = NO;
     
     return result;
+}
+
+- (NSString *) title
+{
+    NSString *result = nil;
+    
+    if( [self.currentEditorView isEqualToString:@"Blocker View" ])
+        result = [NSString stringWithFormat:@"%@ — %@", self.anaylizerKind, self.currentEditorView];
+    else
+        result = self.currentEditorView;
+    
+    return result;    
 }
 
 @end
