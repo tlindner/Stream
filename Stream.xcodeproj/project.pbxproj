@@ -54,6 +54,7 @@
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
 		77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */; };
 		77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */; };
+		77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77AE7556141568BD0052A93D /* BlockIcon.tiff */; };
 		77C17FBD140F450100E23921 /* HexFiendAnaylizerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */; };
 		77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */; };
 		77C17FC3140F469700E23921 /* AudioAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */; };
@@ -203,6 +204,7 @@
 		77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeViewController.h; path = Stream/BlockAttributeViewController.h; sourceTree = "<group>"; };
 		77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewController.m; path = Stream/BlockAttributeViewController.m; sourceTree = "<group>"; };
 		77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewController.xib; path = Stream/BlockAttributeViewController.xib; sourceTree = "<group>"; };
+		77AE7556141568BD0052A93D /* BlockIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = BlockIcon.tiff; sourceTree = "<group>"; };
 		77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnaylizerController.h; path = Stream/HexFiendAnaylizerController.h; sourceTree = "<group>"; };
 		77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnaylizerController.m; path = Stream/HexFiendAnaylizerController.m; sourceTree = "<group>"; };
 		77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HexFiendAnaylizerController.xib; path = Stream/HexFiendAnaylizerController.xib; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		7759CF3D13DBA1A300789DB3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				77AE7556141568BD0052A93D /* BlockIcon.tiff */,
 				77CB933E1404AE7F0032F56F /* Zoom.tif */,
 				7759CF3E13DBA1A300789DB3 /* Stream-Info.plist */,
 				7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */,
@@ -773,6 +776,7 @@
 				77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */,
 				77C17FC4140F469700E23921 /* AudioAnaylizerViewController.xib in Resources */,
 				776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */,
+				77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

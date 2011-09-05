@@ -22,6 +22,7 @@
 @dynamic previousAnaylizerHeight;
 @dynamic collapse;
 @dynamic removeEnabled;
+@dynamic blockSettingsHidden;
 
 + (void)initialize
 {
@@ -108,6 +109,16 @@
     else if ( indexOfMe == ([streamSet count] - 1) )
         result = YES;
     else
+        result = NO;
+    
+    return result;
+}
+
+- (BOOL) blockSettingsHidden
+{
+    BOOL result = YES;
+    
+    if( [self.currentEditorView isEqualToString:@"Blocker View" ])
         result = NO;
     
     return result;

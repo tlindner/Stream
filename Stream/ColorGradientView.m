@@ -48,35 +48,21 @@
     [super awakeFromNib];
 }
 
-
-- (void)updateConstraints {
-//    if( newConstraints == nil )
-//    {
-//        self.newConstraints = [[[NSMutableArray alloc] init] autorelease];
-//        NSDictionary *views = NSDictionaryOfVariableBindings(tlDisclosure, tlTitle, tlAction);
-//        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-3-[tlDisclosure]-0-[tlTitle]-0-[tlAction(==25)]-3-|" options:0 metrics:nil views:views]];
-//        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tlDisclosure]-0-|" options:0 metrics:nil views:views]];
-//        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tlTitle]-0-|" options:0 metrics:nil views:views]];
-//        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tlAction]-0-|" options:0 metrics:nil views:views]];
-//        [self removeConstraints:[self constraints]];
-//        [self addConstraints:newConstraints];
-//    }
-    
-    [super updateConstraints];
-}
-
 - (BOOL)isOpaque
 {
     return true;
 }
 
-- (void)drawRect:(NSRect)rect {
-    if (endingColor == nil || [startingColor isEqual:endingColor]) {
+- (void)drawRect:(NSRect)rect
+{
+    if (endingColor == nil || [startingColor isEqual:endingColor])
+    {
         // Fill view with a standard background color
         [startingColor set];
         NSRectFill(rect);
     }
-    else {
+    else
+    {
         // Fill view with a top-down gradient
         // from startingColor to endingColor
         NSGradient* aGradient = [[[NSGradient alloc]
@@ -310,21 +296,13 @@
     
 }
 
-- (void)dealloc {
-    
-    //    if (utiTextField) {
-    //        [utiTextField unbind:@"value"];
-    //    }
-    //    
-    //    if (editorPopup) {
-    //        [editorPopup unbind:@"contentObjects"];
-    //        [editorPopup unbind:@"selectedObject"];
-    //    }
-    
+- (void)dealloc
+{
     self.popupArrayController = nil;
     self.newConstraints = nil;
     self.actionPopOverNib = nil;
     self.avc = nil;
     [super dealloc];
 }
+
 @end

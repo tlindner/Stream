@@ -27,6 +27,7 @@
 @property (nonatomic, assign) NSString * sourceUTI;
 @property (nonatomic, retain) NSString * resultingUTI;
 @property (nonatomic, readonly) BOOL removeEnabled;
+@property (nonatomic, readonly) BOOL blockSettingsHidden;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 

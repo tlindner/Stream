@@ -30,9 +30,4 @@
     [cgv popOverCancel:sender];
 }
 
-//- (void)dealloc {
-//    NSLog( @"Why did I die: AnaylizerSettingPopOverViewController" );
-//    [super dealloc];
-//}
-
 @end

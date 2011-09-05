@@ -20,8 +20,4 @@
     return self;
 }
 
-//- (void)dealloc {
-//    NSLog( @"Why did I die: AnaylizerSettingPopOverAccessoryViewController" );
-//    [super dealloc];
-//}
 @end
