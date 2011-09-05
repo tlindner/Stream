@@ -24,10 +24,10 @@
 @property (nonatomic, retain) id sourceURL;
 @property (nonatomic, retain) NSString * sourceUTI;
 @property (nonatomic, retain) NSString * streamTransform;
-@property (nonatomic, retain) NSOrderedSet *anaylizers;
-@property (nonatomic, retain) NSSet *blocks;
-@property (nonatomic, retain) NSSet *childStreams;
-@property (nonatomic, retain) StStream *parentStream;
+@property (nonatomic, retain) NSOrderedSet * anaylizers;
+@property (nonatomic, retain) NSSet * blocks;
+@property (nonatomic, retain) NSSet * childStreams;
+@property (nonatomic, retain) StStream * parentStream;
 
 - (NSData *)blockNamed:(NSString *)name;
 - (StBlock *)startNewBlockNamed:(NSString *)name owner:(NSString *)owner;

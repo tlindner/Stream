@@ -22,7 +22,6 @@
 @dynamic blocks;
 @dynamic childStreams;
 @dynamic parentStream;
-
 - (NSData *)blockNamed:(NSString *)name
 {
     NSData *result = nil;

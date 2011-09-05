@@ -22,6 +22,8 @@
 @property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
 @property (nonatomic, retain) StStream *parentStream;
 @property (nonatomic, retain) NSMutableData *resultingData;
+@property (nonatomic, assign) NSString * sourceUTI;
+@property (nonatomic, retain) NSString * resultingUTI;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 

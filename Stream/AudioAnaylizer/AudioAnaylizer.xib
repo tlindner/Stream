@@ -15,7 +15,6 @@
 			<string>NSTextField</string>
 			<string>NSCustomObject</string>
 			<string>NSTextFieldCell</string>
-			<string>NSArrayController</string>
 			<string>NSMenu</string>
 			<string>NSPopUpButton</string>
 			<string>NSCustomView</string>
@@ -65,7 +64,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{15, 16}, {79, 14}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="957882405"/>
 										<string key="NSReuseIdentifierKey">_NS:3936</string>
 										<bool key="NSEnabled">YES</bool>
@@ -105,7 +103,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{293, 66}, {19, 14}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="114509402"/>
 										<string key="NSReuseIdentifierKey">_NS:3936</string>
 										<bool key="NSEnabled">YES</bool>
@@ -125,7 +122,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{15, 41}, {108, 14}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="6837610"/>
 										<string key="NSReuseIdentifierKey">_NS:3936</string>
 										<bool key="NSEnabled">YES</bool>
@@ -145,7 +141,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{128, 39}, {160, 19}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="675515204"/>
 										<string key="NSReuseIdentifierKey">_NS:248</string>
 										<bool key="NSEnabled">YES</bool>
@@ -179,7 +174,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{125, 112}, {166, 22}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="241064896"/>
 										<string key="NSReuseIdentifierKey">_NS:179</string>
 										<int key="NSTag">6809</int>
@@ -221,7 +215,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{128, 89}, {160, 19}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="135251607"/>
 										<string key="NSReuseIdentifierKey">_NS:248</string>
 										<bool key="NSEnabled">YES</bool>
@@ -242,7 +235,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{128, 64}, {160, 19}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="140061067"/>
 										<string key="NSReuseIdentifierKey">_NS:248</string>
 										<bool key="NSEnabled">YES</bool>
@@ -263,7 +255,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{15, 66}, {108, 14}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="8948794"/>
 										<string key="NSReuseIdentifierKey">_NS:3936</string>
 										<bool key="NSEnabled">YES</bool>
@@ -283,7 +274,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{15, 117}, {108, 14}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="400938819"/>
 										<string key="NSReuseIdentifierKey">_NS:3936</string>
 										<bool key="NSEnabled">YES</bool>
@@ -303,7 +293,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{15, 91}, {108, 14}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="82769792"/>
 										<string key="NSReuseIdentifierKey">_NS:3936</string>
 										<bool key="NSEnabled">YES</bool>
@@ -323,7 +312,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{128, 14}, {160, 19}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView"/>
 										<string key="NSReuseIdentifierKey">_NS:248</string>
 										<bool key="NSEnabled">YES</bool>
@@ -344,7 +332,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{293, 41}, {19, 14}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="1018645419"/>
 										<string key="NSReuseIdentifierKey">_NS:3936</string>
 										<bool key="NSEnabled">YES</bool>
@@ -364,7 +351,6 @@
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{293, 91}, {19, 14}}</string>
 										<reference key="NSSuperview" ref="512877073"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="497599271"/>
 										<string key="NSReuseIdentifierKey">_NS:3936</string>
 										<bool key="NSEnabled">YES</bool>
@@ -382,14 +368,12 @@
 								</object>
 								<string key="NSFrame">{{1, 1}, {327, 143}}</string>
 								<reference key="NSSuperview" ref="154433511"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="486046030"/>
 								<string key="NSReuseIdentifierKey">_NS:11</string>
 							</object>
 						</object>
 						<string key="NSFrame">{{1, 7}, {329, 159}}</string>
 						<reference key="NSSuperview" ref="1005"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="512877073"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<string key="NSOffsets">{0, 0}</string>
@@ -413,22 +397,11 @@
 				</object>
 				<string key="NSFrameSize">{331, 172}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="154433511"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSUserDefaultsController" id="545635215">
 				<bool key="NSSharedInstance">YES</bool>
-			</object>
-			<object class="NSArrayController" id="548046416">
-				<string key="NSObjectClassName">NSArray</string>
-				<bool key="NSAutomaticallyPreparesContent">YES</bool>
-				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
-				<bool key="NSAvoidsEmptySelection">YES</bool>
-				<bool key="NSPreservesSelection">YES</bool>
-				<bool key="NSSelectsInsertedObjects">YES</bool>
-				<bool key="NSFilterRestrictsInsertion">YES</bool>
-				<bool key="NSClearsFilterPredicateOnInsertion">YES</bool>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -441,38 +414,6 @@
 						<reference key="destination" ref="1005"/>
 					</object>
 					<int key="connectionID">30</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">content: arrangedObjects</string>
-						<reference key="source" ref="400938819"/>
-						<reference key="destination" ref="548046416"/>
-						<object class="NSNibBindingConnector" key="connector" id="571216539">
-							<reference key="NSSource" ref="400938819"/>
-							<reference key="NSDestination" ref="548046416"/>
-							<string key="NSLabel">content: arrangedObjects</string>
-							<string key="NSBinding">content</string>
-							<string key="NSKeyPath">arrangedObjects</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">90</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentArray: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.audioChannelList</string>
-						<reference key="source" ref="548046416"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="548046416"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">contentArray: representedObject.optionsDictionary.ColorComputerAudioAnaylizer.audioChannelList</string>
-							<string key="NSBinding">contentArray</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.ColorComputerAudioAnaylizer.audioChannelList</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">93</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -540,20 +481,36 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedObject: representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannel</string>
+						<string key="label">contentValues: self.representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannelList</string>
+						<reference key="source" ref="400938819"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector" id="68839296">
+							<reference key="NSSource" ref="400938819"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">contentValues: self.representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannelList</string>
+							<string key="NSBinding">contentValues</string>
+							<string key="NSKeyPath">self.representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannelList</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">153</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedValue: self.representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannel</string>
 						<reference key="source" ref="400938819"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="400938819"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">selectedObject: representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannel</string>
-							<string key="NSBinding">selectedObject</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannel</string>
-							<reference key="NSPreviousConnector" ref="571216539"/>
+							<string key="NSLabel">selectedValue: self.representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannel</string>
+							<string key="NSBinding">selectedValue</string>
+							<string key="NSKeyPath">self.representedObject.optionsDictionary.AudioAnaylizerViewController.audioChannel</string>
+							<reference key="NSPreviousConnector" ref="68839296"/>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">141</int>
+					<int key="connectionID">154</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -595,11 +552,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">79</int>
 						<reference key="object" ref="545635215"/>
-						<reference key="parent" ref="0"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">85</int>
-						<reference key="object" ref="548046416"/>
 						<reference key="parent" ref="0"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -852,12 +804,10 @@
 					<string>75.IBPluginDependency</string>
 					<string>79.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
-					<string>85.IBPluginDependency</string>
 					<string>9.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -905,21 +855,9 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">141</int>
+			<int key="maxID">154</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<bool key="EncodedWithXMLCoder">YES</bool>
-				<object class="IBPartialClassDescription">
-					<string key="className">AnaylizerSettingPopOverAccessoryViewController</string>
-					<string key="superclassName">NSViewController</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/AnaylizerSettingPopOverAccessoryViewController.h</string>
-					</object>
-				</object>
-			</object>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">

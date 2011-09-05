@@ -35,8 +35,6 @@
 @property(nonatomic, retain) NSColor *endingColor;
 @property(nonatomic, retain) NSNib *actionPopOverNib;
 @property(nonatomic, retain) NSArrayController *popupArrayController;
-//@property(nonatomic, retain) NSManagedObjectContext *subMOC;
-//@property(nonatomic, retain) StAnaylizer *subObjectValue;
 @property(nonatomic, retain) AnaylizerSettingPopOverAccessoryViewController *avc;
 @property(assign) int angle;
 

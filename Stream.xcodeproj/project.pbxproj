@@ -546,12 +546,12 @@
 				7799CD2A13E63C1F007D5B8E /* WaveFormView.m */,
 				771DC21913F0374800579077 /* AudioAnaScrollView.h */,
 				771DC21A13F0374800579077 /* AudioAnaScrollView.m */,
-				771C998413F624DC00C3A263 /* AudioAnaylizer.xib */,
 				772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */,
 				772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */,
 				772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */,
 				77C17FC0140F469700E23921 /* AudioAnaylizerViewController.h */,
 				77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */,
+				771C998413F624DC00C3A263 /* AudioAnaylizer.xib */,
 				77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */,
 			);
 			name = AudioAnaylizer;

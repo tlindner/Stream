@@ -24,8 +24,6 @@
 @synthesize newConstraints;
 @synthesize actionPopOverNib;
 @synthesize popupArrayController;
-//@synthesize subMOC;
-//@synthesize subObjectValue;
 @synthesize avc;
 
 - (id)initWithFrame:(NSRect)frame {
@@ -91,7 +89,7 @@
 - (IBAction)doPopOver:(id)sender
 {
     StAnaylizer *anaylizer = [[self superview] valueForKey:@"objectValue"];
-
+    
     if( self.actionPopOverNib == nil )
     {
         self.actionPopOverNib = [[[NSNib alloc] initWithNibNamed:@"AnaylizerSettingPopover" bundle:nil] autorelease];
@@ -104,14 +102,13 @@
     }
     
     NSArray *stuff = nil;
-    NSString *objectUTI;
     id ro = nil;
     
     if( [anaylizer.currentEditorView isEqualToString:@"Blocker View"] )
     {
         [self.labelUTI setStringValue:@"Block UTI:"];
         [self.labelEditor setStringValue:@"Block Editor:"];
-
+        
         AnaylizerTableViewCellView *anaTableViewCell = (AnaylizerTableViewCellView *)[self superview];
         BlockerDataViewController *blockerController = (BlockerDataViewController *)anaTableViewCell.editorController;
         NSArray *selectedObjects = [blockerController.treeController selectedObjects];
@@ -119,7 +116,6 @@
         if( [selectedObjects count] == 1 )
         {
             StBlock *theBlock = [selectedObjects objectAtIndex:0];
-            objectUTI = theBlock.sourceUTI;
             observableSourceUTI = observableEditorView = theBlock;
             stuff = [[Analyzation sharedInstance] anaylizersforUTI:[theBlock valueForKey:@"sourceUTI"]];
             ro = theBlock;
@@ -127,7 +123,6 @@
         else
         {
             NSLog( @"Multiple selection! Ohy, vey!" );
-            objectUTI = nil;
             observableEditorView = nil;
             observableSourceUTI = nil; 
         }
@@ -136,14 +131,13 @@
     {
         observableEditorView = anaylizer;
         observableSourceUTI = anaylizer.parentStream;
-        objectUTI = [anaylizer valueForKeyPath:@"parentStream.sourceUTI"];
-        stuff = [[Analyzation sharedInstance] anaylizersforUTI:[anaylizer valueForKeyPath:@"parentStream.sourceUTI"]];
+        stuff = [[Analyzation sharedInstance] anaylizersforUTI:[anaylizer valueForKey:@"sourceUTI"]];
         ro = anaylizer;
-   }
+    }
     
     self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
     [self.popupArrayController addObjects:stuff];
-
+    
     [utiTextField bind:@"value" toObject:observableSourceUTI withKeyPath:@"sourceUTI" options:nil];
     [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
     [editorPopup bind:@"selectedObject" toObject:observableEditorView withKeyPath:@"currentEditorView" options:nil];
@@ -175,7 +169,7 @@
         self.avc = [[[AnaylizerSettingPopOverAccessoryViewController alloc] initWithNibName:nibName bundle:nil] autorelease];
         [self.avc setRepresentedObject:ro];
         [self.avc loadView];
-
+        
         newSubViewHeight = [[self.avc view] frame].size.height;
         accessoryFrame.size = [[self.avc view] frame].size;
         [accessoryView setFrame:accessoryFrame];
@@ -284,7 +278,7 @@
         [self.popupArrayController removeObjects:[self.popupArrayController arrangedObjects]];
         NSArray *stuff = [[Analyzation sharedInstance] anaylizersforUTI:[objectValue valueForKey:@"sourceUTI"]];
         [self.popupArrayController addObjects:stuff];
-
+        
         return;
     }
     
@@ -318,17 +312,15 @@
 
 - (void)dealloc {
     
-    if (utiTextField) {
-        [utiTextField unbind:@"value"];
-    }
+    //    if (utiTextField) {
+    //        [utiTextField unbind:@"value"];
+    //    }
+    //    
+    //    if (editorPopup) {
+    //        [editorPopup unbind:@"contentObjects"];
+    //        [editorPopup unbind:@"selectedObject"];
+    //    }
     
-    if (editorPopup) {
-        [editorPopup unbind:@"contentObjects"];
-        [editorPopup unbind:@"selectedObject"];
-    }
-    
-    //    self.subObjectValue = nil;
-    //    self.subMOC = nil;
     self.popupArrayController = nil;
     self.newConstraints = nil;
     self.actionPopOverNib = nil;

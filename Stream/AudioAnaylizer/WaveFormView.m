@@ -74,8 +74,6 @@ typedef struct
     
     if( needsAnaylyzation ) [self anaylizeAudioData];
     
-    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
-
     NSMutableData *coalescedObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
     NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
     NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
@@ -356,7 +354,7 @@ typedef struct
     if ([keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"])
     {
         newObject = [change objectForKey:@"new"];
-        if ([newObject respondsToSelector:@selector(intValue)] && [newObject intValue] != currentChannel)
+        if ([newObject respondsToSelector:@selector(integerValue)] && [newObject integerValue] != currentChannel)
         {
             self.needsAnaylyzation = YES;
             [self setNeedsDisplay:YES];
@@ -375,7 +373,8 @@ typedef struct
     needsAnaylyzation = NO;
     anaylizationError = NO;
 
-    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
+    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] integerValue];
+    channelCount = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"] unsignedIntegerValue];
     
     if( currentChannel > channelCount ) currentChannel = channelCount;
     if( currentChannel < 1 ) currentChannel = 1;
@@ -386,7 +385,7 @@ typedef struct
     int zc_count;
     
     AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
-    AudioSampleType *frameStart = audioFrames + (currentChannel-1);
+    AudioSampleType *frameStart = audioFrames + (currentChannel-1); // Interleaved samples
     
     unsigned long max_possible_zero_crossings = (frameCount / 2) + 1;
     float *zero_crossings = malloc(sizeof(float)*max_possible_zero_crossings);

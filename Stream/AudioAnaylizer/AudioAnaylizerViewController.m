@@ -26,12 +26,6 @@
     return self;
 }
 
-//- (void)setRepresentedObject:(id)representedObject
-//{
-//    [super setRepresentedObject:representedObject];
-//
-//}
-
 -(void)loadView
 {
     [super loadView];
@@ -47,8 +41,8 @@
     
     StAnaylizer *theAna = [self representedObject];
     
-    //        trackingArea = [[[NSTrackingArea alloc] initWithRect:scrollerRect options:NSTrackingCursorUpdate+NSTrackingActiveAlways owner:[self.scroller documentView] userInfo:nil] autorelease];
-    //        [self addTrackingArea:trackingArea];
+    //trackingArea = [[[NSTrackingArea alloc] initWithRect:scrollerRect options:NSTrackingCursorUpdate+NSTrackingActiveAlways owner:[self.scroller documentView] userInfo:nil] autorelease];
+    //[self addTrackingArea:trackingArea];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clipViewBoundsChanged:) name:NSViewBoundsDidChangeNotification object:nil];
     [[self.scroller contentView] setPostsBoundsChangedNotifications:YES];
@@ -68,7 +62,7 @@
         /* Read in options data */
         
         wfv.channelCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"] unsignedIntegerValue];
-        wfv.currentChannel = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
+        wfv.currentChannel = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] integerValue];
         wfv.sampleRate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
         wfv.frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
     }
@@ -95,7 +89,7 @@
             wfv.channelCount = clientFormat.mChannelsPerFrame;
             [theAna setValue:[NSNumber numberWithUnsignedInt:clientFormat.mChannelsPerFrame] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"];
             
-            wfv.currentChannel = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
+            wfv.currentChannel = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] integerValue];
             
             wfv.sampleRate = clientFormat.mSampleRate;
             [theAna setValue:[NSNumber numberWithDouble:clientFormat.mSampleRate] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"];

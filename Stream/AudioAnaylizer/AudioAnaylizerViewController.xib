@@ -90,6 +90,7 @@
 										<string key="NSResourceName">AnaylizerArrow</string>
 									</object>
 									<string key="NSSegmentItemLabel">Selection</string>
+									<bool key="NSSegmentItemSelected">YES</bool>
 									<int key="NSSegmentItemImageScaling">0</int>
 								</object>
 								<object class="NSSegmentItem">
@@ -99,7 +100,6 @@
 									</object>
 									<string key="NSSegmentItemLabel">Pan</string>
 									<int key="NSSegmentItemTag">1</int>
-									<bool key="NSSegmentItemSelected">YES</bool>
 									<int key="NSSegmentItemImageScaling">0</int>
 								</object>
 								<object class="NSSegmentItem">
@@ -111,7 +111,6 @@
 									<int key="NSSegmentItemImageScaling">0</int>
 								</object>
 							</array>
-							<int key="NSSelectedSegment">1</int>
 							<int key="NSSegmentStyle">1</int>
 						</object>
 					</object>
@@ -343,7 +342,7 @@
 				<string key="7.CustomClassName">WaveFormView</string>
 				<string key="7.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="8.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<integer value="2" key="9.IBNSSegmentedControlInspectorSelectedSegmentMetadataKey"/>
+				<integer value="0" key="9.IBNSSegmentedControlInspectorSelectedSegmentMetadataKey"/>
 				<string key="9.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>

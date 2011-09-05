@@ -7,6 +7,7 @@
 //
 
 #import "StAnaylizer.h"
+#import "StStream.h"
 
 @implementation StAnaylizer
 @dynamic anaylizerHeight;
@@ -15,6 +16,8 @@
 @dynamic optionsDictionary;
 @dynamic parentStream;
 @dynamic resultingData;
+@dynamic sourceUTI;
+@dynamic resultingUTI;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions
 {
@@ -41,5 +44,42 @@
 {
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
 }
+
+- (NSString *)sourceUTI
+{
+    NSString *result = nil;
+    
+    NSOrderedSet *streamSet = self.parentStream.anaylizers;
+    NSUInteger theIndex = [streamSet indexOfObject:self];
+    
+    if( theIndex == 0 )
+    {
+        result = self.parentStream.sourceUTI;
+    }
+    else
+    {
+        StAnaylizer *previousAna = [streamSet objectAtIndex:theIndex-1];
+        result = previousAna.resultingUTI;
+    }
+    
+    return result;
+}
+
+- (void) setSourceUTI:(NSString *)parentUTI
+{
+    NSOrderedSet *streamSet = self.parentStream.anaylizers;
+    NSUInteger theIndex = [streamSet indexOfObject:self];
+    
+    if( theIndex == 0 )
+    {
+        self.parentStream.sourceUTI = parentUTI;
+    }
+    else
+    {
+        StAnaylizer *previousAna = [streamSet objectAtIndex:theIndex-1];
+        previousAna.resultingUTI = parentUTI;
+    }
+}
+
 
 @end
