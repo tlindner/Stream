@@ -13,7 +13,9 @@
     IBOutlet NSTreeController *streamTreeControler;
 
     NSTableColumn *tableColumn;
+    NSScrollView *streamListView;
 }
+@property (assign) IBOutlet NSScrollView *streamListView;
 
 @property(nonatomic, retain) NSCursor *zoomCursor;
 

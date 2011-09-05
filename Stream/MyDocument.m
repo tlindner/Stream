@@ -14,6 +14,7 @@
 @implementation MyDocument
 @synthesize tableColumn;
 
+@synthesize streamListView;
 @synthesize zoomCursor;
 
 - (id)init
@@ -121,6 +122,14 @@
 - (BOOL)selectionShouldChangeInTableView:(NSTableView *)aTableView
 {
     return NO;
+}
+
+- (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)subview
+{
+    if( subview == streamListView )
+        return NO;
+    else
+        return YES;
 }
 
 - (void)dealloc

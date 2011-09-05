@@ -10,6 +10,7 @@
 #import "StStream.h"
 
 @implementation StAnaylizer
+
 @dynamic anaylizerHeight;
 @dynamic anaylizerKind;
 @dynamic currentEditorView;
@@ -20,6 +21,18 @@
 @dynamic resultingUTI;
 @dynamic previousAnaylizerHeight;
 @dynamic collapse;
+@dynamic removeEnabled;
+
++ (void)initialize
+{
+    if ( self == [StAnaylizer class] )
+    {
+        // Setup standard value transformers
+		streamLockValueTransformer *slvt;
+		slvt = [[[streamLockValueTransformer alloc] init] autorelease];
+		[NSValueTransformer setValueTransformer:slvt forName:@"streamLockValueTransformer"];		
+    }
+}
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions
 {
@@ -83,5 +96,42 @@
     }
 }
 
+- (BOOL) removeEnabled
+{
+    BOOL result = NO;
+    
+    NSOrderedSet *streamSet = self.parentStream.anaylizers;
+    NSUInteger indexOfMe = [streamSet indexOfObject:self];
+    
+    if( indexOfMe == 0 )
+        result = NO;
+    else if ( indexOfMe == ([streamSet count] - 1) )
+        result = YES;
+    else
+        result = NO;
+    
+    return result;
+}
 
+@end
+
+@implementation streamLockValueTransformer
+
++ (Class)transformedValueClass
+{
+    return [NSImage class];
+}
+
+- (id)transformedValue:(id)value
+{
+    if( [value boolValue] )
+    {
+        return [NSImage imageNamed:@"NSRemoveTemplate"];
+    }
+    else
+    {
+        return [NSImage imageNamed:@"NSLockLockedTemplate"];
+    }
+}
+    
 @end

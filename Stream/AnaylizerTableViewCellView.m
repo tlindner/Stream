@@ -11,7 +11,7 @@
 #import "Analyzation.h"
 #import "StAnaylizer.h"
 
-#define MINIMUM_HEIGHT 27.0
+#define MINIMUM_HEIGHT 26.0
 
 @implementation AnaylizerTableViewCellView
 
@@ -46,17 +46,17 @@
 }
 
 - (void)updateConstraints {
-    if( newConstraints == nil )
-    {
-        NSDictionary *views = NSDictionaryOfVariableBindings(_customView, _cgv, dragThumbView);
-        self.newConstraints = [[[NSMutableArray alloc] init] autorelease];
-        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_customView]-0-|" options:0 metrics:nil views:views]];
-        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_cgv]-0-|" options:0 metrics:nil views:views]];
-        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[dragThumbView]-0-|" options:0 metrics:nil views:views]];
-        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_cgv(==19)]-0-[_customView]-2-[dragThumbView(==6)]-0-|" options:0 metrics:nil views:views]];
-        [self removeConstraints:[self constraints]];
-        [self addConstraints:newConstraints];
-    }
+//    if( newConstraints == nil )
+//    {
+//        NSDictionary *views = NSDictionaryOfVariableBindings(_customView, _cgv, dragThumbView);
+//        self.newConstraints = [[[NSMutableArray alloc] init] autorelease];
+//        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_customView]-0-|" options:0 metrics:nil views:views]];
+//        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_cgv]-0-|" options:0 metrics:nil views:views]];
+//        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[dragThumbView]-0-|" options:0 metrics:nil views:views]];
+//        [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_cgv(==19)]-0-[_customView]-2-[dragThumbView(==6)]-0-|" options:0 metrics:nil views:views]];
+//        [self removeConstraints:[self constraints]];
+//        [self addConstraints:newConstraints];
+//    }
     
     [super updateConstraints];
 }
@@ -128,10 +128,10 @@
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-- (BOOL)isFlipped
-{
-    return YES;
-}
+//- (BOOL)isFlipped
+//{
+//    return YES;
+//}
 
 //- (void) mouseDown:(NSEvent *)theEvent
 //{
@@ -180,21 +180,25 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    float distance;
+    float start, distance, offset;
     BOOL keepOn = YES;
     StAnaylizer *ana = (StAnaylizer *)[self objectValue];
     ana.previousAnaylizerHeight = ana.anaylizerHeight;
-    
+    start = [theEvent locationInWindow].y;
+    offset = [self bounds].size.height;
+
     while (keepOn)
     {
         theEvent = [[self window] nextEventMatchingMask: NSLeftMouseUpMask | NSLeftMouseDraggedMask];
-        NSPoint locationInSelf = [self convertPoint:[theEvent locationInWindow] fromView:nil];
         
         switch ([theEvent type])
         {
             case NSLeftMouseDragged:
                 
-                distance = locationInSelf.y - dragOffsetIntoGrowBox.height + 6;
+                distance = start - [theEvent locationInWindow].y;
+                distance += offset;
+                
+                NSLog( @"distance: %f", distance );
                 if( distance < MINIMUM_HEIGHT )
                 {
                     [_customView setHidden:YES];

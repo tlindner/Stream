@@ -26,7 +26,13 @@
 @property (nonatomic, retain) NSMutableData *resultingData;
 @property (nonatomic, assign) NSString * sourceUTI;
 @property (nonatomic, retain) NSString * resultingUTI;
+@property (nonatomic, readonly) BOOL removeEnabled;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 
+@end
+
+@interface streamLockValueTransformer : NSValueTransformer {
+@private
+}
 @end

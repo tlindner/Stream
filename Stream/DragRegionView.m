@@ -22,9 +22,10 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    NSRect bounds = [self bounds];
-    [[NSColor keyboardFocusIndicatorColor] set];
-    NSRectFill(bounds);
+    NSGradient* aGradient = [[[NSGradient alloc]
+                              initWithStartingColor:[NSColor grayColor]
+                              endingColor:[NSColor lightGrayColor]] autorelease];
+    [aGradient drawInRect:[self bounds] angle:90.0];
 }
 
 @end
