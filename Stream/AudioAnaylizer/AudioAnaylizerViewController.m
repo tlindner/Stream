@@ -177,7 +177,12 @@
     float retrieveOrigin = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scrollOrigin"] floatValue];
     
     NSRect clipViewBounds = [clipView frame];
+
     [clipView setBounds:NSMakeRect(retrieveOrigin, clipViewBounds.origin.y, [[self slider] floatValue], clipViewBounds.size.height)];
+
+    NSRect rect = [[self.scroller documentView] frame];
+    rect.size.height = clipViewBounds.size.height;
+    [[self.scroller documentView] setFrame:rect];
 }
 
 - (void)clipViewBoundsChanged:(NSNotification *)notification

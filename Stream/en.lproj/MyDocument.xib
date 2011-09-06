@@ -626,7 +626,7 @@
 									<reference key="NSSuperview" ref="16548953"/>
 									<reference key="NSNextKeyView" ref="682366575"/>
 									<string key="NSReuseIdentifierKey">_NS:499</string>
-									<string key="NSClassName">ViewAutoLayoutSubView</string>
+									<string key="NSClassName">NSView</string>
 								</object>
 								<object class="NSCustomView" id="682366575">
 									<reference key="NSNextResponder" ref="16548953"/>
@@ -1346,14 +1346,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/StreamsTreeController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">ViewAutoLayoutSubView</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/ViewAutoLayoutSubView.h</string>
 					</object>
 				</object>
 			</array>
