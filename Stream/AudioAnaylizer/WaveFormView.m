@@ -526,8 +526,8 @@ typedef struct
     if( characters != [charactersObject mutableBytes] )
         characters = [charactersObject mutableBytes];
 
-    if( character != [characterObject mutableBytes] )
-        character = [characterObject mutableBytes];
+//    if( character != [characterObject mutableBytes] )
+//        character = [characterObject mutableBytes];
 
     NSMutableData *coalescedObject = [NSMutableData dataWithLength:sizeof(charRef)*char_count];
     charRef *coalescedCharacters = [coalescedObject mutableBytes];
@@ -547,8 +547,8 @@ typedef struct
     
     /* shirnk buffer to actual size */
     [coalescedObject setLength:sizeof(charRef)*coa_char_count];
-    if( coalescedCharacters != [coalescedObject mutableBytes] )
-        coalescedCharacters = [coalescedObject mutableBytes];
+//    if( coalescedCharacters != [coalescedObject mutableBytes] )
+//        coalescedCharacters = [coalescedObject mutableBytes];
 
     /* Store NSMutableData Objects away */
     [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];

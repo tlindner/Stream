@@ -108,7 +108,7 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    float start, distance, offset;
+    CGFloat start, distance = 0, offset;
     BOOL keepOn = YES;
     StAnaylizer *ana = (StAnaylizer *)[self objectValue];
     ana.previousAnaylizerHeight = ana.anaylizerHeight;
