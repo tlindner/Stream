@@ -16,10 +16,10 @@
     NSScrollView *streamListView;
 }
 @property (assign) IBOutlet NSScrollView *streamListView;
-
-@property(nonatomic, retain) NSCursor *zoomCursor;
+@property (assign) IBOutlet NSTableColumn *tableColumn;
+@property (nonatomic, retain) NSCursor *zoomCursor;
 
 - (IBAction)add:(id)sender;
-@property (assign) IBOutlet NSTableColumn *tableColumn;
+- (IBAction)removeAnaylizer:(id)sender;
 
 @end

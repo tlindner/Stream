@@ -29,8 +29,8 @@
         <attribute name="uiName" optional="YES" attributeType="String" defaultValueString="uiDeault"/>
         <attribute name="valueTransformer" optional="YES" attributeType="String"/>
         <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock" inverseName="parentBlock" inverseEntity="StBlock"/>
-        <relationship name="parentBlock" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StBlock" inverseName="blocks" inverseEntity="StBlock"/>
-        <relationship name="parentStream" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StStream" inverseName="blocks" inverseEntity="StStream"/>
+        <relationship name="parentBlock" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StBlock" inverseName="blocks" inverseEntity="StBlock"/>
+        <relationship name="parentStream" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="blocks" inverseEntity="StStream"/>
     </entity>
     <entity name="StStream" representedClassName="StStream">
         <attribute name="bytesCache" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
@@ -44,11 +44,11 @@
         <relationship name="anaylizers" toMany="YES" minCount="1" deletionRule="Cascade" ordered="YES" destinationEntity="StAnaylizer" inverseName="parentStream" inverseEntity="StAnaylizer"/>
         <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock" inverseName="parentStream" inverseEntity="StBlock"/>
         <relationship name="childStreams" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StStream" inverseName="parentStream" inverseEntity="StStream"/>
-        <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
+        <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
     </entity>
     <elements>
         <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="180"/>
         <element name="StBlock" positionX="0" positionY="0" width="0" height="330"/>
-        <element name="StStream" positionX="0" positionY="0" width="0" height="255"/>
+        <element name="StStream" positionX="0" positionY="0" width="0" height="225"/>
     </elements>
 </model>

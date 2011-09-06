@@ -27,4 +27,6 @@
 @property(nonatomic, retain) NSViewController *editorController;
 @property(nonatomic, retain) NSMutableArray *newConstraints;
 
+- (IBAction)removeAnaylizer:(id)sender;
+
 @end

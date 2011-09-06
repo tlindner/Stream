@@ -24,7 +24,7 @@
     return self;
 }
 
--(void)loadView
+- (void) loadView
 {
     [super loadView];
     
@@ -50,9 +50,9 @@
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
-    
     [super dealloc];
 }
 
@@ -66,7 +66,6 @@
     return @"Block Attribute View";
 }
 
-/* Used for KVC and KVO in anaylizer options dictionary */
 + (NSString *)anaylizerKey
 {
     return @"BlockAttributeViewController";

@@ -56,10 +56,12 @@
     NSOpenPanel *myOpenPanel = [NSOpenPanel openPanel];
     [myOpenPanel setAllowsMultipleSelection:YES];
     
-    void *sheetCompleation = ^(NSInteger result) {
-        if( result == NSFileHandlingPanelOKButton ) {
-            for (NSURL *aURL in [myOpenPanel URLs]) {
- 
+    void *sheetCompleation = ^(NSInteger result)
+    {
+        if( result == NSFileHandlingPanelOKButton )
+        {
+            for (NSURL *aURL in [myOpenPanel URLs])
+            {
                 NSManagedObject *newObject = [[streamTreeControler newObject] autorelease];
                 
                 /* Setup main object */
@@ -76,31 +78,78 @@
                 /* Setup first anaylizer */
                 NSMutableOrderedSet *theSet = [newObject mutableOrderedSetValueForKey:@"anaylizers"];
                 
-                 StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
+                StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
                 newAnaylizer.anaylizerKind = @"base anaylizer";
                 [theSet addObject:newAnaylizer];
-             
+                
                 [streamTreeControler addObject:newObject];
             }
         }
-     };
-
-    [myOpenPanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
+    };
     
-    NSTableView *tableView = [tableColumn tableView];
-    [tableColumn setWidth:[tableView frame].size.width-25.0];
+    [myOpenPanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
+}
+
+- (IBAction)removeAnaylizer:(id)sender
+{
+    NSAlert *myAlert = [NSAlert alertWithMessageText:@"Delete Anayliser" defaultButton:@"Cancel" alternateButton:@"OK" otherButton:@"" informativeTextWithFormat:@"Are you sure you want to delete this anayliser?"];
+    
+    [myAlert setAlertStyle:NSCriticalAlertStyle];
+    [myAlert beginSheetModalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(deleteAnayliserAlertDidEnd:returnCode:contextInfo:) contextInfo:sender];
+}
+
+- (void) deleteAnayliserAlertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    if (returnCode == 0)
+    {
+        StAnaylizer *anaylizer = contextInfo;
+        
+        NSDictionary *parameter = [NSDictionary dictionaryWithObjectsAndKeys:anaylizer.parentStream, @"parentStream", anaylizer, @"anaylizer", nil];
+        anaylizer.parentStream = nil;
+        
+        /* At the end of the run loop the UI will unhook itself from this object */
+        
+        /* After dealy, the managed object and it's decendents will be deleted */
+        [self performSelector:@selector(flushAnaylizer:) withObject:parameter afterDelay:0.0];
+    }
+}
+
+- (void) flushAnaylizer:(NSDictionary *)parameter
+{
+    StStream *parentStream = [parameter objectForKey:@"parentStream"];
+    StAnaylizer *anaylizer = [parameter objectForKey:@"anaylizer"];
+    
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+    [request setEntity:entity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (anaylizerKind == %@)", parentStream, anaylizer.anaylizerKind ];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *resultBlockArray = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if( error == nil )
+    {
+        for (StBlock *aBlock in resultBlockArray)
+        {
+            [[self managedObjectContext] deleteObject:aBlock];
+        }
+    }
+    else
+        NSLog( @"Deleting blocks in a stream: fetch returned error: %@", error );
+    
+    [[self managedObjectContext] deleteObject:anaylizer];
 }
 
 - (IBAction)makeNewBlocker:(id)sender
 {
     Class <BlockerProtocol> class = [sender representedObject];
-
+    
     NSArray *selectedObjects = [streamTreeControler selectedObjects];
     
     if( [selectedObjects count] > 0 )
     {
         StStream *selectedStream = [selectedObjects objectAtIndex:0];
-
+        
         /* Setup anaylizer */
         NSMutableOrderedSet *theSet = [selectedStream mutableOrderedSetValueForKey:@"anaylizers"];
         

@@ -133,6 +133,8 @@
 
 - (void)dealloc
 {
+    [[self.editorViewController view] removeFromSuperview];
+
     [self stopObserving];
     [self stopObservingBlockEditor];
     self.editorViewController = nil;
@@ -149,7 +151,6 @@
     return @"Blocker View";
 }
 
-/* Used for KVC and KVO in anaylizer options dictionary */
 + (NSString *)anaylizerKey;
 {
     return @"BlockerDataViewController";

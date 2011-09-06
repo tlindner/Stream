@@ -10,6 +10,7 @@
 #import "HexFiendAnaylizerController.h"
 #import "Analyzation.h"
 #import "StAnaylizer.h"
+#import "MyDocument.h"
 
 #define MINIMUM_HEIGHT 26.0
 
@@ -159,6 +160,12 @@
                 break;
         }
     }
+}
+
+- (IBAction)removeAnaylizer:(id)sender
+{
+    MyDocument *ourPerstantDocument = [[[self window] windowController] document];
+    [ourPerstantDocument removeAnaylizer:[self objectValue]];
 }
 
 -(void)dealloc

@@ -288,14 +288,6 @@ typedef struct
 
 - (void)dealloc
 {
-    if( observationsActive )
-    {
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
-    } 
-    
     if( panMomentumTimer != nil )
     {
         [panMomentumTimer invalidate];

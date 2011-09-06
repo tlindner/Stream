@@ -192,6 +192,18 @@
 
 - (void)dealloc
 {
+    WaveFormView *wfv = [self.scroller documentView];
+
+    if( wfv.observationsActive == YES )
+    {
+        StAnaylizer *theAna = [self representedObject];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+        wfv.observationsActive = NO;
+    } 
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     //[self removeTrackingArea:self.trackingArea];
@@ -276,7 +288,6 @@
     return @"Color Computer Audio Anaylizer";
 }
 
-/* Used for KVC and KVO in anaylizer options dictionary */
 + (NSString *)anaylizerKey;
 {
     return @"AudioAnaylizerViewController";
