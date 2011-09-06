@@ -126,7 +126,6 @@
                 distance = start - [theEvent locationInWindow].y;
                 distance += offset;
                 
-                NSLog( @"distance: %f", distance );
                 if( distance < MINIMUM_HEIGHT )
                 {
                     [_customView setHidden:YES];

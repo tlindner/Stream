@@ -197,10 +197,10 @@
     if( wfv.observationsActive == YES )
     {
         StAnaylizer *theAna = [self representedObject];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+        [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
+        [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
+        [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
+        [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
         wfv.observationsActive = NO;
     } 
     

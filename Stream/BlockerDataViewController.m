@@ -36,9 +36,13 @@
 - (void)loadView
 {
     [super loadView];
-    
-    StBlock *theBlock = [self representedObject];
-    [theBlock addSubOptionsDictionary:[BlockerDataViewController anaylizerKey] withDictionary:[BlockerDataViewController defaultOptions]];
+
+    StAnaylizer *theAna = [self representedObject];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (parentBlock == nil) AND (anaylizerKind == %@)", theAna.parentStream, theAna.anaylizerKind ];
+    [treeController setFetchPredicate:predicate];
+
+    [theAna addSubOptionsDictionary:[BlockerDataViewController anaylizerKey] withDictionary:[BlockerDataViewController defaultOptions]];
     if( [[[self representedObject] valueForKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"] boolValue] == YES )
     {
     }
@@ -48,7 +52,6 @@
         
         if (blockerClass != nil )
         {
-            StAnaylizer *theAna = [self representedObject];
             [blockerClass makeBlocks:theAna.parentStream];
             [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"];
         }
