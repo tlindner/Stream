@@ -12,6 +12,7 @@
 @implementation StAnaylizer
 
 @dynamic anaylizerHeight;
+@dynamic computedAnaylizerHeight;
 @dynamic anaylizerKind;
 @dynamic currentEditorView;
 @dynamic optionsDictionary;
@@ -19,7 +20,6 @@
 @dynamic resultingData;
 @dynamic sourceUTI;
 @dynamic resultingUTI;
-@dynamic previousAnaylizerHeight;
 @dynamic collapse;
 @dynamic removeEnabled;
 @dynamic blockSettingsHidden;
@@ -34,6 +34,14 @@
 		slvt = [[[streamLockValueTransformer alloc] init] autorelease];
 		[NSValueTransformer setValueTransformer:slvt forName:@"streamLockValueTransformer"];		
     }
+}
+
+- (float) computedAnaylizerHeight
+{
+    if( self.collapse == NO )
+        return 26.0;
+    else
+        return self.anaylizerHeight;
 }
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions

@@ -163,8 +163,8 @@
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
     NSMutableOrderedSet *oSet = [streamTreeControler valueForKeyPath:@"selection.anaylizers"];
-    NSManagedObject *mo = [oSet objectAtIndex:row];
-    float value = [[mo valueForKey:@"anaylizerHeight"] floatValue];
+    StAnaylizer *ana = [oSet objectAtIndex:row];
+    float value = ana.computedAnaylizerHeight;
     return value;
 }
 

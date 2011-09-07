@@ -6,7 +6,6 @@
         <attribute name="collapse" attributeType="Boolean" defaultValueString="YES"/>
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
-        <attribute name="previousAnaylizerHeight" attributeType="Float" defaultValueString="207"/>
         <attribute name="resultingData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="resultingUTI" attributeType="String" defaultValueString="public.data"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream"/>

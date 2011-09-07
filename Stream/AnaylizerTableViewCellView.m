@@ -17,7 +17,6 @@
 @implementation AnaylizerTableViewCellView
 
 @synthesize editorController;
-@synthesize newConstraints;
 
 - (id)init
 {
@@ -27,16 +26,6 @@
     }
     
     return self;
-}
-
-- (void)viewWillMoveToSuperview:(NSView *)newSuperview
-{
-    dragging = NO;
-    float newHeight = [[self valueForKeyPath:@"objectValue.anaylizerHeight"] floatValue];
-    NSRect ourRect = [self frame];
-    ourRect.size.height = newHeight;
-    [self setFrame:ourRect];
-    self.newConstraints = nil;
 }
 
 - (void)awakeFromNib
@@ -58,7 +47,7 @@
             [[self.editorController view] removeFromSuperview];
             self.editorController = nil;
         }
-
+        
         if (editorViewClass == nil)
             editorViewClass = [HexFiendAnaylizerController class];
         
@@ -71,33 +60,19 @@
         [self.editorController setRepresentedObject:self.objectValue];
         [self.editorController loadView];
         [[self.editorController view] setFrame:adjustedFrame];
-        
-        
         [_customView addSubview:[self.editorController view]];
         
-        if( newConstraints != nil )
-            [self updateConstraints];
+        //ignoreEvent = YES;
+        
+        NSTableView *tv = (NSTableView *)[[self superview] superview];
+        [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
     }
     else if( [keyPath isEqualToString:@"objectValue.collapse"] )
     {
         if( ignoreEvent == NO )
         {
-            StAnaylizer *ana = (StAnaylizer *)[self objectValue];
             NSTableView *tv = (NSTableView *)[[self superview] superview];
-            
-            if( ana.collapse == 1 )
-            {
-                ana.anaylizerHeight = ana.previousAnaylizerHeight;
-                [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
-                [_customView setHidden:NO];
-            }
-            else
-            {
-                ana.previousAnaylizerHeight = ana.anaylizerHeight;
-                ana.anaylizerHeight = MINIMUM_HEIGHT;
-                [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
-                [_customView setHidden:YES];  
-            }
+            [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
         }
         
         ignoreEvent = NO;
@@ -111,10 +86,10 @@
     CGFloat start, distance = 0, offset;
     BOOL keepOn = YES;
     StAnaylizer *ana = (StAnaylizer *)[self objectValue];
-    ana.previousAnaylizerHeight = ana.anaylizerHeight;
+    float startAnaylizerHeight = ana.anaylizerHeight;
     start = [theEvent locationInWindow].y;
     offset = [self bounds].size.height;
-
+    
     while (keepOn)
     {
         theEvent = [[self window] nextEventMatchingMask: NSLeftMouseUpMask | NSLeftMouseDraggedMask];
@@ -123,18 +98,19 @@
         {
             case NSLeftMouseDragged:
                 
+                ignoreEvent = YES;
                 distance = start - [theEvent locationInWindow].y;
                 distance += offset;
                 
                 if( distance < MINIMUM_HEIGHT )
                 {
-                    [_customView setHidden:YES];
                     distance = MINIMUM_HEIGHT;
+                    ana.collapse = NO;
                 }
                 else
-                    [_customView setHidden:NO];
-
-                [self setValue:[NSNumber numberWithFloat:distance] forKeyPath:@"objectValue.anaylizerHeight"];
+                    ana.collapse = YES;
+                
+                ana.anaylizerHeight = distance;
                 NSTableView *tv = (NSTableView *)[[self superview] superview];
                 NSAnimationContext *ac = [NSAnimationContext currentContext];
                 [ac setDuration:0.0];
@@ -147,10 +123,13 @@
                 ignoreEvent = YES;
                 
                 if( distance <= MINIMUM_HEIGHT )
+                {
                     ana.collapse = NO;
+                    ana.anaylizerHeight = startAnaylizerHeight;
+                }
                 else
                     ana.collapse = YES;
- 
+                
                 keepOn = NO;
                 break;
                 
@@ -178,7 +157,6 @@
         self.editorController = nil;
     }
     
-    self.newConstraints= nil;
     [super dealloc];
 }
 

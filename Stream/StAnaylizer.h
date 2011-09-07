@@ -17,9 +17,9 @@
 }
 
 @property (nonatomic) float anaylizerHeight;
-@property (nonatomic) float previousAnaylizerHeight;
 @property (nonatomic) BOOL collapse;
 @property (nonatomic, retain) NSString * anaylizerKind;
+@property (nonatomic, readonly) float computedAnaylizerHeight;
 @property (nonatomic, retain) NSString * currentEditorView;
 @property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
 @property (nonatomic, retain) StStream *parentStream;

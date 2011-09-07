@@ -17,15 +17,12 @@
     IBOutlet NSView *dragThumbView;
     IBOutlet NSButton *tlDisclosure;
     NSViewController *editorController;
-    NSMutableArray *newConstraints;
     NSSize dragOffsetIntoGrowBox;
-    BOOL dragging;
     BOOL ignoreEvent;
     float rowHeight;
 }
 
 @property(nonatomic, retain) NSViewController *editorController;
-@property(nonatomic, retain) NSMutableArray *newConstraints;
 
 - (IBAction)removeAnaylizer:(id)sender;
 
