@@ -33,6 +33,18 @@
     return self;
 }
 
+- (void)setRepresentedObject:(id)representedObject
+{
+    if( representedObject == nil )
+    {
+        [self stopObserving];
+        [self stopObservingBlockEditor];
+        [self.editorViewController setRepresentedObject:nil];
+    }
+    
+    [super setRepresentedObject:representedObject];
+}
+
 - (void)loadView
 {
     [super loadView];
@@ -112,6 +124,7 @@
             
             if( self.editorViewController != nil )
             {
+                [self.editorViewController setRepresentedObject:nil];
                 [[self.editorViewController view] removeFromSuperview];
                 self.editorViewController = nil;
             }

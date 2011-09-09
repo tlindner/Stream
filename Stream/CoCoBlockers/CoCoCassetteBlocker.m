@@ -75,13 +75,14 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
             StBlock *newBlock = [stream startNewBlockNamed:[NSString stringWithFormat:@"Block %d", blockName++] owner:[CoCoCassetteBlocker anaylizerKey]];
             
             unsigned char blockType = streamBytes[i+1];
-            unsigned char checksumCheck = 0x55;
+            unsigned char checksumCheck = 0;
             unsigned char fixed = 0x55;
             NSUInteger blockLength = streamBytes[i+2];
             
-            for( NSUInteger j=i+1; j<i+2+blockLength; j++ ) checksumCheck += streamBytes[j];
-            
+            for( NSUInteger j=i+1; j<i+3+blockLength; j++ ) checksumCheck += streamBytes[j];
+
             [newBlock addAttributeRange:@"stream" start:i+1 length:1 name:@"Block Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
+            [newBlock addAttributeRange:@"stream" start:i+2 length:1 name:@"Length" verification:nil transformation:@"BlocksUnsignedBigEndian"];
             [newBlock addAttributeRange:@"stream" start:i+blockLength+3 length:1 name:@"Check Sum" verification:[NSData dataWithBytes:&checksumCheck length:1] transformation:@"BlocksUnsignedBigEndian"];
             [newBlock addAttributeRange:@"stream" start:i+blockLength+4 length:1 name:@"Fixed" verification:[NSData dataWithBytes:&fixed length:1] transformation:@"BlocksUnsignedBigEndian"];
             

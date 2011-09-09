@@ -1667,6 +1667,8 @@ static BOOL rangesAreInAscendingOrder(NSEnumerator *rangeEnumerator) {
         success = [self _insertionModeCoreInsertByteArray:bytesToInsert replacingPreviousBytes:previousBytes allowUndoCoalescing:allowUndoCoalescing outNewSingleSelectedRange:&modificationRange];
     }
     
+    NSLog( @"Edit: location %llu, length: %llu", modificationRange.location, modificationRange.length );
+    
     if (success) {
         /* Update our selection */
         [self _addPropertyChangeBits:HFControllerContentValue];

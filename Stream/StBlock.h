@@ -33,7 +33,7 @@
 @property (nonatomic, retain) StBlock *parentBlock;
 @property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
 @property (nonatomic, retain) NSSet *blocks;
-@property (nonatomic, readonly) NSDictionary *dataForUI;
+@property (nonatomic, assign) NSDictionary *dataForUI;
 @property (nonatomic, readonly) NSDictionary *checkBytesForUI;
 @property (nonatomic, readonly) NSData *data;
 

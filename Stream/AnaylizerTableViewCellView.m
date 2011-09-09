@@ -38,34 +38,37 @@
 {
     if ([keyPath isEqualToString:@"objectValue.currentEditorView"])
     {
-        // create sub view editor.
-        Class editorViewClass = [[Analyzation sharedInstance] anaylizerClassforName:[change objectForKey:@"new"]];
-        
-        if( self.editorController != nil )
+        if( [[[change objectForKey:@"new"] class] isSubclassOfClass:[NSString class]] )
         {
-            // teardown existing sub view editor
-            [[self.editorController view] removeFromSuperview];
-            self.editorController = nil;
+            // create sub view editor.
+            Class editorViewClass = [[Analyzation sharedInstance] anaylizerClassforName:[change objectForKey:@"new"]];
+            
+            if( self.editorController != nil )
+            {
+                // teardown existing sub view editor
+                [[self.editorController view] removeFromSuperview];
+                self.editorController = nil;
+            }
+            
+            if (editorViewClass == nil)
+                editorViewClass = [HexFiendAnaylizerController class];
+            
+            //NSLog( @"name: %@, class: %@", [change objectForKey:@"new"], editorViewClass );
+            
+            NSRect adjustedFrame = [_customView frame];
+            adjustedFrame.origin.x = 0;
+            adjustedFrame.origin.y = 0;
+            self.editorController = [[[editorViewClass alloc] initWithNibName:nil bundle:nil] autorelease];
+            [self.editorController setRepresentedObject:self.objectValue];
+            [self.editorController loadView];
+            [[self.editorController view] setFrame:adjustedFrame];
+            [_customView addSubview:[self.editorController view]];
+            
+            //ignoreEvent = YES;
+            
+            NSTableView *tv = (NSTableView *)[[self superview] superview];
+            [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
         }
-        
-        if (editorViewClass == nil)
-            editorViewClass = [HexFiendAnaylizerController class];
-        
-        //NSLog( @"name: %@, class: %@", [change objectForKey:@"new"], editorViewClass );
-        
-        NSRect adjustedFrame = [_customView frame];
-        adjustedFrame.origin.x = 0;
-        adjustedFrame.origin.y = 0;
-        self.editorController = [[[editorViewClass alloc] initWithNibName:nil bundle:nil] autorelease];
-        [self.editorController setRepresentedObject:self.objectValue];
-        [self.editorController loadView];
-        [[self.editorController view] setFrame:adjustedFrame];
-        [_customView addSubview:[self.editorController view]];
-        
-        //ignoreEvent = YES;
-        
-        NSTableView *tv = (NSTableView *)[[self superview] superview];
-        [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
     }
     else if( [keyPath isEqualToString:@"objectValue.collapse"] )
     {
@@ -137,6 +140,14 @@
                 /* Ignore any other kind of event. */
                 break;
         }
+    }
+}
+
+- (void) viewWillMoveToSuperview:(NSView *)newSuperview
+{
+    if( newSuperview == nil )
+    {
+        [editorController setRepresentedObject:nil];
     }
 }
 

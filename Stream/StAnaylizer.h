@@ -38,3 +38,7 @@
 @private
 }
 @end
+
+@interface NSValueTransformer (StreamsValueTransformerAdditions)
+- (id)reverseTransformedValue:(id)value ofSize:(size_t)size;
+@end

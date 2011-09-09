@@ -13,6 +13,7 @@
     NSArrayController *arrayController;
     StBlockFormatter *blockFormatter;
     NSTableView *tableView;
+    BOOL observationsActive;
 }
 
 @property (assign) IBOutlet NSTableView *tableView;

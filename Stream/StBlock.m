@@ -227,6 +227,38 @@
     return result;
 }
 
+- (void) setDataForUI:(NSDictionary *)dictionary
+{
+    /* parse string and pass change up the block chain */
+    NSString *mode = [dictionary objectForKey:@"mode"];
+    id value = [dictionary objectForKey:@"value"];
+    
+    NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:self.valueTransformer];
+    
+    if( [[[vt class] transformedValueClass] isKindOfClass:[NSNumber class]] )
+    {
+        NSUInteger result = 0;
+
+        if( [mode isEqualToString:@"Hexadecimal"] )
+        {
+            /* convert number from hexidecimal to decimal */
+            unsigned long long tempResult;
+            [[NSScanner scannerWithString: value] scanHexLongLong:&tempResult];
+            result = (NSUInteger)tempResult;
+            value = [NSNumber numberWithUnsignedLongLong:tempResult];
+        }
+        else
+        {
+            result = [value integerValue];
+            value = [NSNumber numberWithUnsignedInteger:result];
+        }
+    }
+
+    NSData *theData = [vt reverseTransformedValue:value ofSize:[self length]];
+    
+    [[self parentStream] setBlock:self withData:theData];
+}
+
 - (NSDictionary *)checkBytesForUI
 {
     NSDictionary *result = nil;
@@ -277,6 +309,8 @@
 
 - (BOOL)getObjectValue:(id *)anObject forString:(NSString *)string errorDescription:(NSString **)error
 {
+    /* just send the string back, we'll parse in the StBlock */
+    *anObject = [NSDictionary dictionaryWithObjectsAndKeys:mode, "mode", string, @"value", nil];
     return YES;
 }
 

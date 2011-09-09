@@ -24,10 +24,22 @@
     return self;
 }
 
-//- (void)setRepresentedObject:(id)representedObject
-//{
-//    [super setRepresentedObject:representedObject];
-//}
+- (void)setRepresentedObject:(id)representedObject
+{
+    if( representedObject == nil )
+    {
+        if( observationsActive )
+        {
+            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
+            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
+            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+            
+            observationsActive = NO;
+        }
+    }
+    
+    [super setRepresentedObject:representedObject];
+}
 
 - (void)loadView
 {
@@ -74,8 +86,13 @@
         [[hexView layoutRepresenter] addRepresenter:lcRepresenter];
     }
 
+    BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"] boolValue];
+    [[hexView controller] setInOverwriteMode:overWriteMode];
+    
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset" options:NSKeyValueChangeSetting context:nil];
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase" options:NSKeyValueChangeSetting context:nil];
+    [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode" options:NSKeyValueChangeSetting context:nil];
+
     observationsActive = YES;
 }
 
@@ -83,7 +100,8 @@
 {
     BOOL showOffset = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"] boolValue];
     NSString *offsetBase = [[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
-
+    BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"] boolValue];
+    
     if ([keyPath isEqualToString:@"optionsDictionary.HexFiendAnaylizerController.showOffset"])
     {
         HFTextView *hexView = (HFTextView *)[self view];
@@ -107,6 +125,11 @@
     {
         [self setLineNumberFormatString:offsetBase];
         return;
+    }
+    else if ([keyPath isEqualToString:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"])
+    {
+        HFTextView *hexView = (HFTextView *)[self view];
+        [[hexView controller] setInOverwriteMode:overWriteMode];
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -132,10 +155,12 @@
 
 - (void)dealloc
 {
-    if( observationsActive )
+    if( observationsActive == YES )
     {
         [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
         [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
+        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+        
         observationsActive = NO;
     }
 
@@ -169,7 +194,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"showOffset", @"Hexadecimal", @"offsetBase",[NSArray arrayWithObjects:@"Hexadecimal", @"Decimal", nil], @"offsetBaseOptions", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"showOffset", @"Hexadecimal", @"offsetBase",[NSArray arrayWithObjects:@"Hexadecimal", @"Decimal", nil], @"offsetBaseOptions", [NSNumber numberWithBool:YES], @"overWriteMode", nil] autorelease];
 }
 
 @end

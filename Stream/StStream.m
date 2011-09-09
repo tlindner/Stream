@@ -150,4 +150,25 @@
     }    
 }
 
+- (void) setBlock:(StBlock *)theBlock withData:theData
+{
+    /* assemble array of primitive ranges of stream */
+    
+    /* coalesce ranges */
+    
+    /* delete all blocks */
+    
+    /* iterate over ranges, setting data in stream */
+ 
+    /* regenerate blocks */
+    
+    
+}
+
+
+
+
+
+
+
 @end

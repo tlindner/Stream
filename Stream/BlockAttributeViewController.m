@@ -24,6 +24,20 @@
     return self;
 }
 
+- (void)setRepresentedObject:(id)representedObject
+{
+    if( representedObject == nil )
+    {
+        if( observationsActive == YES )
+        {
+            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
+            observationsActive = NO;
+        }
+    }
+    
+    [super setRepresentedObject:representedObject];
+}
+
 - (void) loadView
 {
     [super loadView];
@@ -34,6 +48,7 @@
     blockFormatter.mode = currentMode;
     
     [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:nil];
+    observationsActive = YES;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -52,7 +67,12 @@
 
 - (void)dealloc
 {
-    [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
+    if( observationsActive == YES )
+    {
+        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
+        observationsActive = NO;
+    }
+    
     [super dealloc];
 }
 

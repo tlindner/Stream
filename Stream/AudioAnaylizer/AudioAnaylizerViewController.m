@@ -26,6 +26,26 @@
     return self;
 }
 
+- (void)setRepresentedObject:(id)representedObject
+{
+    if( representedObject == nil )
+    {
+        WaveFormView *wfv = [self.scroller documentView];
+        
+        if( wfv.observationsActive == YES )
+        {
+            StAnaylizer *theAna = [self representedObject];
+            [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
+            [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
+            [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
+            [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+            wfv.observationsActive = NO;
+        } 
+    }
+    
+    [super setRepresentedObject:representedObject];
+}
+
 -(void)loadView
 {
     [super loadView];
