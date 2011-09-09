@@ -65,6 +65,11 @@
     }
 }
 
+- (void) writebyte:(unsigned char) byte atOffset:(NSUInteger)offset
+{
+    NSLog( @"Unimplmented: %@ writing byte %x at offset %lu", [self currentEditorView], byte, offset );
+}
+
 - (void)awakeFromInsert
 {
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];

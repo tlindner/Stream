@@ -492,12 +492,12 @@
 			isa = PBXGroup;
 			children = (
 				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
-				7760145E140987A500777D60 /* StBlock.h */,
-				7760145F140987A600777D60 /* StBlock.m */,
 				778A597C140703DB00B68EB4 /* StStream.h */,
 				778A597D140703DB00B68EB4 /* StStream.m */,
 				77FEA6D613F57D4B0082B946 /* StAnaylizer.h */,
 				77FEA6D713F57D4B0082B946 /* StAnaylizer.m */,
+				7760145E140987A500777D60 /* StBlock.h */,
+				7760145F140987A600777D60 /* StBlock.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";

@@ -43,9 +43,9 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
 
 + (void) makeBlocks:(StStream *)stream
 {
-    NSAssert( [stream respondsToSelector:@selector(blockNamed:)] == YES, @"CoCoCassetteBlocker: Incompatiable stream" );
+    NSAssert( [stream respondsToSelector:@selector(dataOfBlockNamed:)] == YES, @"CoCoCassetteBlocker: Incompatiable stream" );
     
-    NSData  *streamBytesObject = [stream blockNamed:@"stream"];
+    NSData  *streamBytesObject = [stream dataOfBlockNamed:@"stream"];
     NSAssert( streamBytesObject != nil, @"CoCoCassetteBlocker: no stream object" );
     
     unsigned char *streamBytes = (unsigned char *)[streamBytesObject bytes];

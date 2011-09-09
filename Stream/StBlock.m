@@ -198,7 +198,7 @@
             
             for (StBlock *theBlock in subBlocks)
             {
-                NSData *blockData = [ourStream blockNamed:theBlock.source];
+                NSData *blockData = [ourStream dataOfBlockNamed:theBlock.source];
                 NSRange theRange = NSMakeRange(theBlock.offset, theBlock.length);
                 [result appendData:[blockData subdataWithRange:theRange]];
             }
@@ -208,7 +208,7 @@
     {
         /* This is a leaf block */
         StStream *ourStream = [self getStream];
-        NSData *blockData = [ourStream blockNamed:self.source];
+        NSData *blockData = [ourStream dataOfBlockNamed:self.source];
         NSRange theRange = NSMakeRange(self.offset, self.length);
         result = [[blockData subdataWithRange:theRange] mutableCopy];
         [result autorelease];
@@ -216,6 +216,69 @@
     
     return result;
 }
+
+- (NSArray *)getBlocks
+{
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* This is a top level block, return blocks from data block */
+            [result addObjectsFromArray:[[self blockNamed:@"data"] getBlocks]];
+        }
+        else
+        {
+            /* This is a midlevel block, return it's accumulated blocks */
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+            NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            
+            for (StBlock *aBlock in subBlocks)
+            {
+                [result addObjectsFromArray:[aBlock getBlocks]];
+            }
+        }
+    }
+    else
+    {
+        /* This is a leaf block */
+        [result addObject:self];
+    }
+    
+    return [result autorelease];
+}
+
+- (void)writeByte:(unsigned char)byte atOffset:(NSUInteger)offset
+{
+    NSArray *blockArray = [self getBlocks];
+    NSUInteger place = 0;
+    BOOL byteWritten = NO;
+    
+    for (StBlock *aBlock in blockArray)
+    {
+        if( offset < place + aBlock.length )
+        {
+            /* we found the block to write to */
+            if( [aBlock.name isEqualToString:@"stream"] )
+            {
+                /* writing to stream */
+                [[[self getStream] lastFilterAnayliser] writebyte:byte atOffset:aBlock.offset + (offset - place)];
+                byteWritten = YES;
+            }
+            else
+            {
+                StBlock *subBlock = [[self getStream] blockNamed:aBlock.name];
+                [subBlock writeByte:byte atOffset:offset - place];
+            }
+        }
+        else
+            place += aBlock.length;
+    }
+    
+    NSAssert(byteWritten == YES, @"Tried writing byte past end of block: %@, offset: %d", [self name], [self offset]);
+}
+
 
 - (NSDictionary *)dataForUI
 {
@@ -238,7 +301,7 @@
     if( [[[vt class] transformedValueClass] isKindOfClass:[NSNumber class]] )
     {
         NSUInteger result = 0;
-
+        
         if( [mode isEqualToString:@"Hexadecimal"] )
         {
             /* convert number from hexidecimal to decimal */
@@ -253,7 +316,7 @@
             value = [NSNumber numberWithUnsignedInteger:result];
         }
     }
-
+    
     NSData *theData = [vt reverseTransformedValue:value ofSize:[self length]];
     
     [[self parentStream] setBlock:self withData:theData];

@@ -53,7 +53,9 @@
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 - (NSData *)getData;
+- (NSArray *)getBlocks;
 - (StBlock *)blockNamed:(NSString *)inName;
+- (void)writeByte:(unsigned char)byte atOffset:(NSUInteger)offset;
 
 @end
 

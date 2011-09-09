@@ -29,10 +29,12 @@
 @property (nonatomic, retain) NSSet * childStreams;
 @property (nonatomic, retain) StStream * parentStream;
 
-- (NSData *)blockNamed:(NSString *)name;
+- (NSData *)dataOfBlockNamed:(NSString *)name;
 - (StBlock *)startNewBlockNamed:(NSString *)name owner:(NSString *)owner;
 - (NSSet *)blocksWithKey:(NSString *)key;
 - (void) setBlock:(StBlock *)theBlock withData:theData;
+- (StAnaylizer *)lastFilterAnayliser;
+- (StBlock *)blockNamed:(NSString *)theName;
 
 @end
 
