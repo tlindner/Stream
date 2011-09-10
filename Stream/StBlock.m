@@ -84,7 +84,7 @@
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
 {
-    StBlock *attributeBlock = [self blockNamed:@"attributes"];
+    StBlock *attributeBlock = [self subBlockNamed:@"attributes"];
     StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
     newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", attrIndex, blockName, start, length];
     newBlock.source = blockName;
@@ -119,7 +119,7 @@
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
 {
-    StBlock *dataBlock = [self blockNamed:@"data"];
+    StBlock *dataBlock = [self subBlockNamed:@"data"];
     StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
     newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
     newBlock.uiName = name;
@@ -142,7 +142,7 @@
 
 - (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
 {
-    StBlock *depBlock = [self blockNamed:@"dependencies"];
+    StBlock *depBlock = [self subBlockNamed:@"dependencies"];
     StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
     newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
     newBlock.uiName = name;
@@ -156,7 +156,7 @@
     self.expectedSize += length;
 }
 
-- (StBlock *)blockNamed:(NSString *)inName
+- (StBlock *)subBlockNamed:(NSString *)inName
 {
     void *predicate = ^(id obj, BOOL *stop)
     {
@@ -185,7 +185,7 @@
         if( self.parentStream != nil )
         {
             /* This is a top level block, return data from data block */
-            return [[self blockNamed:@"data"] getData];
+            return [[self subBlockNamed:@"data"] getData];
         }
         else
         {
@@ -217,7 +217,7 @@
     return result;
 }
 
-- (NSArray *)getBlocks
+- (NSArray *)getArrayOfBlocks
 {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     
@@ -226,7 +226,7 @@
         if( self.parentStream != nil )
         {
             /* This is a top level block, return blocks from data block */
-            [result addObjectsFromArray:[[self blockNamed:@"data"] getBlocks]];
+            [result addObjectsFromArray:[[self subBlockNamed:@"data"] getArrayOfBlocks]];
         }
         else
         {
@@ -236,7 +236,7 @@
             
             for (StBlock *aBlock in subBlocks)
             {
-                [result addObjectsFromArray:[aBlock getBlocks]];
+                [result addObjectsFromArray:[aBlock getArrayOfBlocks]];
             }
         }
     }
@@ -249,9 +249,28 @@
     return [result autorelease];
 }
 
-- (void)writeByte:(unsigned char)byte atOffset:(NSUInteger)offset
+- (NSString *)description
 {
-    NSArray *blockArray = [self getBlocks];
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            return [NSString stringWithFormat:@"Top level block named: %@", [self name]];
+        }
+        else
+        {
+            return [NSString stringWithFormat:@"Mid level block:%@, named: %@", [[self parentBlock] name], [self name]];
+        }
+    }
+    else
+    {
+        return [NSString stringWithFormat:@"Leaf block: %@, named: %@, index: %d, source: %@, start: %d, lenth: %d", [[[self parentBlock] parentBlock] name], [[self parentBlock] name], [self index], [self source], self.offset, self.length];
+    }
+}
+
+- (BOOL) writeByte:(unsigned char)byte atOffset:(NSUInteger)offset
+{
+    NSArray *blockArray = [self getArrayOfBlocks];
     NSUInteger place = 0;
     BOOL byteWritten = NO;
     
@@ -260,7 +279,7 @@
         if( offset < place + aBlock.length )
         {
             /* we found the block to write to */
-            if( [aBlock.name isEqualToString:@"stream"] )
+            if( [aBlock.source isEqualToString:@"stream"] )
             {
                 /* writing to stream */
                 [[[self getStream] lastFilterAnayliser] writebyte:byte atOffset:aBlock.offset + (offset - place)];
@@ -268,8 +287,8 @@
             }
             else
             {
-                StBlock *subBlock = [[self getStream] blockNamed:aBlock.name];
-                [subBlock writeByte:byte atOffset:offset - place];
+                StBlock *subBlock = [[self getStream] blockNamed:aBlock.source];
+                byteWritten = [subBlock writeByte:byte atOffset:offset - place];
             }
         }
         else
@@ -277,6 +296,7 @@
     }
     
     NSAssert(byteWritten == YES, @"Tried writing byte past end of block: %@, offset: %d", [self name], [self offset]);
+    return byteWritten;
 }
 
 
@@ -298,15 +318,20 @@
     
     NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:self.valueTransformer];
     
-    if( [[[vt class] transformedValueClass] isKindOfClass:[NSNumber class]] )
+    if( [[[vt class] transformedValueClass] isSubclassOfClass:[NSNumber class]] )
     {
+        NSString *string = value;
+        
+        if( [string hasPrefix:@"0x"] )
+            mode = @"Hexadecimal";
+        
         NSUInteger result = 0;
         
         if( [mode isEqualToString:@"Hexadecimal"] )
         {
             /* convert number from hexidecimal to decimal */
             unsigned long long tempResult;
-            [[NSScanner scannerWithString: value] scanHexLongLong:&tempResult];
+            [[NSScanner scannerWithString: string] scanHexLongLong:&tempResult];
             result = (NSUInteger)tempResult;
             value = [NSNumber numberWithUnsignedLongLong:tempResult];
         }
@@ -319,7 +344,7 @@
     
     NSData *theData = [vt reverseTransformedValue:value ofSize:[self length]];
     
-    [[self parentStream] setBlock:self withData:theData];
+    [[self getStream] setBlock:self withData:theData];
 }
 
 - (NSDictionary *)checkBytesForUI
@@ -341,24 +366,33 @@
 - (NSString *)stringForObjectValue:(id)anObject
 {
     id result;
-    
+
     if( [anObject isKindOfClass:[NSDictionary class]] )
     {
         NSDictionary *inDict = anObject;
+        NSString *valueTransformerString = [inDict objectForKey:@"valueTransformer"];
         
-        NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:[inDict objectForKey:@"valueTransformer"]];
-        result = [vt transformedValue:[inDict objectForKey:@"value"]];
-        
-        if( ![result isKindOfClass:[NSString class]] )
+        if( valueTransformerString == nil )
         {
-            if( [self.mode isEqualToString:@"Decimal"] )
-                result = [result stringValue];
-            else
+            /* a dictionary without a value transformer is from the reverse formatter */
+            result = [inDict objectForKey:@"value"];
+        }
+        else
+        {
+            /* a dictionary with no value transformer is straight from the block object */
+            NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:valueTransformerString];
+            result = [vt transformedValue:[inDict objectForKey:@"value"]];
+            
+            if( ![result isKindOfClass:[NSString class]] )
             {
-                result = [NSString stringWithFormat:@"0x%x", [result intValue]];
+                if( [self.mode isEqualToString:@"Decimal"] )
+                    result = [result stringValue];
+                else
+                {
+                    result = [NSString stringWithFormat:@"0x%x", [result intValue]];
+                }
             }
         }
-        
     }
     else if( [anObject isKindOfClass:[NSString class]] )
     {
@@ -372,9 +406,17 @@
 
 - (BOOL)getObjectValue:(id *)anObject forString:(NSString *)string errorDescription:(NSString **)error
 {
-    /* just send the string back, we'll parse in the StBlock */
-    *anObject = [NSDictionary dictionaryWithObjectsAndKeys:mode, "mode", string, @"value", nil];
-    return YES;
+    if( [[string class] isSubclassOfClass:[NSString class]] )
+    {
+        /* just send the string back, we'll parse in the StBlock */
+        *anObject = [NSDictionary dictionaryWithObjectsAndKeys:mode, @"mode", string, @"value", nil];
+        return YES;
+    }
+    else
+    {
+        NSLog( @"Incomming string not string: %@", string );
+        return NO;
+    }
 }
 
 @end

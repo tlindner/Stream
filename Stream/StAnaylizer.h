@@ -31,6 +31,7 @@
 @property (nonatomic, readonly) NSString * title;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
+- (void) writebyte:(unsigned char) byte atOffset:(NSUInteger)offset;
 
 @end
 
