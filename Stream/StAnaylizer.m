@@ -65,9 +65,16 @@
     }
 }
 
-- (void) writebyte:(unsigned char) byte atOffset:(NSUInteger)offset
+- (void) writebyte:(unsigned char)byte atOffset:(NSUInteger)offset
 {
-    NSLog( @"Unimplmented: %@ writing byte %x at offset %lu", [self currentEditorView], byte, offset );
+    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:offset];
+    NSRange range = NSMakeRange(offset, 1);
+    
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"resultingData"];
+    [self.resultingData replaceBytesInRange:range withBytes:&byte];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"resultingData"];
+    
+    //NSLog( @"Unimplmented: %@ writing byte %x at offset %lu", [self currentEditorView], byte, offset );
 }
 
 - (void)awakeFromInsert

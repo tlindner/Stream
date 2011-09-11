@@ -24,7 +24,7 @@ typedef struct
 @interface WaveFormView : NSView
 {
     NSUInteger frameCount;
-    Float64 sampleRate;
+//    Float64 sampleRate;
     NSUInteger channelCount;
     
     NSInteger toolMode;
@@ -41,12 +41,13 @@ typedef struct
     CGFloat originFrames[ZOOM_FRAMES];
     CGFloat sizeFrames[ZOOM_FRAMES];
     int currentFrame;
+    BOOL needsAnaylyzation;
 }
 
 @property (nonatomic, assign) AudioAnaylizerViewController *viewController;
 
 @property(nonatomic, assign) NSUInteger frameCount;
-@property(nonatomic, assign) Float64 sampleRate;
+//@property(nonatomic, assign) Float64 sampleRate;
 
 @property(nonatomic, assign) NSUInteger channelCount;
 @property(nonatomic, assign) NSUInteger currentChannel;
@@ -57,14 +58,13 @@ typedef struct
 @property(nonatomic, assign) Float32 *previousBuffer;
 
 @property(nonatomic, assign) StAnaylizer *cachedAnaylizer;
-@property(nonatomic, assign) float lowCycle;
-@property(nonatomic, assign) float highCycle;
+//@property(nonatomic, assign) float lowCycle;
+//@property(nonatomic, assign) float highCycle;
 @property(nonatomic, assign) float resyncThresholdHertz;
 @property(nonatomic, assign) BOOL observationsActive;
 
 @property(nonatomic, assign) BOOL anaylizationError;
 @property(nonatomic, retain) NSString *errorString;
-@property(nonatomic, assign) BOOL needsAnaylyzation;
 
 - (void) anaylizeAudioData;
 - (IBAction)chooseTool:(id)sender;

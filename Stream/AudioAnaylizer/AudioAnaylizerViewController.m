@@ -39,6 +39,8 @@
             [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
             [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
             [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+            [theAna removeObserver:wfv forKeyPath:@"resultingData"];
+            
             wfv.observationsActive = NO;
         } 
     }
@@ -83,7 +85,7 @@
         
         wfv.channelCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"] unsignedIntegerValue];
         wfv.currentChannel = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] integerValue];
-        wfv.sampleRate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
+//        wfv.sampleRate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
         wfv.frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
     }
     else
@@ -97,7 +99,7 @@
         
         if (myErr == noErr)
         {
-            [theAna willChangeValueForKey:@"optionsDictionary"];
+//            [theAna willChangeValueForKey:@"optionsDictionary"];
             SInt64 fileFrameCount;
             
             AudioStreamBasicDescription clientFormat;
@@ -111,7 +113,7 @@
             
             wfv.currentChannel = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] integerValue];
             
-            wfv.sampleRate = clientFormat.mSampleRate;
+//            wfv.sampleRate = clientFormat.mSampleRate;
             [theAna setValue:[NSNumber numberWithDouble:clientFormat.mSampleRate] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"];
             
             /* Build array for channel popup list in accessory view */
@@ -154,7 +156,7 @@
             NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
             
             [theAna setValue:frameBufferObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
-            [theAna didChangeValueForKey:@"optionsDictionary"];
+//            [theAna didChangeValueForKey:@"optionsDictionary"];
             [wfv anaylizeAudioData];
             
             [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"];
@@ -176,6 +178,8 @@
         [theAna addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
         [theAna addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
         [theAna addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
+        [theAna addObserver:wfv forKeyPath:@"resultingData" options:NSKeyValueChangeReplacement context:nil];
+
         wfv.observationsActive = YES;
     }
     
@@ -226,6 +230,7 @@
         [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
         [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
         [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+        [theAna removeObserver:wfv forKeyPath:@"resultingData"];
         wfv.observationsActive = NO;
     } 
     
@@ -248,9 +253,9 @@
     boundsRect.origin.x += (width-newWidth)/2.0;
     
     [clipView setBounds:boundsRect];
-    [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
+//    [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
     [[self representedObject] setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
-    [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
+//    [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
     
     NSRect rect = [[self.scroller documentView] frame];
     rect.size.height = boundsRect.size.height;
@@ -268,9 +273,9 @@
     
     newBoundsRect.size.width = inRect.size.width;
     [clipView setBounds:newBoundsRect];
-    [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
+//    [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
     [[self representedObject] setValue:[NSNumber numberWithFloat:newBoundsRect.size.width] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
-    [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
+//    [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
     [self.slider setFloatValue:newBoundsRect.size.width];
 
     NSRect rect = [[self.scroller documentView] frame];
@@ -294,9 +299,9 @@
     boundsRect.size.width = newWidth;
     boundsRect.origin.x += (width-newWidth)/ratio;
     [clipView setBounds:boundsRect];
-    [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
+//    [[self representedObject] willChangeValueForKey:@"optionsDictionary"];
     [[self representedObject] setValue:[NSNumber numberWithFloat:newWidth] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"];
-    [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
+//    [[self representedObject] didChangeValueForKey:@"optionsDictionary"];
 
     NSRect rect = [[self.scroller documentView] frame];
     rect.size.height = boundsRect.size.height;
@@ -330,7 +335,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"frameCount", [NSNull null], @"coalescedObject", [NSNull null], @"frameBufferObject",[NSNumber numberWithBool:NO], @"initializedOD", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"frameCount", [NSNull null], @"coalescedObject", [NSNull null], @"frameBufferObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", nil] autorelease];
 }
 
 @end

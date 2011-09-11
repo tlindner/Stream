@@ -39,7 +39,7 @@ typedef struct
 
 @synthesize viewController;
 @synthesize frameCount;
-@synthesize sampleRate;
+//@synthesize sampleRate;
 @synthesize channelCount;
 @synthesize currentChannel;
 @synthesize previousCurrentChannel;
@@ -47,13 +47,12 @@ typedef struct
 @synthesize previousFrameWidth;
 @synthesize previousOffset;
 @synthesize previousBuffer;
-@synthesize lowCycle;
-@synthesize highCycle;
+//@synthesize lowCycle;
+//@synthesize highCycle;
 @synthesize resyncThresholdHertz;
 @synthesize cachedAnaylizer;
 @synthesize anaylizationError;
 @synthesize errorString;
-@synthesize needsAnaylyzation;
 @synthesize observationsActive;
 
 - (id)initWithFrame:(NSRect)frame
@@ -72,7 +71,9 @@ typedef struct
 {
     NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
     
-    if( needsAnaylyzation ) [self anaylizeAudioData];
+    NSLog( @"drawRect: needsAnaylyzation = %d", needsAnaylyzation );
+    
+    if( needsAnaylyzation == YES ) [self anaylizeAudioData];
     
     NSMutableData *coalescedObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
     NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
@@ -122,7 +123,8 @@ typedef struct
         int offset = dirtyRect.origin.x;
         if( offset < 0 ) offset = 0;
         AudioSampleType *frameStart = audioFrames + (offset * channelCount) + (currentChannel-1); // Interleaved samples
-        
+        double sampleRate = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
+       
         if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) && (previousCurrentChannel == currentChannel) )
         {
             viewFloats = previousBuffer;
@@ -307,48 +309,138 @@ typedef struct
 {
     id newObject;
     
-    if ([keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"])
+    NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
+    
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] )
     {
         newObject = [change objectForKey:@"new"];
-        if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != lowCycle)
+//        if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != lowCycle)
         {
-            self.needsAnaylyzation = YES;
+            needsAnaylyzation = YES;
             [self setNeedsDisplay:YES];
         }
         
         return;
     }
     
-    if ([keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"])
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] )
     {
         newObject = [change objectForKey:@"new"];
-        if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != highCycle)
+ //       if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != highCycle)
         {
-            self.needsAnaylyzation = YES;
+            needsAnaylyzation = YES;
             [self setNeedsDisplay:YES];
         }
         
         return;
     }
     
-    if ([keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"])
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"])
     {
         newObject = [change objectForKey:@"new"];
         if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != resyncThresholdHertz)
         {
-            self.needsAnaylyzation = YES;
+            needsAnaylyzation = YES;
             [self setNeedsDisplay:YES];
         }
         
         return;
     }
     
-    if ([keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"])
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] )
     {
         newObject = [change objectForKey:@"new"];
         if ([newObject respondsToSelector:@selector(integerValue)] && [newObject integerValue] != currentChannel)
         {
-            self.needsAnaylyzation = YES;
+            needsAnaylyzation = YES;
+            [self setNeedsDisplay:YES];
+        }
+        
+        return;
+    }
+    
+    if( [keyPath isEqualToString:@"resultingData"] )
+    {
+        //NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
+        NSUInteger kind = [[change objectForKey:@"kind"] unsignedIntegerValue];
+        if( kind == NSKeyValueChangeReplacement )
+        {
+            NSIndexSet *changedOffsets = [change objectForKey:@"indexes"];
+            
+            void *enumerateBlock = ^(NSUInteger idx, BOOL *stop)
+            {
+                /* add index to modified set */
+                NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+                [changedSet addIndex:idx];
+                
+                /* get max of current wave form */
+                NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
+                charRef *characters = (charRef *)[charactersObject bytes];
+                channelCount = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"] unsignedIntegerValue];
+                NSMutableData *audioFramesObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+                AudioSampleType *audioFrames = [audioFramesObject mutableBytes];
+                AudioSampleType *frameStart = audioFrames + (characters[idx].start * channelCount) + (currentChannel-1); // Interleaved samples
+                AudioSampleType maxValue;
+                
+                vDSP_maxv( frameStart, channelCount, &maxValue, characters[idx].length );
+                
+                /* calculate waveform buffer size */
+                NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
+                unsigned char *character = [characterObject mutableBytes];
+                int zeros = 0, ones = 0;
+                unsigned int test = character[idx];
+                
+                for( int i=0; i<8; i++ )
+                {
+                    if( (test & 0x01) == 0x01 ) ones++; else zeros++;
+                    test >>= 1;
+                }
+                
+                double sampleRate = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
+                float lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] floatValue];
+                float highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
+
+                int onesLength = sampleRate / highCycle;
+                int zerosLength = sampleRate / lowCycle;
+                int totalLength = (ones * onesLength) + (zeros * zerosLength);
+                
+                AudioSampleType *newByteWaveForm = malloc( sizeof(AudioSampleType) * totalLength );
+                int waveFormIndex = 0;
+                test = character[idx];
+                
+                /* build new byte waveform */
+                for( int i=0; i<8; i++ )
+                {
+                    int sinusoidal_length = ((test & 0x01) == 0x01 ? onesLength : zerosLength);
+                    test >>= 1;
+                    float increment = (pi * 2.0) / sinusoidal_length;
+                    float offset = ((frameStart[0] > frameStart[1]) ? pi : pi * 2.0);
+                    
+                    for( int j=0; j<sinusoidal_length; j++ )
+                    {
+                        newByteWaveForm[waveFormIndex++] = sinf( offset + (increment * j) ) * maxValue;
+                    }
+                }
+                
+                /* replace old wave buffer with new wave buffer */
+                NSRange oldRange = NSMakeRange(sizeof(AudioSampleType) * characters[idx].start, sizeof(AudioSampleType) * characters[idx].length);
+                [audioFramesObject replaceBytesInRange:oldRange withBytes:newByteWaveForm length:sizeof(AudioSampleType) * totalLength];
+                free( newByteWaveForm );
+                
+                /* adjust characters accounting */
+                int delta = characters[idx].length - totalLength;
+                
+                characters[idx].length = totalLength;
+                
+                for( int i = idx+1; i < [characterObject length]; i++ )
+                {
+                    characters[i].start += delta;
+                }
+            };
+            
+            [changedOffsets enumerateIndexesUsingBlock:enumerateBlock];
+            
+            previousOffset = !previousOffset;
             [self setNeedsDisplay:YES];
         }
         
@@ -362,7 +454,10 @@ typedef struct
 {
     NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
     
+    NSLog( @"Anaylizing!" );
+    
     needsAnaylyzation = NO;
+    NSLog( @"anaylizeAudioData: needsAnaylyzation = %d", needsAnaylyzation );
     anaylizationError = NO;
 
     currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] integerValue];
@@ -371,8 +466,9 @@ typedef struct
     if( currentChannel > channelCount ) currentChannel = channelCount;
     if( currentChannel < 1 ) currentChannel = 1;
         
-    lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] floatValue];
-    highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
+    double sampleRate = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
+    float lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] floatValue];
+    float highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
     vDSP_Length i;
     int zc_count;
     
@@ -551,10 +647,10 @@ typedef struct
 //        coalescedCharacters = [coalescedObject mutableBytes];
 
     /* Store NSMutableData Objects away */
-    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
+//    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
     [self.cachedAnaylizer setValue:coalescedObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
     [self.cachedAnaylizer setValue:charactersObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
-    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
+//    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
     
     [self.cachedAnaylizer setValue:characterObject forKey:@"resultingData"];
 }
@@ -826,11 +922,11 @@ typedef struct
     {   
         if( cancelDrag == NO )
         {
-            NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
-            [mo willChangeValueForKey:@"bytesAfterTransform"];
-            [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
-            [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
-            [mo didChangeValueForKey:@"bytesAfterTransform"];
+//            NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
+//            [mo willChangeValueForKey:@"bytesAfterTransform"];
+//            [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
+//            [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
+//            [mo didChangeValueForKey:@"bytesAfterTransform"];
 
             NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
             NSData *previousSamples = [NSData dataWithBytes:storedSamples length:sizeof(AudioSampleType)*selectedSampleLength];
@@ -907,11 +1003,11 @@ typedef struct
     needsAnaylyzation = YES;
     [self setNeedsDisplay:YES];
 
-    NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
-    [mo willChangeValueForKey:@"bytesAfterTransform"];
-    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
-    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
-    [mo didChangeValueForKey:@"bytesAfterTransform"];
+//    NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
+//    [mo willChangeValueForKey:@"bytesAfterTransform"];
+//    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
+//    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
+//    [mo didChangeValueForKey:@"bytesAfterTransform"];
 }
 
 @end
@@ -990,6 +1086,7 @@ void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuf
         // vDSP_meamgv( float * __vDSP_A, vDSP_Stride __vDSP_I float * __vDSP_C, vDSP_Length __vDSP_N);
     }
 }
+
 
 void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {

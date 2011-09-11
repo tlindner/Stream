@@ -199,7 +199,17 @@
             for (StBlock *theBlock in subBlocks)
             {
                 NSData *blockData = [ourStream dataOfBlockNamed:theBlock.source];
-                NSRange theRange = NSMakeRange(theBlock.offset, theBlock.length);
+                NSUInteger useLength;
+                
+                if( theBlock.length == 0 )
+                {
+                    /* length of zero means "to the end of the block" */
+                    useLength = [blockData length] - theBlock.offset;
+                }
+                else
+                    useLength = theBlock.length;
+                
+                NSRange theRange = NSMakeRange(theBlock.offset, useLength);
                 [result appendData:[blockData subdataWithRange:theRange]];
             }
         }
@@ -209,7 +219,17 @@
         /* This is a leaf block */
         StStream *ourStream = [self getStream];
         NSData *blockData = [ourStream dataOfBlockNamed:self.source];
-        NSRange theRange = NSMakeRange(self.offset, self.length);
+        NSUInteger useLength;
+
+        if( self.length == 0 )
+        {
+            /* length of zero means "to the end of the block" */
+            useLength = [blockData length] - self.offset;
+        }
+        else
+            useLength = self.length;
+
+        NSRange theRange = NSMakeRange(self.offset, useLength);
         result = [[blockData subdataWithRange:theRange] mutableCopy];
         [result autorelease];
     }
@@ -295,7 +315,7 @@
             place += aBlock.length;
     }
     
-    NSAssert(byteWritten == YES, @"Tried writing byte past end of block: %@, offset: %d", [self name], [self offset]);
+    NSAssert(byteWritten == YES, @"Tried writing byte past end of block: %@, offset: %d", [self source], [self offset]);
     return byteWritten;
 }
 
@@ -332,7 +352,6 @@
             /* convert number from hexidecimal to decimal */
             unsigned long long tempResult;
             [[NSScanner scannerWithString: string] scanHexLongLong:&tempResult];
-            result = (NSUInteger)tempResult;
             value = [NSNumber numberWithUnsignedLongLong:tempResult];
         }
         else
