@@ -521,21 +521,40 @@
     frameCount -= delta;
     [theAna setValue:[NSNumber numberWithUnsignedLongLong:frameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
     
-    NSManagedObjectContext *parentContext = [self.representedObject managedObjectContext];
+    /* setup undo */
+    NSManagedObjectContext *parentContext = [theAna managedObjectContext];
     NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousDataObject, @"data", newRangeValue, @"range", nil];
     [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
-    [[parentContext undoManager] setActionName:@"Sample Change"];
+    [[parentContext undoManager] setActionName:@"Byte Change"];
 
 }
 
 - (void) setPreviousState:(NSDictionary *)previousState
 {
+    StAnaylizer *theAna = self.representedObject;
+    NSMutableData *frameBufferObject = [self.representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+    
+    /* setup redo */
+    NSValue *priorRange = [previousState objectForKey:@"range"];
+    NSRange range = [priorRange rangeValue];
+    NSData *priorData = [frameBufferObject subdataWithRange:range];
+    NSManagedObjectContext *parentContext = [theAna managedObjectContext];
+    NSDictionary *priorState = [NSDictionary dictionaryWithObjectsAndKeys:priorData, @"data", priorRange, @"range", nil];
+    [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:priorState];
+    [[parentContext undoManager] setActionName:@"Change"];
+    
+    /* apply previous state */
     [self.representedObject willChangeValueForKey:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
     NSData *previousSamplesObject = [previousState objectForKey:@"data"];
-    NSRange range = [[previousState objectForKey:@"range"] rangeValue];
-    NSMutableData *frameBufferObject = [self.representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
     [frameBufferObject replaceBytesInRange:range withBytes:[previousSamplesObject bytes] length:[previousSamplesObject length]];
     [self.representedObject didChangeValueForKey:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+
+    /* update frame count */
+    unsigned long long frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
+    frameCount -= [previousSamplesObject length] - range.length;
+    [theAna setValue:[NSNumber numberWithUnsignedLongLong:frameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
+    
+    /* re anaylize */
     [self anaylizeAudioData];
 }
 

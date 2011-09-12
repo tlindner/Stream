@@ -50,11 +50,13 @@
     
     if( anaylizerObject == nil )
     {
+        NSLog( @"initializing to: %@", self.currentEditorView );
         anaylizerObject = [[anaObjectClass alloc] init];
         [anaylizerObject setRepresentedObject:self];
     }
     else if( ![[anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView]] )
     {
+        NSLog( @"resetting to: %@", self.currentEditorView );
         [anaylizerObject setRepresentedObject:nil];
         [anaylizerObject release];
         
@@ -110,11 +112,13 @@
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:offset];
     NSRange range = NSMakeRange(offset, 1);
     
+    /* make sure model object is listening */
+    [self anaylizerObject];
+    
+    /* change byte in KVO approved ay */
     [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"resultingData"];
     [self.resultingData replaceBytesInRange:range withBytes:&byte];
     [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"resultingData"];
-    
-    //NSLog( @"Unimplmented: %@ writing byte %x at offset %lu", [self currentEditorView], byte, offset );
 }
 
 - (void)awakeFromInsert
