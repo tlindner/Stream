@@ -35,6 +35,7 @@
 - (void) setBlock:(StBlock *)theBlock withData:theData;
 - (StAnaylizer *)lastFilterAnayliser;
 - (StBlock *)blockNamed:(NSString *)theName;
+- (StAnaylizer *)previousAnayliser:(StAnaylizer *)inAna;
 
 @end
 

@@ -8,6 +8,8 @@
 
 #import "StAnaylizer.h"
 #import "StStream.h"
+#import "Analyzation.h"
+#import "HexFiendAnaylizer.h"
 
 @implementation StAnaylizer
 
@@ -22,8 +24,11 @@
 @dynamic resultingUTI;
 @dynamic collapse;
 @dynamic removeEnabled;
+@dynamic editEnabled;
 @dynamic blockSettingsHidden;
 @dynamic title;
+
+@dynamic anaylizerObject;
 
 + (void)initialize
 {
@@ -34,6 +39,41 @@
 		slvt = [[[streamLockValueTransformer alloc] init] autorelease];
 		[NSValueTransformer setValueTransformer:slvt forName:@"streamLockValueTransformer"];		
     }
+}
+
+- (NSObject *)anaylizerObject
+{
+    Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
+
+    if( anaObjectClass == nil )
+        anaObjectClass = [HexFiendAnaylizer class];
+    
+    if( anaylizerObject == nil )
+    {
+        anaylizerObject = [[anaObjectClass alloc] init];
+        [anaylizerObject setRepresentedObject:self];
+    }
+    else if( ![[anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.anaylizerKind]] )
+    {
+        [anaylizerObject setRepresentedObject:nil];
+        [anaylizerObject release];
+        
+        anaylizerObject = [[anaObjectClass alloc] init];
+        [anaylizerObject setRepresentedObject:self];
+    }
+    
+    return anaylizerObject;
+}
+
+- (void)dealloc
+{
+    if( anaylizerObject != nil )
+    {
+        [anaylizerObject setRepresentedObject:nil];
+        [anaylizerObject release];
+    }
+
+    [super dealloc];
 }
 
 - (float) computedAnaylizerHeight
@@ -129,8 +169,16 @@
         result = NO;
     else if ( indexOfMe == ([streamSet count] - 1) )
         result = YES;
-    else
-        result = NO;
+
+    return result;
+}
+
+- (BOOL) editEnabled
+{
+    BOOL result = NO;
+    
+    if( self == [self.parentStream lastFilterAnayliser] )  
+        result = YES;
     
     return result;
 }
@@ -155,6 +203,37 @@
         result = self.currentEditorView;
     
     return result;    
+}
+
+- (NSURL *)urlForCachedData
+{
+    NSData *anaylizeData;
+    StAnaylizer *previousAnaylizer = [self.parentStream previousAnayliser:self];
+    
+    if( previousAnaylizer == nil )
+        anaylizeData = [self.parentStream bytesCache];
+    else
+        anaylizeData = [previousAnaylizer resultingData];
+
+    NSString *tempFileTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:@"cocoaudioanaylizer_tempfile.XXXXXX"];
+    const char *tempFileTemplateCString = [tempFileTemplate fileSystemRepresentation];
+    char *tempFileNameCString = (char *)malloc(strlen(tempFileTemplateCString) + 1);
+    strcpy(tempFileNameCString, tempFileTemplateCString);
+    int fileDescriptor = mkstemp(tempFileNameCString);
+    NSString *tempFileName = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:tempFileNameCString length:strlen(tempFileNameCString)];
+    free(tempFileNameCString);
+    
+    if (fileDescriptor == -1)
+    {
+        NSAssert(YES==NO, @"urlForCachedData: Could not create temporary file for cached data: %@", tempFileName);
+        return nil;
+    }
+
+    NSFileHandle *tempFileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fileDescriptor closeOnDealloc:YES];
+    [tempFileHandle writeData:anaylizeData];
+    [tempFileHandle release];
+    
+    return [NSURL fileURLWithPath:tempFileName];
 }
 
 @end

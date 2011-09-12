@@ -7,6 +7,7 @@
 //
 
 #import "WaveFormView.h"
+#import "CoCoAudioAnaylizer.h"
 #import "Accelerate/Accelerate.h"
 #import "AudioToolbox/AudioConverter.h"
 #import "MyDocument.h"
@@ -18,10 +19,10 @@
 #define DOT_HANDLE_SCALE 0.5
 #define DATA_SPACE 19.0
 
-void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
-void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
-void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
-void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
+void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
+void SamplesSamples_avg( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
+void SamplesSamples_1to1( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
+void SamplesSamples_resample( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData);
 double CubicHermite(double t, double p0, double p1, double m0, double m1);
@@ -38,18 +39,6 @@ typedef struct
 @implementation WaveFormView
 
 @synthesize viewController;
-@synthesize frameCount;
-//@synthesize sampleRate;
-@synthesize channelCount;
-@synthesize currentChannel;
-@synthesize previousCurrentChannel;
-@synthesize previousBoundsWidth;
-@synthesize previousFrameWidth;
-@synthesize previousOffset;
-@synthesize previousBuffer;
-//@synthesize lowCycle;
-//@synthesize highCycle;
-@synthesize resyncThresholdHertz;
 @synthesize cachedAnaylizer;
 @synthesize anaylizationError;
 @synthesize errorString;
@@ -63,31 +52,27 @@ typedef struct
         selectedSample = NSUIntegerMax;
         selectedSampleLength = 1;
     }
-
+    
     return self;
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
     NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
+    NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
     
-    NSLog( @"drawRect: needsAnaylyzation = %d", needsAnaylyzation );
-    
-    if( needsAnaylyzation == YES ) [self anaylizeAudioData];
-    
-    NSMutableData *coalescedObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
-    NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
+    NSMutableData *coalescedObject = [optionsDict objectForKey:@"coalescedObject"];
     NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
-
-    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
-    charRef *coalescedCharacters = [coalescedObject mutableBytes];
-    charRef *characters = [charactersObject mutableBytes];
-    unsigned char *character = [characterObject mutableBytes];
-    NSUInteger char_count = [characterObject length];
-    NSUInteger coa_char_count = [coalescedObject length]/sizeof(charRef);
+    AudioSampleType *audioFrames = [[optionsDict objectForKey:@"frameBufferObject"] mutableBytes];
+    NSRange *characters = [[optionsDict objectForKey:@"charactersObject"] mutableBytes];
+    NSInteger currentChannel = [[optionsDict objectForKey:@"audioChannel"] intValue];
+    unsigned long long frameCount = [[optionsDict objectForKey:@"frameCount"] unsignedLongLongValue];
+    double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
     
-    if( currentChannel > channelCount ) currentChannel = channelCount;
-    if( currentChannel < 1 ) currentChannel = 1;
+    NSUInteger char_count = [characterObject length];
+    NSRange *coalescedCharacters = [coalescedObject mutableBytes];
+    NSUInteger coa_char_count = [coalescedObject length]/sizeof(NSRange);
+    unsigned char *character = [characterObject mutableBytes];
     
     /* Drawing code here. */
     if( anaylizationError == YES )
@@ -98,12 +83,14 @@ typedef struct
         
         [[NSColor grayColor] set];
         NSRectFill(dirtyRect);
+        return;
     }
     
     if( audioFrames != nil )
     {
         CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
         CGFloat currentFrameWidth = [[self superview] frame].size.width;
+        
         CGFloat scale = currentBoundsWidth/currentFrameWidth;
         
         NSAffineTransform *at = [NSAffineTransform transform];
@@ -122,10 +109,21 @@ typedef struct
         Float32 *viewFloats;
         int offset = dirtyRect.origin.x;
         if( offset < 0 ) offset = 0;
-        AudioSampleType *frameStart = audioFrames + (offset * channelCount) + (currentChannel-1); // Interleaved samples
-        double sampleRate = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
-       
-        if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) && (previousCurrentChannel == currentChannel) )
+        AudioSampleType *frameStart = audioFrames + offset; // Interleaved samples
+
+        if( resample == YES )
+        {
+            free( previousBuffer );
+            resample = NO;
+            viewFloats = malloc(sizeof(Float32)*width);
+            SamplesSamples_max( sampleRate, viewFloats, frameStart, scale, width, &(audioFrames[frameCount]) );
+            previousBuffer = viewFloats;
+            previousOffset = offset;
+            previousBoundsWidth = currentBoundsWidth;
+            previousFrameWidth = currentFrameWidth;
+            previousCurrentChannel = currentChannel;
+        }
+        else if( (previousOffset == offset) && (previousBoundsWidth == currentBoundsWidth) && (previousFrameWidth == currentFrameWidth) && (previousCurrentChannel == currentChannel) )
         {
             viewFloats = previousBuffer;
         }
@@ -133,8 +131,7 @@ typedef struct
         {
             free( previousBuffer );
             viewFloats = malloc(sizeof(Float32)*width);
-
-            SamplesSamples_max( sampleRate, channelCount, viewFloats, frameStart, scale, width, &(audioFrames[frameCount*channelCount]) );
+            SamplesSamples_max( sampleRate, viewFloats, frameStart, scale, width, &(audioFrames[frameCount]) );
             previousBuffer = viewFloats;
             previousOffset = offset;
             previousBoundsWidth = currentBoundsWidth;
@@ -153,19 +150,19 @@ typedef struct
         if( ((sampleRate / 2400.0) * 8 / scale) > 9.5)
         {
             /* we're zoomed enought to draw segemented frames around byte groups and actual values */
-            while ( i < char_count && characters[i].start < dirtyRect.origin.x) i++;
+            while ( i < char_count && characters[i].location < dirtyRect.origin.x) i++;
             
             if( i>0 ) i--;
             
             NSColor *lightColor = [NSColor colorWithCalibratedWhite:0.8 alpha:0.5];
             NSColor *darkColor = [NSColor colorWithCalibratedWhite:0.65 alpha:0.5];
-            while( i < char_count && characters[i].start < dirtyRect.origin.x+dirtyRect.size.width )
+            while( i < char_count && characters[i].location < dirtyRect.origin.x+dirtyRect.size.width )
             {
                 /* Draw decoded values */
                 [[NSColor blackColor] set];
                 NSString *string = [NSString stringWithFormat:@"%2.2X" , character[i]];
                 NSSize charWidth = [string sizeWithAttributes:nil];
-                NSPoint thePoint = NSMakePoint((characters[i].start+(characters[i].length/2)-(charWidth.width/2))/scale, viewHeight-(DATA_SPACE)+1.0);
+                NSPoint thePoint = NSMakePoint((characters[i].location+(characters[i].length/2)-(charWidth.width/2))/scale, viewHeight-(DATA_SPACE)+1.0);
                 [string drawAtPoint:thePoint withAttributes:nil];
                 
                 /* Draw byte grouping */
@@ -174,7 +171,7 @@ typedef struct
                 else
                     [darkColor set];
                 
-                NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect((characters[i].start)/scale, 0.0, ((characters[i].length)/scale), viewWaveHeight) xRadius:5.0 yRadius:5.0];
+                NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect((characters[i].location)/scale, 0.0, ((characters[i].length)/scale), viewWaveHeight) xRadius:5.0 yRadius:5.0];
                 [aPath fill];
                 i++;
             }
@@ -182,17 +179,17 @@ typedef struct
         else
         {
             /* we're zoomed too far out to see detial */
-            while ( (i < coa_char_count) && (coalescedCharacters[i].start < dirtyRect.origin.x)) i++;
+            while ( (i < coa_char_count) && (coalescedCharacters[i].location < dirtyRect.origin.x)) i++;
             
             if( i>0 ) i--;
             
             NSColor *aLightGrey = [NSColor colorWithCalibratedWhite:0.85 alpha:1.0];
             [aLightGrey set];
             
-            while( (i < coa_char_count) && (coalescedCharacters[i].start < dirtyRect.origin.x+dirtyRect.size.width) )
+            while( (i < coa_char_count) && (coalescedCharacters[i].location < dirtyRect.origin.x+dirtyRect.size.width) )
             {
                 /* Draw backound grouping */
-                rect = NSMakeRect((coalescedCharacters[i].start)/scale, 0, ((coalescedCharacters[i].length)/scale), viewWaveHeight);
+                rect = NSMakeRect((coalescedCharacters[i].location)/scale, 0, ((coalescedCharacters[i].length)/scale), viewWaveHeight);
                 NSRectFill(rect);
                 
                 /* Draw value bar */
@@ -256,7 +253,7 @@ typedef struct
                     }
                     
                     x += 1.0/scale;
-                    i += channelCount;
+                    i += 1;
                 }
             }
         }
@@ -307,352 +304,44 @@ typedef struct
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    id newObject;
-    
-    NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
+    //NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
     
     if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] )
     {
-        newObject = [change objectForKey:@"new"];
-//        if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != lowCycle)
-        {
-            needsAnaylyzation = YES;
-            [self setNeedsDisplay:YES];
-        }
-        
+        resample = YES;
+        [self setNeedsDisplay:YES];
         return;
     }
     
     if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] )
     {
-        newObject = [change objectForKey:@"new"];
- //       if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != highCycle)
-        {
-            needsAnaylyzation = YES;
-            [self setNeedsDisplay:YES];
-        }
-        
+        resample = YES;
+        [self setNeedsDisplay:YES];
         return;
     }
     
     if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"])
     {
-        newObject = [change objectForKey:@"new"];
-        if ([newObject respondsToSelector:@selector(floatValue)] && [newObject floatValue] != resyncThresholdHertz)
-        {
-            needsAnaylyzation = YES;
-            [self setNeedsDisplay:YES];
-        }
-        
+        resample = YES;
+        [self setNeedsDisplay:YES];
         return;
     }
     
     if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] )
     {
-        newObject = [change objectForKey:@"new"];
-        if ([newObject respondsToSelector:@selector(integerValue)] && [newObject integerValue] != currentChannel)
-        {
-            needsAnaylyzation = YES;
-            [self setNeedsDisplay:YES];
-        }
-        
+        resample = YES;
+        [self setNeedsDisplay:YES];
         return;
     }
     
     if( [keyPath isEqualToString:@"resultingData"] )
     {
-        //NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
-        NSUInteger kind = [[change objectForKey:@"kind"] unsignedIntegerValue];
-        if( kind == NSKeyValueChangeReplacement )
-        {
-            NSIndexSet *changedOffsets = [change objectForKey:@"indexes"];
-            
-            void *enumerateBlock = ^(NSUInteger idx, BOOL *stop)
-            {
-                /* add index to modified set */
-                NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
-                [changedSet addIndex:idx];
-                
-                /* get max of current wave form */
-                NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
-                charRef *characters = (charRef *)[charactersObject bytes];
-                channelCount = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"] unsignedIntegerValue];
-                NSMutableData *audioFramesObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
-                AudioSampleType *audioFrames = [audioFramesObject mutableBytes];
-                AudioSampleType *frameStart = audioFrames + (characters[idx].start * channelCount) + (currentChannel-1); // Interleaved samples
-                AudioSampleType maxValue;
-                
-                vDSP_maxv( frameStart, channelCount, &maxValue, characters[idx].length );
-                
-                /* calculate waveform buffer size */
-                NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
-                unsigned char *character = [characterObject mutableBytes];
-                int zeros = 0, ones = 0;
-                unsigned int test = character[idx];
-                
-                for( int i=0; i<8; i++ )
-                {
-                    if( (test & 0x01) == 0x01 ) ones++; else zeros++;
-                    test >>= 1;
-                }
-                
-                double sampleRate = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
-                float lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] floatValue];
-                float highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
-
-                int onesLength = sampleRate / highCycle;
-                int zerosLength = sampleRate / lowCycle;
-                int totalLength = (ones * onesLength) + (zeros * zerosLength);
-                
-                AudioSampleType *newByteWaveForm = malloc( sizeof(AudioSampleType) * totalLength );
-                int waveFormIndex = 0;
-                test = character[idx];
-                
-                /* build new byte waveform */
-                for( int i=0; i<8; i++ )
-                {
-                    int sinusoidal_length = ((test & 0x01) == 0x01 ? onesLength : zerosLength);
-                    test >>= 1;
-                    float increment = (pi * 2.0) / sinusoidal_length;
-                    float offset = ((frameStart[0] > frameStart[1]) ? pi : pi * 2.0);
-                    
-                    for( int j=0; j<sinusoidal_length; j++ )
-                    {
-                        newByteWaveForm[waveFormIndex++] = sinf( offset + (increment * j) ) * maxValue;
-                    }
-                }
-                
-                /* replace old wave buffer with new wave buffer */
-                NSRange oldRange = NSMakeRange(sizeof(AudioSampleType) * characters[idx].start, sizeof(AudioSampleType) * characters[idx].length);
-                [audioFramesObject replaceBytesInRange:oldRange withBytes:newByteWaveForm length:sizeof(AudioSampleType) * totalLength];
-                free( newByteWaveForm );
-                
-                /* adjust characters accounting */
-                int delta = characters[idx].length - totalLength;
-                
-                characters[idx].length = totalLength;
-                
-                for( int i = idx+1; i < [characterObject length]; i++ )
-                {
-                    characters[i].start += delta;
-                }
-            };
-            
-            [changedOffsets enumerateIndexesUsingBlock:enumerateBlock];
-            
-            previousOffset = !previousOffset;
-            [self setNeedsDisplay:YES];
-        }
-        
+        resample = YES;
+        [self setNeedsDisplay:YES];
         return;
     }
     
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-}
-
-- (void) anaylizeAudioData
-{
-    NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
-    
-    NSLog( @"Anaylizing!" );
-    
-    needsAnaylyzation = NO;
-    NSLog( @"anaylizeAudioData: needsAnaylyzation = %d", needsAnaylyzation );
-    anaylizationError = NO;
-
-    currentChannel = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] integerValue];
-    channelCount = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"] unsignedIntegerValue];
-    
-    if( currentChannel > channelCount ) currentChannel = channelCount;
-    if( currentChannel < 1 ) currentChannel = 1;
-        
-    double sampleRate = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
-    float lowCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] floatValue];
-    float highCycle = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
-    vDSP_Length i;
-    int zc_count;
-    
-    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
-    AudioSampleType *frameStart = audioFrames + (currentChannel-1); // Interleaved samples
-    
-    unsigned long max_possible_zero_crossings = (frameCount / 2) + 1;
-    float *zero_crossings = malloc(sizeof(float)*max_possible_zero_crossings);
-    zc_count = 0;
-    
-    /* Create temporary array of zero crossing points */
-    for( i=1; i<frameCount; i++ )
-    {
-        vDSP_Length crossing;
-        vDSP_Length total;
-        const vDSP_Length findOneCrossing = 1;
-        
-        vDSP_nzcros(frameStart+(i*channelCount), channelCount, findOneCrossing, &crossing, &total, frameCount-i);
-        
-        if( crossing == 0 ) break;
-        
-        zero_crossings[zc_count++] = i+crossing;
-        //zero_crossings[zc_count++] = XIntercept(i+crossing-1, frameStart[i+crossing-1], i+crossing, frameStart[i+crossing]);
-        
-        i += crossing-1;
-    }
-    
-    /* remove unused space in zero crossing array */
-    zero_crossings = realloc(zero_crossings, sizeof(float)*zc_count);
-    
-    /* Scan zero crossings looking for valid data */
-    
-    int max_possible_characters = (zc_count*2*8)+1;
-    NSMutableData *charactersObject = [NSMutableData dataWithLength:sizeof(charRef)*max_possible_characters];
-    charRef *characters = [charactersObject mutableBytes];
-    NSMutableData *characterObject = [NSMutableData dataWithLength:sizeof(unsigned char)*max_possible_characters];
-    unsigned char *character = [characterObject mutableBytes];
-    NSUInteger char_count = 0;
-    
-    zc_count -= 1;
-    unsigned short even_parity = 0, odd_parity = 0;
-    double dataThreashold = ((sampleRate/lowCycle) + (sampleRate/highCycle)) / 2.0, test1, test2;
-    resyncThresholdHertz = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"] floatValue];
-    
-    if( resyncThresholdHertz > lowCycle/2.0 )
-    {
-        self.errorString = @"Resynchronization threshold cannot be larger than half of the low frequency target.";
-        self.anaylizationError = YES;
-        NSLog( @"Setting anaylization error" );
-        return;
-    }
-    
-    double resyncThreshold = sampleRate/resyncThresholdHertz;
-    int bit_count = 0;
-    
-    /* start by scanning zero crossing looking for the start of a block */
-    for (i=2; i<zc_count; i+=2)
-    {
-        /* test frequency of 2 zero crossings */
-        even_parity >>= 1;
-        test1 = (zero_crossings[i] - zero_crossings[i-2]);
-        if( test1 < dataThreashold )
-            even_parity |= 0x8000;
-        
-        /* test frequency of 2 zero crossings, offset by one zero crossing into the future */
-        odd_parity >>= 1;
-        test2 = (zero_crossings[i+1] - zero_crossings[i-1]);
-        if( test2 < dataThreashold )
-            odd_parity |= 0x8000;
-        
-        /* test for start block bit pattern */
-        if( (even_parity & 0xff0f) == 0x3c05 || (odd_parity & 0xff0f) == 0x3c05 )
-        {
-            if( (odd_parity & 0xff0f) == 0x3c05 )
-            {
-                /* adjust position one zero crossing into the future */
-                i++;
-                even_parity = odd_parity;
-            }
-            
-            /* capture (0x0f & 0x05) sync byte */
-            characters[char_count].start = zero_crossings[i-(16*2)];
-            characters[char_count].length = zero_crossings[i-(8*2)] - zero_crossings[i-(16*2)];
-            character[char_count] = even_parity & 0x00ff;
-            char_count++;
-            
-            /* capture 0x3c sync byte */
-            characters[char_count].start = zero_crossings[i-(8*2)];
-            characters[char_count].length = zero_crossings[i] - zero_crossings[i-(8*2)];
-            character[char_count] = even_parity >> 8;
-            char_count++;
-            
-            /* start capturing synchronized bits */
-            i += 2;
-            for( ; i<zc_count; i+=2 )
-            {
-                /* mark begining of byte */
-                if(bit_count == 0)
-                {
-                    characters[char_count].start = zero_crossings[i-2];
-                    //characters[char_count].length = 0;
-                }
-                
-                /* test frequency of 2 zero crossings */ 
-                even_parity >>= 1;
-                test1 = (zero_crossings[i] - zero_crossings[i-2]);
-                if( test1 < dataThreashold )
-                    even_parity |= 0x8000;
-                bit_count++;
-                
-                if( bit_count == 8 )
-                {
-                    /* we have eight bits, finish byte capture */
-                    if( test1 > resyncThreshold )
-                        characters[char_count].length = zero_crossings[i-1] - characters[char_count].start + resyncThreshold;
-                    else
-                        characters[char_count].length = zero_crossings[i] - characters[char_count].start;
-                    character[char_count] = even_parity >> 8;
-                    char_count++;
-                    bit_count = 0;
-                }
-                else if( test1 > resyncThreshold )
-                {
-                    /* lost sync, finish off last byte, break out of loop to try to re-synchronize */
-                    characters[char_count].length = zero_crossings[i-1] - characters[char_count].start + resyncThreshold;
-                    character[char_count] = even_parity >> 8;
-                    char_count++;
-                    bit_count = 0;
-                    i += 2;
-                    break;
-                }
-            }
-        }
-        
-        /* done testing zero crossings, finish off last byte capture */
-        if( bit_count == 7 )
-        {
-            even_parity >>= 1;
-            characters[char_count].length = frameCount - characters[char_count].start;
-            character[char_count] = even_parity >> 8;
-            char_count++;
-        }
-    }
-    
-    free(zero_crossings);
-    
-    /* shirnk buffers to actual size */
-    [charactersObject setLength:sizeof(charRef)*char_count];
-    [characterObject setLength:sizeof(unsigned char)*char_count];
-
-    if( characters != [charactersObject mutableBytes] )
-        characters = [charactersObject mutableBytes];
-
-//    if( character != [characterObject mutableBytes] )
-//        character = [characterObject mutableBytes];
-
-    NSMutableData *coalescedObject = [NSMutableData dataWithLength:sizeof(charRef)*char_count];
-    charRef *coalescedCharacters = [coalescedObject mutableBytes];
-
-    coalescedCharacters[0] = characters[0];
-    NSUInteger coa_char_count = 1;
-    
-    /* coalesce nearby found byte rectangles into single continous rectangle */
-    /* this greatly speeds up the "found data" tint when zoomed out */
-    for( i=1; i<char_count; i++ )
-    {
-        if( characters[i].start-5.0 <= coalescedCharacters[coa_char_count-1].start + coalescedCharacters[coa_char_count-1].length )
-            coalescedCharacters[coa_char_count-1].length += characters[i].length - (coalescedCharacters[coa_char_count-1].start + coalescedCharacters[coa_char_count-1].length - characters[i].start);
-        else
-            coalescedCharacters[coa_char_count++] = characters[i];
-    }
-    
-    /* shirnk buffer to actual size */
-    [coalescedObject setLength:sizeof(charRef)*coa_char_count];
-//    if( coalescedCharacters != [coalescedObject mutableBytes] )
-//        coalescedCharacters = [coalescedObject mutableBytes];
-
-    /* Store NSMutableData Objects away */
-//    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
-    [self.cachedAnaylizer setValue:coalescedObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
-    [self.cachedAnaylizer setValue:charactersObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
-//    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
-    
-    [self.cachedAnaylizer setValue:characterObject forKey:@"resultingData"];
 }
 
 - (IBAction)chooseTool:(id)sender
@@ -712,7 +401,7 @@ typedef struct
         CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
         AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
-        AudioSampleType *frameStart = audioFrames + (selectedSampleUnderMouse * channelCount) + (currentChannel-1); // Interleaved samples
+        AudioSampleType *frameStart = audioFrames + selectedSampleUnderMouse;
         CGFloat thePoint = viewWaveHalfHeight+(frameStart[0]*viewWaveHalfHeight);
         NSRect sampleRect = NSMakeRect(selectedSampleUnderMouse-6.0, thePoint-6.0, 12, 12);
         
@@ -736,12 +425,12 @@ typedef struct
             /* make copy of selected samples */
             if( storedSamples != nil ) free( storedSamples );
             
-            AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
+            AudioSampleType *frameStart = audioFrames + selectedSample;
             storedSamples = malloc( sizeof(AudioSampleType)*selectedSampleLength );
             
             for( unsigned long i = 0; i<selectedSampleLength; i++ )
             {
-                storedSamples[i] = frameStart[i*channelCount];
+                storedSamples[i] = frameStart[i];
             }
         }
     }
@@ -787,25 +476,25 @@ typedef struct
             CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
             
             AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
-            AudioSampleType *frameStart = audioFrames + (selectedSample * channelCount) + (currentChannel-1); // Interleaved samples
+            AudioSampleType *frameStart = audioFrames + selectedSample;
             
             AudioSampleType delta = (locationNowSelf.y - locationMouseDownSelf.y) / viewWaveHalfHeight;
             
             /* adjust sample up or down depending on mouse */
             for( unsigned long i=0; i<selectedSampleLength; i++ )
             {
-                frameStart[i*channelCount] = storedSamples[i] + delta;
+                frameStart[i] = storedSamples[i] + delta;
                 
                 /* Check for clipping, and possible canceling */
-                if( frameStart[i*channelCount] > 1.5 )
+                if( frameStart[i] > 1.5 )
                     cancelDrag = YES;
-                else if( frameStart[i*channelCount] > 1.0 )
-                    frameStart[i*channelCount] = 1.0;
+                else if( frameStart[i] > 1.0 )
+                    frameStart[i] = 1.0;
                 
-                if( frameStart[i*channelCount] < -1.5 )
+                if( frameStart[i] < -1.5 )
                     cancelDrag = YES;
-                else if( frameStart[i*channelCount] < -1.0 )
-                    frameStart[i*channelCount] = -1.0;
+                else if( frameStart[i] < -1.0 )
+                    frameStart[i] = -1.0;
             }
             
             if( cancelDrag )
@@ -813,11 +502,11 @@ typedef struct
                 /* reset all samples */
                 for( unsigned long i=0; i<selectedSampleLength; i++ )
                 {
-                    frameStart[i*channelCount] = storedSamples[i];
+                    frameStart[i] = storedSamples[i];
                 }
             }
             
-            previousOffset = !previousOffset; /* force resample */
+            resample = YES;
             [self setNeedsDisplay:YES];
         }
         else if( mouseDown == YES)
@@ -922,15 +611,15 @@ typedef struct
     {   
         if( cancelDrag == NO )
         {
-//            NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
-//            [mo willChangeValueForKey:@"bytesAfterTransform"];
-//            [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
-//            [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
-//            [mo didChangeValueForKey:@"bytesAfterTransform"];
-
+            //            NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
+            //            [mo willChangeValueForKey:@"bytesAfterTransform"];
+            //            [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
+            //            [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
+            //            [mo didChangeValueForKey:@"bytesAfterTransform"];
+            
             NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
             NSData *previousSamples = [NSData dataWithBytes:storedSamples length:sizeof(AudioSampleType)*selectedSampleLength];
-            NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", [NSNumber numberWithUnsignedInteger:selectedSample], @"selectedSample", [NSNumber numberWithUnsignedInteger:selectedSampleLength], @"selectedSampleLength", [NSNumber numberWithUnsignedInteger:currentChannel], @"currentChannel", nil];
+            NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", [NSNumber numberWithUnsignedInteger:selectedSample], @"selectedSample", [NSNumber numberWithUnsignedInteger:selectedSampleLength], @"selectedSampleLength", nil];
             
             [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
             
@@ -989,25 +678,24 @@ typedef struct
     AudioSampleType *previousSamples = (AudioSampleType *)[[previousState objectForKey:@"data"] bytes];
     NSUInteger storedSelectedSample = [[previousState objectForKey:@"selectedSample"] unsignedIntegerValue];
     NSUInteger storedSelectedSampleLength = [[previousState objectForKey:@"selectedSampleLength"] unsignedIntegerValue];
-    NSUInteger storedCurrentChannel = [[previousState objectForKey:@"currentChannel"] unsignedIntegerValue];
     
     AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
-    AudioSampleType *frameStart = audioFrames + (storedSelectedSample * channelCount) + (storedCurrentChannel-1); // Interleaved samples
+    AudioSampleType *frameStart = audioFrames + storedSelectedSample;
     
     for( unsigned long i = 0; i < storedSelectedSampleLength; i++ )
     {
-        frameStart[i*channelCount] = previousSamples[i];
+        frameStart[i] = previousSamples[i];
     }
     
-    previousOffset = !previousOffset; /* force resample */
+    resample = YES;
     needsAnaylyzation = YES;
     [self setNeedsDisplay:YES];
-
-//    NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
-//    [mo willChangeValueForKey:@"bytesAfterTransform"];
-//    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
-//    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
-//    [mo didChangeValueForKey:@"bytesAfterTransform"];
+    
+    //    NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
+    //    [mo willChangeValueForKey:@"bytesAfterTransform"];
+    //    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
+    //    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
+    //    [mo didChangeValueForKey:@"bytesAfterTransform"];
 }
 
 @end
@@ -1022,26 +710,25 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )
     return (-b)/m;
 }
 
-void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
+void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
     if (sampleSize < 1.0)
     {
-        SamplesSamples_resample( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
+        SamplesSamples_resample( sampleRate, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
     }
     else if (sampleSize == 1.0 )
     {
-        SamplesSamples_1to1( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
+        SamplesSamples_1to1( sampleRate, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
     }
     else
     {
         /* find maximum sample in each group */
         for( int i=0; i<viewWidth; i++ )
         {
-            int j = (i*stride)*sampleSize;
-            j += (j % stride);
+            int j = (i)*sampleSize;
             
             if( &(inBuffer[j+(long)sampleSize-1]) < lastFrame )
-                vDSP_maxv( &(inBuffer[j]), stride, &(outBuffer[i]), sampleSize );
+                vDSP_maxv( &(inBuffer[j]), 1, &(outBuffer[i]), sampleSize );
             else
             {
                 //NSLog( @"reading past array, %p > %p", &(inBuffer[j+(long)sampleSize-1]), lastFrame );
@@ -1051,15 +738,15 @@ void SamplesSamples_max( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuf
     }
 }
 
-void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
+void SamplesSamples_avg( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
     if (sampleSize < 1.0)
     {
-        SamplesSamples_resample( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
+        SamplesSamples_resample( sampleRate, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
     }
     else if (sampleSize == 1.0 )
     {
-        SamplesSamples_1to1( sampleRate, stride, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
+        SamplesSamples_1to1( sampleRate, outBuffer, inBuffer, sampleSize, viewWidth, lastFrame );
     }
     else
     {
@@ -1088,7 +775,7 @@ void SamplesSamples_avg( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuf
 }
 
 
-void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
+void SamplesSamples_resample( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
     /* de-stride input */
     
@@ -1097,8 +784,8 @@ void SamplesSamples_resample( Float64 sampleRate, vDSP_Stride stride, Float32 *o
     
     for( int i=0; i<inputLength; i++ )
     {
-        if( &(inBuffer[i*stride]) < lastFrame )
-            destrideBuffer[i] = inBuffer[i*stride];
+        if( &(inBuffer[i]) < lastFrame )
+            destrideBuffer[i] = inBuffer[i];
         else
             destrideBuffer[i] = 0;
     }
@@ -1179,11 +866,11 @@ OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDat
     return noErr;
 }
 
-void SamplesSamples_1to1( Float64 sampleRate, vDSP_Stride stride, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
+void SamplesSamples_1to1( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
     for( int i = 0; i<viewWidth; i++ )
     {
-        outBuffer[i] = inBuffer[i*stride];
+        outBuffer[i] = inBuffer[i];
     }
 }
 

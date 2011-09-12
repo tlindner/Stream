@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */; };
 		7714BC5713EA580600892495 /* ViewAutoLayoutSubView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */; };
+		771AD296141D06C800E0FE41 /* CoCoAudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */; };
+		771AD29A141D414B00E0FE41 /* HexFiendAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */; };
+		771AD29D141D431400E0FE41 /* BlockerDataAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD29C141D431400E0FE41 /* BlockerDataAnaylizer.m */; };
+		771AD2A0141D43AE00E0FE41 /* BlockAttributeAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */; };
 		771C998513F624DC00C3A263 /* AudioAnaylizer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 771C998413F624DC00C3A263 /* AudioAnaylizer.xib */; };
 		771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 771DC21A13F0374800579077 /* AudioAnaScrollView.m */; };
 		77263A8413F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77263A8213F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m */; };
@@ -133,6 +137,14 @@
 		770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataViewController.m; path = Stream/BlockerDataViewController.m; sourceTree = "<group>"; };
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
 		7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewAutoLayoutSubView.m; path = Stream/ViewAutoLayoutSubView.m; sourceTree = "<group>"; };
+		771AD294141D06C800E0FE41 /* CoCoAudioAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoAudioAnaylizer.h; path = Stream/AudioAnaylizer/CoCoAudioAnaylizer.h; sourceTree = "<group>"; };
+		771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoAudioAnaylizer.m; path = Stream/AudioAnaylizer/CoCoAudioAnaylizer.m; sourceTree = "<group>"; };
+		771AD298141D414B00E0FE41 /* HexFiendAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnaylizer.h; path = Stream/HexFiendAnaylizer.h; sourceTree = "<group>"; };
+		771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnaylizer.m; path = Stream/HexFiendAnaylizer.m; sourceTree = "<group>"; };
+		771AD29B141D431400E0FE41 /* BlockerDataAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataAnaylizer.h; path = Stream/BlockerDataAnaylizer.h; sourceTree = "<group>"; };
+		771AD29C141D431400E0FE41 /* BlockerDataAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataAnaylizer.m; path = Stream/BlockerDataAnaylizer.m; sourceTree = "<group>"; };
+		771AD29E141D43AE00E0FE41 /* BlockAttributeAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeAnaylizer.h; path = Stream/BlockAttributeAnaylizer.h; sourceTree = "<group>"; };
+		771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeAnaylizer.m; path = Stream/BlockAttributeAnaylizer.m; sourceTree = "<group>"; };
 		771C998413F624DC00C3A263 /* AudioAnaylizer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnaylizer.xib; path = Stream/AudioAnaylizer/AudioAnaylizer.xib; sourceTree = "<group>"; };
 		771DC21913F0374800579077 /* AudioAnaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaScrollView.h; path = Stream/AudioAnaScrollView.h; sourceTree = "<group>"; };
 		771DC21A13F0374800579077 /* AudioAnaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaScrollView.m; path = Stream/AudioAnaScrollView.m; sourceTree = "<group>"; };
@@ -354,6 +366,8 @@
 				77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */,
 				77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */,
 				77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */,
+				771AD298141D414B00E0FE41 /* HexFiendAnaylizer.h */,
+				771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */,
 			);
 			name = HexFiendAnaylizer;
 			sourceTree = "<group>";
@@ -538,6 +552,8 @@
 				778A59901407524900B68EB4 /* BlockerDataViewController.xib */,
 				770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */,
 				770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */,
+				771AD29B141D431400E0FE41 /* BlockerDataAnaylizer.h */,
+				771AD29C141D431400E0FE41 /* BlockerDataAnaylizer.m */,
 			);
 			name = BlockerDataView;
 			sourceTree = "<group>";
@@ -556,6 +572,8 @@
 				77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */,
 				771C998413F624DC00C3A263 /* AudioAnaylizer.xib */,
 				77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */,
+				771AD294141D06C800E0FE41 /* CoCoAudioAnaylizer.h */,
+				771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */,
 			);
 			name = AudioAnaylizer;
 			sourceTree = "<group>";
@@ -567,6 +585,8 @@
 				776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */,
 				77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */,
 				77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */,
+				771AD29E141D43AE00E0FE41 /* BlockAttributeAnaylizer.h */,
+				771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */,
 			);
 			name = BlockAttributeView;
 			sourceTree = "<group>";
@@ -884,6 +904,10 @@
 				77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */,
 				77C17FBD140F450100E23921 /* HexFiendAnaylizerController.m in Sources */,
 				77C17FC3140F469700E23921 /* AudioAnaylizerViewController.m in Sources */,
+				771AD296141D06C800E0FE41 /* CoCoAudioAnaylizer.m in Sources */,
+				771AD29A141D414B00E0FE41 /* HexFiendAnaylizer.m in Sources */,
+				771AD29D141D431400E0FE41 /* BlockerDataAnaylizer.m in Sources */,
+				771AD2A0141D43AE00E0FE41 /* BlockAttributeAnaylizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

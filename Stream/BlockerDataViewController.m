@@ -157,30 +157,6 @@
     self.sortDescriptors = nil;
     [super dealloc];
 }
-+ (NSArray *)anaylizerUTIs
-{
-    return [NSArray arrayWithObject:@"public.data"];
-}
-
-+ (NSString *)anayliserName
-{
-    return @"Blocker View";
-}
-
-+ (NSString *)anaylizerKey;
-{
-    return @"BlockerDataViewController";
-}
-
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
-{
-    return @"BlockerViewAccessory";
-}
-
-+ (NSMutableDictionary *)defaultOptions
-{
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"initializedOD", nil] autorelease];
-}
 
 -(NSString *)nibName
 {

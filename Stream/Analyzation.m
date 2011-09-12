@@ -23,10 +23,10 @@ static Analyzation *sharedSingleton;
     {
         initialized = YES;
         sharedSingleton = [[Analyzation alloc] init];
-        [sharedSingleton addAnalyzer:@"AudioAnaylizerViewController"];
-        [sharedSingleton addAnalyzer:@"BlockerDataViewController"];
-        [sharedSingleton addAnalyzer:@"BlockAttributeViewController"];
-        [sharedSingleton addAnalyzer:@"HexFiendAnaylizerController"];
+        [sharedSingleton addAnalyzer:@"CoCoAudioAnaylizer"];
+        [sharedSingleton addAnalyzer:@"BlockerDataAnaylizer"];
+        [sharedSingleton addAnalyzer:@"BlockAttributeAnaylizer"];
+        [sharedSingleton addAnalyzer:@"HexFiendAnaylizer"];
         //[sharedSingleton addAnalyzer:@"TextViewAnaylizerController"];
     }
 }

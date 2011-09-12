@@ -50,7 +50,6 @@
     if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
     {
         StAnaylizer *object = [self representedObject];
-        [object addSubOptionsDictionary:[HexFiendAnaylizerController anaylizerKey] withDictionary:[HexFiendAnaylizerController defaultOptions]];
         [hexView setData:[object.parentStream valueForKey:@"bytesCache"]];      
         [self setupRepresentedObject];
     }
@@ -167,34 +166,9 @@
     [super dealloc];
 }
 
-+ (NSArray *)anaylizerUTIs
-{
-    return [NSArray arrayWithObject:@"public.data"];
-}
-
-+ (NSString *)anayliserName
-{
-    return @"Hex Editor";
-}
-
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
-{
-    return @"HFAccessoryView";
-}
-
 - (NSString *)nibName
 {
     return @"HexFiendAnaylizerController";
-}
-
-+ (NSString *)anaylizerKey;
-{
-    return @"HexFiendAnaylizerController";
-}
-
-+ (NSMutableDictionary *)defaultOptions
-{
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"showOffset", @"Hexadecimal", @"offsetBase",[NSArray arrayWithObjects:@"Hexadecimal", @"Decimal", nil], @"offsetBaseOptions", [NSNumber numberWithBool:YES], @"overWriteMode", nil] autorelease];
 }
 
 @end

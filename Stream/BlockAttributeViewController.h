@@ -20,10 +20,4 @@
 @property (assign) IBOutlet NSArrayController *arrayController;
 @property (assign) IBOutlet StBlockFormatter *blockFormatter;
 
-+ (NSArray *)anaylizerUTIs;
-+ (NSString *)anayliserName;
-+ (NSString *)anaylizerKey;
-+ (NSString *)AnaylizerPopoverAccessoryViewNib;
-+ (NSMutableDictionary *)defaultOptions;
-
 @end

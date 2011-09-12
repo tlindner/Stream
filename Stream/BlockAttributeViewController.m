@@ -43,7 +43,6 @@
     [super loadView];
     
     StBlock *theBlock = [self representedObject];
-    [theBlock addSubOptionsDictionary:[BlockAttributeViewController anaylizerKey] withDictionary:[BlockAttributeViewController defaultOptions]];
     NSString *currentMode = [theBlock valueForKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
     blockFormatter.mode = currentMode;
     
@@ -76,34 +75,9 @@
     [super dealloc];
 }
 
-+ (NSArray *)anaylizerUTIs
-{
-    return [NSArray arrayWithObject:@"org.macmess.stream.attribute"];
-}
-
-+ (NSString *)anayliserName
-{
-    return @"Block Attribute View";
-}
-
-+ (NSString *)anaylizerKey
-{
-    return @"BlockAttributeViewController";
-}
-
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
-{
-    return @"BlockAttributeViewAccessory";
-}
-
 -(NSString *)nibName
 {
     return @"BlockAttributeViewController";
-}
-
-+ (NSMutableDictionary *)defaultOptions
-{
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Hexadecimal", @"numericDisplay", [NSArray arrayWithObjects:@"Hexadecimal", @"Decimal", nil], @"numericDisplayOptions", nil] autorelease];
 }
 
 @end

@@ -41,24 +41,21 @@
         if( [[[change objectForKey:@"new"] class] isSubclassOfClass:[NSString class]] )
         {
             // create sub view editor.
-            Class editorViewClass = [[Analyzation sharedInstance] anaylizerClassforName:[change objectForKey:@"new"]];
-            
+
             if( self.editorController != nil )
             {
                 // teardown existing sub view editor
                 [[self.editorController view] removeFromSuperview];
                 self.editorController = nil;
             }
-            
-            if (editorViewClass == nil)
-                editorViewClass = [HexFiendAnaylizerController class];
-            
-            //NSLog( @"name: %@, class: %@", [change objectForKey:@"new"], editorViewClass );
+
+            StAnaylizer *theAna = [self objectValue];
+            NSObject *anaylizerObject = [theAna anaylizerObject];
             
             NSRect adjustedFrame = [_customView frame];
             adjustedFrame.origin.x = 0;
             adjustedFrame.origin.y = 0;
-            self.editorController = [[[editorViewClass alloc] initWithNibName:nil bundle:nil] autorelease];
+            self.editorController = [[[[anaylizerObject viewController] alloc] initWithNibName:nil bundle:nil] autorelease];
             [self.editorController setRepresentedObject:self.objectValue];
             [self.editorController loadView];
             [[self.editorController view] setFrame:adjustedFrame];

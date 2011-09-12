@@ -154,6 +154,15 @@
     return nil;
 }
 
+- (StAnaylizer *)previousAnayliser:(StAnaylizer *)inAna
+{
+    NSUInteger theIndex = [[self anaylizers] indexOfObject:inAna];
+    
+    if( theIndex == 0 )
+        return nil;
+    else
+        return [[self anaylizers] objectAtIndex:theIndex - 1];
+}
 
 - (NSArray *)blocksWithKey:(NSString *)key
 {

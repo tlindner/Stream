@@ -14,11 +14,13 @@
 @interface StAnaylizer : NSManagedObject
 {
 @private
+    NSObject * anaylizerObject;
 }
 
 @property (nonatomic) float anaylizerHeight;
 @property (nonatomic) BOOL collapse;
 @property (nonatomic, retain) NSString * anaylizerKind;
+@property (nonatomic, readonly) NSObject * anaylizerObject;
 @property (nonatomic, readonly) float computedAnaylizerHeight;
 @property (nonatomic, retain) NSString * currentEditorView;
 @property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
@@ -27,11 +29,13 @@
 @property (nonatomic, assign) NSString * sourceUTI;
 @property (nonatomic, retain) NSString * resultingUTI;
 @property (nonatomic, readonly) BOOL removeEnabled;
+@property (nonatomic, readonly) BOOL editEnabled;
 @property (nonatomic, readonly) BOOL blockSettingsHidden;
 @property (nonatomic, readonly) NSString * title;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 - (void) writebyte:(unsigned char) byte atOffset:(NSUInteger)offset;
+- (NSURL *)urlForCachedData;
 
 @end
 

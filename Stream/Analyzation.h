@@ -24,12 +24,13 @@
 
 @end
 
-@interface NSViewController(AnaylizationExtensions)
+@interface NSObject (AnaylizationExtensions)
 + (NSArray *)anaylizerUTIs;
 + (NSString *)anayliserName;
-- (void)setRepresentedObject:(id)representedObject;
 + (NSString *)anaylizerKey;
 + (NSString *)AnaylizerPopoverAccessoryViewNib;
 + (NSMutableDictionary *)defaultOptions;
+- (Class)viewController;
+- (void)setRepresentedObject:(id)representedObject;
 - (void)prepareAccessoryView: (NSView *)baseView;
 @end
