@@ -31,17 +31,7 @@
     if( inRepresentedObject == nil )
     {
         WaveFormView *wfv = [self.scroller documentView];
-        
-        if( wfv.observationsActive == YES )
-        {
-            StAnaylizer *theAna = [self representedObject];
-            [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
-            [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
-            [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
-            [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
-            [theAna removeObserver:wfv forKeyPath:@"resultingData"];
-            wfv.observationsActive = NO;
-        } 
+        [wfv deactivateObservations];
     }
     
     [super setRepresentedObject:inRepresentedObject];
@@ -99,16 +89,7 @@
     NSRect rect = [[self.scroller documentView] frame];
     rect.size.height = clipViewBounds.size.height;
     [[self.scroller documentView] setFrame:rect];
-    
-    if( wfv.observationsActive == NO )
-    {
-        [theAna addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:wfv forKeyPath:@"resultingData" options:NSKeyValueChangeReplacement context:nil];
-         wfv.observationsActive = YES;
-    }
+    [wfv activateObservations];
 }
 
 - (void)clipViewBoundsChanged:(NSNotification *)notification
@@ -124,18 +105,8 @@
 - (void)dealloc
 {
     WaveFormView *wfv = [self.scroller documentView];
+    [wfv deactivateObservations];
 
-    if( wfv.observationsActive == YES )
-    {
-        StAnaylizer *theAna = [self representedObject];
-        [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
-        [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
-        [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
-        [theAna removeObserver:wfv forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
-        [theAna removeObserver:wfv forKeyPath:@"resultingData"];
-        wfv.observationsActive = NO;
-    } 
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     //[self removeTrackingArea:self.trackingArea];

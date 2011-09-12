@@ -56,6 +56,35 @@ typedef struct
     return self;
 }
 
+- (void) activateObservations
+{
+    if( observationsActive == NO )
+    {
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeReplacement context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"frameBufferObject" options:NSKeyValueChangeSetting context:nil];
+        
+        observationsActive = YES;
+    }
+}
+
+- (void) deactivateObservations
+{
+    if( observationsActive == YES )
+    {
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"resultingData"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"frameBufferObject"];
+        observationsActive = NO;
+    }     
+}
+
 - (void)drawRect:(NSRect)dirtyRect
 {
     NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
@@ -341,6 +370,13 @@ typedef struct
         return;
     }
     
+    if( [keyPath isEqualToString:@"frameBufferObject"] )
+    {
+        resample = YES;
+        [self setNeedsDisplay:YES];
+        return;
+    }
+    
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
@@ -619,16 +655,18 @@ typedef struct
             
             NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
             NSData *previousSamples = [NSData dataWithBytes:storedSamples length:sizeof(AudioSampleType)*selectedSampleLength];
-            NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", [NSNumber numberWithUnsignedInteger:selectedSample], @"selectedSample", [NSNumber numberWithUnsignedInteger:selectedSampleLength], @"selectedSampleLength", nil];
+            NSValue *rangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType)*selectedSample, sizeof(AudioSampleType)*selectedSampleLength)];
+            NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", rangeValue, @"range", nil];
             
-            [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
+            id modelObject = [self.cachedAnaylizer anaylizerObject];
+            [[parentContext undoManager] registerUndoWithTarget:modelObject selector:@selector(setPreviousState:) object:previousState];
             
             if( selectedSampleLength == 1 )
                 [[parentContext undoManager] setActionName:@"Move Sample"];
             else
                 [[parentContext undoManager] setActionName:@"Move Samples"];
             
-            needsAnaylyzation = YES;
+            [modelObject anaylizeAudioData];
             [self setNeedsDisplay:YES];
         }
     }
@@ -671,31 +709,6 @@ typedef struct
         
         currentFrame++;
     }
-}
-
-- (void) setPreviousState:(NSDictionary *)previousState
-{
-    AudioSampleType *previousSamples = (AudioSampleType *)[[previousState objectForKey:@"data"] bytes];
-    NSUInteger storedSelectedSample = [[previousState objectForKey:@"selectedSample"] unsignedIntegerValue];
-    NSUInteger storedSelectedSampleLength = [[previousState objectForKey:@"selectedSampleLength"] unsignedIntegerValue];
-    
-    AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
-    AudioSampleType *frameStart = audioFrames + storedSelectedSample;
-    
-    for( unsigned long i = 0; i < storedSelectedSampleLength; i++ )
-    {
-        frameStart[i] = previousSamples[i];
-    }
-    
-    resample = YES;
-    needsAnaylyzation = YES;
-    [self setNeedsDisplay:YES];
-    
-    //    NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
-    //    [mo willChangeValueForKey:@"bytesAfterTransform"];
-    //    [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
-    //    [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
-    //    [mo didChangeValueForKey:@"bytesAfterTransform"];
 }
 
 @end

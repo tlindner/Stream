@@ -21,6 +21,8 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
     BOOL anaylizationError;
     BOOL observationsActive;
     StAnaylizer *representedObject;
+    
+    int currentAudioChannel;
 }
 
 @property (assign) StAnaylizer * representedObject;
@@ -28,5 +30,6 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 - (void) loadAudioChannel:(int)audioChannel;
 - (void) anaylizeAudioData;
 - (void) updateWaveFormForCharacter:(NSUInteger)idx;
+- (void) setPreviousState:(NSDictionary *)previousState;
 
 @end

@@ -53,7 +53,7 @@
         anaylizerObject = [[anaObjectClass alloc] init];
         [anaylizerObject setRepresentedObject:self];
     }
-    else if( ![[anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.anaylizerKind]] )
+    else if( ![[anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView]] )
     {
         [anaylizerObject setRepresentedObject:nil];
         [anaylizerObject release];

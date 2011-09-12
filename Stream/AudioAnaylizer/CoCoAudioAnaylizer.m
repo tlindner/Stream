@@ -90,6 +90,7 @@
 
 - (void) loadAudioChannel:(int)audioChannel
 {
+    currentAudioChannel = audioChannel;
     StAnaylizer *theAna = self.representedObject;    
     OSStatus myErr;
     UInt32 propSize;
@@ -409,7 +410,10 @@
     if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] )
     {
         int audioChannel = [[self.representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
-        [self loadAudioChannel:audioChannel];
+        if( currentAudioChannel != audioChannel )
+        {
+            [self loadAudioChannel:audioChannel];
+        }
         return;
     }
     
@@ -448,13 +452,15 @@
     
     /* get max of current wave form */
     NSMutableData *charactersObject = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
-    NSRange *characters = (NSRange *)[charactersObject bytes];
+    NSRange *characters = (NSRange *)[charactersObject mutableBytes];
     NSMutableData *audioFramesObject = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
     AudioSampleType *audioFrames = [audioFramesObject mutableBytes];
     AudioSampleType *frameStart = audioFrames + characters[idx].location;
     AudioSampleType maxValue;
     
     vDSP_maxv( frameStart, 1, &maxValue, characters[idx].length );
+    
+    NSData *previousDataObject = [NSData dataWithBytes:frameStart length:sizeof(AudioSampleType) * characters[idx].length];
     
     /* calculate waveform buffer size */
     NSMutableData *characterObject = [theAna valueForKey:@"resultingData"];
@@ -476,6 +482,7 @@
     int zerosLength = sampleRate / lowCycle;
     int totalLength = (ones * onesLength) + (zeros * zerosLength);
     
+    NSValue *newRangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType) * characters[idx].location, sizeof(AudioSampleType) * totalLength)];
     AudioSampleType *newByteWaveForm = malloc( sizeof(AudioSampleType) * totalLength );
     int waveFormIndex = 0;
     test = character[idx];
@@ -506,8 +513,30 @@
     
     for( unsigned long i = idx+1; i < [characterObject length]; i++ )
     {
-        characters[i].location += delta;
+        characters[i].location -= delta;
     }
+    
+    /* update frame count */
+    unsigned long long frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
+    frameCount -= delta;
+    [theAna setValue:[NSNumber numberWithUnsignedLongLong:frameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
+    
+    NSManagedObjectContext *parentContext = [self.representedObject managedObjectContext];
+    NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousDataObject, @"data", newRangeValue, @"range", nil];
+    [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
+    [[parentContext undoManager] setActionName:@"Sample Change"];
+
+}
+
+- (void) setPreviousState:(NSDictionary *)previousState
+{
+    [self.representedObject willChangeValueForKey:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+    NSData *previousSamplesObject = [previousState objectForKey:@"data"];
+    NSRange range = [[previousState objectForKey:@"range"] rangeValue];
+    NSMutableData *frameBufferObject = [self.representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+    [frameBufferObject replaceBytesInRange:range withBytes:[previousSamplesObject bytes] length:[previousSamplesObject length]];
+    [self.representedObject didChangeValueForKey:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+    [self anaylizeAudioData];
 }
 
 + (NSArray *)anaylizerUTIs

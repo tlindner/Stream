@@ -48,6 +48,7 @@
 @property (nonatomic, retain) NSString *errorString;
 
 - (IBAction)chooseTool:(id)sender;
-- (void) setPreviousState:(NSDictionary *)previousState;
+- (void) activateObservations;
+- (void) deactivateObservations;
 
 @end

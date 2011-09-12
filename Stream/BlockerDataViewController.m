@@ -54,7 +54,6 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (parentBlock == nil) AND (anaylizerKind == %@)", theAna.parentStream, theAna.anaylizerKind ];
     [treeController setFetchPredicate:predicate];
 
-    [theAna addSubOptionsDictionary:[BlockerDataViewController anaylizerKey] withDictionary:[BlockerDataViewController defaultOptions]];
     if( [[[self representedObject] valueForKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"] boolValue] == YES )
     {
     }
@@ -129,11 +128,12 @@
                 self.editorViewController = nil;
             }
              
-            Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:theBlock.currentEditorView];
-            
-            if( anaClass == nil )
-                anaClass = [HexFiendAnaylizerController class];
+//            Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:theBlock.currentEditorView];
+//            
+//            if( anaClass == nil )
+//                anaClass = [HexFiendAnaylizerController class];
              
+            Class anaClass = [[theBlock anaylizerObject] viewController];
             theFrame.origin.y = theFrame.origin.x = 0;
             self.editorViewController = [[[anaClass alloc] initWithNibName:nil bundle:nil] autorelease];
             [self.editorViewController setRepresentedObject:theBlock];

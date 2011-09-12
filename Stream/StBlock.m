@@ -8,7 +8,8 @@
 
 #import "StBlock.h"
 #import "StStream.h"
-
+#import "Analyzation.h"
+#import "HexFiendAnaylizer.h"
 
 @implementation StBlock
 @dynamic anaylizerKind;
@@ -36,6 +37,41 @@
 - (void)awakeFromInsert
 {
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
+}
+
+- (NSObject *)anaylizerObject
+{
+    Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
+    
+    if( anaObjectClass == nil )
+        anaObjectClass = [HexFiendAnaylizer class];
+    
+    if( anaylizerObject == nil )
+    {
+        anaylizerObject = [[anaObjectClass alloc] init];
+        [anaylizerObject setRepresentedObject:self];
+    }
+    else if( ![[anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView]] )
+    {
+        [anaylizerObject setRepresentedObject:nil];
+        [anaylizerObject release];
+        
+        anaylizerObject = [[anaObjectClass alloc] init];
+        [anaylizerObject setRepresentedObject:self];
+    }
+    
+    return anaylizerObject;
+}
+
+- (void)dealloc
+{
+    if( anaylizerObject != nil )
+    {
+        [anaylizerObject setRepresentedObject:nil];
+        [anaylizerObject release];
+    }
+    
+    [super dealloc];
 }
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions

@@ -15,9 +15,11 @@
 {
 @private
     NSUInteger dataIndex, attrIndex, depIndex; 
+    NSObject * anaylizerObject;
 }
 @property (nonatomic, retain) NSString * anaylizerKind;
 @property (nonatomic, retain) NSString * currentEditorView;
+@property (nonatomic, readonly) NSObject * anaylizerObject;
 @property (nonatomic) int64_t expectedSize;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic) int32_t type;
