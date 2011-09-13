@@ -476,7 +476,7 @@ typedef struct
             /* Add selection to changed set */
             NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
             if( previousIndexSet != nil ) [previousIndexSet release];
-            previousIndexSet = [changedSet copy];
+            previousIndexSet = [changedSet mutableCopy];
             NSRange range = NSMakeRange(selectedSample, selectedSampleLength);
             [changedSet addIndexesInRange:range];
 

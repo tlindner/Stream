@@ -84,7 +84,7 @@
         [theAna removeObserver:self forKeyPath:@"resultingData"];
         observationsActive = NO;
     } 
-
+    
     [super dealloc];
 }
 
@@ -98,7 +98,7 @@
     /* clear out modified data index set*/
     NSMutableIndexSet *changedSet = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
     [changedSet removeAllIndexes];
-
+    
     /* Convert data to samples */
     NSURL *fileURL = [theAna urlForCachedData];
     ExtAudioFileRef af;
@@ -133,7 +133,7 @@
         
         [theAna setValue:theChannelList forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannelList"];
         [theChannelList release];
-
+        
         propSize = sizeof(SInt64);
         myErr = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileLengthFrames, &propSize, &fileFrameCount);
         NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty2: returned %d", myErr );
@@ -168,7 +168,7 @@
         {
             frameBufferObjectBytes[i] = sourceAudioFrame[i*channelCount];
         }
-
+        
         free( frameBuffer );
         
         [theAna setValue:frameBufferObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
@@ -189,12 +189,12 @@
 {
     NSAssert(self.representedObject != nil, @"Anaylize Audio Data: anaylizer can not be nil");
     StAnaylizer *theAna = self.representedObject;
-
+    
     needsAnaylyzation = NO;
     anaylizationError = NO;
     
     unsigned long long frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
-
+    
     double sampleRate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
     float lowCycle = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] floatValue];
     float highCycle = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
@@ -375,7 +375,30 @@
     //    if( coalescedCharacters != [coalescedObject mutableBytes] )
     //        coalescedCharacters = [coalescedObject mutableBytes];
     
-    /* Store NSMutableData Objects away */
+    
+    /* find average of max value for each coalessed range */
+    /* this will be used when creating new wave forms during writing */
+    AudioSampleType average;
+    
+    if( coa_char_count != 0 )
+    {
+        average = 0;
+        
+        for( i=0; i<coa_char_count; i++ )
+        {
+            AudioSampleType maxValue;
+            vDSP_maxv( audioFrames + coalescedCharacters[i].location, 1, &maxValue, coalescedCharacters[i].length );
+            average += maxValue;
+        }
+        
+        average = average / coa_char_count;
+    }
+    else
+        average = 0.75; /* this is a decent value if there is no found data */
+    
+    [theAna setValue:[NSNumber numberWithFloat:average] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.averagedMaximumSample"];
+    
+    /* store NSMutableData Objects away */
     //    [theAna willChangeValueForKey:@"optionsDictionary"];
     [theAna setValue:coalescedObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
     [theAna setValue:charactersObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
@@ -444,17 +467,15 @@
 - (void) updateWaveFormForCharacter:(NSUInteger)idx
 {
     StAnaylizer *theAna = self.representedObject;
-
+    
     /* get max of current wave form */
-    NSMutableData *charactersObject = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
+    NSDictionary *optionsDictionary = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
+    NSMutableData *charactersObject = [optionsDictionary objectForKey:@"charactersObject"];
     NSRange *characters = (NSRange *)[charactersObject mutableBytes];
-    NSMutableData *audioFramesObject = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+    NSMutableData *audioFramesObject = [optionsDictionary objectForKey:@"frameBufferObject"];
     AudioSampleType *audioFrames = [audioFramesObject mutableBytes];
     AudioSampleType *frameStart = audioFrames + characters[idx].location;
-    AudioSampleType maxValue;
-    
-    vDSP_maxv( frameStart, 1, &maxValue, characters[idx].length );
-    
+    AudioSampleType maxValue = [[optionsDictionary objectForKey:@"averagedMaximumSample"] floatValue];
     NSData *previousDataObject = [NSData dataWithBytes:frameStart length:sizeof(AudioSampleType) * characters[idx].length];
     
     /* calculate waveform buffer size */
@@ -469,9 +490,9 @@
         test >>= 1;
     }
     
-    double sampleRate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
-    float lowCycle = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] floatValue];
-    float highCycle = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
+    double sampleRate = [[optionsDictionary objectForKey:@"sampleRate"] doubleValue];
+    float lowCycle = [[optionsDictionary objectForKey:@"lowCycle"] floatValue];
+    float highCycle = [[optionsDictionary objectForKey:@"highCycle"] floatValue];
     
     int onesLength = sampleRate / highCycle;
     int zerosLength = sampleRate / lowCycle;
@@ -512,13 +533,13 @@
     }
     
     /* add index to modified set */
-    NSMutableIndexSet *changedSet = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
-    NSMutableIndexSet *previousChangedSet = [changedSet copy];
+    NSMutableIndexSet *changedSet = [optionsDictionary objectForKey:@"changedIndexes"];
+    NSMutableIndexSet *previousChangedSet = [changedSet mutableCopy];
     [changedSet shiftIndexesStartingAtIndex:characters[idx].location+characters[idx].length by:delta];
     [changedSet addIndexesInRange:characters[idx]];
     
     /* update frame count */
-    unsigned long long frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
+    unsigned long long frameCount = [[optionsDictionary objectForKey:@"frameCount"] unsignedLongLongValue];
     frameCount += delta;
     [theAna setValue:[NSNumber numberWithUnsignedLongLong:frameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
     
@@ -527,7 +548,7 @@
     NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousDataObject, @"data", newRangeValue, @"range", [previousChangedSet autorelease], @"indexSet", nil];
     [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
     [[parentContext undoManager] setActionName:@"Byte Change"];
-
+    
 }
 
 - (void) setPreviousState:(NSDictionary *)previousState
@@ -538,12 +559,12 @@
     /* setup redo */
     NSValue *priorRange = [previousState objectForKey:@"range"];
     NSMutableIndexSet *previousChangedSet = [previousState objectForKey:@"indexSet"];
-
+    
     NSRange range = [priorRange rangeValue];
     NSData *priorData = [frameBufferObject subdataWithRange:range];
     NSManagedObjectContext *parentContext = [theAna managedObjectContext];
     NSIndexSet *priorChangedSet = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
-    NSDictionary *priorState = [NSDictionary dictionaryWithObjectsAndKeys:priorData, @"data", priorRange, @"range", [[priorChangedSet copy] autorelease], @"indexSet", nil];
+    NSDictionary *priorState = [NSDictionary dictionaryWithObjectsAndKeys:priorData, @"data", priorRange, @"range", [[priorChangedSet mutableCopy] autorelease], @"indexSet", nil];
     [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:priorState];
     [[parentContext undoManager] setActionName:@"Change"];
     
@@ -553,7 +574,7 @@
     [frameBufferObject replaceBytesInRange:range withBytes:[previousSamplesObject bytes] length:[previousSamplesObject length]];
     [self.representedObject didChangeValueForKey:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
     [self.representedObject setValue:previousChangedSet forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
-
+    
     /* update frame count */
     unsigned long long frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
     frameCount -= [previousSamplesObject length] - range.length;
@@ -590,7 +611,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"frameCount", [NSNull null], @"coalescedObject", [NSNull null], @"frameBufferObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"frameCount", [NSNull null], @"coalescedObject", [NSNull null], @"frameBufferObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", nil] autorelease];
 }
 
 @end
