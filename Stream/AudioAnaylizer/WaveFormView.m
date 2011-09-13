@@ -139,7 +139,7 @@ typedef struct
         int offset = dirtyRect.origin.x;
         if( offset < 0 ) offset = 0;
         AudioSampleType *frameStart = audioFrames + offset; // Interleaved samples
-
+        
         if( resample == YES )
         {
             free( previousBuffer );
@@ -296,8 +296,20 @@ typedef struct
             }
         }
         
-        /* Draw lupe & selection rect */
         
+        /* draw green modification tints */
+        [[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:0.5] set];
+        NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+        NSRange range = NSMakeRange(dirtyRect.origin.x, dirtyRect.size.width);
+        [changedSet enumerateRangesInRange:range options:0 usingBlock:
+         ^(NSRange range, BOOL *stop)
+         {
+             NSRect rect = NSMakeRect(range.location/scale, 0.0, range.length/scale, viewWaveHeight);
+             NSRectFillUsingOperation( rect, NSCompositeSourceOver );
+             
+         }];
+        
+        /* draw lupe & selection rect */
         if( mouseDownOnPoint == NO )
         {
             if( (toolMode == WFVSelection || toolMode == WFVLupe) && mouseDown == YES )
@@ -327,6 +339,9 @@ typedef struct
     
     if( previousBuffer != nil )
         free( previousBuffer );
+    
+    if( previousIndexSet != nil )
+        [previousIndexSet release];
     
     [super dealloc];
 }
@@ -458,6 +473,13 @@ typedef struct
                 selectedSampleLength = 1;
             }
             
+            /* Add selection to changed set */
+            NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+            if( previousIndexSet != nil ) [previousIndexSet release];
+            previousIndexSet = [changedSet copy];
+            NSRange range = NSMakeRange(selectedSample, selectedSampleLength);
+            [changedSet addIndexesInRange:range];
+
             /* make copy of selected samples */
             if( storedSamples != nil ) free( storedSamples );
             
@@ -656,7 +678,7 @@ typedef struct
             NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
             NSData *previousSamples = [NSData dataWithBytes:storedSamples length:sizeof(AudioSampleType)*selectedSampleLength];
             NSValue *rangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType)*selectedSample, sizeof(AudioSampleType)*selectedSampleLength)];
-            NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", rangeValue, @"range", nil];
+            NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", rangeValue, @"range", previousIndexSet, @"indexSet", nil];
             
             id modelObject = [self.cachedAnaylizer anaylizerObject];
             [[parentContext undoManager] registerUndoWithTarget:modelObject selector:@selector(setPreviousState:) object:previousState];

@@ -356,6 +356,11 @@
 }
 
 
++ (NSSet *)keyPathsForValuesAffectingDataForUI
+{
+    return [NSSet setWithObjects:@"data", @"valueTransformer", nil];
+}
+
 - (NSDictionary *)dataForUI
 {
     NSDictionary *result = nil;
@@ -400,6 +405,11 @@
     NSData *theData = [vt reverseTransformedValue:value ofSize:[self length]];
     
     [[self getStream] setBlock:self withData:theData];
+}
+
++ (NSSet *)keyPathsForValuesAffectingCheckBytesForUI
+{
+    return [NSSet setWithObjects:@"checkBytes", @"valueTransformer", nil];
 }
 
 - (NSDictionary *)checkBytesForUI

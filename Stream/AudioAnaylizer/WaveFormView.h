@@ -23,6 +23,7 @@
     CGFloat previousFrameWidth;
     int previousOffset;
     Float32 *previousBuffer;
+    NSIndexSet *previousIndexSet;
     
     NSInteger toolMode;
     NSUInteger selectedSample, selectedSampleUnderMouse;

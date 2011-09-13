@@ -41,6 +41,11 @@
     }
 }
 
++ (NSSet *)keyPathsForValuesAffectingAnaylizerObject
+{
+    return [NSSet setWithObjects:@"currentEditorView", nil];
+}
+
 - (NSObject *)anaylizerObject
 {
     Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
@@ -50,13 +55,11 @@
     
     if( anaylizerObject == nil )
     {
-        NSLog( @"initializing to: %@", self.currentEditorView );
         anaylizerObject = [[anaObjectClass alloc] init];
         [anaylizerObject setRepresentedObject:self];
     }
     else if( ![[anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView]] )
     {
-        NSLog( @"resetting to: %@", self.currentEditorView );
         [anaylizerObject setRepresentedObject:nil];
         [anaylizerObject release];
         
@@ -76,6 +79,11 @@
     }
 
     [super dealloc];
+}
+
++ (NSSet *)keyPathsForValuesAffectingComputedAnaylizerHeight
+{
+    return [NSSet setWithObjects:@"anaylizerHeight", nil];
 }
 
 - (float) computedAnaylizerHeight
@@ -162,6 +170,11 @@
     }
 }
 
++ (NSSet *)keyPathsForValuesAffectingRemoveEnabled
+{
+    return [NSSet setWithObjects:@"parentStream.anaylizers", nil];
+}
+
 - (BOOL) removeEnabled
 {
     BOOL result = NO;
@@ -177,6 +190,11 @@
     return result;
 }
 
++ (NSSet *)keyPathsForValuesAffectingEditEnabled
+{
+    return [NSSet setWithObjects:@"parentStream", nil];
+}
+
 - (BOOL) editEnabled
 {
     BOOL result = NO;
@@ -187,6 +205,11 @@
     return result;
 }
 
++ (NSSet *)keyPathsForValuesAffectingBlockSettingsHidden
+{
+    return [NSSet setWithObjects:@"currentEditorView", nil];
+}
+
 - (BOOL) blockSettingsHidden
 {
     BOOL result = YES;
@@ -195,6 +218,11 @@
         result = NO;
     
     return result;
+}
+
++ (NSSet *)keyPathsForValuesAffectingTitle
+{
+    return [NSSet setWithObjects:@"anaylizerKind", @"currentEditorView", nil];
 }
 
 - (NSString *) title
