@@ -23,7 +23,6 @@ void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType
 void SamplesSamples_avg( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
 void SamplesSamples_1to1( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
 void SamplesSamples_resample( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame );
-CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData);
 double CubicHermite(double t, double p0, double p1, double m0, double m1);
 double Interpolate( double timeToAccel, double timeCruising, double timeToDecel, double finalPosition, double currentTime);
@@ -479,7 +478,7 @@ typedef struct
             previousIndexSet = [changedSet mutableCopy];
             NSRange range = NSMakeRange(selectedSample, selectedSampleLength);
             [changedSet addIndexesInRange:range];
-
+            
             /* make copy of selected samples */
             if( storedSamples != nil ) free( storedSamples );
             
@@ -669,12 +668,6 @@ typedef struct
     {   
         if( cancelDrag == NO )
         {
-            //            NSManagedObject *mo = [self.cachedAnaylizer valueForKey:@"parentStream"];
-            //            [mo willChangeValueForKey:@"bytesAfterTransform"];
-            //            [self.cachedAnaylizer willChangeValueForKey:@"optionsDictionary"];
-            //            [self.cachedAnaylizer didChangeValueForKey:@"optionsDictionary"];
-            //            [mo didChangeValueForKey:@"bytesAfterTransform"];
-            
             NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
             NSData *previousSamples = [NSData dataWithBytes:storedSamples length:sizeof(AudioSampleType)*selectedSampleLength];
             NSValue *rangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType)*selectedSample, sizeof(AudioSampleType)*selectedSampleLength)];
@@ -734,16 +727,6 @@ typedef struct
 }
 
 @end
-
-CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )
-{
-    /*  m=(Y1-Y2)/(X1-X2) */
-    double m = ((double)y1 - (double)y2)/((double)x1-(double)x2);
-    /*  b = Y-mX */
-    double b = (double)y1 - (m * (double)x1);
-    
-    return (-b)/m;
-}
 
 void SamplesSamples_max( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {

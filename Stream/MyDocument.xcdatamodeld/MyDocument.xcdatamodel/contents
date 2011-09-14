@@ -5,6 +5,7 @@
         <attribute name="anaylizerKind" attributeType="String" indexed="YES"/>
         <attribute name="collapse" attributeType="Boolean" defaultValueString="YES"/>
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
+        <attribute name="editIndexSet" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <attribute name="resultingData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="resultingUTI" attributeType="String" defaultValueString="public.data"/>
@@ -18,6 +19,8 @@
         <attribute name="dataForUI" optional="YES" transient="YES" attributeType="Transformable"/>
         <attribute name="expectedSize" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <attribute name="index" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="isEdit" attributeType="Boolean" defaultValueString="NO"/>
+        <attribute name="isFail" attributeType="Boolean" defaultValueString="NO"/>
         <attribute name="length" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
         <attribute name="name" attributeType="String" defaultValueString="untitled"/>
         <attribute name="offset" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
@@ -47,7 +50,7 @@
     </entity>
     <elements>
         <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="180"/>
-        <element name="StBlock" positionX="0" positionY="0" width="0" height="330"/>
+        <element name="StBlock" positionX="0" positionY="0" width="0" height="360"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="225"/>
     </elements>
 </model>

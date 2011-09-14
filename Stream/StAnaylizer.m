@@ -18,6 +18,7 @@
 @dynamic anaylizerKind;
 @dynamic currentEditorView;
 @dynamic optionsDictionary;
+@dynamic editIndexSet;
 @dynamic parentStream;
 @dynamic resultingData;
 @dynamic sourceUTI;
@@ -127,11 +128,17 @@
     [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"resultingData"];
     [self.resultingData replaceBytesInRange:range withBytes:&byte];
     [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"resultingData"];
+    
+    /* add byte index to edited index set */
+    [self willChangeValueForKey:@"editIndexSet"];
+    [self.editIndexSet addIndex:offset];
+    [self didChangeValueForKey:@"editIndexSet"];
 }
 
 - (void)awakeFromInsert
 {
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
+    self.editIndexSet = [[[NSMutableIndexSet alloc] init] autorelease];
 }
 
 - (NSString *)sourceUTI

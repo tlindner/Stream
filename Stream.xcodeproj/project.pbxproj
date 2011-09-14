@@ -49,6 +49,7 @@
 		776139AF13E1BA4200CA80BB /* ColorGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776139AE13E1BA4200CA80BB /* ColorGradientView.m */; };
 		7768590613F0FF92006BE753 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7768590513F0FF92006BE753 /* Accelerate.framework */; };
 		776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */; };
+		776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776EB7E4142069060019329F /* BlockAttributeViewTableView.m */; };
 		777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 777984BC13E99E96007198EE /* StreamsTreeController.m */; };
 		778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */; };
 		778A597E140703DB00B68EB4 /* StStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597D140703DB00B68EB4 /* StStream.m */; };
@@ -201,6 +202,8 @@
 		776139AE13E1BA4200CA80BB /* ColorGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColorGradientView.m; path = Stream/ColorGradientView.m; sourceTree = "<group>"; };
 		7768590513F0FF92006BE753 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewAccessory.xib; path = Stream/BlockAttributeViewAccessory.xib; sourceTree = "<group>"; };
+		776EB7E3142069060019329F /* BlockAttributeViewTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeViewTableView.h; path = Stream/BlockAttributeViewTableView.h; sourceTree = "<group>"; };
+		776EB7E4142069060019329F /* BlockAttributeViewTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewTableView.m; path = Stream/BlockAttributeViewTableView.m; sourceTree = "<group>"; };
 		777984BB13E99E96007198EE /* StreamsTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamsTreeController.h; sourceTree = "<group>"; };
 		777984BC13E99E96007198EE /* StreamsTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamsTreeController.m; sourceTree = "<group>"; };
 		778A59791406EE7600B68EB4 /* CoCoCassetteBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoCassetteBlocker.h; path = Stream/CoCoBlockers/CoCoCassetteBlocker.h; sourceTree = "<group>"; };
@@ -587,6 +590,8 @@
 				77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */,
 				771AD29E141D43AE00E0FE41 /* BlockAttributeAnaylizer.h */,
 				771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */,
+				776EB7E3142069060019329F /* BlockAttributeViewTableView.h */,
+				776EB7E4142069060019329F /* BlockAttributeViewTableView.m */,
 			);
 			name = BlockAttributeView;
 			sourceTree = "<group>";
@@ -908,6 +913,7 @@
 				771AD29A141D414B00E0FE41 /* HexFiendAnaylizer.m in Sources */,
 				771AD29D141D431400E0FE41 /* BlockerDataAnaylizer.m in Sources */,
 				771AD2A0141D43AE00E0FE41 /* BlockAttributeAnaylizer.m in Sources */,
+				776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

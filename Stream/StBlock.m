@@ -29,10 +29,13 @@
 @dynamic sourceUTI;
 @dynamic currentEditorView;
 @dynamic optionsDictionary;
+@dynamic isFail;
+@dynamic isEdit;
 
 @dynamic data;
 @dynamic dataForUI;
 @dynamic checkBytesForUI;
+@dynamic attributeColor;
 
 - (void)awakeFromInsert
 {
@@ -212,6 +215,18 @@
     return [dataBlockSet anyObject];
 }
 
+- (StBlock *)subBlockAtIndex:(NSInteger)theIndex
+{
+    for (StBlock *aBlock in [self blocks])
+    {
+        if( aBlock.index == theIndex )
+            return aBlock;
+    }
+    
+    NSAssert(YES==NO, @"StBlock: Subblock index not found: %d", theIndex);
+    return nil;
+}
+
 - (NSData *)getData
 {
     NSMutableData *result;
@@ -256,7 +271,7 @@
         StStream *ourStream = [self getStream];
         NSData *blockData = [ourStream dataOfBlockNamed:self.source];
         NSUInteger useLength;
-
+        
         if( self.length == 0 )
         {
             /* length of zero means "to the end of the block" */
@@ -264,7 +279,7 @@
         }
         else
             useLength = self.length;
-
+        
         NSRange theRange = NSMakeRange(self.offset, useLength);
         result = [[blockData subdataWithRange:theRange] mutableCopy];
         [result autorelease];
@@ -422,6 +437,23 @@
     return result;
 }
 
++ (NSSet *)keyPathsForValuesAffectingAttributeColor
+{
+    return [NSSet setWithObjects:@"isEdit", @"isFail", nil];
+}
+
+- (NSColor *)attributeColor
+{
+    if( self.isEdit && self.isFail )
+        return [NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.0 alpha:0.5];
+    else if( self.isEdit )
+        return [NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:0.5];
+    else if( self.isFail )
+        return [NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5];
+    
+    return nil;
+}
+
 @end
 
 @implementation StBlockFormatter
@@ -431,7 +463,7 @@
 - (NSString *)stringForObjectValue:(id)anObject
 {
     id result;
-
+    
     if( [anObject isKindOfClass:[NSDictionary class]] )
     {
         NSDictionary *inDict = anObject;

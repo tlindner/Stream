@@ -38,6 +38,9 @@
 @property (nonatomic, assign) NSDictionary *dataForUI;
 @property (nonatomic, readonly) NSDictionary *checkBytesForUI;
 @property (nonatomic, readonly) NSData *data;
+@property (nonatomic, assign) BOOL isFail;
+@property (nonatomic, assign) BOOL isEdit;
+@property (nonatomic, readonly) NSColor * attributeColor;
 
 - (StStream *)getStream;
 
@@ -58,6 +61,7 @@
 - (NSArray *)getArrayOfBlocks;
 - (StBlock *)subBlockNamed:(NSString *)inName;
 - (BOOL)writeByte:(unsigned char)byte atOffset:(NSUInteger)offset;
+- (StBlock *)subBlockAtIndex:(NSInteger)theIndex;
 
 @end
 

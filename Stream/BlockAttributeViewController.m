@@ -7,6 +7,7 @@
 //
 
 #import "BlockAttributeViewController.h"
+#import "StStream.h"
 #import "StBlock.h"
 
 @implementation BlockAttributeViewController
@@ -24,18 +25,19 @@
     return self;
 }
 
-- (void)setRepresentedObject:(id)representedObject
+- (void)setRepresentedObject:(id)inRepresentedObject
 {
-    if( representedObject == nil )
+    if( [self representedObject] == nil )
     {
         if( observationsActive == YES )
         {
             [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
+            [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet"];
             observationsActive = NO;
         }
     }
     
-    [super setRepresentedObject:representedObject];
+    [super setRepresentedObject:inRepresentedObject];
 }
 
 - (void) loadView
@@ -46,7 +48,11 @@
     NSString *currentMode = [theBlock valueForKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
     blockFormatter.mode = currentMode;
     
+    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    [tableView setSortDescriptors:[NSArray arrayWithObject:sd]];
+     
     [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:nil];
+    [[[theBlock getStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
     observationsActive = YES;
 }
 
@@ -60,6 +66,10 @@
         blockFormatter.mode = currentMode;
         [tableView reloadData];
     }
+    else if( [keyPath isEqualToString:@"editIndexSet"] )
+    {
+        NSLog( @"Block Attribute View Controller: Index set changed" );
+    }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -69,10 +79,17 @@
     if( observationsActive == YES )
     {
         [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
+        [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet"];
         observationsActive = NO;
     }
     
     [super dealloc];
+}
+
+- (NSColor *)tableView:(NSTableView *)aTableView backgroundColorForRow:(NSInteger)rowIndex
+{
+    StBlock *theBlock = [self representedObject];
+    return [[theBlock subBlockAtIndex:rowIndex] attributeColor];
 }
 
 -(NSString *)nibName

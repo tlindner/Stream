@@ -10,6 +10,8 @@
 #import "AudioAnaylizerViewController.h"
 #import "Accelerate/Accelerate.h"
 
+CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
+
 @implementation CoCoAudioAnaylizer
 
 @dynamic representedObject;
@@ -96,8 +98,10 @@
     UInt32 propSize;
     
     /* clear out modified data index set*/
-    NSMutableIndexSet *changedSet = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
-    [changedSet removeAllIndexes];
+    NSMutableIndexSet *changedSampleSet = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+    [changedSampleSet removeAllIndexes];
+    NSMutableIndexSet *editIndexSet = theAna.editIndexSet;
+    [editIndexSet removeAllIndexes];
     
     /* Convert data to samples */
     NSURL *fileURL = [theAna urlForCachedData];
@@ -106,7 +110,6 @@
     
     if (myErr == noErr)
     {
-        //            [theAna willChangeValueForKey:@"optionsDictionary"];
         SInt64 fileFrameCount;
         
         AudioStreamBasicDescription clientFormat;
@@ -144,7 +147,6 @@
         myErr = ExtAudioFileSetProperty(af, kExtAudioFileProperty_ClientDataFormat, propSize, &clientFormat);
         NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", myErr );
         
-        //frameCount = fileFrameCount;
         [theAna setValue:[NSNumber numberWithUnsignedLongLong:fileFrameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
         
         size_t frameBufferSize = sizeof(AudioSampleType) * fileFrameCount * channelCount;
@@ -172,7 +174,6 @@
         free( frameBuffer );
         
         [theAna setValue:frameBufferObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
-        //            [theAna didChangeValueForKey:@"optionsDictionary"];
         [self anaylizeAudioData];
         
         myErr = ExtAudioFileDispose(af);
@@ -229,7 +230,6 @@
     zero_crossings = realloc(zero_crossings, sizeof(float)*zc_count);
     
     /* Scan zero crossings looking for valid data */
-    
     int max_possible_characters = (zc_count*2*8)+1;
     NSMutableData *charactersObject = [NSMutableData dataWithLength:sizeof(NSRange)*max_possible_characters];
     NSRange *characters = [charactersObject mutableBytes];
@@ -350,10 +350,7 @@
     
     if( characters != [charactersObject mutableBytes] )
         characters = [charactersObject mutableBytes];
-    
-    //    if( character != [characterObject mutableBytes] )
-    //        character = [characterObject mutableBytes];
-    
+
     NSMutableData *coalescedObject = [NSMutableData dataWithLength:sizeof(NSRange)*char_count];
     NSRange *coalescedCharacters = [coalescedObject mutableBytes];
     
@@ -372,10 +369,7 @@
     
     /* shirnk buffer to actual size */
     [coalescedObject setLength:sizeof(NSRange)*coa_char_count];
-    //    if( coalescedCharacters != [coalescedObject mutableBytes] )
-    //        coalescedCharacters = [coalescedObject mutableBytes];
-    
-    
+
     /* find average of max value for each coalessed range */
     /* this will be used when creating new wave forms during writing */
     AudioSampleType average;
@@ -399,10 +393,8 @@
     [theAna setValue:[NSNumber numberWithFloat:average] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.averagedMaximumSample"];
     
     /* store NSMutableData Objects away */
-    //    [theAna willChangeValueForKey:@"optionsDictionary"];
     [theAna setValue:coalescedObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
     [theAna setValue:charactersObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
-    //    [theAna didChangeValueForKey:@"optionsDictionary"];
     
     [theAna setValue:characterObject forKey:@"resultingData"];
 }
@@ -631,4 +623,14 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
         clientFormat->mBytesPerPacket = clientFormat->mBytesPerFrame = sampleSize;
         clientFormat->mFormatFlags |= kAudioFormatFlagIsNonInterleaved;
     }
+}
+
+CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )
+{
+    /*  m=(Y1-Y2)/(X1-X2) */
+    double m = ((double)y1 - (double)y2)/((double)x1-(double)x2);
+    /*  b = Y-mX */
+    double b = (double)y1 - (m * (double)x1);
+    
+    return (-b)/m;
 }

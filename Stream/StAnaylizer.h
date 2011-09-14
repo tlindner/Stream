@@ -23,7 +23,8 @@
 @property (nonatomic, readonly) NSObject * anaylizerObject;
 @property (nonatomic, readonly) float computedAnaylizerHeight;
 @property (nonatomic, retain) NSString * currentEditorView;
-@property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
+@property (nonatomic, retain) NSMutableDictionary * optionsDictionary;
+@property (nonatomic, retain) NSMutableIndexSet * editIndexSet;
 @property (nonatomic, retain) StStream *parentStream;
 @property (nonatomic, retain) NSMutableData *resultingData;
 @property (nonatomic, assign) NSString * sourceUTI;
