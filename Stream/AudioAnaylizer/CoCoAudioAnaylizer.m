@@ -503,13 +503,14 @@
     int waveFormIndex = 0;
     test = character[idx];
     
+    float offset = ((frameStart[-1] > frameStart[0]) ? pi : pi * 2.0);
+
     /* build new byte waveform */
     for( int i=0; i<8; i++ )
     {
         int sinusoidal_length = ((test & 0x01) == 0x01 ? onesLength : zerosLength);
         test >>= 1;
         float increment = (pi * 2.0) / sinusoidal_length;
-        float offset = ((frameStart[0] > frameStart[1]) ? pi : pi * 2.0);
         
         for( int j=0; j<sinusoidal_length; j++ )
         {
@@ -522,20 +523,18 @@
     [audioFramesObject replaceBytesInRange:oldRange withBytes:newByteWaveForm length:sizeof(AudioSampleType) * totalLength];
     free( newByteWaveForm );
     
+    /* slide changed byte to accomadate new size */
     unsigned long delta = totalLength - characters[idx].length;
-    
-    /* adjust characters accounting */
-    characters[idx].length = totalLength;
-    
-    for( unsigned long i = idx+1; i < [characterObject length]; i++ )
-    {
-        characters[i].location += delta;
-    }
-    
-    /* add index to modified set */
     NSMutableIndexSet *changedSet = [optionsDictionary objectForKey:@"changedIndexes"];
     NSMutableIndexSet *previousChangedSet = [changedSet mutableCopy];
-    [changedSet shiftIndexesStartingAtIndex:characters[idx].location+characters[idx].length by:delta];
+    [changedSet shiftIndexesStartingAtIndex:characters[idx+1].location by:delta];
+
+    /* adjust characters accounting */
+    characters[idx].length = totalLength;
+    for( unsigned long i = idx+1; i < [characterObject length]; i++ )
+        characters[i].location += delta;
+
+    /* add newley generated waveform to changed set */
     [changedSet addIndexesInRange:characters[idx]];
     
     /* update frame count */
@@ -548,7 +547,6 @@
     NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousDataObject, @"data", newRangeValue, @"range", [previousChangedSet autorelease], @"indexSet", nil];
     [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
     [[parentContext undoManager] setActionName:@"Byte Change"];
-    
 }
 
 - (void) setPreviousState:(NSDictionary *)previousState
