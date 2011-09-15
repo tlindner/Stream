@@ -13,8 +13,10 @@
 
 @interface BlockerDataViewController : NSViewController {
     NSView *editorView;
+    NSOutlineView *outlineView;
 }
 
+@property (assign) IBOutlet NSOutlineView *outlineView;
 @property (assign) IBOutlet NSView *editorView;
 @property (assign) IBOutlet NSTreeController *treeController;
 @property (assign) BOOL observing;

@@ -294,8 +294,7 @@ typedef struct
                 NSRectFill(rect);
             }
         }
-        
-        
+
         /* draw green modification tints */
         [[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:0.5] set];
         NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
@@ -304,8 +303,12 @@ typedef struct
          ^(NSRange range, BOOL *stop)
          {
              NSRect rect = NSMakeRect(range.location/scale, 0.0, range.length/scale, viewWaveHeight);
-             NSRectFillUsingOperation( rect, NSCompositeSourceOver );
-             
+             NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
+             [aPath fill];
+             rect.origin.y = viewWaveHeight+2.0;
+             rect.size.height = 13;
+             aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
+             [aPath fill];
          }];
         
         /* draw lupe & selection rect */

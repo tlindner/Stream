@@ -17,6 +17,7 @@
 @synthesize treeController;
 @synthesize observing;
 @synthesize observingBlock;
+@synthesize outlineView;
 @synthesize editorView;
 @synthesize editorViewController;
 @synthesize sortDescriptors;
@@ -76,15 +77,21 @@
 - (void) startObserving
 {
     if( self.observing == NO )
+    {
         [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:nil];
-    
+        [[[[self representedObject] parentStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
+    }
+
     self.observing = YES;
 }
 
 - (void) stopObserving;
 {
     if( self.observing == YES )
+    {
         [treeController removeObserver:self forKeyPath:@"selectedObjects"];
+        [[[[self representedObject] parentStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet"];
+    }
     
     self.observing = NO;
 }
@@ -143,6 +150,10 @@
             [self startObservingBlockEditor:theBlock];
         }
     }
+    else if( [keyPath isEqualToString:@"editIndexSet"] )
+    {
+        [outlineView setNeedsDisplay];
+    }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -156,6 +167,11 @@
     self.editorViewController = nil;
     self.sortDescriptors = nil;
     [super dealloc];
+}
+
+- (NSColor *)tableView:(NSOutlineView *)aTableView backgroundColorForRow:(NSInteger)rowIndex
+{
+    return [[[aTableView itemAtRow:rowIndex] representedObject] attributeColor];
 }
 
 -(NSString *)nibName

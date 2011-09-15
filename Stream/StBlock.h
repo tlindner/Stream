@@ -62,6 +62,7 @@
 - (StBlock *)subBlockNamed:(NSString *)inName;
 - (BOOL)writeByte:(unsigned char)byte atOffset:(NSUInteger)offset;
 - (StBlock *)subBlockAtIndex:(NSInteger)theIndex;
+- (void) smartSetEdit;
 
 @end
 

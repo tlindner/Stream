@@ -67,6 +67,7 @@
 		77C8DE1613E6F2C000AD079E /* Analyzation.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C8DE1513E6F2C000AD079E /* Analyzation.m */; };
 		77CB933F1404AE7F0032F56F /* Zoom.tif in Resources */ = {isa = PBXBuildFile; fileRef = 77CB933E1404AE7F0032F56F /* Zoom.tif */; };
 		77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D94C8B13E8F704009192BA /* DragRegionView.m */; };
+		77DA26CD1421BAA2007BE635 /* BlockerViewOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */; };
 		77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */; };
 		77F2045613DD3AD000FA5B1F /* HFBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FC13DD3ACF00FA5B1F /* HFBTree.m */; };
 		77F2045713DD3AD000FA5B1F /* HFBTreeByteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FE13DD3ACF00FA5B1F /* HFBTreeByteArray.m */; };
@@ -231,6 +232,8 @@
 		77CB933E1404AE7F0032F56F /* Zoom.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Zoom.tif; sourceTree = "<group>"; };
 		77D94C8A13E8F704009192BA /* DragRegionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DragRegionView.h; path = Stream/DragRegionView.h; sourceTree = "<group>"; };
 		77D94C8B13E8F704009192BA /* DragRegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DragRegionView.m; path = Stream/DragRegionView.m; sourceTree = "<group>"; };
+		77DA26CB1421BAA2007BE635 /* BlockerViewOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerViewOutlineView.h; path = Stream/BlockerViewOutlineView.h; sourceTree = "<group>"; };
+		77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerViewOutlineView.m; path = Stream/BlockerViewOutlineView.m; sourceTree = "<group>"; };
 		77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerSettingPopover.xib; path = Stream/AnaylizerSettingPopover.xib; sourceTree = "<group>"; };
 		77F203FA13DD3ACF00FA5B1F /* HexFiend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiend.h; path = Stream/HexFiend/HexFiend.h; sourceTree = "<group>"; };
 		77F203FB13DD3ACF00FA5B1F /* HFBTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HFBTree.h; path = Stream/HexFiend/HFBTree.h; sourceTree = "<group>"; };
@@ -557,6 +560,8 @@
 				770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */,
 				771AD29B141D431400E0FE41 /* BlockerDataAnaylizer.h */,
 				771AD29C141D431400E0FE41 /* BlockerDataAnaylizer.m */,
+				77DA26CB1421BAA2007BE635 /* BlockerViewOutlineView.h */,
+				77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */,
 			);
 			name = BlockerDataView;
 			sourceTree = "<group>";
@@ -588,10 +593,10 @@
 				776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */,
 				77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */,
 				77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */,
-				771AD29E141D43AE00E0FE41 /* BlockAttributeAnaylizer.h */,
-				771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */,
 				776EB7E3142069060019329F /* BlockAttributeViewTableView.h */,
 				776EB7E4142069060019329F /* BlockAttributeViewTableView.m */,
+				771AD29E141D43AE00E0FE41 /* BlockAttributeAnaylizer.h */,
+				771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */,
 			);
 			name = BlockAttributeView;
 			sourceTree = "<group>";
@@ -914,6 +919,7 @@
 				771AD29D141D431400E0FE41 /* BlockerDataAnaylizer.m in Sources */,
 				771AD2A0141D43AE00E0FE41 /* BlockAttributeAnaylizer.m in Sources */,
 				776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */,
+				77DA26CD1421BAA2007BE635 /* BlockerViewOutlineView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

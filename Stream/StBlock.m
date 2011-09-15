@@ -345,6 +345,8 @@
     NSUInteger place = 0;
     BOOL byteWritten = NO;
     
+    [self smartSetEdit];
+
     for (StBlock *aBlock in blockArray)
     {
         if( offset < place + aBlock.length )
@@ -370,6 +372,27 @@
     return byteWritten;
 }
 
+- (void) smartSetEdit
+{
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* top-level block */
+            self.isEdit = YES;
+        }
+        else
+        {
+            /* mid-level block */
+            self.isEdit = self.parentBlock.isEdit = YES;
+        }
+    }
+    else
+    {
+        /* leaf block */
+        self.isEdit = self.parentBlock.isEdit = self.parentBlock.parentBlock.isEdit = YES;
+    }
+}
 
 + (NSSet *)keyPathsForValuesAffectingDataForUI
 {

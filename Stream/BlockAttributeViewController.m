@@ -49,7 +49,7 @@
     blockFormatter.mode = currentMode;
     
     NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-    [tableView setSortDescriptors:[NSArray arrayWithObject:sd]];
+    [arrayController setSortDescriptors:[NSArray arrayWithObject:sd]];
      
     [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:nil];
     [[[theBlock getStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
@@ -68,7 +68,7 @@
     }
     else if( [keyPath isEqualToString:@"editIndexSet"] )
     {
-        NSLog( @"Block Attribute View Controller: Index set changed" );
+        [tableView setNeedsDisplay];
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
