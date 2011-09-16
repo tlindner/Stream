@@ -21,6 +21,9 @@
 @synthesize editorView;
 @synthesize editorViewController;
 @synthesize sortDescriptors;
+@synthesize selectedBlockLevel1;
+@synthesize selectedBlockLevel2;
+@synthesize selectedBlockLevel3;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,16 +37,111 @@
     return self;
 }
 
-- (void)setRepresentedObject:(id)representedObject
+- (void)setRepresentedObject:(id)inRepresentedObject
 {
-    if( representedObject == nil )
+    if( inRepresentedObject == nil )
     {
         [self stopObserving];
         [self stopObservingBlockEditor];
         [self.editorViewController setRepresentedObject:nil];
+        
+        /* store selected block away for safe keeping */
+        NSIndexPath *ip = [treeController selectionIndexPath];
+        NSUInteger paths[3];
+        [ip getIndexes:paths];
+        NSTreeNode *tn;
+        self.selectedBlockLevel1 = nil;
+        self.selectedBlockLevel2 = nil;
+        self.selectedBlockLevel3 = nil;
+        
+        if( [ip length] > 0 )
+        {
+            tn = [[[treeController arrangedObjects] childNodes] objectAtIndex:paths[0]];
+            self.selectedBlockLevel1 = [[tn representedObject] valueForKey:@"name"];
+            if( [ip length] > 1 )
+            {
+                tn = [[tn childNodes] objectAtIndex:paths[1]];
+                self.selectedBlockLevel2 = [[tn representedObject] valueForKey:@"name"];
+                
+                if( [ip length] > 2 )
+                {
+                    tn = [[tn childNodes] objectAtIndex:paths[2]];
+                    self.selectedBlockLevel3 = [[tn representedObject] valueForKey:@"name"];
+                    
+                }
+            }
+        }
+    }
+
+    [super setRepresentedObject:inRepresentedObject];
+}
+
+- (void)restoreSelection
+{
+    NSUInteger paths[3] = {NSNotFound, NSNotFound, NSNotFound};
+        
+    /* restore selection */
+    if( self.selectedBlockLevel1 != nil )
+    {
+        NSArray *treeArray1 = [[treeController arrangedObjects] childNodes];
+        
+        paths[0] = [treeArray1 indexOfObjectPassingTest:
+                    ^(id obj, NSUInteger idx, BOOL *stop)
+                    {
+                        if( [[[obj representedObject] valueForKey:@"name"] isEqualToString:self.selectedBlockLevel1] )
+                            return YES;
+                        
+                        return NO;
+                    }];
+        
+        if( paths[0] != NSNotFound )
+        {
+            if( self.selectedBlockLevel2 != nil )
+            {
+                NSArray *treeArray2 = [[treeArray1 objectAtIndex:paths[0]] childNodes];
+                paths[1] = [treeArray2 indexOfObjectPassingTest:
+                            ^(id obj, NSUInteger idx, BOOL *stop)
+                            {
+                                if( [[[obj representedObject] valueForKey:@"name"] isEqualToString:self.selectedBlockLevel2] )
+                                    return YES;
+                                
+                                return NO;
+                            }];
+                
+                if( paths[1] != NSNotFound )
+                {
+                    if( self.selectedBlockLevel3 != nil )
+                    {
+                        NSArray *treeArray3 = [[treeArray2 objectAtIndex:paths[1]] childNodes];
+                        paths[2] = [treeArray3 indexOfObjectPassingTest:
+                                    ^(id obj, NSUInteger idx, BOOL *stop)
+                                    {
+                                        if( [[[obj representedObject] valueForKey:@"name"] isEqualToString:self.selectedBlockLevel3] )
+                                            return YES;
+                                        
+                                        return NO;
+                                    }];
+                    }
+                }
+            }
+        }
     }
     
-    [super setRepresentedObject:representedObject];
+    self.selectedBlockLevel1 = nil;
+    self.selectedBlockLevel2 = nil;
+    self.selectedBlockLevel3 = nil;
+
+    NSUInteger length = 0;
+    if( paths[0] != NSNotFound ) length++;
+    if( paths[1] != NSNotFound ) length++;
+    if( paths[2] != NSNotFound ) length++;
+    
+    if( length > 0 )
+    {
+        NSIndexPath *ip = [[NSIndexPath alloc] initWithIndexes:paths length:length];
+        [treeController setSelectionIndexPath:ip];
+        [ip release];
+    }
 }
 
 - (void)loadView
@@ -78,8 +176,10 @@
 {
     if( self.observing == NO )
     {
-        [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:nil];
-        [[[[self representedObject] parentStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
+        [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:self];
+        [[[[self representedObject] parentStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+        NSLog( @"blocker view: address of last filter anayliser: %p", [[[self representedObject] parentStream] lastFilterAnayliser] );
+
     }
 
     self.observing = YES;
@@ -89,8 +189,8 @@
 {
     if( self.observing == YES )
     {
-        [treeController removeObserver:self forKeyPath:@"selectedObjects"];
-        [[[[self representedObject] parentStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet"];
+        [treeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
+        [[[[self representedObject] parentStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet" context:self];
     }
     
     self.observing = NO;
@@ -102,7 +202,7 @@
     {
         [self stopObservingBlockEditor];
         self.observingBlock = inBlock;
-        [self.observingBlock addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:nil];
+        [self.observingBlock addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:self];
     }
 }
 
@@ -110,7 +210,7 @@
 {
     if( self.observingBlock != nil )
     {
-        [observingBlock removeObserver:self forKeyPath:@"currentEditorView"];
+        [observingBlock removeObserver:self forKeyPath:@"currentEditorView" context:self];
         self.observingBlock = nil;
     }
 }
@@ -120,34 +220,36 @@
     //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
     if( [keyPath isEqualToString:@"selectedObjects"] || [keyPath isEqualToString:@"currentEditorView"] )
     {
-        NSArray *selectedObjects = [[self treeController] selectedObjects];
-        [self stopObservingBlockEditor];
-        
-        if( [selectedObjects count] > 0 )
+        if( self.selectedBlockLevel1 != nil )
         {
-            StBlock *theBlock = [selectedObjects objectAtIndex:0];
-            NSRect theFrame = [self.editorView frame];
+            [self restoreSelection];
+        }
+        else
+        {
+            NSArray *selectedObjects = [[self treeController] selectedObjects];
+            [self stopObservingBlockEditor];
             
-            if( self.editorViewController != nil )
+            if( [selectedObjects count] > 0 )
             {
-                [self.editorViewController setRepresentedObject:nil];
-                [[self.editorViewController view] removeFromSuperview];
-                self.editorViewController = nil;
+                StBlock *theBlock = [selectedObjects objectAtIndex:0];
+                NSRect theFrame = [self.editorView frame];
+                
+                if( self.editorViewController != nil )
+                {
+                    [self.editorViewController setRepresentedObject:nil];
+                    [[self.editorViewController view] removeFromSuperview];
+                    self.editorViewController = nil;
+                }
+                 
+                Class anaClass = [[theBlock anaylizerObject] viewController];
+                theFrame.origin.y = theFrame.origin.x = 0;
+                self.editorViewController = [[[anaClass alloc] initWithNibName:nil bundle:nil] autorelease];
+                [self.editorViewController setRepresentedObject:theBlock];
+                [self.editorViewController loadView];
+                [[self.editorViewController view] setFrame:theFrame];
+                [self.editorView addSubview:[self.editorViewController view]];
+                [self startObservingBlockEditor:theBlock];
             }
-             
-//            Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:theBlock.currentEditorView];
-//            
-//            if( anaClass == nil )
-//                anaClass = [HexFiendAnaylizerController class];
-             
-            Class anaClass = [[theBlock anaylizerObject] viewController];
-            theFrame.origin.y = theFrame.origin.x = 0;
-            self.editorViewController = [[[anaClass alloc] initWithNibName:nil bundle:nil] autorelease];
-            [self.editorViewController setRepresentedObject:theBlock];
-            [self.editorViewController loadView];
-            [[self.editorViewController view] setFrame:theFrame];
-            [self.editorView addSubview:[self.editorViewController view]];
-            [self startObservingBlockEditor:theBlock];
         }
     }
     else if( [keyPath isEqualToString:@"editIndexSet"] )
@@ -160,7 +262,14 @@
 
 - (void)dealloc
 {
+    StAnaylizer *theAna = [self representedObject];
+    theAna.viewController = nil;
+
     [[self.editorViewController view] removeFromSuperview];
+
+    self.selectedBlockLevel1 = nil;
+    self.selectedBlockLevel2 = nil;
+    self.selectedBlockLevel3 = nil;
 
     [self stopObserving];
     [self stopObservingBlockEditor];

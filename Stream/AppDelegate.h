@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "BlockerProtocol.h"
 
 @class StStream;
 
@@ -17,13 +18,4 @@
 
 @property (assign) IBOutlet NSMenu *blocksMenu;
 
-@end
-
-@protocol BlockerProtocol <NSObject>
-@optional
-+ (NSString *)anayliserName;
-+ (NSString *)anaylizerKey;
-+ (NSString *)AnaylizerPopoverAccessoryViewNib;
-+ (NSMutableDictionary *)defaultOptions;
-+ (void) makeBlocks:(StStream *)stream;
 @end

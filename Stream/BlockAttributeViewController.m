@@ -31,8 +31,8 @@
     {
         if( observationsActive == YES )
         {
-            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
-            [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet"];
+            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
+            [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet" context:self];
             observationsActive = NO;
         }
     }
@@ -51,8 +51,9 @@
     NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
     [arrayController setSortDescriptors:[NSArray arrayWithObject:sd]];
      
-    [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:nil];
-    [[[theBlock getStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
+    [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
+    [[[theBlock getStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+    
     observationsActive = YES;
 }
 
@@ -76,10 +77,13 @@
 
 - (void)dealloc
 {
+    StAnaylizer *theAna = [self representedObject];
+    theAna.viewController = nil;
+
     if( observationsActive == YES )
     {
-        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
-        [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet"];
+        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
+        [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet" context:self];
         observationsActive = NO;
     }
     

@@ -131,6 +131,7 @@
     {
         for (StBlock *aBlock in resultBlockArray)
         {
+            //[parentStream removeBlocksObject:aBlock];
             [[self managedObjectContext] deleteObject:aBlock];
         }
     }

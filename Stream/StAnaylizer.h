@@ -33,10 +33,14 @@
 @property (nonatomic, readonly) BOOL editEnabled;
 @property (nonatomic, readonly) BOOL blockSettingsHidden;
 @property (nonatomic, readonly) NSString * title;
+@property (nonatomic, assign ) NSViewController * viewController;
+
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 - (void) writebyte:(unsigned char) byte atOffset:(NSUInteger)offset;
 - (NSURL *)urlForCachedData;
+- (void) setResultingData:(NSMutableData *)inData andChangedIndexSet:(NSMutableIndexSet *)inIndexSet;
+- (BOOL) streamEditedInRange:(NSRange)range;
 
 @end
 

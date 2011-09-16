@@ -160,6 +160,7 @@
 		772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerLupe.tiff; path = Stream/AudioAnaylizer/AnaylizerLupe.tiff; sourceTree = "<group>"; };
 		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerTableViewCellView.h; path = Stream/AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
 		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerTableViewCellView.m; path = Stream/AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
+		773FEC2A1422F45000C33F68 /* BlockerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockerProtocol.h; sourceTree = "<group>"; };
 		774A181613FAB01500510032 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		7759CF3213DBA1A300789DB3 /* Stream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7759CF3613DBA1A300789DB3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -386,8 +387,8 @@
 				77ABAD8B140F31CE002F03BB /* BlockAttributeView */,
 				778A598C1407516500B68EB4 /* BlockerDataView */,
 				7799CD1E13E5C651007D5B8E /* AudioAnaylizer */,
-				778A59771406EE0700B68EB4 /* CoCoBlockers */,
 				772D952814088129001A449B /* HexFiendAnaylizer */,
+				778A59771406EE0700B68EB4 /* CoCoBlockers */,
 				77614F3413DC9B6C00041279 /* Models */,
 				7788588B13EDC1B30057E042 /* AnaylizerUI */,
 				7759CF3C13DBA1A300789DB3 /* Stream */,
@@ -448,6 +449,7 @@
 				777984BC13E99E96007198EE /* StreamsTreeController.m */,
 				778A598914072E6A00B68EB4 /* AppDelegate.h */,
 				778A598A14072E6A00B68EB4 /* AppDelegate.m */,
+				773FEC2A1422F45000C33F68 /* BlockerProtocol.h */,
 			);
 			path = Stream;
 			sourceTree = "<group>";

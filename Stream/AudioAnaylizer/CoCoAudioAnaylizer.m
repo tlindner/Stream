@@ -194,8 +194,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     needsAnaylyzation = NO;
     anaylizationError = NO;
     
-    NSMutableData *priorResultingData = theAna.resultingData;
-    NSMutableIndexSet *priorChangedIndexSet = theAna.editIndexSet;
+//    NSMutableData *priorResultingData = theAna.resultingData;
+//    NSMutableIndexSet *priorChangedIndexSet = theAna.editIndexSet;
                                                
     unsigned long long frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
     
@@ -400,14 +400,14 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     [theAna setValue:charactersObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
     
     /* store new decoded data in anaylizer */
-    BOOL resultingDataChanged = NO;
-    
-    if( priorResultingData != nil && [priorResultingData isEqualToData:characterObject] )
-        resultingDataChanged = YES;
-    
-    if( resultingDataChanged ) [theAna willChangeValueForKey:@"resultingData"];
-    [theAna setValue:characterObject forKey:@"resultingData"];
-    if( resultingDataChanged ) [theAna didChangeValueForKey:@"resultingData"];
+//    BOOL resultingDataChanged = NO;
+//    
+//    if( priorResultingData != nil && ![priorResultingData isEqualToData:characterObject] )
+//        resultingDataChanged = YES;
+//    
+//    if( resultingDataChanged ) [theAna willChangeValueForKey:@"resultingData"];
+//    [theAna setValue:characterObject forKey:@"resultingData"];
+//    if( resultingDataChanged ) [theAna didChangeValueForKey:@"resultingData"];
     
     /* generate new changed index set */
     NSMutableIndexSet *changedIndexSetObject = [[NSMutableIndexSet alloc] init];
@@ -441,16 +441,18 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     free( indexBuffer );
 
     /* store new changed index set in anaylizer */
-    BOOL changedIndexSetChanged = NO;
+//    BOOL changedIndexSetChanged = NO;
+//    
+//    if( priorChangedIndexSet != nil && ![priorChangedIndexSet isEqualToIndexSet:changedIndexSetObject] )
+//        changedIndexSetChanged = YES;
+//    
+//    if( changedIndexSetChanged ) [theAna willChangeValueForKey:@"editIndexSet"];
+//    [theAna setValue:changedIndexSetObject forKey:@"editIndexSet"];
+//    if( changedIndexSetChanged ) [theAna didChangeValueForKey:@"editIndexSet"];
     
-    if( priorChangedIndexSet != nil && [priorChangedIndexSet isEqualToIndexSet:changedIndexSetObject] )
-        changedIndexSetChanged = YES;
+    [theAna setResultingData:characterObject andChangedIndexSet:changedIndexSetObject];
     
-    if( changedIndexSetChanged ) [theAna willChangeValueForKey:@"editIndexSet"];
-    [theAna setValue:changedIndexSetObject forKey:@"editIndexSet"];
-    if( changedIndexSetChanged ) [theAna didChangeValueForKey:@"editIndexSet"];
     [changedIndexSetObject release];
-    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

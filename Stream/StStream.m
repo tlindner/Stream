@@ -7,6 +7,7 @@
 //
 
 #import "StStream.h"
+#import "BlockerProtocol.h"
 
 @implementation StStream
 
@@ -70,7 +71,7 @@
             return [resultBlockArray objectAtIndex:0];
         }
         else
-            NSAssert(YES==NO, @"blockNamed: zero, or more than one blocks found: %@", resultBlockArray);
+            NSAssert(YES==NO, @"blockNamed: zero, or more than one blocks named: %@ found: %@", theName, resultBlockArray);
     }
     else
         NSAssert(YES==NO, @"blockNamed: Error fetching block: %@", error);
@@ -183,7 +184,7 @@
     }    
 }
 
-- (void) setBlock:(StBlock *)theBlock withData:(NSData *)theData
+- (void)setBlock:(StBlock *)theBlock withData:(NSData *)theData
 {
     NSUInteger index, length = [theData length];
     unsigned char *bytes = (unsigned char *)[theData bytes];
@@ -192,6 +193,78 @@
     {
         [theBlock writeByte:bytes[index] atOffset:index];
     }
+}
+
+- (void)regenerateAllBlocks
+{   
+    [self willChangeValueForKey:@"blocks"];
+    
+    /* suspend all KVOs in active views */
+    for( StAnaylizer *anAna in [self anaylizers] )
+    {
+        if( [anAna.currentEditorView isEqualToString:@"Blocker View"] )
+        {
+            if( anAna.viewController != nil )
+            {
+                [anAna.viewController setRepresentedObject:nil];
+            }
+        }
+    }
+    
+    /* remove all blocks */
+    NSSet *blocks = [self blocks];
+    for (StBlock *aBlock in blocks)
+    {
+        //[self.parentStream removeBlocksObject:aBlock];
+        [[self managedObjectContext] deleteObject:aBlock];
+    }
+    
+    /* Regenerate blocks using blockers */
+    for( StAnaylizer *anAna in [self anaylizers] )
+    {
+        if( [anAna.currentEditorView isEqualToString:@"Blocker View"] )
+        {
+            Class blockerClass = NSClassFromString([anAna valueForKey:@"anaylizerKind"]);
+            
+            if (blockerClass != nil )
+            {
+                [blockerClass makeBlocks:self];
+            }
+        }
+    }
+    
+    /* resume all KVOs in active views */
+    for( StAnaylizer *anAna in [self anaylizers] )
+    {
+        if( [anAna.currentEditorView isEqualToString:@"Blocker View"] )
+        {
+            if( anAna.viewController != nil )
+            {
+                [anAna.viewController setRepresentedObject:anAna];
+            }
+        }
+    }
+    
+    [self didChangeValueForKey:@"blocks"];
+    
+    /* start observing */
+    for( StAnaylizer *anAna in [self anaylizers] )
+    {
+        if( [anAna.currentEditorView isEqualToString:@"Blocker View"] )
+        {
+            if( anAna.viewController != nil )
+            {
+                [anAna.viewController startObserving];
+            }
+        }
+    }
+    
+}
+
+- (BOOL)isBlockEdited:(NSString *)blockName
+{
+    StBlock *aBlock = [self blockNamed:blockName];
+    return [aBlock isEdit];
 }
 
 @end

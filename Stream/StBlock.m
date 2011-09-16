@@ -134,6 +134,8 @@
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
     [attributeBlock addBlocksObject:newBlock];
+
+    [self checkEdited:newBlock];
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length
@@ -177,6 +179,8 @@
     
     [dataBlock addBlocksObject:newBlock];
     self.expectedSize += length;
+    
+    [self checkEdited:newBlock];
 }
 
 - (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
@@ -193,6 +197,23 @@
     newBlock.valueTransformer = transform;
     [depBlock addBlocksObject:newBlock];
     self.expectedSize += length;
+
+    [self checkEdited:newBlock];
+}
+
+- (void) checkEdited:(StBlock *)newBlock
+{
+    if( [newBlock.source isEqualToString:@"stream"] )
+    {
+        if( [[[self getStream] lastFilterAnayliser] streamEditedInRange:NSMakeRange(newBlock.offset, newBlock.length)] )
+        {
+            [newBlock smartSetEdit];
+        }
+    }
+    else if( [[self getStream] isBlockEdited:newBlock.source] )
+    {
+        [newBlock smartSetEdit];
+    }
 }
 
 - (StBlock *)subBlockNamed:(NSString *)inName

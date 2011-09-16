@@ -56,6 +56,7 @@
             adjustedFrame.origin.x = 0;
             adjustedFrame.origin.y = 0;
             self.editorController = [[[[anaylizerObject viewController] alloc] initWithNibName:nil bundle:nil] autorelease];
+            theAna.viewController = self.editorController;
             [self.editorController setRepresentedObject:self.objectValue];
             [self.editorController loadView];
             [[self.editorController view] setFrame:adjustedFrame];

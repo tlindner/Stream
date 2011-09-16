@@ -24,21 +24,22 @@
     return self;
 }
 
-- (void)setRepresentedObject:(id)representedObject
+- (void)setRepresentedObject:(id)inRepresentedObject
 {
-    if( representedObject == nil )
+    if( inRepresentedObject == nil )
     {
         if( observationsActive )
         {
-            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
-            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
-            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+            StAnaylizer *theAna = [self representedObject];
+            [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
+            [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
+            [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
             
             observationsActive = NO;
         }
     }
     
-    [super setRepresentedObject:representedObject];
+    [super setRepresentedObject:inRepresentedObject];
 }
 
 - (void)loadView
@@ -153,11 +154,14 @@
 
 - (void)dealloc
 {
+    StAnaylizer *theAna = [self representedObject];
+    theAna.viewController = nil;
+
     if( observationsActive == YES )
     {
-        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
-        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
-        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
         
         observationsActive = NO;
     }

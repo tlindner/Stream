@@ -28,6 +28,7 @@
 @dynamic editEnabled;
 @dynamic blockSettingsHidden;
 @dynamic title;
+@synthesize viewController;
 
 @dynamic anaylizerObject;
 
@@ -273,6 +274,29 @@
     [tempFileHandle release];
     
     return [NSURL fileURLWithPath:tempFileName];
+}
+
+- (void) setResultingData:(NSMutableData *)inData andChangedIndexSet:(NSMutableIndexSet *)inIndexSet
+{
+    BOOL reBlock = NO;
+    
+    if( ![self.resultingData isEqualToData:inData] ) reBlock = YES;
+    if( ![self.editIndexSet isEqualToIndexSet:inIndexSet] ) reBlock = YES;
+    
+    self.resultingData = inData;
+    
+    if( inIndexSet != nil ) self.editIndexSet = inIndexSet;
+    
+    if( reBlock )
+    {
+        [self.parentStream regenerateAllBlocks];
+    }
+}
+
+- (BOOL) streamEditedInRange:(NSRange)range
+{
+    NSIndexSet *changedIndexSet = [self editIndexSet];
+    return [changedIndexSet containsIndexesInRange:range];
 }
 
 @end

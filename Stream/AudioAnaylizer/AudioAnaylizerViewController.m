@@ -104,6 +104,9 @@
 
 - (void)dealloc
 {
+    StAnaylizer *theAna = [self representedObject];
+    theAna.viewController = nil;
+
     WaveFormView *wfv = [self.scroller documentView];
     [wfv deactivateObservations];
 

@@ -36,6 +36,8 @@
 - (StAnaylizer *)lastFilterAnayliser;
 - (StBlock *)blockNamed:(NSString *)theName;
 - (StAnaylizer *)previousAnayliser:(StAnaylizer *)inAna;
+- (void)regenerateAllBlocks;
+- (BOOL)isBlockEdited:(NSString *)blockName;
 
 @end
 
@@ -62,3 +64,5 @@
 - (void)removeChildStreams:(NSSet *)values;
 
 @end
+
+
