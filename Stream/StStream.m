@@ -8,6 +8,7 @@
 
 #import "StStream.h"
 #import "BlockerProtocol.h"
+#import "Analyzation.h"
 
 @implementation StStream
 

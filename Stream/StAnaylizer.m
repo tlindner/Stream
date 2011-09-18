@@ -148,12 +148,15 @@
     /* the xml version of the fileformat seems to baken in the concreat versions of these properties */
     NSMutableDictionary *mutableOptions = [self.optionsDictionary mutableCopy];
     self.optionsDictionary = mutableOptions;
+    [mutableOptions release];
     
     NSMutableIndexSet *mutableSet = [self.editIndexSet mutableCopy];
     self.editIndexSet = mutableSet;
+    [mutableSet release];
     
     NSMutableData *mutableData = [self.resultingData mutableCopy];
     self.resultingData = mutableData;
+    [mutableData release];
 }
 
 - (NSString *)sourceUTI

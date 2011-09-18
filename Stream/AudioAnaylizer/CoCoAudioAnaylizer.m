@@ -150,7 +150,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         [theAna setValue:[NSNumber numberWithUnsignedLongLong:fileFrameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
         
         size_t frameBufferSize = sizeof(AudioSampleType) * fileFrameCount * channelCount;
-        AudioSampleType *frameBuffer = malloc(frameBufferSize);
+        AudioSampleType *frameBuffer = malloc(frameBufferSize+1);
         
         AudioBufferList bufList;
         bufList.mNumberBuffers = 1;

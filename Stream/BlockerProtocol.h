@@ -20,5 +20,4 @@
 + (void) makeBlocks:(StStream *)stream;
 @end
 
-
 #endif

@@ -30,7 +30,8 @@
     if( inRepresentedObject == nil && observationsActive == YES )
     {
         [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
-        [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        [lastFilterAnaylizer release];
         observationsActive = NO;
     }
 
@@ -51,8 +52,8 @@
     NSAssert(observationsActive == NO, @"BlockAttributeView: double observer fault");
 
     [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
-    NSLog( @"BlockAttributeviewcontroller: add observer for editIndexSet: %p" , self );
-    [[[theBlock getStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+    lastFilterAnaylizer = [[[theBlock getStream] lastFilterAnayliser] retain];
+    [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
     
     observationsActive = YES;
 }
@@ -83,7 +84,8 @@
     if( observationsActive == YES )
     {
         [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
-        [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        [lastFilterAnaylizer release];
         observationsActive = NO;
     }
     

@@ -14,6 +14,7 @@
     StBlockFormatter *blockFormatter;
     NSTableView *tableView;
     BOOL observationsActive;
+    NSManagedObject *lastFilterAnaylizer;
 }
 
 @property (assign) IBOutlet NSTableView *tableView;

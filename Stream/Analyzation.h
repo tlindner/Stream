@@ -34,3 +34,7 @@
 - (void)setRepresentedObject:(id)representedObject;
 - (void)prepareAccessoryView: (NSView *)baseView;
 @end
+
+@interface NSViewController (StreamViewControllerExtensions)
+- (void) startObserving;
+@end
