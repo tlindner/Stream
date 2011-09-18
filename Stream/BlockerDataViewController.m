@@ -179,7 +179,6 @@
     if( self.observing == NO )
     {
         [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:self];
-        NSLog( @"blockerDataViewController: add observer for editIndexSet: %p" , self );
         lastFilterAnaylizer = [[[[self representedObject] parentStream] lastFilterAnayliser] retain];
         
         [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];

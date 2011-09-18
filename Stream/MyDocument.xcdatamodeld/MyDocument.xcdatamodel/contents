@@ -6,6 +6,7 @@
         <attribute name="collapse" attributeType="Boolean" defaultValueString="YES"/>
         <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
         <attribute name="editIndexSet" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
+        <attribute name="failIndexSet" attributeType="Transformable"/>
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <attribute name="resultingData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="resultingUTI" attributeType="String" defaultValueString="public.data"/>

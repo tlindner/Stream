@@ -102,6 +102,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     [changedSampleSet removeAllIndexes];
     NSMutableIndexSet *editIndexSet = theAna.editIndexSet;
     [editIndexSet removeAllIndexes];
+    NSMutableIndexSet *failIndexSet = theAna.failIndexSet;
+    [failIndexSet removeAllIndexes];
     
     /* Convert data to samples */
     NSURL *fileURL = [theAna urlForCachedData];
@@ -606,7 +608,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 - (void) setPreviousState:(NSDictionary *)previousState
 {
     StAnaylizer *theAna = self.representedObject;
-    NSMutableData *frameBufferObject = [self.representedObject valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+    NSMutableDictionary *optionsDict = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
+    NSMutableData *frameBufferObject = [optionsDict objectForKey:@"frameBufferObject"];
     
     /* setup redo */
     NSValue *priorRange = [previousState objectForKey:@"range"];
@@ -615,22 +618,24 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     NSRange range = [priorRange rangeValue];
     NSData *priorData = [frameBufferObject subdataWithRange:range];
     NSManagedObjectContext *parentContext = [theAna managedObjectContext];
-    NSIndexSet *priorChangedSet = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+    NSIndexSet *priorChangedSet = [optionsDict objectForKey:@"changedIndexes"];
     NSDictionary *priorState = [NSDictionary dictionaryWithObjectsAndKeys:priorData, @"data", priorRange, @"range", [[priorChangedSet mutableCopy] autorelease], @"indexSet", nil];
+    
+    /* register redo */
     [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:priorState];
     [[parentContext undoManager] setActionName:@"Change"];
     
     /* apply previous state */
-    [self.representedObject willChangeValueForKey:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+    [optionsDict willChangeValueForKey:@"frameBufferObject"];
     NSData *previousSamplesObject = [previousState objectForKey:@"data"];
     [frameBufferObject replaceBytesInRange:range withBytes:[previousSamplesObject bytes] length:[previousSamplesObject length]];
-    [self.representedObject didChangeValueForKey:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
-    [self.representedObject setValue:previousChangedSet forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+    [optionsDict didChangeValueForKey:@"frameBufferObject"];
+    [optionsDict setObject:previousChangedSet forKey:@"changedIndexes"];
     
     /* update frame count */
-    unsigned long long frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
+    unsigned long long frameCount = [[optionsDict objectForKey:@"frameCount"] unsignedLongLongValue];
     frameCount -= [previousSamplesObject length] - range.length;
-    [theAna setValue:[NSNumber numberWithUnsignedLongLong:frameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
+    [optionsDict setObject:[NSNumber numberWithUnsignedLongLong:frameCount] forKey:@"frameCount"];
     
     /* re anaylize */
     [self anaylizeAudioData];

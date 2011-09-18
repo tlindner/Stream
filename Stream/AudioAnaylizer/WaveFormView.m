@@ -63,8 +63,8 @@ typedef struct
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnaylizer addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeReplacement context:nil];
-        [self.cachedAnaylizer addObserver:self forKeyPath:@"frameBufferObject" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject" options:NSKeyValueChangeSetting context:nil];
         
         observationsActive = YES;
     }
@@ -79,7 +79,7 @@ typedef struct
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"resultingData"];
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"frameBufferObject"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
         observationsActive = NO;
     }     
 }
@@ -311,6 +311,31 @@ typedef struct
              [aPath fill];
          }];
         
+        /* draw red fail tints */
+        [[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5] set];
+        NSMutableIndexSet *failSet = [self.cachedAnaylizer valueForKeyPath:@"failIndexSet"];
+        range = NSMakeRange(0, NSUIntegerMax);
+        [failSet enumerateRangesInRange:range options:0 usingBlock:
+         ^(NSRange range, BOOL *stop)
+         {
+             NSRect rect = NSMakeRect(characters[range.location].location, 0.0, 0.0, viewWaveHeight);
+             
+             for( NSUInteger i = 0; i<range.length; i++ )
+             {
+                 rect.size.width += characters[range.location + i].length;
+             }
+             
+             rect.origin.x /= scale;
+             rect.size.width /= scale;
+
+             NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
+             [aPath fill];
+             rect.origin.y = viewWaveHeight+2.0;
+             rect.size.height = 13;
+             aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
+             [aPath fill];
+         }];
+        
         /* draw lupe & selection rect */
         if( mouseDownOnPoint == NO )
         {
@@ -387,7 +412,7 @@ typedef struct
         return;
     }
     
-    if( [keyPath isEqualToString:@"frameBufferObject"] )
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];

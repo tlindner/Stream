@@ -19,6 +19,7 @@
 @dynamic currentEditorView;
 @dynamic optionsDictionary;
 @dynamic editIndexSet;
+@dynamic failIndexSet;
 @dynamic parentStream;
 @dynamic resultingData;
 @dynamic sourceUTI;
@@ -140,6 +141,7 @@
 {
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
     self.editIndexSet = [[[NSMutableIndexSet alloc] init] autorelease];
+    self.failIndexSet = [[[NSMutableIndexSet alloc] init] autorelease];
     self.resultingData = [[[NSMutableData alloc] init] autorelease];
 }
 
@@ -150,9 +152,13 @@
     self.optionsDictionary = mutableOptions;
     [mutableOptions release];
     
-    NSMutableIndexSet *mutableSet = [self.editIndexSet mutableCopy];
-    self.editIndexSet = mutableSet;
-    [mutableSet release];
+    NSMutableIndexSet *mutableEditSet = [self.editIndexSet mutableCopy];
+    self.editIndexSet = mutableEditSet;
+    [mutableEditSet release];
+    
+    NSMutableIndexSet *mutableFailSet = [self.failIndexSet mutableCopy];
+    self.failIndexSet = mutableFailSet;
+    [mutableFailSet release];
     
     NSMutableData *mutableData = [self.resultingData mutableCopy];
     self.resultingData = mutableData;
@@ -299,15 +305,20 @@
     
     if( ![self.resultingData isEqualToData:inData] )
     {
+        [self willChangeValueForKey:@"resultingData"];
         reBlock = YES;
         [self.resultingData setData:inData];
+        [self didChangeValueForKey:@"resultingData"];
+
     }
     
     if( ![self.editIndexSet isEqualToIndexSet:inIndexSet] )
     {
+        [self willChangeValueForKey:@"editIndexSet"];
         reBlock = YES; 
         [self.editIndexSet removeAllIndexes];
         [self.editIndexSet addIndexes:inIndexSet];
+        [self didChangeValueForKey:@"editIndexSet"];
     }
     
     if( reBlock )
@@ -354,6 +365,22 @@
     {
         return [NSImage imageNamed:@"NSLockLockedTemplate"];
     }
+}
+
+@end
+
+@implementation NSData (StreamKeyValueCoding)
+- (NSArray *)objectsAtIndexes:(NSIndexSet *)indexes
+{
+    NSMutableArray *ma = [[NSMutableArray alloc] init];
+
+    [indexes enumerateRangesUsingBlock:
+     ^(NSRange range, BOOL *stop)
+     {
+         [ma addObject:[self subdataWithRange:range]];
+     }];
+    
+    return [ma autorelease];
 }
 
 @end

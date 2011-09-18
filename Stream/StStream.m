@@ -198,13 +198,9 @@
     }
     
     /* remove all blocks */
-    NSSet *blocks = [self blocks];
-    for (StBlock *aBlock in blocks)
-    {
-        //[self.parentStream removeBlocksObject:aBlock];
-        [[self managedObjectContext] deleteObject:aBlock];
-    }
-    
+    NSMutableSet *allBlocks = [self mutableSetValueForKey:@"blocks"];
+    [allBlocks removeAllObjects];
+
     /* Regenerate blocks using blockers */
     for( StAnaylizer *anAna in [self anaylizers] )
     {

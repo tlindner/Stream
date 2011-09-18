@@ -90,6 +90,20 @@
     [myOpenPanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
 }
 
+- (IBAction)wftSave:(id)sender
+{
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    
+    NSError *err = nil;
+    
+    [moc save:&err];
+    
+    if( err != nil )
+    {
+        NSLog( @"%@", err );
+    }
+}
+
 - (IBAction)removeAnaylizer:(id)sender
 {
     NSAlert *myAlert = [NSAlert alertWithMessageText:@"Delete Anayliser" defaultButton:@"Cancel" alternateButton:@"OK" otherButton:@"" informativeTextWithFormat:@"Are you sure you want to delete this anayliser?"];

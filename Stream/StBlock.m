@@ -369,16 +369,16 @@
     {
         if( self.parentStream != nil )
         {
-            return [NSString stringWithFormat:@"Top level block named: %@", [self name]];
+            return [NSString stringWithFormat:@"%p: Top level block named: %@", self, [self name]];
         }
         else
         {
-            return [NSString stringWithFormat:@"Mid level block:%@, named: %@", [[self parentBlock] name], [self name]];
+            return [NSString stringWithFormat:@"%p: Mid level block:%@, named: %@", self, [[self parentBlock] name], [self name]];
         }
     }
     else
     {
-        return [NSString stringWithFormat:@"Leaf block: %@, named: %@, index: %d, source: %@, start: %d, lenth: %d", [[[self parentBlock] parentBlock] name], [[self parentBlock] name], [self index], [self source], self.offset, self.length];
+        return [NSString stringWithFormat:@"%p: Leaf block: %@, named: %@, index: %d, source: %@, start: %d, lenth: %d", self, [[[self parentBlock] parentBlock] name], [[self parentBlock] name], [self index], [self source], self.offset, self.length];
     }
 }
 
@@ -456,6 +456,13 @@
     {
         /* leaf block */
         self.isFail = self.parentBlock.isFail = self.parentBlock.parentBlock.isFail = YES;
+        
+        if( [self.source isEqualToString:@"stream"] )
+        {
+            NSRange range = {self.offset, self.length};
+            [[[self getStream] lastFilterAnayliser].failIndexSet addIndexesInRange:range];
+        }
+
     }
 }
 

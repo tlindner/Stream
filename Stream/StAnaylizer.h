@@ -25,6 +25,7 @@
 @property (nonatomic, retain) NSString * currentEditorView;
 @property (nonatomic, retain) NSMutableDictionary * optionsDictionary;
 @property (nonatomic, retain) NSMutableIndexSet * editIndexSet;
+@property (nonatomic, retain) NSMutableIndexSet * failIndexSet;
 @property (nonatomic, retain) StStream *parentStream;
 @property (nonatomic, retain) NSMutableData *resultingData;
 @property (nonatomic, assign) NSString * sourceUTI;
@@ -51,4 +52,8 @@
 
 @interface NSValueTransformer (StreamsValueTransformerAdditions)
 - (id)reverseTransformedValue:(id)value ofSize:(size_t)size;
+@end
+
+@interface NSData (StreamKeyValueCoding)
+- (NSArray *)objectsAtIndexes:(NSIndexSet *)indexes;
 @end
