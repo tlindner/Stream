@@ -27,16 +27,13 @@
 
 - (void)setRepresentedObject:(id)inRepresentedObject
 {
-    if( [self representedObject] == nil )
+    if( inRepresentedObject == nil && observationsActive == YES )
     {
-        if( observationsActive == YES )
-        {
-            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
-            [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet" context:self];
-            observationsActive = NO;
-        }
+        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
+        [[[[self representedObject] getStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        observationsActive = NO;
     }
-    
+
     [super setRepresentedObject:inRepresentedObject];
 }
 
@@ -50,8 +47,11 @@
     
     NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
     [arrayController setSortDescriptors:[NSArray arrayWithObject:sd]];
-     
+    
+    NSAssert(observationsActive == NO, @"BlockAttributeView: double observer fault");
+
     [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
+    NSLog( @"BlockAttributeviewcontroller: add observer for editIndexSet: %p" , self );
     [[[theBlock getStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
     
     observationsActive = YES;

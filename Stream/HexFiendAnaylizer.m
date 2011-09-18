@@ -32,7 +32,11 @@
 {
     representedObject = inRepresentedObject;
     StAnaylizer *theAna = inRepresentedObject;
-    [theAna addSubOptionsDictionary:[HexFiendAnaylizer anaylizerKey] withDictionary:[HexFiendAnaylizer defaultOptions]];
+    
+    if( inRepresentedObject != nil )
+    {
+        [theAna addSubOptionsDictionary:[HexFiendAnaylizer anaylizerKey] withDictionary:[HexFiendAnaylizer defaultOptions]];
+    }
 }
 
 + (NSArray *)anaylizerUTIs

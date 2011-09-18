@@ -14,6 +14,7 @@
 @interface BlockerDataViewController : NSViewController {
     NSView *editorView;
     NSOutlineView *outlineView;
+    NSManagedObject *lastFilterAnaylizer;
 }
 
 @property (assign) IBOutlet NSOutlineView *outlineView;

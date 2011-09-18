@@ -15,7 +15,7 @@
     NSColor *color = [(NSObject *)[self delegate] tableView:self backgroundColorForRow:row];
     
     // ignore any background color if the row is selected
-    if (color && [self isRowSelected:row] == NO)
+    if (color) // && [self isRowSelected:row] == NO)
     {
         [NSGraphicsContext saveGraphicsState];
         NSRectClip(clipRect);
@@ -27,6 +27,16 @@
         
         // draw with rounded end caps
         CGFloat radius = NSHeight(rowRect) / 2.0;
+        
+        // Draw circle over disclosure triangle if selected
+        if( [self isRowSelected:row] == YES )
+        {
+            rowRect.size.width = 20;
+            rowRect.origin.x += [self levelForRow:row] * 18;
+        }
+        
+        rowRect.size.height--;
+        
         NSBezierPath *p = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(rowRect, 1.0, 0.0) xRadius:radius yRadius:radius];
         [color setFill];
         [p fill];

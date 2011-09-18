@@ -103,10 +103,13 @@
     if (returnCode == 0)
     {
         StAnaylizer *anaylizer = contextInfo;
+        StStream *parentStream = [anaylizer parentStream];
         
         NSDictionary *parameter = [NSDictionary dictionaryWithObjectsAndKeys:anaylizer.parentStream, @"parentStream", anaylizer, @"anaylizer", nil];
-        anaylizer.parentStream = nil;
         
+        NSMutableOrderedSet *os = [parentStream mutableOrderedSetValueForKey:@"anaylizers"];
+        [os removeObject:anaylizer];
+
         /* At the end of the run loop the UI will unhook itself from this object */
         
         /* After dealy, the managed object and it's decendents will be deleted */
@@ -129,11 +132,8 @@
     
     if( error == nil )
     {
-        for (StBlock *aBlock in resultBlockArray)
-        {
-            //[parentStream removeBlocksObject:aBlock];
-            [[self managedObjectContext] deleteObject:aBlock];
-        }
+        NSMutableSet *ms = [parentStream mutableSetValueForKey:@"blocks"];
+        [ms minusSet:[NSSet setWithArray:resultBlockArray]];
     }
     else
         NSLog( @"Deleting blocks in a stream: fetch returned error: %@", error );

@@ -168,6 +168,8 @@
         else
             NSLog( @"Could not create class: %@", [[self representedObject] valueForKey:@"anaylizerKind"] );
     }
+
+    NSAssert(self.observing == NO, @"BlockAttributeView: double observer fault");
     
     [self startObserving];
 }
@@ -177,9 +179,10 @@
     if( self.observing == NO )
     {
         [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:self];
-        [[[[self representedObject] parentStream] lastFilterAnayliser] addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
-        NSLog( @"blocker view: address of last filter anayliser: %p", [[[self representedObject] parentStream] lastFilterAnayliser] );
-
+        NSLog( @"blockerDataViewController: add observer for editIndexSet: %p" , self );
+        lastFilterAnaylizer = [[[[self representedObject] parentStream] lastFilterAnayliser] retain];
+        
+        [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
     }
 
     self.observing = YES;
@@ -190,7 +193,8 @@
     if( self.observing == YES )
     {
         [treeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
-        [[[[self representedObject] parentStream] lastFilterAnayliser] removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        [lastFilterAnaylizer release];
     }
     
     self.observing = NO;
@@ -224,7 +228,7 @@
         {
             [self restoreSelection];
         }
-        else
+        else //if( [change objectForKey:@"new"] != [NSNull null] )
         {
             NSArray *selectedObjects = [[self treeController] selectedObjects];
             [self stopObservingBlockEditor];

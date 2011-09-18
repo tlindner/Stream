@@ -32,7 +32,11 @@
 {
     representedObject = inRepresentedObject;
     StAnaylizer *theAna = inRepresentedObject;
-    [theAna addSubOptionsDictionary:[BlockerDataAnaylizer anaylizerKey] withDictionary:[BlockerDataAnaylizer defaultOptions]];
+    
+    if( theAna != nil )
+    {
+        [theAna addSubOptionsDictionary:[BlockerDataAnaylizer anaylizerKey] withDictionary:[BlockerDataAnaylizer defaultOptions]];
+    }
 }
 
 + (NSArray *)anaylizerUTIs

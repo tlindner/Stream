@@ -136,6 +136,7 @@
     [attributeBlock addBlocksObject:newBlock];
 
     [self checkEdited:newBlock];
+    [self checkFail:newBlock];
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length
@@ -181,6 +182,7 @@
     self.expectedSize += length;
     
     [self checkEdited:newBlock];
+    [self checkFail:newBlock];
 }
 
 - (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
@@ -199,6 +201,7 @@
     self.expectedSize += length;
 
     [self checkEdited:newBlock];
+    [self checkFail:newBlock];
 }
 
 - (void) checkEdited:(StBlock *)newBlock
@@ -213,6 +216,25 @@
     else if( [[self getStream] isBlockEdited:newBlock.source] )
     {
         [newBlock smartSetEdit];
+    }
+}
+
+- (void) checkFail:(StBlock *)newBlock
+{
+    if( newBlock.checkBytes != nil )
+    {
+        if( ![newBlock.checkBytes isEqualToData:[newBlock getData]] )
+        {
+            [newBlock smartSetFail];
+        }
+    }
+    
+    if( ![newBlock.source isEqualToString:@"stream"] )
+    {
+        if( [[self getStream] isBlockFailed:newBlock.source] )
+        {
+            [newBlock smartSetFail];
+        }
     }
 }
 
@@ -415,6 +437,28 @@
     }
 }
 
+- (void) smartSetFail
+{
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* top-level block */
+            self.isFail = YES;
+        }
+        else
+        {
+            /* mid-level block */
+            self.isFail = self.parentBlock.isFail = YES;
+        }
+    }
+    else
+    {
+        /* leaf block */
+        self.isFail = self.parentBlock.isFail = self.parentBlock.parentBlock.isFail = YES;
+    }
+}
+
 + (NSSet *)keyPathsForValuesAffectingDataForUI
 {
     return [NSSet setWithObjects:@"data", @"valueTransformer", nil];
@@ -496,6 +540,14 @@
         return [NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5];
     
     return nil;
+}
+
+- (void)willTurnIntoFault
+{
+    if( anaylizerObject != nil)
+    {
+        [anaylizerObject setRepresentedObject:nil];
+    }
 }
 
 @end

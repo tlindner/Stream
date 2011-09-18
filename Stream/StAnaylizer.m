@@ -51,7 +51,7 @@
 - (NSObject *)anaylizerObject
 {
     Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
-
+    
     if( anaObjectClass == nil )
         anaObjectClass = [HexFiendAnaylizer class];
     
@@ -79,7 +79,7 @@
         [anaylizerObject setRepresentedObject:nil];
         [anaylizerObject release];
     }
-
+    
     [super dealloc];
 }
 
@@ -102,12 +102,12 @@
     
     if( [ourOptDict valueForKey:subOptionsID] == nil )
     {
-       [ourOptDict setObject:newOptions forKey:subOptionsID];
+        [ourOptDict setObject:newOptions forKey:subOptionsID];
         return;
     }
     
     NSMutableDictionary *dict = [ourOptDict objectForKey:subOptionsID];
-
+    
     for (NSString *key in [newOptions allKeys])
     {
         id value = [dict objectForKey:key];
@@ -140,6 +140,20 @@
 {
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
     self.editIndexSet = [[[NSMutableIndexSet alloc] init] autorelease];
+    self.resultingData = [[[NSMutableData alloc] init] autorelease];
+}
+
+- (void)awakeFromFetch
+{
+    /* the xml version of the fileformat seems to baken in the concreat versions of these properties */
+    NSMutableDictionary *mutableOptions = [self.optionsDictionary mutableCopy];
+    self.optionsDictionary = mutableOptions;
+    
+    NSMutableIndexSet *mutableSet = [self.editIndexSet mutableCopy];
+    self.editIndexSet = mutableSet;
+    
+    NSMutableData *mutableData = [self.resultingData mutableCopy];
+    self.resultingData = mutableData;
 }
 
 - (NSString *)sourceUTI
@@ -194,7 +208,7 @@
         result = NO;
     else if ( indexOfMe == ([streamSet count] - 1) )
         result = YES;
-
+    
     return result;
 }
 
@@ -254,7 +268,7 @@
         anaylizeData = [self.parentStream bytesCache];
     else
         anaylizeData = [previousAnaylizer resultingData];
-
+    
     NSString *tempFileTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:@"cocoaudioanaylizer_tempfile.XXXXXX"];
     const char *tempFileTemplateCString = [tempFileTemplate fileSystemRepresentation];
     char *tempFileNameCString = (char *)malloc(strlen(tempFileTemplateCString) + 1);
@@ -268,7 +282,7 @@
         NSAssert(YES==NO, @"urlForCachedData: Could not create temporary file for cached data: %@", tempFileName);
         return nil;
     }
-
+    
     NSFileHandle *tempFileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fileDescriptor closeOnDealloc:YES];
     [tempFileHandle writeData:anaylizeData];
     [tempFileHandle release];
@@ -280,12 +294,18 @@
 {
     BOOL reBlock = NO;
     
-    if( ![self.resultingData isEqualToData:inData] ) reBlock = YES;
-    if( ![self.editIndexSet isEqualToIndexSet:inIndexSet] ) reBlock = YES;
+    if( ![self.resultingData isEqualToData:inData] )
+    {
+        reBlock = YES;
+        [self.resultingData setData:inData];
+    }
     
-    self.resultingData = inData;
-    
-    if( inIndexSet != nil ) self.editIndexSet = inIndexSet;
+    if( ![self.editIndexSet isEqualToIndexSet:inIndexSet] )
+    {
+        reBlock = YES; 
+        [self.editIndexSet removeAllIndexes];
+        [self.editIndexSet addIndexes:inIndexSet];
+    }
     
     if( reBlock )
     {
@@ -297,6 +317,19 @@
 {
     NSIndexSet *changedIndexSet = [self editIndexSet];
     return [changedIndexSet containsIndexesInRange:range];
+}
+
+- (void)willTurnIntoFault
+{
+//    if( viewController != nil )
+//    {
+//        [viewController setRepresentedObject:nil];
+//    }
+    
+    if( anaylizerObject != nil)
+    {
+        [anaylizerObject setRepresentedObject:nil];
+    }
 }
 
 @end
@@ -319,5 +352,5 @@
         return [NSImage imageNamed:@"NSLockLockedTemplate"];
     }
 }
-    
+
 @end

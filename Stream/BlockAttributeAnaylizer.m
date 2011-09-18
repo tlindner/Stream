@@ -32,7 +32,11 @@
 {
     representedObject = inRepresentedObject;
     StAnaylizer *theAna = inRepresentedObject;
-    [theAna addSubOptionsDictionary:[BlockAttributeAnaylizer anaylizerKey] withDictionary:[BlockAttributeAnaylizer defaultOptions]];
+    
+    if( theAna != nil )
+    {
+        [theAna addSubOptionsDictionary:[BlockAttributeAnaylizer anaylizerKey] withDictionary:[BlockAttributeAnaylizer defaultOptions]];
+    }
 }
 
 + (NSArray *)anaylizerUTIs

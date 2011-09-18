@@ -68,7 +68,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
         header <<= 8;
         header += streamBytes[i];
         
-        if( (header & 0x0fff) == 0x053c )
+        if( (header & 0xf0ff) == 0x503c )
         {
             /* we found a header */
             

@@ -38,6 +38,7 @@
 - (StAnaylizer *)previousAnayliser:(StAnaylizer *)inAna;
 - (void)regenerateAllBlocks;
 - (BOOL)isBlockEdited:(NSString *)blockName;
+- (BOOL)isBlockFailed:(NSString *)blockName;
 
 @end
 

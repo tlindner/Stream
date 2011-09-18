@@ -30,25 +30,12 @@
     
     if( [name isEqualToString:@"stream"] )
     {
-        NSOrderedSet *anaylizers = [self.anaylizers reversedOrderedSet];
-        
-        for (StAnaylizer *anAna in anaylizers)
-        {
-            if( anAna.resultingData != nil )
-            {
-                result = anAna.resultingData;
-            }
-        }
-        
-        if( result == nil )
-            result = self.bytesCache;
-        
-        return result;
+        result = [[self lastFilterAnayliser] resultingData];
     }
     else
     {
         /* find block and returned it's data */
-        return [[self blockNamed:name] getData];
+        result = [[self blockNamed:name] getData];
     }
     
     return result;
@@ -78,8 +65,6 @@
     
     return nil;
 }
-
-
 
 - (StBlock *)startNewBlockNamed:(NSString *)name owner:(NSString *)owner
 {
@@ -265,6 +250,12 @@
 {
     StBlock *aBlock = [self blockNamed:blockName];
     return [aBlock isEdit];
+}
+
+- (BOOL)isBlockFailed:(NSString *)blockName
+{
+    StBlock *aBlock = [self blockNamed:blockName];
+    return [aBlock isFail];
 }
 
 @end
