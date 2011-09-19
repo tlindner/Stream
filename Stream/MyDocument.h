@@ -20,6 +20,9 @@
 @property (nonatomic, retain) NSCursor *zoomCursor;
 
 - (IBAction)add:(id)sender;
+- (void) addStreamFromURL:(NSURL *)aURL;
+- (IBAction)removeStream:(id)sender;
 - (IBAction)removeAnaylizer:(id)sender;
+- (void) flushAnaylizer:(NSDictionary *)parameter;
 
 @end

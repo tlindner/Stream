@@ -32,6 +32,7 @@
 {
     [self addObserver:self forKeyPath:@"objectValue.currentEditorView" options:NSKeyValueChangeSetting context:nil];
     [self addObserver:self forKeyPath:@"objectValue.collapse" options:NSKeyValueChangeSetting context:nil];
+    [self addObserver:self forKeyPath:@"objectValue.anaylizerHeight" options:NSKeyValueChangeSetting context:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -40,16 +41,18 @@
     {
         if( [[[change objectForKey:@"new"] class] isSubclassOfClass:[NSString class]] )
         {
+            StAnaylizer *theAna = [self objectValue];
             // create sub view editor.
-
+            
             if( self.editorController != nil )
             {
                 // teardown existing sub view editor
                 [[self.editorController view] removeFromSuperview];
                 self.editorController = nil;
+
+                [[[theAna managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Set Stream Anaylizer “%@”", [theAna valueForKey:@"currentEditorView"]]];
             }
 
-            StAnaylizer *theAna = [self objectValue];
             NSObject *anaylizerObject = [theAna anaylizerObject];
             
             NSRect adjustedFrame = [_customView frame];
@@ -75,8 +78,14 @@
             NSTableView *tv = (NSTableView *)[[self superview] superview];
             [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
         }
-        
-        ignoreEvent = NO;
+    }
+    else if( [keyPath isEqualToString:@"objectValue.anaylizerHeight"] )
+    {
+        if( ignoreEvent == NO)
+        {
+            NSTableView *tv = (NSTableView *)[[self superview] superview];
+            [tv noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[tv rowForView:self]]];
+        }
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -127,11 +136,16 @@
                 {
                     ana.collapse = NO;
                     ana.anaylizerHeight = startAnaylizerHeight;
+                    [[[[self objectValue] managedObjectContext] undoManager] setActionName:@"Collapse"];
                 }
                 else
+                {
                     ana.collapse = YES;
+                    [[[[self objectValue] managedObjectContext] undoManager] setActionName:@"Set Height"];
+                }
                 
                 keepOn = NO;
+                ignoreEvent = NO;
                 break;
                 
             default:
@@ -139,6 +153,7 @@
                 break;
         }
     }
+    
 }
 
 - (void) viewWillMoveToSuperview:(NSView *)newSuperview
@@ -159,6 +174,7 @@
 {
     [self removeObserver:self forKeyPath:@"objectValue.collapse"];
     [self removeObserver:self forKeyPath:@"objectValue.currentEditorView"];
+    [self removeObserver:self forKeyPath:@"objectValue.anaylizerHeight"];
     
     if( self.editorController != nil )
     {

@@ -318,6 +318,7 @@
         reBlock = YES; 
         [self.editIndexSet removeAllIndexes];
         [self.editIndexSet addIndexes:inIndexSet];
+        NSLog( @"New set of indexes: %@", self.editIndexSet );
         [self didChangeValueForKey:@"editIndexSet"];
     }
     
@@ -330,7 +331,7 @@
 - (BOOL) streamEditedInRange:(NSRange)range
 {
     NSIndexSet *changedIndexSet = [self editIndexSet];
-    return [changedIndexSet containsIndexesInRange:range];
+    return [changedIndexSet intersectsIndexesInRange:range];
 }
 
 - (void)willTurnIntoFault

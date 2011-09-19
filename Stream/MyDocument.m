@@ -39,10 +39,10 @@
     [super windowControllerDidLoadNib:aController];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
     
-//    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
-//    NSManagedObjectContext *newMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
-//    [newMOC setPersistentStoreCoordinator:psc];
-//    [self setManagedObjectContext:newMOC];
+    //    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
+    //    NSManagedObjectContext *newMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
+    //    [newMOC setPersistentStoreCoordinator:psc];
+    //    [self setManagedObjectContext:newMOC];
     self.zoomCursor = [[[NSCursor alloc] initWithImage:[NSImage imageNamed:@"Zoom"] hotSpot:NSMakePoint(5.0, 5.0)] autorelease];
 }
 
@@ -62,32 +62,40 @@
         {
             for (NSURL *aURL in [myOpenPanel URLs])
             {
-                NSManagedObject *newObject = [[streamTreeControler newObject] autorelease];
-                
-                /* Setup main object */
-                [newObject setValue:aURL forKey:@"sourceURL"];
-                [newObject setValue:[aURL lastPathComponent] forKey:@"displayName"];
-                NSDate *modDate = [[[NSFileManager defaultManager] attributesOfItemAtPath:[aURL path] error:nil] fileModificationDate];
-                [newObject setValue:modDate forKey:@"modificationDateofURL"];
-                [newObject setValue:[[[NSData alloc] initWithContentsOfURL:aURL] autorelease] forKey:@"bytesCache"];
-                
-                CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)[aURL pathExtension], NULL);
-                [newObject setValue:(NSString *)fileUTI forKey:@"sourceUTI"];
-                CFRelease( fileUTI );
-                
-                /* Setup first anaylizer */
-                NSMutableOrderedSet *theSet = [newObject mutableOrderedSetValueForKey:@"anaylizers"];
-                
-                StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
-                newAnaylizer.anaylizerKind = @"base anaylizer";
-                [theSet addObject:newAnaylizer];
-                
-                [streamTreeControler addObject:newObject];
+                [self addStreamFromURL:aURL];
             }
         }
     };
     
     [myOpenPanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
+}
+
+- (void) addStreamFromURL:(NSURL *)aURL
+{
+    NSManagedObject *newObject = [[streamTreeControler newObject] autorelease];
+    
+    /* Setup main object */
+    [newObject setValue:aURL forKey:@"sourceURL"];
+    [newObject setValue:[aURL lastPathComponent] forKey:@"displayName"];
+    NSDate *modDate = [[[NSFileManager defaultManager] attributesOfItemAtPath:[aURL path] error:nil] fileModificationDate];
+    [newObject setValue:modDate forKey:@"modificationDateofURL"];
+    [newObject setValue:[[[NSData alloc] initWithContentsOfURL:aURL] autorelease] forKey:@"bytesCache"];
+    
+    CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)[aURL pathExtension], NULL);
+    [newObject setValue:(NSString *)fileUTI forKey:@"sourceUTI"];
+    CFRelease( fileUTI );
+    
+    /* Setup first anaylizer */
+    NSMutableOrderedSet *theSet = [newObject mutableOrderedSetValueForKey:@"anaylizers"];
+    
+    StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
+    newAnaylizer.anaylizerKind = @"base anaylizer";
+    [theSet addObject:newAnaylizer];
+    
+    [streamTreeControler addObject:newObject];
+    
+    /* setup undo */
+    [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Stream “%@”", [newObject valueForKey:@"displayName"]]];
 }
 
 - (IBAction)wftSave:(id)sender
@@ -102,6 +110,30 @@
     {
         NSLog( @"%@", err );
     }
+}
+
+- (IBAction)removeStream:(id)sender
+{
+    StStream *removeStream = sender;
+    
+    /* setup redo */
+    NSLog( @"%@", removeStream );
+    [[[self managedObjectContext] undoManager] registerUndoWithTarget:self selector:@selector(addStreamFromURL:) object:[removeStream sourceURL]];
+    [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Stream “%@”", [removeStream valueForKey:@"displayName"]]];
+
+    NSMutableOrderedSet *orderedAnaylizers = [removeStream mutableOrderedSetValueForKey:@"anaylizers"];
+    StAnaylizer *lastAna;
+    
+    while( (lastAna = [orderedAnaylizers lastObject]) != nil )
+    {
+        NSDictionary *flushDictionary;
+        
+        flushDictionary = [NSDictionary dictionaryWithObjectsAndKeys:removeStream, @"parentStream", lastAna, @"anaylizer", nil];
+        [self flushAnaylizer:flushDictionary];
+    }
+    
+    //[streamTreeControler removeObject:removeStream];
+    [[self managedObjectContext] deleteObject:removeStream];
 }
 
 - (IBAction)removeAnaylizer:(id)sender
@@ -123,7 +155,7 @@
         
         NSMutableOrderedSet *os = [parentStream mutableOrderedSetValueForKey:@"anaylizers"];
         [os removeObject:anaylizer];
-
+        
         /* At the end of the run loop the UI will unhook itself from this object */
         
         /* After dealy, the managed object and it's decendents will be deleted */
@@ -172,6 +204,8 @@
         newAnaylizer.anaylizerKind = [class anaylizerKey];
         newAnaylizer.currentEditorView = @"Blocker View";
         [theSet addObject:newAnaylizer];
+
+        [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Blocker “%@”", newAnaylizer.anaylizerKind]];
     }
 }
 

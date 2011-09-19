@@ -174,15 +174,21 @@
 {
     NSUInteger index, length = [theData length];
     unsigned char *bytes = (unsigned char *)[theData bytes];
+    const unsigned char *orginalBytes = [[theBlock getData] bytes];
     
     for( index = 0; index<length; index ++ )
     {
-        [theBlock writeByte:bytes[index] atOffset:index];
+        if( orginalBytes[index] != bytes[index] )
+        {
+            [theBlock writeByte:bytes[index] atOffset:index];
+        }
     }
 }
 
 - (void)regenerateAllBlocks
 {   
+    [[[self lastFilterAnayliser] failIndexSet] removeAllIndexes];
+    
     [self willChangeValueForKey:@"blocks"];
     
     /* suspend all KVOs in active views */
