@@ -35,7 +35,7 @@
 @property (nonatomic, readonly) BOOL blockSettingsHidden;
 @property (nonatomic, readonly) NSString * title;
 @property (nonatomic, assign ) NSViewController * viewController;
-
+@property (nonatomic, readonly) BOOL canChangeEditor;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 - (void) writebyte:(unsigned char) byte atOffset:(NSUInteger)offset;

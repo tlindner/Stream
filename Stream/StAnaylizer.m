@@ -30,6 +30,7 @@
 @dynamic blockSettingsHidden;
 @dynamic title;
 @synthesize viewController;
+@dynamic canChangeEditor;
 
 @dynamic anaylizerObject;
 
@@ -336,15 +337,19 @@
 
 - (void)willTurnIntoFault
 {
-//    if( viewController != nil )
-//    {
-//        [viewController setRepresentedObject:nil];
-//    }
-    
     if( anaylizerObject != nil)
     {
         [anaylizerObject setRepresentedObject:nil];
     }
+}
+
+- (BOOL) canChangeEditor
+{
+    BOOL result;
+    
+    result = ( self == [[[self parentStream] anaylizers] lastObject] );
+    
+    return result;
 }
 
 @end

@@ -125,8 +125,10 @@
     [self.popupArrayController addObjects:stuff];
     
     [utiTextField bind:@"value" toObject:observableSourceUTI withKeyPath:@"sourceUTI" options:nil];
+    [utiTextField bind:@"enabled" toObject:observableEditorView withKeyPath:@"canChangeEditor" options:nil];
     [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
     [editorPopup bind:@"selectedObject" toObject:observableEditorView withKeyPath:@"currentEditorView" options:nil];
+    [editorPopup bind:@"enabled" toObject:observableEditorView withKeyPath:@"canChangeEditor" options:nil];
     
     [observableEditorView addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:nil];
     [observableSourceUTI addObserver:self forKeyPath:@"sourceUTI" options:NSKeyValueChangeSetting context:nil];
@@ -274,8 +276,10 @@
 - (IBAction)popOverOK:(id)sender
 {
     [utiTextField unbind:@"value"];
+    [utiTextField unbind:@"enabled"];
     [editorPopup unbind:@"contentObjects"];
     [editorPopup unbind:@"selectedObject"];
+    [editorPopup unbind:@"enabled"];
     
     [observableEditorView removeObserver:self forKeyPath:@"currentEditorView"];
     [observableSourceUTI removeObserver:self forKeyPath:@"sourceUTI"];
@@ -286,8 +290,10 @@
 - (IBAction)popOverCancel:(id)sender
 {
     [utiTextField unbind:@"value"];
+    [utiTextField unbind:@"enabled"];
     [editorPopup unbind:@"contentObjects"];
     [editorPopup unbind:@"selectedObject"];
+    [editorPopup unbind:@"enabled"];
     
     [observableEditorView removeObserver:self forKeyPath:@"currentEditorView"];
     [observableSourceUTI removeObserver:self forKeyPath:@"sourceUTI"];

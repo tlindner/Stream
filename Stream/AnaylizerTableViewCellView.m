@@ -42,11 +42,16 @@
         if( [[[change objectForKey:@"new"] class] isSubclassOfClass:[NSString class]] )
         {
             StAnaylizer *theAna = [self objectValue];
-            // create sub view editor.
+            /* create sub view editor. */
             
             if( self.editorController != nil )
             {
-                // teardown existing sub view editor
+                /* make sure view editor is actually changing */
+
+                if( [[[theAna anaylizerObject] viewController] isSubclassOfClass:[self.editorController class]] ) return;
+
+                /* teardown existing sub view editor */
+                
                 [[self.editorController view] removeFromSuperview];
                 self.editorController = nil;
 
