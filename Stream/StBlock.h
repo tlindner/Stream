@@ -41,6 +41,7 @@
 @property (nonatomic, assign) BOOL isFail;
 @property (nonatomic, assign) BOOL isEdit;
 @property (nonatomic, readonly) NSColor * attributeColor;
+@property (nonatomic, readonly) BOOL canChangeEditor;
 
 - (StStream *)getStream;
 

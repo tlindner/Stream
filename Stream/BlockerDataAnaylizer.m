@@ -41,7 +41,7 @@
 
 + (NSArray *)anaylizerUTIs
 {
-    return [NSArray arrayWithObject:@"public.data"];
+    return [NSArray arrayWithObject:@"org.macmess.stream.block"];
 }
 
 + (NSString *)anayliserName

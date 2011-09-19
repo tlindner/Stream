@@ -105,9 +105,7 @@
 	<array>
 		<dict>
 			<key>UTTypeConformsTo</key>
-			<array>
-				<string>org.macmess.stream</string>
-			</array>
+			<array/>
 			<key>UTTypeIdentifier</key>
 			<string>org.macmess.stream.block</string>
 		</dict>

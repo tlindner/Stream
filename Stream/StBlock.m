@@ -31,6 +31,7 @@
 @dynamic optionsDictionary;
 @dynamic isFail;
 @dynamic isEdit;
+@dynamic canChangeEditor;
 
 @dynamic data;
 @dynamic dataForUI;
@@ -555,6 +556,11 @@
     {
         [anaylizerObject setRepresentedObject:nil];
     }
+}
+
+- (BOOL) canChangeEditor
+{
+    return YES;
 }
 
 @end
