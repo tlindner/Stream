@@ -7,7 +7,7 @@
 //
 
 #import "Analyzation.h"
-#import "HexFiendAnaylizerController.h"
+#import "HexFiendAnaylizer.h"
 
 static Analyzation *sharedSingleton;
 
@@ -96,7 +96,7 @@ static Analyzation *sharedSingleton;
     }
     
     if( [resultArray count] == 0 )
-        [resultArray addObject:[HexFiendAnaylizerController anayliserName]];
+        [resultArray addObject:[HexFiendAnaylizer anayliserName]];
     
     return [resultArray autorelease];
 }
