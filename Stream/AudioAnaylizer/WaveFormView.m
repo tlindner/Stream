@@ -94,7 +94,7 @@ typedef struct
     AudioSampleType *audioFrames = [[optionsDict objectForKey:@"frameBufferObject"] mutableBytes];
     NSRange *characters = [[optionsDict objectForKey:@"charactersObject"] mutableBytes];
     NSInteger currentChannel = [[optionsDict objectForKey:@"audioChannel"] intValue];
-    unsigned long long frameCount = [[optionsDict objectForKey:@"frameCount"] unsignedLongLongValue];
+    NSUInteger frameCount = [[optionsDict objectForKey:@"frameBufferObject"] length] / sizeof(AudioSampleType);
     double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
     
     NSUInteger char_count = [characterObject length];

@@ -63,7 +63,7 @@
     self.scroller.viewController = self;
 
     wfv.cachedAnaylizer = theAna;
-    unsigned long long frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"] unsignedLongLongValue];
+    NSUInteger frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] length] / sizeof(AudioSampleType);
     
     NSView *clipView = [self.scroller contentView];
     self.slider.maxValue = frameCount;
