@@ -390,7 +390,7 @@
     BOOL byteWritten = NO;
     
     [self smartSetEdit];
-
+    
     for (StBlock *aBlock in blockArray)
     {
         if( offset < place + aBlock.length )

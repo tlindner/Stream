@@ -183,6 +183,8 @@
             [theBlock writeByte:bytes[index] atOffset:index];
         }
     }
+    
+    [self regenerateAllBlocks];
 }
 
 - (void)regenerateAllBlocks

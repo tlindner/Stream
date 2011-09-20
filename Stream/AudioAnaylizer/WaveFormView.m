@@ -64,6 +64,7 @@ typedef struct
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"failIndexSet" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject" options:NSKeyValueChangeSetting context:nil];
         
         observationsActive = YES;
@@ -79,6 +80,7 @@ typedef struct
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"resultingData"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"failIndexSet"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
         observationsActive = NO;
     }     
@@ -381,45 +383,39 @@ typedef struct
     {
         resample = YES;
         [self setNeedsDisplay:YES];
-        return;
     }
-    
-    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] )
+    else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
-        return;
     }
-    
-    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"])
+    else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
-        return;
     }
-    
-    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] )
+    else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
-        return;
     }
-    
-    if( [keyPath isEqualToString:@"resultingData"] )
+    else if( [keyPath isEqualToString:@"resultingData"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
-        return;
     }
-    
-    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] )
+    else if( [keyPath isEqualToString:@"failIndexSet"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
-        return;
     }
-    
-    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] )
+    {
+        resample = YES;
+        [self setNeedsDisplay:YES];
+    }
+    else
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 - (IBAction)chooseTool:(id)sender
