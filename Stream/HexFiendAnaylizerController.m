@@ -105,32 +105,38 @@
     
     if ([keyPath isEqualToString:@"optionsDictionary.HexFiendAnaylizerController.showOffset"])
     {
-        HFTextView *hexView = (HFTextView *)[self view];
-        if( showOffset == YES && lcRepresenter == nil )
+        if( [change objectForKey:@"new"] != [NSNull null] )
         {
-            lcRepresenter = [[[HFLineCountingRepresenter alloc] init] autorelease];
-            [self setLineNumberFormatString:offsetBase];
-            [[hexView controller] addRepresenter:lcRepresenter];
-            [[hexView layoutRepresenter] addRepresenter:lcRepresenter];
+            HFTextView *hexView = (HFTextView *)[self view];
+            if( showOffset == YES && lcRepresenter == nil )
+            {
+                lcRepresenter = [[[HFLineCountingRepresenter alloc] init] autorelease];
+                [self setLineNumberFormatString:offsetBase];
+                [[hexView controller] addRepresenter:lcRepresenter];
+                [[hexView layoutRepresenter] addRepresenter:lcRepresenter];
+            }
+            else if( showOffset == NO && lcRepresenter != nil )
+            {
+                [[hexView layoutRepresenter] removeRepresenter:lcRepresenter];
+                [[hexView controller] removeRepresenter:lcRepresenter];
+                lcRepresenter = nil;
+            }
         }
-        else if( showOffset == NO && lcRepresenter != nil )
-        {
-            [[hexView layoutRepresenter] removeRepresenter:lcRepresenter];
-            [[hexView controller] removeRepresenter:lcRepresenter];
-            lcRepresenter = nil;
-        }
-                
-        return;
     }
     else if ([keyPath isEqualToString:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"])
     {
-        [self setLineNumberFormatString:offsetBase];
-        return;
+        if( [change objectForKey:@"new"] != [NSNull null] )
+        {
+            [self setLineNumberFormatString:offsetBase];
+        }
     }
     else if ([keyPath isEqualToString:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"])
     {
-        HFTextView *hexView = (HFTextView *)[self view];
-        [[hexView controller] setInOverwriteMode:overWriteMode];
+        if( [change objectForKey:@"new"] != [NSNull null] )
+        {
+            HFTextView *hexView = (HFTextView *)[self view];
+            [[hexView controller] setInOverwriteMode:overWriteMode];
+        }
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

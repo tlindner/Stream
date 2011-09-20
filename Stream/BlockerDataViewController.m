@@ -153,22 +153,6 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (parentBlock == nil) AND (anaylizerKind == %@)", theAna.parentStream, theAna.anaylizerKind ];
     [treeController setFetchPredicate:predicate];
 
-    if( [[[self representedObject] valueForKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"] boolValue] == YES )
-    {
-    }
-    else
-    {
-        Class <BlockerProtocol> blockerClass = NSClassFromString([[self representedObject] valueForKey:@"anaylizerKind"]);
-        
-        if (blockerClass != nil )
-        {
-            [blockerClass makeBlocks:theAna.parentStream];
-            [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.BlockerDataViewController.initializedOD"];
-        }
-        else
-            NSLog( @"Could not create class: %@", [[self representedObject] valueForKey:@"anaylizerKind"] );
-    }
-
     NSAssert(self.observing == NO, @"BlockAttributeView: double observer fault");
     
     [self startObserving];
@@ -180,7 +164,6 @@
     {
         [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:self];
         lastFilterAnaylizer = [[[[self representedObject] parentStream] lastFilterAnayliser] retain];
-        
         [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
     }
 
@@ -201,16 +184,24 @@
 
 - (void) startObservingBlockEditor:(StBlock *)inBlock
 {
-    if( self.observingBlock != inBlock )
+    if( self.observingBlock != nil )
     {
         [self stopObservingBlockEditor];
-        self.observingBlock = inBlock;
-        [self.observingBlock addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:self];
     }
+    
+    self.observingBlock = inBlock;
+    [self.observingBlock addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:self];
 }
 
 - (void) stopObservingBlockEditor
 {
+    if( self.editorViewController != nil )
+    {
+        [self.editorViewController setRepresentedObject:nil];
+        [[self.editorViewController view] removeFromSuperview];
+        self.editorViewController = nil;
+    }
+    
     if( self.observingBlock != nil )
     {
         [observingBlock removeObserver:self forKeyPath:@"currentEditorView" context:self];
@@ -227,31 +218,29 @@
         {
             [self restoreSelection];
         }
-        else //if( [change objectForKey:@"new"] != [NSNull null] )
+        else
         {
-            NSArray *selectedObjects = [[self treeController] selectedObjects];
-            [self stopObservingBlockEditor];
-            
-            if( [selectedObjects count] > 0 )
+            //if( [change objectForKey:@"new"] != [NSNull null] )
             {
-                StBlock *theBlock = [selectedObjects objectAtIndex:0];
-                NSRect theFrame = [self.editorView frame];
+                NSArray *selectedObjects = [[self treeController] selectedObjects];
+                [self stopObservingBlockEditor];
                 
-                if( self.editorViewController != nil )
+                if( [selectedObjects count] > 0 )
                 {
-                    [self.editorViewController setRepresentedObject:nil];
-                    [[self.editorViewController view] removeFromSuperview];
-                    self.editorViewController = nil;
+                    StBlock *theBlock = [selectedObjects objectAtIndex:0];
+                    NSRect theFrame = [self.editorView frame];
+                     
+                    Class anaClass = [[theBlock anaylizerObject] viewController];
+                    theFrame.origin.y = theFrame.origin.x = 0;
+                    NSViewController *vc = [[anaClass alloc] initWithNibName:nil bundle:nil];
+                    self.editorViewController = vc;
+                    [vc setRepresentedObject:theBlock];
+                    [vc loadView];
+                    [[vc view] setFrame:theFrame];
+                    [self.editorView addSubview:[vc view]];
+                    [self startObservingBlockEditor:theBlock];
+                    [vc release];
                 }
-                 
-                Class anaClass = [[theBlock anaylizerObject] viewController];
-                theFrame.origin.y = theFrame.origin.x = 0;
-                self.editorViewController = [[[anaClass alloc] initWithNibName:nil bundle:nil] autorelease];
-                [self.editorViewController setRepresentedObject:theBlock];
-                [self.editorViewController loadView];
-                [[self.editorViewController view] setFrame:theFrame];
-                [self.editorView addSubview:[self.editorViewController view]];
-                [self startObservingBlockEditor:theBlock];
             }
         }
     }

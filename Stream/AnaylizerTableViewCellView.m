@@ -137,16 +137,23 @@
                 
                 ignoreEvent = YES;
                 
-                if( distance <= MINIMUM_HEIGHT )
+                if( startAnaylizerHeight == ana.anaylizerHeight )
                 {
-                    ana.collapse = NO;
-                    ana.anaylizerHeight = startAnaylizerHeight;
-                    [[[[self objectValue] managedObjectContext] undoManager] setActionName:@"Collapse"];
+                    [[[self objectValue] managedObjectContext] processPendingChanges];
                 }
                 else
                 {
-                    ana.collapse = YES;
-                    [[[[self objectValue] managedObjectContext] undoManager] setActionName:@"Set Height"];
+                    if( distance <= MINIMUM_HEIGHT )
+                    {
+                        ana.collapse = NO;
+                        ana.anaylizerHeight = startAnaylizerHeight;
+                        [[[[self objectValue] managedObjectContext] undoManager] setActionName:@"Collapse"];
+                    }
+                    else
+                    {
+                        ana.collapse = YES;
+                        [[[[self objectValue] managedObjectContext] undoManager] setActionName:@"Set Height"];
+                    }
                 }
                 
                 keepOn = NO;

@@ -205,6 +205,15 @@
         newAnaylizer.currentEditorView = @"Blocker View";
         [theSet addObject:newAnaylizer];
 
+        Class <BlockerProtocol> blockerClass = NSClassFromString([newAnaylizer valueForKey:@"anaylizerKind"]);
+        
+        if (blockerClass != nil )
+        {
+            [blockerClass makeBlocks:selectedStream];
+        }
+        else
+            NSLog( @"Could not create class: %@", [newAnaylizer valueForKey:@"anaylizerKind"] );
+
         [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Blocker “%@”", newAnaylizer.anaylizerKind]];
     }
 }

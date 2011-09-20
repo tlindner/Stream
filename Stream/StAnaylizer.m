@@ -319,7 +319,6 @@
         reBlock = YES; 
         [self.editIndexSet removeAllIndexes];
         [self.editIndexSet addIndexes:inIndexSet];
-        NSLog( @"New set of indexes: %@", self.editIndexSet );
         [self didChangeValueForKey:@"editIndexSet"];
     }
     
