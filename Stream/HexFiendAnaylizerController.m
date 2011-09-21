@@ -34,6 +34,8 @@
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+            HFTextView *hexView = (HFTextView *)[self view];
+            [hexView removeObserver:self forKeyPath:@"data"];
             
             observationsActive = NO;
         }
@@ -93,7 +95,8 @@
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset" options:NSKeyValueChangeSetting context:nil];
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase" options:NSKeyValueChangeSetting context:nil];
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode" options:NSKeyValueChangeSetting context:nil];
-
+    [hexView addObserver:self forKeyPath:@"data" options:NSKeyValueChangeReplacement context:nil];
+    
     observationsActive = YES;
 }
 
@@ -138,6 +141,10 @@
             [[hexView controller] setInOverwriteMode:overWriteMode];
         }
     }
+    else if( [keyPath isEqualToString:@"data"] )
+    {
+        NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
+    }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -170,6 +177,8 @@
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+        HFTextView *hexView = (HFTextView *)[self view];
+        [hexView removeObserver:self forKeyPath:@"data"];
         
         observationsActive = NO;
     }

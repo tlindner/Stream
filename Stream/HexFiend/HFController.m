@@ -162,7 +162,10 @@ static inline Class preferredByteArrayClass(void) {
 #else
     NSNumber *number = [[NSNumber alloc] initWithUnsignedInt:bits];
 #endif
-    NSDictionary *userInfo = [[NSDictionary alloc] initWithObjects:&number forKeys:&HFControllerChangedPropertiesKey count:1];
+    //NSDictionary *userInfo = [[NSDictionary alloc] initWithObjects:&number forKeys:&HFControllerChangedPropertiesKey count:1];
+    NSRange theChangeRange = {changeRange.location, changeRange.length };
+    NSValue *changeValue = [NSValue valueWithRange:theChangeRange];
+    NSDictionary *userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:number, HFControllerChangedPropertiesKey, changeValue, @"changeRange", nil];
     [number release];
     [[NSNotificationCenter defaultCenter] postNotificationName:HFControllerDidChangePropertiesNotification object:self userInfo:userInfo];
     [userInfo release];
@@ -1667,7 +1670,8 @@ static BOOL rangesAreInAscendingOrder(NSEnumerator *rangeEnumerator) {
         success = [self _insertionModeCoreInsertByteArray:bytesToInsert replacingPreviousBytes:previousBytes allowUndoCoalescing:allowUndoCoalescing outNewSingleSelectedRange:&modificationRange];
     }
     
-    NSLog( @"Edit: location %llu, length: %llu", modificationRange.location, modificationRange.length );
+    //NSLog( @"Edit: location %llu, length: %llu", modificationRange.location, modificationRange.length );
+    changeRange = modificationRange;
     
     if (success) {
         /* Update our selection */

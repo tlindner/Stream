@@ -33,6 +33,8 @@
 
 - (void)_HFControllerDidChangeProperties:(NSNotification *)note {
         NSNumber *propertyNumber = [[note userInfo] objectForKey:HFControllerChangedPropertiesKey];
+        NSRange changeRange = [[[note userInfo] objectForKey:@"changeRange"] rangeValue];
+    
 #if __LP64__
         NSUInteger propertyMask = [propertyNumber unsignedIntegerValue];
 #else
@@ -41,10 +43,13 @@
     if (propertyMask & (HFControllerContentValue | HFControllerContentLength)) {
         /* Note that this isn't quite right.  If we don't have any cached data, then we can't provide the "before" data for this change.  In practice, this is likely harmless, but it's still something that should be fixed at some point.
         */
-        [self willChangeValueForKey:@"data"];
+//        [self willChangeValueForKey:@"data"];
+        NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:changeRange];
+        [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"data"];
         [cachedData release];
         cachedData = nil; //set this to nil so that it gets recomputed on demand
-        [self didChangeValueForKey:@"data"];
+        [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"data"];
+//        [self didChangeValueForKey:@"data"];
     }
     if ([delegate respondsToSelector:@selector(hexTextView:didChangeProperties:)]) {
         [(id <HFTextViewDelegate>)delegate hexTextView:self didChangeProperties:propertyMask];

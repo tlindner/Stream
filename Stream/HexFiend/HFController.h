@@ -117,6 +117,9 @@ You create an HFController via <tt>[[HFController alloc] init]</tt>.  After that
     NSData *cachedData;
     NSUInteger cachedGenerationIndex;
     
+    /* Change range */
+    HFRange changeRange;
+    
     struct  {
         unsigned antialias:1;
         unsigned overwriteMode:1;
