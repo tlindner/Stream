@@ -14,7 +14,8 @@
 
 @interface HexFiendAnaylizer : NSObject
 {
-    StAnaylizer *representedObject;    
+    StAnaylizer *representedObject;
+    BOOL observationsActive;
 }
 
 @property (assign) StAnaylizer * representedObject;

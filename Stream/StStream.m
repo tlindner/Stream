@@ -176,7 +176,24 @@
     unsigned char *bytes = (unsigned char *)[theData bytes];
     const unsigned char *orginalBytes = [[theBlock getData] bytes];
     
-    for( index = 0; index<length; index ++ )
+    for( index = 0; index < length; index++ )
+    {
+        if( orginalBytes[index] != bytes[index] )
+        {
+            [theBlock writeByte:bytes[index] atOffset:index];
+        }
+    }
+    
+    [self regenerateAllBlocks];
+}
+
+- (void) setBlock:(StBlock *)theBlock withData:(id)theData inRange:(NSRange)range
+{
+    NSUInteger index, end = NSMaxRange(range);
+    unsigned char *bytes = (unsigned char *)[theData bytes];
+    const unsigned char *orginalBytes = [[theBlock getData] bytes];
+    
+    for( index = range.location; index < end; index++ )
     {
         if( orginalBytes[index] != bytes[index] )
         {

@@ -9,6 +9,7 @@
 #import "HexFiendAnaylizerController.h"
 #import "Analyzation.h"
 #import "HFTextView.h"
+#import "StStream.h"
 #import "StAnaylizer.h"
 #import "StBlock.h"
 
@@ -143,7 +144,39 @@
     }
     else if( [keyPath isEqualToString:@"data"] )
     {
-        NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
+        //NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
+        NSIndexSet *changes = [change objectForKey:@"indexes"];
+        NSUInteger kind = [[change objectForKey:@"kind"] intValue];
+        
+        if( kind == NSKeyValueChangeReplacement && changes != nil)
+        {
+            if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
+            {
+                NSAssert(YES==NO, @"StAnayliser: not implemented yet");
+//                StAnaylizer *object = [self representedObject];
+//                [hexView setData:[object.parentStream valueForKey:@"bytesCache"]];      
+//                [self setupRepresentedObject];
+            }
+            else if( [[self representedObject] isKindOfClass:[StBlock class]] )
+            {
+                StBlock *theBlock = [self representedObject];
+                StStream *theStream = [theBlock getStream];
+                HFTextView *hexView = (HFTextView *)[self view];
+
+                [changes enumerateRangesUsingBlock: ^(NSRange range, BOOL *stop)
+                 {
+                     [theStream setBlock:theBlock withData:[hexView data] inRange:range];
+                 }];
+            }
+            else if( [[self representedObject] isKindOfClass:[NSData class]] )
+            {
+                NSAssert(YES==NO, @"NSData: not implemented yet");
+            }
+            else
+                NSLog( @"HexFiendAnaylizerController: Unknown type of represented object" );
+            
+            
+        }
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
