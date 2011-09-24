@@ -117,7 +117,6 @@
     StStream *removeStream = sender;
     
     /* setup redo */
-    NSLog( @"%@", removeStream );
     [[[self managedObjectContext] undoManager] registerUndoWithTarget:self selector:@selector(addStreamFromURL:) object:[removeStream sourceURL]];
     [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Stream “%@”", [removeStream valueForKey:@"displayName"]]];
 

@@ -168,14 +168,14 @@
     
 }
 
-- (void) viewWillMoveToSuperview:(NSView *)newSuperview
-{
-    if( newSuperview == nil )
-    {
-        [editorController setRepresentedObject:nil];
-    }
-}
-
+//- (void) viewWillMoveToSuperview:(NSView *)newSuperview
+//{
+//    if( newSuperview == nil )
+//    {
+//        [editorController setRepresentedObject:nil];
+//    }
+//}
+//
 - (IBAction)removeAnaylizer:(id)sender
 {
     MyDocument *ourPerstantDocument = [[[self window] windowController] document];

@@ -174,8 +174,6 @@
             }
             else
                 NSLog( @"HexFiendAnaylizerController: Unknown type of represented object" );
-            
-            
         }
     }
     else

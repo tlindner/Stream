@@ -401,6 +401,7 @@
                 /* writing to stream */
                 [[[self getStream] lastFilterAnayliser] writebyte:byte atOffset:aBlock.offset + (offset - place)];
                 byteWritten = YES;
+                break;
             }
             else
             {

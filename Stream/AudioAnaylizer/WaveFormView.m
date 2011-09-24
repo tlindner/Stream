@@ -65,6 +65,7 @@ typedef struct
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"failIndexSet" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject" options:NSKeyValueChangeSetting context:nil];
         
         observationsActive = YES;
@@ -81,6 +82,7 @@ typedef struct
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"resultingData"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"failIndexSet"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"editIndexSet"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
         observationsActive = NO;
     }     
@@ -405,6 +407,11 @@ typedef struct
         [self setNeedsDisplay:YES];
     }
     else if( [keyPath isEqualToString:@"failIndexSet"] )
+    {
+        resample = YES;
+        [self setNeedsDisplay:YES];
+    }
+    else if( [keyPath isEqualToString:@"editIndexSet"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];

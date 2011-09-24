@@ -175,6 +175,9 @@
     NSUInteger index, length = [theData length];
     unsigned char *bytes = (unsigned char *)[theData bytes];
     const unsigned char *orginalBytes = [[theBlock getData] bytes];
+    StAnaylizer *lastAaylizer = [self lastFilterAnayliser];
+    
+    [lastAaylizer willChangeValueForKey:@"resultingData"];
     
     for( index = 0; index < length; index++ )
     {
@@ -183,8 +186,10 @@
             [theBlock writeByte:bytes[index] atOffset:index];
         }
     }
-    
+
     [self regenerateAllBlocks];
+    
+    [lastAaylizer didChangeValueForKey:@"resultingData"];
 }
 
 - (void) setBlock:(StBlock *)theBlock withData:(id)theData inRange:(NSRange)range
@@ -192,7 +197,11 @@
     NSUInteger index, end = NSMaxRange(range);
     unsigned char *bytes = (unsigned char *)[theData bytes];
     const unsigned char *orginalBytes = [[theBlock getData] bytes];
+    StAnaylizer *lastAaylizer = [self lastFilterAnayliser];
     
+    NSLog( @"stream: %p", lastAaylizer );
+    [lastAaylizer willChangeValueForKey:@"resultingData"];
+
     for( index = range.location; index < end; index++ )
     {
         if( orginalBytes[index] != bytes[index] )
@@ -200,8 +209,10 @@
             [theBlock writeByte:bytes[index] atOffset:index];
         }
     }
-    
+
     [self regenerateAllBlocks];
+    
+    [lastAaylizer didChangeValueForKey:@"resultingData"];
 }
 
 - (void)regenerateAllBlocks
