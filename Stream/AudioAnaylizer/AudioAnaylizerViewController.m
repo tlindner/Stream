@@ -28,19 +28,21 @@
 
 - (void)setRepresentedObject:(id)inRepresentedObject
 {
-    if( inRepresentedObject == nil )
-    {
-        WaveFormView *wfv = [self.scroller documentView];
+    WaveFormView *wfv = [self.scroller documentView];
+    if( wfv != nil )
         [wfv deactivateObservations];
-    }
-    
+
     [super setRepresentedObject:inRepresentedObject];
 }
 
 -(void)loadView
 {
     [super loadView];
-    
+    [self reloadView];
+}
+
+- (void) reloadView
+{
     [self.scroller setHasVerticalScroller:NO];
     [self.scroller setHasHorizontalScroller:YES];
     [self.scroller setHasVerticalRuler:NO];

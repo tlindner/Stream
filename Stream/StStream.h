@@ -11,9 +11,15 @@
 #import "StAnaylizer.h"
 #import "StBlock.h"
 
+@interface NSViewController (BlockerViewExtensions)
+- (void) notifyOfImpendingDeletion:(NSArray *)blocks;
+- (void) reloadView;
+@end
+
 @interface StStream : NSManagedObject
 {
 @private
+    BOOL regeneratingBlocks;
 }
 
 @property (nonatomic, retain) NSData * bytesCache;
@@ -29,17 +35,20 @@
 @property (nonatomic, retain) NSSet * childStreams;
 @property (nonatomic, retain) StStream * parentStream;
 
-- (NSData *)dataOfBlockNamed:(NSString *)name;
-- (StBlock *)startNewBlockNamed:(NSString *)name owner:(NSString *)owner;
-- (NSSet *)blocksWithKey:(NSString *)key;
+- (NSData *) dataOfBlockNamed:(NSString *)name;
+- (StBlock *) startNewBlockNamed:(NSString *)name owner:(NSString *)owner;
+- (StBlock *) makeNewBlockNamed:(NSString *)name owner:(NSString *)owner;
+- (NSSet *) blocksWithKey:(NSString *)key;
 - (void) setBlock:(StBlock *)theBlock withData:theData;
 - (void) setBlock:(StBlock *)theBlock withData:(id)theData inRange:(NSRange)range;
-- (StAnaylizer *)lastFilterAnayliser;
-- (StBlock *)blockNamed:(NSString *)theName;
-- (StAnaylizer *)previousAnayliser:(StAnaylizer *)inAna;
-- (void)regenerateAllBlocks;
-- (BOOL)isBlockEdited:(NSString *)blockName;
-- (BOOL)isBlockFailed:(NSString *)blockName;
+- (StAnaylizer *) lastFilterAnayliser;
+- (StBlock *) blockNamed:(NSString *)theName;
+- (StAnaylizer *) previousAnayliser:(StAnaylizer *)inAna;
+- (void) regenerateAllBlocks;
+- (void) markBlocksForDeletion;
+- (void) deleteBlocksMarkedForDeletion;
+- (BOOL) isBlockEdited:(NSString *)blockName;
+- (BOOL) isBlockFailed:(NSString *)blockName;
 
 @end
 

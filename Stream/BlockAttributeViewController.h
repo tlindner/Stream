@@ -21,4 +21,6 @@
 @property (assign) IBOutlet NSArrayController *arrayController;
 @property (assign) IBOutlet StBlockFormatter *blockFormatter;
 
+- (void) reloadView;
+
 @end

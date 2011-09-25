@@ -33,6 +33,9 @@
 - (void) stopObserving;
 - (void) startObservingBlockEditor:(StBlock *)inBlock;
 - (void) stopObservingBlockEditor;
+- (void) removeViewController;
 - (void) restoreSelection;
+- (void) notifyOfImpendingDeletion:(NSArray *)blocks;
+- (void) reloadView;
 
 @end

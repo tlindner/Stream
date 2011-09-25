@@ -17,5 +17,6 @@
 
 - (void) setupRepresentedObject;
 - (void) setLineNumberFormatString:(NSString *)inFormat;
+- (void) reloadView;
 
 @end

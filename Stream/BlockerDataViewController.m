@@ -42,6 +42,7 @@
     if( inRepresentedObject == nil )
     {
         [self stopObserving];
+        [self removeViewController];
         [self stopObservingBlockEditor];
         [self.editorViewController setRepresentedObject:nil];
         
@@ -147,7 +148,11 @@
 - (void)loadView
 {
     [super loadView];
+    [self reloadView];
+}
 
+- (void) reloadView
+{
     StAnaylizer *theAna = [self representedObject];
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (parentBlock == nil) AND (anaylizerKind == %@)", theAna.parentStream, theAna.anaylizerKind ];
@@ -195,13 +200,6 @@
 
 - (void) stopObservingBlockEditor
 {
-    if( self.editorViewController != nil )
-    {
-        [self.editorViewController setRepresentedObject:nil];
-        [[self.editorViewController view] removeFromSuperview];
-        self.editorViewController = nil;
-    }
-    
     if( self.observingBlock != nil )
     {
         [observingBlock removeObserver:self forKeyPath:@"currentEditorView" context:self];
@@ -209,10 +207,20 @@
     }
 }
 
+- (void) removeViewController
+{
+    if( self.editorViewController != nil )
+    {
+        [self.editorViewController setRepresentedObject:nil];
+        [[self.editorViewController view] removeFromSuperview];
+        self.editorViewController = nil;
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
-    if( [keyPath isEqualToString:@"selectedObjects"] || [keyPath isEqualToString:@"currentEditorView"] )
+    if( [keyPath isEqualToString:@"selectedObjects"] )
     {
         if( self.selectedBlockLevel1 != nil )
         {
@@ -220,28 +228,82 @@
         }
         else
         {
-            //if( [change objectForKey:@"new"] != [NSNull null] )
+            NSArray *selectedObjects = [[self treeController] selectedObjects];
+             
+            if( [selectedObjects count] > 0 )
             {
-                NSArray *selectedObjects = [[self treeController] selectedObjects];
-                [self stopObservingBlockEditor];
+                StBlock *theBlock = [selectedObjects objectAtIndex:0];
                 
-                if( [selectedObjects count] > 0 )
+                /* check if block is really different */
+                if( self.observingBlock != theBlock )
                 {
-                    StBlock *theBlock = [selectedObjects objectAtIndex:0];
-                    NSRect theFrame = [self.editorView frame];
-                     
+                    [self stopObservingBlockEditor];
                     Class anaClass = [[theBlock anaylizerObject] viewController];
-                    theFrame.origin.y = theFrame.origin.x = 0;
-                    NSViewController *vc = [[anaClass alloc] initWithNibName:nil bundle:nil];
-                    self.editorViewController = vc;
-                    [vc setRepresentedObject:theBlock];
-                    [vc loadView];
-                    [[vc view] setFrame:theFrame];
-                    [self.editorView addSubview:[vc view]];
-                    [self startObservingBlockEditor:theBlock];
-                    [vc release];
+                    
+                    if( [[self.editorViewController class] isSubclassOfClass:anaClass] )
+                    {
+                        [self.editorViewController setRepresentedObject:theBlock];
+                        [self startObservingBlockEditor:theBlock];
+                        [self.editorViewController reloadView];
+                    }
+                    else
+                    {
+                        [self removeViewController];
+                        NSRect theFrame = [self.editorView frame];
+                        theFrame.origin.y = theFrame.origin.x = 0;
+                        NSViewController *vc = [[anaClass alloc] initWithNibName:nil bundle:nil];
+                        self.editorViewController = vc;
+                        [vc setRepresentedObject:theBlock];
+                        [vc loadView];
+                        [[vc view] setFrame:theFrame];
+                        [self.editorView addSubview:[vc view]];
+                        [self startObservingBlockEditor:theBlock];
+                        [vc release];
+                    }
                 }
             }
+            else
+            {
+                /* nothing selected */
+                [self removeViewController];
+                [self stopObservingBlockEditor];
+            }
+        }
+    }
+    else if( [keyPath isEqualToString:@"currentEditorView"] )
+    {
+        NSArray *selectedObjects = [[self treeController] selectedObjects];
+        
+        if( [selectedObjects count] > 0 )
+        {
+            StBlock *theBlock = [selectedObjects objectAtIndex:0];
+            Class anaClass = [[theBlock anaylizerObject] viewController];
+            
+            if( ![[self.editorViewController class] isSubclassOfClass:anaClass] )
+            {
+                [self removeViewController];
+                NSRect theFrame = [self.editorView frame];
+                theFrame.origin.y = theFrame.origin.x = 0;
+                NSViewController *vc = [[anaClass alloc] initWithNibName:nil bundle:nil];
+                self.editorViewController = vc;
+                [vc setRepresentedObject:theBlock];
+                [vc loadView];
+                [[vc view] setFrame:theFrame];
+                [self.editorView addSubview:[vc view]];
+                [self startObservingBlockEditor:theBlock];
+                [vc release];
+            }
+            else
+            {
+                [self.editorViewController setRepresentedObject:theBlock];
+                [self.editorViewController reloadView];
+            }
+        }
+        else
+        {
+            /* nothing selected */
+            [self removeViewController];
+            [self stopObservingBlockEditor];
         }
     }
     else if( [keyPath isEqualToString:@"editIndexSet"] )
@@ -250,6 +312,24 @@
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (void) notifyOfImpendingDeletion:(NSArray *)blocks
+{
+    if( self.observingBlock != nil )
+    {
+        NSURL *observingID = [[self.observingBlock objectID] URIRepresentation];
+        
+        for (StBlock *aBlock in blocks)
+        {
+            if( [observingID isEqualTo:[[aBlock objectID] URIRepresentation]] )
+            {
+                NSLog( @"BlockerDataViewController: Found a match during deletion" );
+                [self removeViewController];
+                [self stopObservingBlockEditor];
+            }
+        }
+    }
 }
 
 - (void)dealloc
@@ -264,8 +344,8 @@
     self.selectedBlockLevel3 = nil;
 
     [self stopObserving];
+    [self removeViewController];
     [self stopObservingBlockEditor];
-    self.editorViewController = nil;
     self.sortDescriptors = nil;
     [super dealloc];
 }

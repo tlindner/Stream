@@ -27,11 +27,17 @@
 
 - (void)setRepresentedObject:(id)inRepresentedObject
 {
-    if( inRepresentedObject == nil && observationsActive == YES )
+    if( observationsActive == YES )
     {
-        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
-        [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
-        [lastFilterAnaylizer release];
+        StBlock *theBlock = [self representedObject];
+        
+        if( theBlock != nil )
+        {
+            [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
+            [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
+            [lastFilterAnaylizer release];
+        }
+        
         observationsActive = NO;
     }
 
@@ -41,7 +47,11 @@
 - (void) loadView
 {
     [super loadView];
-    
+    [self reloadView];
+}
+
+- (void) reloadView
+{
     StBlock *theBlock = [self representedObject];
     NSString *currentMode = [theBlock valueForKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
     blockFormatter.mode = currentMode;

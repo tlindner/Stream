@@ -58,8 +58,10 @@
         {
             return [resultBlockArray objectAtIndex:0];
         }
-        else
-            NSAssert(YES==NO, @"blockNamed: zero, or more than one blocks named: %@ found: %@", theName, resultBlockArray);
+        else if( resultBlockArray != nil && [resultBlockArray count] > 1 )
+        {
+            NSAssert(YES==NO, @"blockNamed: more than one blocks named: %@ found: %@", theName, resultBlockArray);
+        }
     }
     else
         NSAssert(YES==NO, @"blockNamed: Error fetching block: %@", error);
@@ -75,6 +77,69 @@
         return nil;
     }
     
+    StBlock *newBlock = [self blockNamed:name];
+    
+    if( regeneratingBlocks == YES )
+    {
+        if( newBlock != nil )
+        {
+            /* reset block */
+            [newBlock resetCounters];
+            newBlock.anaylizerKind = owner;
+            newBlock.markForDeletion = NO;
+            newBlock.isEdit = NO;
+            newBlock.isFail = NO;
+
+            [newBlock subBlockNamed:@"data"].markForDeletion = NO;
+            [newBlock subBlockNamed:@"data"].isEdit = NO;
+            [newBlock subBlockNamed:@"data"].isFail = NO;
+//            [newBlock subBlockNamed:@"data"].currentEditorView = @"Hex Editor";
+//            [newBlock subBlockNamed:@"data"].sourceUTI = @"public.data";
+            
+            [newBlock subBlockNamed:@"attributes"].markForDeletion = NO;
+            [newBlock subBlockNamed:@"attributes"].isEdit = NO;
+            [newBlock subBlockNamed:@"attributes"].isFail = NO;
+//            [newBlock subBlockNamed:@"attributes"].currentEditorView = @"Block Attribute View";
+//            [newBlock subBlockNamed:@"attributes"].sourceUTI = @"org.macmess.stream.attribute";
+            
+            [newBlock subBlockNamed:@"dependencies"].markForDeletion = NO;
+            [newBlock subBlockNamed:@"dependencies"].isEdit = NO;
+            [newBlock subBlockNamed:@"dependencies"].isFail = NO;
+//            [newBlock subBlockNamed:@"dependencies"].currentEditorView = @"Hex Editor";
+//            [newBlock subBlockNamed:@"dependencies"].sourceUTI = @"public.data";
+            
+            [newBlock subBlockNamed:@"intrinsic"].markForDeletion = NO;
+            [newBlock subBlockNamed:@"intrinsic"].isEdit = NO;
+            [newBlock subBlockNamed:@"intrinsic"].isFail = NO;
+//            [newBlock subBlockNamed:@"intrinsic"].currentEditorView = @"Hex Editor";
+//            [newBlock subBlockNamed:@"intrinsic"].sourceUTI = @"public.data";
+            
+        }
+        else
+        {
+            /* make new block */
+            newBlock = [self makeNewBlockNamed:name owner:owner];
+        }
+    }
+    else
+    {
+        if( newBlock == nil )
+        {
+            /* make new block */
+            newBlock = [self makeNewBlockNamed:name owner:owner];
+        }
+        else
+        {
+            NSLog( @"startNewBlockNamed: error, block already exists: %@", name );
+            newBlock = nil;
+        }
+    }
+    
+    return newBlock;
+}
+
+- (StBlock *)makeNewBlockNamed:(NSString *)name owner:(NSString *)owner
+{
     /* See if named block already exists */
     
     NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
@@ -198,8 +263,7 @@
     unsigned char *bytes = (unsigned char *)[theData bytes];
     const unsigned char *orginalBytes = [[theBlock getData] bytes];
     StAnaylizer *lastAaylizer = [self lastFilterAnayliser];
-    
-    NSLog( @"stream: %p", lastAaylizer );
+
     [lastAaylizer willChangeValueForKey:@"resultingData"];
 
     for( index = range.location; index < end; index++ )
@@ -217,25 +281,13 @@
 
 - (void)regenerateAllBlocks
 {   
+    /* set all block to be marked for deletion */
+    [self markBlocksForDeletion];
+    
+    /* reset fail index set */
     [[[self lastFilterAnayliser] failIndexSet] removeAllIndexes];
     
     [self willChangeValueForKey:@"blocks"];
-    
-    /* suspend all KVOs in active views */
-    for( StAnaylizer *anAna in [self anaylizers] )
-    {
-        if( [anAna.currentEditorView isEqualToString:@"Blocker View"] )
-        {
-            if( anAna.viewController != nil )
-            {
-                [anAna.viewController setRepresentedObject:nil];
-            }
-        }
-    }
-    
-    /* remove all blocks */
-    NSMutableSet *allBlocks = [self mutableSetValueForKey:@"blocks"];
-    [allBlocks removeAllObjects];
 
     /* Regenerate blocks using blockers */
     for( StAnaylizer *anAna in [self anaylizers] )
@@ -248,35 +300,100 @@
             {
                 [blockerClass makeBlocks:self];
             }
-        }
-    }
-    
-    /* resume all KVOs in active views */
-    for( StAnaylizer *anAna in [self anaylizers] )
-    {
-        if( [anAna.currentEditorView isEqualToString:@"Blocker View"] )
-        {
-            if( anAna.viewController != nil )
+            else
             {
-                [anAna.viewController setRepresentedObject:anAna];
+                NSAssert(YES==NO, @"Stream: regernerating blocks, blocker class %@ not found", [anAna valueForKey:@"anaylizerKind"]);
             }
         }
     }
+
+    /* delete any blocks still marked for deletion */
+    [self deleteBlocksMarkedForDeletion];
     
     [self didChangeValueForKey:@"blocks"];
+}
+
+- (void) markBlocksForDeletion
+{
+    regeneratingBlocks = YES;
     
-    /* start observing */
-    for( StAnaylizer *anAna in [self anaylizers] )
+    /* mark all blocks for deletion */
+    NSMutableSet *allBlocks = [self mutableSetValueForKey:@"blocks"];
+    [allBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
+     {
+         StBlock *theBlock = obj;
+         theBlock.markForDeletion = YES;
+         
+         NSMutableSet *subBlocks = [theBlock mutableSetValueForKey:@"blocks"];
+         [subBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
+          {
+              StBlock *theSubBlock = obj;
+              theSubBlock.markForDeletion = YES;
+              
+              NSMutableSet *subSubBlocks = [theSubBlock mutableSetValueForKey:@"blocks"];
+              [subSubBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
+               {
+                   StBlock *theSubSubBlock = obj;
+                   theSubSubBlock.markForDeletion = YES;
+               }];
+          }];
+     }];
+}
+
+- (void) deleteBlocksMarkedForDeletion
+{
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+    [request setEntity:entity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"markForDeletion == YES", self ];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *resultBlockArray = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if( error == nil )
     {
-        if( [anAna.currentEditorView isEqualToString:@"Blocker View"] )
+        if( resultBlockArray != nil)
         {
-            if( anAna.viewController != nil )
+            /* notify blocker views of impending deletes */
+            for( StAnaylizer *anAna in [self anaylizers] )
             {
-                [anAna.viewController startObserving];
+                if( [anAna.currentEditorView respondsToSelector:@selector(notifyOfImpendingDeletion:)] )
+                {
+                    [anAna.viewController setRepresentedObject:resultBlockArray];
+                }
+            }
+            
+            /* delete marked blocks */
+            for (StBlock *aBlock in resultBlockArray)
+            {
+                if( aBlock.source == nil )
+                {
+                    if( aBlock.parentStream != nil )
+                    {
+                        /* This is a top level block */
+                        NSMutableSet *parentStreamBlocks = [aBlock.parentStream mutableSetValueForKey:@"blocks"];
+                        [parentStreamBlocks removeObject:aBlock];
+                    }
+                    else
+                    {
+                        /* This is a midlevel block */
+                        NSMutableSet *parentBlock = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
+                        [parentBlock removeObject:aBlock];
+                    }
+                }
+                else
+                {
+                    /* This is a leaf block */
+                    NSMutableSet *parentBlock = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
+                    [parentBlock removeObject:aBlock];
+                }
             }
         }
     }
+    else
+        NSAssert(YES==NO, @"deleteBlocksMarkedForDeletion: Error fetching marked for deletion block", error);
     
+    regeneratingBlocks = NO;
 }
 
 - (BOOL)isBlockEdited:(NSString *)blockName

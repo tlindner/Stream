@@ -32,6 +32,7 @@
 @dynamic isFail;
 @dynamic isEdit;
 @dynamic canChangeEditor;
+@dynamic markForDeletion;
 
 @dynamic data;
 @dynamic dataForUI;
@@ -112,6 +113,11 @@
         return [self.parentBlock getStream];
 }
 
+- (void) resetCounters
+{
+    dataIndex = attrIndex = depIndex = 0;
+}
+
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name
 {
     [self addAttributeRange:blockName start:start length:length name:name verification:nil transformation:nil];
@@ -125,7 +131,20 @@
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
 {
     StBlock *attributeBlock = [self subBlockNamed:@"attributes"];
-    StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+    StBlock *newBlock = [attributeBlock subBlockAtIndex:attrIndex];
+    
+    if( newBlock != nil )
+    {
+        newBlock.markForDeletion = NO;
+        newBlock.isEdit = NO;
+        newBlock.isFail = NO;
+    }
+    else
+    {
+        newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        [attributeBlock addBlocksObject:newBlock];
+    }
+    
     newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", attrIndex, blockName, start, length];
     newBlock.source = blockName;
     newBlock.uiName = name;
@@ -134,7 +153,6 @@
     newBlock.index = attrIndex++;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
-    [attributeBlock addBlocksObject:newBlock];
 
     [self checkEdited:newBlock];
     [self checkFail:newBlock];
@@ -163,7 +181,26 @@
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
 {
     StBlock *dataBlock = [self subBlockNamed:@"data"];
-    StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+    StBlock *newBlock = [dataBlock subBlockAtIndex:dataIndex];
+    
+    if( newBlock != nil )
+    {
+        newBlock.markForDeletion = NO;
+        newBlock.isEdit = NO;
+        newBlock.isFail = NO;
+    }
+    else
+    {
+        newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        [dataBlock addBlocksObject:newBlock];
+        
+        if( name != nil || verify != nil || transform != nil )
+        {
+            dataBlock.sourceUTI = @"org.macmess.stream.attribute";
+            dataBlock.currentEditorView = @"Block Attribute View";
+        }
+    }
+    
     newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
     newBlock.uiName = name;
     newBlock.source = blockName;
@@ -172,12 +209,6 @@
     newBlock.index = dataIndex++;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
-    
-    if( name != nil || verify != nil || transform != nil )
-    {
-        dataBlock.sourceUTI = @"org.macmess.stream.attribute";
-        dataBlock.currentEditorView = @"Block Attribute View";
-    }
     
     [dataBlock addBlocksObject:newBlock];
     self.expectedSize += length;
@@ -189,7 +220,20 @@
 - (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
 {
     StBlock *depBlock = [self subBlockNamed:@"dependencies"];
-    StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+    StBlock *newBlock = [depBlock subBlockAtIndex:depIndex];
+    
+    if( newBlock != nil )
+    {
+        newBlock.markForDeletion = NO;
+        newBlock.isEdit = NO;
+        newBlock.isFail = NO;
+    }
+    else
+    {
+        newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        [depBlock addBlocksObject:newBlock];
+    }
+    
     newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
     newBlock.uiName = name;
     newBlock.source = blockName;
@@ -266,8 +310,7 @@
         if( aBlock.index == theIndex )
             return aBlock;
     }
-    
-    NSAssert(YES==NO, @"StBlock: Subblock index not found: %d", theIndex);
+
     return nil;
 }
 

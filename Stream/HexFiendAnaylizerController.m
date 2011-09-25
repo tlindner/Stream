@@ -27,33 +27,35 @@
 
 - (void)setRepresentedObject:(id)inRepresentedObject
 {
-    if( inRepresentedObject == nil )
+    if( observationsActive )
     {
-        if( observationsActive )
-        {
-            StAnaylizer *theAna = [self representedObject];
-            [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
-            [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
-            [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
-            HFTextView *hexView = (HFTextView *)[self view];
-            [hexView removeObserver:self forKeyPath:@"data"];
-            
-            observationsActive = NO;
-        }
+        StAnaylizer *theAna = [self representedObject];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+        HFTextView *hexView = (HFTextView *)[self view];
+        [hexView removeObserver:self forKeyPath:@"data"];
+        
+        observationsActive = NO;
     }
-    
+
     [super setRepresentedObject:inRepresentedObject];
 }
 
 - (void)loadView
 {
     [super loadView];
-    
+    [self reloadView];
+}
+
+- (void) reloadView
+{
     HFTextView *hexView = (HFTextView *)[self view];
     
     if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
     {
         StAnaylizer *object = [self representedObject];
+        [[hexView controller] setInOverwriteMode:NO];
         [hexView setData:[object.parentStream valueForKey:@"bytesCache"]];      
         [self setupRepresentedObject];
     }
@@ -61,12 +63,14 @@
     {
         StBlock *theBlock = [self representedObject];
         NSData *theData = [theBlock getData];
+        [[hexView controller] setInOverwriteMode:NO];
         [hexView setData:theData];
         [self setupRepresentedObject];
     }
     else if( [[self representedObject] isKindOfClass:[NSData class]] )
     {
         NSData *theData = [self representedObject];
+        [[hexView controller] setInOverwriteMode:NO];
         [hexView setData:theData];
     }
     else
@@ -80,13 +84,20 @@
     BOOL showOffset = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"] boolValue];
     NSString *offsetBase = [[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
     
-    if( showOffset )
+    if( showOffset == YES && lcRepresenter == nil )
     {
         lcRepresenter = [[[HFLineCountingRepresenter alloc] init] autorelease];
-        [self setLineNumberFormatString:offsetBase];
         [[hexView controller] addRepresenter:lcRepresenter];
         [[hexView layoutRepresenter] addRepresenter:lcRepresenter];
     }
+    else if( showOffset == NO && lcRepresenter != nil )
+    {
+        [[hexView layoutRepresenter] removeRepresenter:lcRepresenter];
+        [[hexView controller] removeRepresenter:lcRepresenter];
+        lcRepresenter = nil;
+    }
+
+    [self setLineNumberFormatString:offsetBase];
 
     BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"] boolValue];
     [[hexView controller] setInOverwriteMode:overWriteMode];

@@ -31,6 +31,7 @@
 @property (nonatomic, retain) NSString * source;
 @property (nonatomic, retain) NSString * sourceUTI;
 @property (nonatomic) int64_t index;
+@property (nonatomic) BOOL markForDeletion;
 @property (nonatomic, retain) StStream *parentStream;
 @property (nonatomic, retain) StBlock *parentBlock;
 @property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
@@ -44,6 +45,7 @@
 @property (nonatomic, readonly) BOOL canChangeEditor;
 
 - (StStream *)getStream;
+- (void) resetCounters;
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name;
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify;

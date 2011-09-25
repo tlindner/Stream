@@ -23,5 +23,6 @@
 - (IBAction)updateSlider:(id)sender;
 - (void)updateBounds:(NSRect)inRect;
 - (void)deltaSlider:(float)delta fromPoint:(NSPoint)point;
+- (void) reloadView;
 
 @end
