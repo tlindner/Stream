@@ -43,6 +43,10 @@ static const NSTimeInterval HFCaretBlinkFrequency = 0.56;
     return cachedSelectedRanges;
 }
 
+- (NSArray *)displayedEditedContentsRanges {
+    return [[[self representer] displayedEditContentsRanges] copy];
+}
+
 - (BOOL)_shouldHaveCaretTimer {
     NSWindow *window = [self window];
     if (window == NULL) return NO;
@@ -485,9 +489,21 @@ enum LineCoverage_t {
 
 - (void)drawSelectionIfNecessaryWithClip:(NSRect)clipRect {
     NSArray *ranges = [self displayedSelectedContentsRanges];
-    NSUInteger bytesPerLine = [self bytesPerLine];
     NSColor *textHighlightColor = ([self shouldHaveForegroundHighlightColor] ? [NSColor selectedTextBackgroundColor] : [NSColor colorWithCalibratedWhite: (CGFloat)(212./255.) alpha:1]);
     [textHighlightColor set];
+    [self drawTintIfNecessaryWithClip:clipRect withRanges:ranges];
+}
+
+- (void)drawEditTintIfNeccessaryWithClip:(NSRect)clipRect {
+    NSArray *ranges = [self displayedEditedContentsRanges];
+    NSColor *textHighlightColor = [NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:0.5];
+    [textHighlightColor set];
+    [self drawTintIfNecessaryWithClip:clipRect withRanges:ranges];
+}
+
+- (void)drawTintIfNecessaryWithClip:(NSRect)clipRect withRanges:(NSArray *)ranges
+{
+    NSUInteger bytesPerLine = [self bytesPerLine];
     CGFloat lineHeight = [self lineHeight];
     FOREACH(NSValue *, rangeValue, ranges) {
         NSRange range = [rangeValue rangeValue];
@@ -503,7 +519,8 @@ enum LineCoverage_t {
                 NSRect selectionRect = NSMakeRect(startPoint.x, startPoint.y, endPoint.x + [self advancePerByte] - startPoint.x, lineHeight);
                 NSRect clippedSelectionRect = NSIntersectionRect(selectionRect, clipRect);
                 if (! NSIsEmptyRect(clippedSelectionRect)) {
-                    NSRectFill(clippedSelectionRect);
+                    //NSRectFill(clippedSelectionRect);
+                    NSRectFillUsingOperation(clippedSelectionRect, NSCompositeSourceOver);
                 }
                 characterIndex = endCharacterForThisLineOfRange + 1;
             }
@@ -951,6 +968,7 @@ enum LineCoverage_t {
     [[font screenFont] set];
     
     [self _drawLineBackgrounds:clip withLineHeight:[self lineHeight] maxLines:ll2l(HFRoundUpToNextMultiple(byteCount, bytesPerLine) / bytesPerLine)];
+    [self drawEditTintIfNeccessaryWithClip:clip];
     [self drawSelectionIfNecessaryWithClip:clip];
     
     NSColor *textColor = [NSColor blackColor];

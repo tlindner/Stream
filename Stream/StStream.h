@@ -39,8 +39,8 @@
 - (StBlock *) startNewBlockNamed:(NSString *)name owner:(NSString *)owner;
 - (StBlock *) makeNewBlockNamed:(NSString *)name owner:(NSString *)owner;
 - (NSSet *) blocksWithKey:(NSString *)key;
-- (void) setBlock:(StBlock *)theBlock withData:theData;
-- (void) setBlock:(StBlock *)theBlock withData:(id)theData inRange:(NSRange)range;
+- (void) setBlock:(StBlock *)theBlock withData:(NSData *)theData;
+- (void) setBlock:(StBlock *)theBlock withData:(NSData *)theData inRange:(NSRange)range;
 - (StAnaylizer *) lastFilterAnayliser;
 - (StBlock *) blockNamed:(NSString *)theName;
 - (StAnaylizer *) previousAnayliser:(StAnaylizer *)inAna;

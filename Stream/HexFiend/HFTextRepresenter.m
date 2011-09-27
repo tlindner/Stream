@@ -187,6 +187,46 @@
     return result;
 }
 
+- (NSArray *)displayedEditContentsRanges {
+    HFController *controller = [self controller];
+    NSArray *result;
+    NSArray *editedRanges = [controller editContentsRanges];
+    HFRange displayedRange = [self entireDisplayedRange];
+    
+    HFASSERT(displayedRange.length <= NSUIntegerMax);
+    NEW_ARRAY(NSValue *, clippedEditedRanges, [editedRanges count]);
+    NSUInteger clippedRangeIndex = 0;
+    FOREACH(HFRangeWrapper *, wrapper, editedRanges) {
+        HFRange editedRange = [wrapper HFRange];
+        BOOL clippedRangeIsVisible;
+        NSRange clippedEditedRange;
+        /* Necessary because zero length ranges do not intersect anything */
+        if (editedRange.length == 0) {
+            /* Remember that {6, 0} is considered a subrange of {3, 3} */
+            clippedRangeIsVisible = HFRangeIsSubrangeOfRange(editedRange, displayedRange);
+            if (clippedRangeIsVisible) {
+                HFASSERT(editedRange.location >= displayedRange.location);
+                clippedEditedRange.location = ll2l(editedRange.location - displayedRange.location);
+                clippedEditedRange.length = 0;
+            }
+        }
+        else {
+            // selectedRange.length > 0
+            clippedRangeIsVisible = HFIntersectsRange(editedRange, displayedRange);
+            if (clippedRangeIsVisible) {
+                HFRange intersectionRange = HFIntersectionRange(editedRange, displayedRange);
+                HFASSERT(intersectionRange.location >= displayedRange.location);
+                clippedEditedRange.location = ll2l(intersectionRange.location - displayedRange.location);
+                clippedEditedRange.length = ll2l(intersectionRange.length);
+            }
+        }
+        if (clippedRangeIsVisible) clippedEditedRanges[clippedRangeIndex++] = [NSValue valueWithRange:clippedEditedRange];
+    }
+    result = [NSArray arrayWithObjects:clippedEditedRanges count:clippedRangeIndex];
+    FREE_ARRAY(clippedEditedRanges);
+    return result;
+}
+
 - (unsigned long long)byteIndexForCharacterIndex:(NSUInteger)characterIndex {
     HFController *controller = [self controller];
     HFFPRange lineRange = [controller displayedLineRange];

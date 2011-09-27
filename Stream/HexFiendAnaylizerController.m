@@ -33,6 +33,13 @@
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+        if( lastAnaylizer != nil )
+        {
+            [lastAnaylizer removeObserver:self forKeyPath:@"editIndexSet"];
+            [lastAnaylizer release];
+            lastAnaylizer = nil;
+        }
+        
         HFTextView *hexView = (HFTextView *)[self view];
         [hexView removeObserver:self forKeyPath:@"data"];
         
@@ -62,6 +69,7 @@
     else if( [[self representedObject] isKindOfClass:[StBlock class]] )
     {
         StBlock *theBlock = [self representedObject];
+        lastAnaylizer = [[[theBlock getStream] lastFilterAnayliser] retain];
         NSData *theData = [theBlock getData];
         [[hexView controller] setInOverwriteMode:NO];
         [hexView setData:theData];
@@ -89,6 +97,7 @@
         lcRepresenter = [[[HFLineCountingRepresenter alloc] init] autorelease];
         [[hexView controller] addRepresenter:lcRepresenter];
         [[hexView layoutRepresenter] addRepresenter:lcRepresenter];
+        [[hexView controller] setUndoManager:[[[self representedObject] managedObjectContext] undoManager]];
     }
     else if( showOffset == NO && lcRepresenter != nil )
     {
@@ -101,12 +110,17 @@
 
     BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"] boolValue];
     [[hexView controller] setInOverwriteMode:overWriteMode];
+    [self setEditContentRanges];
     
     NSAssert(observationsActive == NO, @"HexFieldAnaylizerController: double observer fault");
     
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset" options:NSKeyValueChangeSetting context:nil];
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase" options:NSKeyValueChangeSetting context:nil];
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode" options:NSKeyValueChangeSetting context:nil];
+    
+    if( lastAnaylizer != nil )
+        [lastAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
+    
     [hexView addObserver:self forKeyPath:@"data" options:NSKeyValueChangeReplacement context:nil];
     
     observationsActive = YES;
@@ -163,7 +177,7 @@
         {
             if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
             {
-                NSAssert(YES==NO, @"StAnayliser: not implemented yet");
+                NSAssert(YES==NO, @"StAnayliser: data: not implemented yet");
 //                StAnaylizer *object = [self representedObject];
 //                [hexView setData:[object.parentStream valueForKey:@"bytesCache"]];      
 //                [self setupRepresentedObject];
@@ -171,13 +185,16 @@
             else if( [[self representedObject] isKindOfClass:[StBlock class]] )
             {
                 StBlock *theBlock = [self representedObject];
-                StStream *theStream = [theBlock getStream];
-                HFTextView *hexView = (HFTextView *)[self view];
-
-                [changes enumerateRangesUsingBlock: ^(NSRange range, BOOL *stop)
-                 {
-                     [theStream setBlock:theBlock withData:[hexView data] inRange:range];
-                 }];
+                if( ![[[theBlock managedObjectContext] undoManager] isUndoing] )
+                {
+                    StStream *theStream = [theBlock getStream];
+                    HFTextView *hexView = (HFTextView *)[self view];
+                    
+                    [changes enumerateRangesUsingBlock: ^(NSRange range, BOOL *stop)
+                     {
+                         [theStream setBlock:theBlock withData:[hexView data] inRange:range];
+                     }];
+                }
             }
             else if( [[self representedObject] isKindOfClass:[NSData class]] )
             {
@@ -187,10 +204,54 @@
                 NSLog( @"HexFiendAnaylizerController: Unknown type of represented object" );
         }
     }
+    else if( [keyPath isEqualToString:@"editIndexSet"] )
+    {
+        if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
+        {
+            NSAssert(YES==NO, @"StAnayliser: editIndexSet: not implemented yet");
+        }
+        else if( [[self representedObject] isKindOfClass:[StBlock class]] )
+        {
+            [self setEditContentRanges];
+        }
+        else if( [[self representedObject] isKindOfClass:[NSData class]] )
+        {
+            NSAssert(YES==NO, @"NSData: editIndexSet: not implemented yet");
+        }
+        else
+            NSLog( @"HexFiendAnaylizerController: editIndexSet: Unknown type of represented object" );
+        
+    }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
+- (void) setEditContentRanges
+{
+    if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
+    {
+        NSLog( @"HexFiendAnaylizerController: setEditContentRanges: StAnaylizer unimplemented" );
+    }
+    else if( [[self representedObject] isKindOfClass:[StBlock class]] )
+    {
+        StBlock *theBlock = [self representedObject];
+        HFTextView *hexView = (HFTextView *)[self view];
+        NSMutableArray *editRanges = [[NSMutableArray alloc] init];
+        NSIndexSet *theEditSet = [theBlock editSet];
+        NSLog( @"new index set: %@", theEditSet );
+        
+        [theEditSet enumerateRangesUsingBlock:
+         ^(NSRange range, BOOL *stop)
+         {
+             [editRanges addObject:[NSValue valueWithRange:range]];
+         }];
+        
+        [[hexView controller] setEditContentsRanges:editRanges];
+        [editRanges release];
+    }
+    else
+        NSLog( @"HexFiendAnaylizerController: setEditContentRanges: unknown represented object class" );
+}
 
 - (void) setLineNumberFormatString:(NSString *)inFormat
 {
@@ -219,6 +280,14 @@
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+
+        if( lastAnaylizer != nil )
+        {
+            [lastAnaylizer removeObserver:self forKeyPath:@"editIndexSet"];
+            [lastAnaylizer release];
+            lastAnaylizer = nil;
+        }
+        
         HFTextView *hexView = (HFTextView *)[self view];
         [hexView removeObserver:self forKeyPath:@"data"];
         

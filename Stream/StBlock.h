@@ -43,6 +43,7 @@
 @property (nonatomic, assign) BOOL isEdit;
 @property (nonatomic, readonly) NSColor * attributeColor;
 @property (nonatomic, readonly) BOOL canChangeEditor;
+@property (nonatomic, readonly) NSMutableIndexSet *editSet;
 
 - (StStream *)getStream;
 - (void) resetCounters;

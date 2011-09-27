@@ -38,6 +38,7 @@
 @dynamic dataForUI;
 @dynamic checkBytesForUI;
 @dynamic attributeColor;
+@dynamic editSet;
 
 - (void)awakeFromInsert
 {
@@ -592,6 +593,60 @@
         return [NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5];
     
     return nil;
+}
+
+- (NSMutableIndexSet *)editSet
+{
+    NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
+    
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* top level block */
+            [indexSet addIndexes:[[self subBlockNamed:@"data"] editSet]];
+        }
+        else
+        {
+            /* mid level block */
+            NSInteger shiftAmount = 0;
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+            NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            
+            for (StBlock *aBlock in subBlocks)
+            {
+                NSMutableIndexSet *set = [aBlock editSet];
+                [set shiftIndexesStartingAtIndex:0 by:shiftAmount];
+                [indexSet addIndexes:set];
+                shiftAmount += aBlock.length;
+            }
+        }
+    }
+    else
+    {
+        /* leaf block */
+        if( [self.source isEqualToString:@"stream"] )
+        {
+            NSRange range = {self.offset, self.length};
+            StAnaylizer *lastFilterAnaylizer = [[self getStream] lastFilterAnayliser];
+            NSIndexSet *set = lastFilterAnaylizer.editIndexSet;
+            NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:^(NSUInteger idx, BOOL *stop){ return YES; }] mutableCopy];
+            [setInRange shiftIndexesStartingAtIndex:0 by:-self.offset];
+            [indexSet addIndexes:setInRange];
+            [setInRange release];
+        }
+        else
+        {
+            NSRange range = {self.offset, self.length};
+            NSMutableIndexSet *set = [[[self getStream] blockNamed:self.source] editSet];
+            NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:^(NSUInteger idx, BOOL *stop){ return YES; }] mutableCopy];
+            [setInRange shiftIndexesStartingAtIndex:0 by:-self.offset];
+            [indexSet addIndexes:setInRange];
+            [setInRange release];
+        }
+    }
+    
+    return [indexSet autorelease];
 }
 
 - (void)willTurnIntoFault

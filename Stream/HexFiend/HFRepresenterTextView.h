@@ -97,6 +97,7 @@
 - (void)drawGlyphs:(CGGlyph *)glyphs withAdvances:(CGSize *)advances count:(NSUInteger)glyphCount;
 - (void)drawCaretIfNecessaryWithClip:(NSRect)clipRect;
 - (void)drawSelectionIfNecessaryWithClip:(NSRect)clipRect;
+- (void)drawTintIfNecessaryWithClip:(NSRect)clipRect withRanges:(NSArray *)ranges;
 
 /* Must be overridden */
 - (void)drawTextWithClip:(NSRect)clipRect restrictingToTextInRanges:(NSArray *)restrictingToRanges;

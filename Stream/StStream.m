@@ -237,27 +237,10 @@
 
 - (void)setBlock:(StBlock *)theBlock withData:(NSData *)theData
 {
-    NSUInteger index, length = [theData length];
-    unsigned char *bytes = (unsigned char *)[theData bytes];
-    const unsigned char *orginalBytes = [[theBlock getData] bytes];
-    StAnaylizer *lastAaylizer = [self lastFilterAnayliser];
-    
-    [lastAaylizer willChangeValueForKey:@"resultingData"];
-    
-    for( index = 0; index < length; index++ )
-    {
-        if( orginalBytes[index] != bytes[index] )
-        {
-            [theBlock writeByte:bytes[index] atOffset:index];
-        }
-    }
-
-    [self regenerateAllBlocks];
-    
-    [lastAaylizer didChangeValueForKey:@"resultingData"];
+    [self setBlock:theBlock withData:theData inRange:NSMakeRange(0, [theData length])];
 }
 
-- (void) setBlock:(StBlock *)theBlock withData:(id)theData inRange:(NSRange)range
+- (void) setBlock:(StBlock *)theBlock withData:(NSData *)theData inRange:(NSRange)range
 {
     NSUInteger index, end = NSMaxRange(range);
     unsigned char *bytes = (unsigned char *)[theData bytes];

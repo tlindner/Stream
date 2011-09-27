@@ -570,9 +570,11 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 
     /* setup undo */
     NSManagedObjectContext *parentContext = [theAna managedObjectContext];
-    NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousDataObject, @"data", newRangeValue, @"range", [previousChangedSet autorelease], @"indexSet", nil];
-    [[parentContext undoManager] registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
-    [[parentContext undoManager] setActionName:@"Byte Change"];
+    NSUndoManager *um = [parentContext undoManager];
+    NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousDataObject, @"data", newRangeValue, @"range", previousChangedSet, @"indexSet", nil];
+    [previousChangedSet release];
+    [um registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
+    [um setActionName:@"Byte Change"];
 }
 
 - (void) setPreviousState:(NSDictionary *)previousState

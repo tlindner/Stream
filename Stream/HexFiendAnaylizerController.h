@@ -8,15 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 #import "HFLineCountingRepresenter.h"
+#import "StAnaylizer.h"
 
 @interface HexFiendAnaylizerController : NSViewController
 {
     BOOL observationsActive;
     HFLineCountingRepresenter *lcRepresenter;
+    StAnaylizer *lastAnaylizer;
 }
 
 - (void) setupRepresentedObject;
 - (void) setLineNumberFormatString:(NSString *)inFormat;
 - (void) reloadView;
+- (void) setEditContentRanges;
 
 @end

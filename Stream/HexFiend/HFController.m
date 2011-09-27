@@ -85,6 +85,7 @@ static inline Class preferredByteArrayClass(void) {
 
 - (void)_sharedInit {
     selectedContentsRanges = [[NSMutableArray alloc] initWithObjects:[HFRangeWrapper withRange:HFRangeMake(0, 0)], nil];
+    editContentsRanges = [[NSMutableArray alloc] initWithObjects:[HFRangeWrapper withRange:HFRangeMake(0, 0)], nil];
     byteArray = [[preferredByteArrayClass() alloc] init];
     [byteArray addObserver:self forKeyPath:@"changesAreLocked" options:0 context:KVOContextChangesAreLocked];
     selectionAnchor = NO_SELECTION;    
@@ -107,6 +108,7 @@ static inline Class preferredByteArrayClass(void) {
     [representers makeObjectsPerformSelector:@selector(_setController:) withObject:nil];
     [representers release];
     [selectedContentsRanges release];
+    [editContentsRanges release];
     [self _removeUndoManagerNotifications];
     [undoManager release];
     [undoCoalescer release];
@@ -448,6 +450,10 @@ static inline Class preferredByteArrayClass(void) {
     VALIDATE_SELECTION();
     if ([self _shouldInvertSelectedRangesByAnchorRange]) return [self _invertedSelectedContentsRanges];
     else return [NSArray arrayWithArray:selectedContentsRanges];
+}
+
+- (NSArray *)editContentsRanges {
+    return [NSArray arrayWithArray:editContentsRanges];
 }
 
 - (unsigned long long)contentsLength {
@@ -1006,6 +1012,30 @@ static inline Class preferredByteArrayClass(void) {
     [selectedContentsRanges setArray:selectedRanges];
     VALIDATE_SELECTION();
     selectionAnchor = NO_SELECTION;
+    [self _addPropertyChangeBits:HFControllerSelectedRanges];
+}
+
+- (void)setEditContentsRanges:(NSArray *)editRanges {
+    REQUIRE_NOT_NULL(editRanges);
+    
+    if( [editRanges count] == 0 )
+    {
+        NSMutableArray *hfEditRanges = [[NSMutableArray alloc] initWithObjects:[HFRangeWrapper withRange:HFRangeMake(0, 0)], nil];
+        [editContentsRanges setArray:hfEditRanges];
+        [hfEditRanges release];
+    }
+    else
+    {
+        NSMutableArray *hfEditRanges = [[NSMutableArray alloc] init];
+        for (NSValue *edtiRangeValue in editRanges) {
+            NSRange range = [edtiRangeValue rangeValue];
+            HFRange hfRange = {range.location, range.length};
+            [hfEditRanges addObject:[HFRangeWrapper withRange:hfRange]];
+        }
+        [editContentsRanges setArray:hfEditRanges];
+        [hfEditRanges release];
+    }
+
     [self _addPropertyChangeBits:HFControllerSelectedRanges];
 }
 

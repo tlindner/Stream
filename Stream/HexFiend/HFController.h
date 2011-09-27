@@ -91,6 +91,7 @@ You create an HFController via <tt>[[HFController alloc] init]</tt>.  After that
     NSMutableArray *representers;
     HFByteArray *byteArray;
     NSMutableArray *selectedContentsRanges;
+    NSMutableArray *editContentsRanges;
     HFRange displayedContentsRange;
     HFFPRange displayedLineRange;
     NSUInteger bytesPerLine;
@@ -212,6 +213,9 @@ You create an HFController via <tt>[[HFController alloc] init]</tt>.  After that
 /*! Returns an array of HFRangeWrappers, representing the selected ranges.  This method always contains at least one range.  If there is no selection, then the result will contain a single range of length 0, with the location equal to the position of the cursor. */
 - (NSArray *)selectedContentsRanges;
 
+/*! Returns an array of HFRangeWrappers, representing the edited ranges.  This method always contains at least one range.  */
+- (NSArray *)editContentsRanges;
+
 /*! Explicitly set the selected contents ranges.  Pass an array of HFRangeWrappers that meets the following criteria:
  The array must not be NULL.
  There always must be at least one selected range.
@@ -219,6 +223,10 @@ You create an HFController via <tt>[[HFController alloc] init]</tt>.  After that
  No range may extend beyond the contentsLength, with the exception of a single zero-length range, which may be at the end.
 */
 - (void)setSelectedContentsRanges:(NSArray *)selectedRanges;
+
+/*! Explicitly set the edited contents ranges.  This range is highlited green during display
+ */
+- (void)setEditContentsRanges:(NSArray *)editRanges;
 
 /*! Selects the entire contents. */
 - (IBAction)selectAll:(id)sender;
