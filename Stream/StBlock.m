@@ -315,6 +315,66 @@
     return nil;
 }
 
+- (NSRange)getUnionRange
+{
+    /* This returns the largest range that encompasses all of child blocks */
+    
+    NSRange result = {0, 0};
+
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* This is a top level block, return data from data block */
+            result = [[self subBlockNamed:@"data"] getUnionRange];
+        }
+        else
+        {
+            /* This is a midlevel block, return it's accumulated blocks */
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+            NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            
+            for (StBlock *theBlock in subBlocks)
+            {
+                StStream *ourStream = [self getStream];
+                NSData *blockData = [ourStream dataOfBlockNamed:theBlock.source];
+                NSUInteger useLength;
+                
+                if( theBlock.length == 0 )
+                {
+                    /* length of zero means "to the end of the block" */
+                    useLength = [blockData length] - theBlock.offset;
+                }
+                else
+                    useLength = theBlock.length;
+                
+                if( result.location == 0 && result.length == 0 ) result = NSMakeRange( theBlock.offset, useLength );
+                
+                result = NSUnionRange( result, NSMakeRange( theBlock.offset, useLength ));
+            }
+        }
+    }
+    else {
+        /* This is a leaf block */
+        StStream *ourStream = [self getStream];
+        NSData *blockData = [ourStream dataOfBlockNamed:self.source];
+        NSUInteger useLength;
+        
+        if( self.length == 0 )
+        {
+            /* length of zero means "to the end of the block" */
+            useLength = [blockData length] - self.offset;
+        }
+        else
+            useLength = self.length;
+        
+        result = NSMakeRange(self.offset, useLength);
+    }
+    
+    return result;
+    
+}
+
 - (NSData *)getData
 {
     NSMutableData *result;

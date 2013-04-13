@@ -77,6 +77,22 @@
     [super setRepresentedObject:inRepresentedObject];
 }
 
+- (void)awakeFromNib {
+    [outlineView setTarget:self];
+    [outlineView setDoubleAction:@selector(doubleClick:)];
+}
+
+- (void)doubleClick:(id)object {
+//    NSInteger rowNumber = [outlineView clickedRow];
+    ;
+    
+    StAnaylizer *thePreviousAna = [(StAnaylizer *)[self representedObject] previousAnaylizer];
+    [thePreviousAna willChangeValueForKey:@"viewRange"];
+    thePreviousAna.viewRange = [NSValue valueWithRange:observingBlock.getUnionRange];
+    [thePreviousAna didChangeValueForKey:@"viewRange"];
+    
+}
+
 - (void)restoreSelection
 {
     NSUInteger paths[3] = {NSNotFound, NSNotFound, NSNotFound};

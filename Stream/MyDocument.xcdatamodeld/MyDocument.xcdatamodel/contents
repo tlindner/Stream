@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="562" systemVersion="11B26" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11G63b" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="AnaylizerEdit" representedClassName="AnaylizerEdit" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="length" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StAnaylizer" inverseName="edits" inverseEntity="StAnaylizer" syncable="YES"/>
+    </entity>
     <entity name="StAnaylizer" representedClassName="StAnaylizer">
         <attribute name="anaylizerHeight" attributeType="Float" minValueString="0" defaultValueString="207"/>
         <attribute name="anaylizerKind" attributeType="String" indexed="YES"/>
@@ -10,6 +16,8 @@
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <attribute name="resultingData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="resultingUTI" attributeType="String" defaultValueString="public.data"/>
+        <attribute name="viewRange" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="edits" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="AnaylizerEdit" inverseName="parent" inverseEntity="AnaylizerEdit" syncable="YES"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream"/>
     </entity>
     <entity name="StBlock" representedClassName="StBlock">
@@ -36,6 +44,12 @@
         <relationship name="parentBlock" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StBlock" inverseName="blocks" inverseEntity="StBlock"/>
         <relationship name="parentStream" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="blocks" inverseEntity="StStream"/>
     </entity>
+    <entity name="StreamEdit" representedClassName="StreamEdit" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="length" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="edits" inverseEntity="StStream" syncable="YES"/>
+    </entity>
     <entity name="StStream" representedClassName="StStream">
         <attribute name="bytesCache" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="customeSortOrder" attributeType="Float" defaultValueString="500"/>
@@ -48,11 +62,14 @@
         <relationship name="anaylizers" toMany="YES" minCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="StAnaylizer" inverseName="parentStream" inverseEntity="StAnaylizer"/>
         <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock" inverseName="parentStream" inverseEntity="StBlock"/>
         <relationship name="childStreams" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StStream" inverseName="parentStream" inverseEntity="StStream"/>
+        <relationship name="edits" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StreamEdit" inverseName="parentStream" inverseEntity="StreamEdit" syncable="YES"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
     </entity>
     <elements>
-        <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="180"/>
+        <element name="AnaylizerEdit" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="210"/>
         <element name="StBlock" positionX="0" positionY="0" width="0" height="375"/>
+        <element name="StreamEdit" positionX="160" positionY="192" width="128" height="105"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="225"/>
     </elements>
 </model>

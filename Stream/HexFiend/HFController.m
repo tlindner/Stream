@@ -1036,7 +1036,7 @@ static inline Class preferredByteArrayClass(void) {
         [hfEditRanges release];
     }
 
-    [self _addPropertyChangeBits:HFControllerSelectedRanges];
+    [self _addPropertyChangeBits:HFControllerEditedRanges];
 }
 
 - (IBAction)selectAll:sender {

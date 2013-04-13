@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "StAnaylizer.h"
 #import "StBlock.h"
+#import "StreamEdit.h"
 
 @interface NSViewController (BlockerViewExtensions)
 - (void) notifyOfImpendingDeletion:(NSArray *)blocks;
@@ -33,6 +34,7 @@
 @property (nonatomic, retain) NSOrderedSet * anaylizers;
 @property (nonatomic, retain) NSSet * blocks;
 @property (nonatomic, retain) NSSet * childStreams;
+@property (nonatomic, retain) NSOrderedSet * edits;
 @property (nonatomic, retain) StStream * parentStream;
 
 - (NSData *) dataOfBlockNamed:(NSString *)name;
@@ -64,6 +66,18 @@
 - (void)removeAnaylizersObject:(StAnaylizer *)value;
 - (void)addAnaylizers:(NSOrderedSet *)values;
 - (void)removeAnaylizers:(NSOrderedSet *)values;
+
+- (void)insertObject:(StreamEdit *)value inEditsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromEditsAtIndex:(NSUInteger)idx;
+- (void)insertEdits:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeEditsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInEditsAtIndex:(NSUInteger)idx withObject:(StreamEdit *)value;
+- (void)replaceEditsAtIndexes:(NSIndexSet *)indexes withEdits:(NSArray *)values;
+- (void)addEditsObject:(StreamEdit *)value;
+- (void)removeEditsObject:(StreamEdit *)value;
+- (void)addEdits:(NSOrderedSet *)values;
+- (void)removeEdits:(NSOrderedSet *)values;
+
 - (void)addBlocksObject:(NSManagedObject *)value;
 - (void)removeBlocksObject:(NSManagedObject *)value;
 - (void)addBlocks:(NSSet *)values;

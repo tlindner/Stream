@@ -21,6 +21,7 @@
 @dynamic sourceUTI;
 @dynamic streamTransform;
 @dynamic anaylizers;
+@dynamic edits;
 @dynamic blocks;
 @dynamic childStreams;
 @dynamic parentStream;

@@ -10,8 +10,8 @@
 
 @interface ViewAutoLayoutSubView : NSView
 {
-    NSMutableArray *newConstraints;
+    NSMutableArray *additionalConstraints;
 }
 
-@property(nonatomic, retain) NSMutableArray *newConstraints;
+@property(nonatomic, retain) NSMutableArray *additionalConstraints;
 @end

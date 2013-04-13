@@ -32,7 +32,8 @@ enum
     HFControllerFont = 1 << 8,			/*!< Indicates that the font property has changed. */
     HFControllerAntialias = 1 << 9,		/*!< Indicates that the shouldAntialias property has changed. */
     HFControllerLineHeight = 1 << 10,		/*!< Indicates that the lineHeight property has changed. */
-    HFControllerViewSizeRatios = 1 << 11	/*!< Indicates that the optimum size for each view may have changed; used by HFLayoutController after font changes. */
+    HFControllerViewSizeRatios = 1 << 11,	/*!< Indicates that the optimum size for each view may have changed; used by HFLayoutController after font changes. */
+    HFControllerEditedRanges = 1 << 12      /*!< Indicates that the editedContentsRanges property of the document has changed (e.g. the user edited some other range). */
 };
 typedef NSUInteger HFControllerPropertyBits;
 

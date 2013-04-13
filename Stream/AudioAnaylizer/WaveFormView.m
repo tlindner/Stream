@@ -11,10 +11,13 @@
 #import "Accelerate/Accelerate.h"
 #import "AudioToolbox/AudioConverter.h"
 #import "MyDocument.h"
+#import "NSIndexSet+GSIndexSetAdditions.h"
+#import "CoCoAudioAnaylizer.h"
 
 #define WFVSelection 0
 #define WFVPan 1
 #define WFVLupe 2
+#define WFVPencil 3
 
 #define DOT_HANDLE_SCALE 0.5
 #define DATA_SPACE 19.0
@@ -63,10 +66,13 @@ typedef struct
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"failIndexSet" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"viewRange" options:NSKeyValueChangeSetting context:nil];
+        CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
+        [modelObject addObserver:self forKeyPath:@"frameBuffer" options:NSKeyValueChangeSetting context:nil];
         
         observationsActive = YES;
     }
@@ -80,10 +86,13 @@ typedef struct
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"resultingData"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"failIndexSet"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"editIndexSet"];
-        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"viewRange"];
+        CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
+        [modelObject removeObserver:self forKeyPath:@"frameBuffer"];
         observationsActive = NO;
     }     
 }
@@ -91,14 +100,16 @@ typedef struct
 - (void)drawRect:(NSRect)dirtyRect
 {
     NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
+    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
     NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
     
     NSMutableData *coalescedObject = [optionsDict objectForKey:@"coalescedObject"];
     NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
-    AudioSampleType *audioFrames = [[optionsDict objectForKey:@"frameBufferObject"] mutableBytes];
+//    AudioSampleType *audioFrames = [[optionsDict objectForKey:@"frameBufferObject"] mutableBytes];
+    AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
     NSRange *characters = [[optionsDict objectForKey:@"charactersObject"] mutableBytes];
     NSInteger currentChannel = [[optionsDict objectForKey:@"audioChannel"] intValue];
-    NSUInteger frameCount = [[optionsDict objectForKey:@"frameBufferObject"] length] / sizeof(AudioSampleType);
+    NSUInteger frameCount = [modelObject.frameBuffer length] / sizeof(AudioSampleType);
     double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
     
     NSUInteger char_count = [characterObject length];
@@ -192,7 +203,18 @@ typedef struct
             {
                 /* Draw decoded values */
                 [[NSColor blackColor] set];
-                NSString *string = [NSString stringWithFormat:@"%2.2X" , character[i]];
+                NSString *string;
+                if( ((sampleRate / 2400.0) * 8 / scale) > 35.0)
+                {
+                    string = [NSString stringWithFormat:@"%d: %2.2X", i, character[i]];
+                }
+                else
+                {
+                    string = [NSString stringWithFormat:@"%2.2X", character[i]];
+                }
+                
+                //NSLog( @"Scale: %f", ((sampleRate / 2400.0) * 8 / scale) );
+                
                 NSSize charWidth = [string sizeWithAttributes:nil];
                 NSPoint thePoint = NSMakePoint((characters[i].location+(characters[i].length/2)-(charWidth.width/2))/scale, viewHeight-(DATA_SPACE)+1.0);
                 [string drawAtPoint:thePoint withAttributes:nil];
@@ -287,10 +309,50 @@ typedef struct
                     x += 1.0/scale;
                     i += 1;
                 }
+                
+                /* Draw zero crossing lines */
+                [[NSColor darkGrayColor] set];
+                NSData *zerocrossingObject = [optionsDict objectForKey:@"zeroCrossingArray"];
+                float *zeroCrossings = (float *)[zerocrossingObject bytes];
+                i=0;
+                while (zeroCrossings[i] < dirtyRect.origin.x) i++;
+                while (zeroCrossings[i] < dirtyRect.origin.x + dirtyRect.size.width )
+                {
+                    NSBezierPath *line = [NSBezierPath bezierPath];
+                    [line moveToPoint:NSMakePoint(zeroCrossings[i]/scale, 0.0)];
+                    [line lineToPoint:NSMakePoint(zeroCrossings[i]/scale, viewWaveHeight)];
+                    [line setLineWidth:0.5]; /// Make it easy to see
+                    [line stroke];  
+                    i++;
+                }
+                
+                /* Enable pencil tool */
+                [viewController.toolControl setEnabled:YES forSegment:WFVPencil];
+            }
+            else
+            {
+                /* Disable Pencil tool */
+                if( [viewController.toolControl selectedSegment] == WFVPencil )
+                {
+                    toolMode = WFVLupe;
+                    [viewController.toolControl setSelectedSegment:WFVLupe];
+                }
+                
+                [viewController.toolControl setEnabled:NO forSegment:WFVPencil];
+                
             }
         }
         else
         {
+            /* Disable Pencil tool */
+            if( [viewController.toolControl selectedSegment] == WFVPencil )
+            {
+                toolMode = WFVLupe;
+                [viewController.toolControl setSelectedSegment:WFVLupe];
+            }
+            
+            [viewController.toolControl setEnabled:NO forSegment:WFVPencil];
+
             /* Zoomed out, draw maxed values, reflected across zero */
             for( i=0; i<width; i++ )
             {
@@ -416,13 +478,25 @@ typedef struct
         resample = YES;
         [self setNeedsDisplay:YES];
     }
-    else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] )
+    else if( [keyPath isEqualToString:@"frameBuffer"] )
+    {
+        resample = YES;
+        [self setNeedsDisplay:YES];
+    }
+    else if( [keyPath isEqualToString:@"viewRange"] )
+    {
+        [self zoomToCharacter: [[self.cachedAnaylizer viewRange] rangeValue]];
+    }
+    else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.amplify"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
     }
     else
+    {   
+        NSLog( @"Got an unexpected change" );
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (IBAction)chooseTool:(id)sender
@@ -453,8 +527,40 @@ typedef struct
     return YES;
 }
 
+- (IBAction)copy:(id)sender
+{
+    if( selectedSample != NSUIntegerMax )
+    {
+        CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
+
+//        NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
+
+        /* Package chunk of sound into a WAV file*/
+        NSRange subRange = NSMakeRange(selectedSample * sizeof(float), selectedSampleLength * sizeof(float));
+        
+        NSData *selectedSamples = [NSData dataWithData:[modelObject.frameBuffer subdataWithRange:subRange]];
+        NSURL *wavURL = [modelObject makeTemporaryWavFileWithData:selectedSamples];
+        
+        if( wavURL != nil )
+        {
+            /* Create NSSound object with WAV data */
+            NSSound *sound = [[NSSound alloc] initWithContentsOfURL:wavURL byReference:NO];
+            
+            /* Stuff it into a paste board */
+            NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+            [pasteboard clearContents];
+            [sound writeToPasteboard:pasteboard];
+            [sound release];
+        }
+        else {
+            NSBeep();
+        }
+    }   
+}
+
 - (void) mouseDown:(NSEvent *)theEvent
 {
+    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
     mouseDown = YES;
     mouseDownOnPoint = NO;
     locationPrevious = locationNow = locationMouseDown = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
@@ -481,7 +587,7 @@ typedef struct
         CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
         CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
-        AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
+        AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
         AudioSampleType *frameStart = audioFrames + selectedSampleUnderMouse;
         CGFloat thePoint = viewWaveHalfHeight+(frameStart[0]*viewWaveHalfHeight);
         NSRect sampleRect = NSMakeRect(selectedSampleUnderMouse-6.0, thePoint-6.0, 12, 12);
@@ -522,12 +628,48 @@ typedef struct
             }
         }
     }
+    else if( toolMode == WFVPencil )
+    {
+        NSPoint locationMouseDownSelf = [self convertPoint:locationMouseDown fromView:nil];
+        NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
+        selectedSampleUnderMouse = locationNowSelf.x;
+        selectedSample = selectedSampleUnderMouse;
+        CGFloat viewHeight = [self frame].size.height;
+        CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
+        CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
+        AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
+        unsigned long audioFramesLength = [modelObject.frameBuffer length];
+        AudioSampleType *frameStart = audioFrames + selectedSample;
+        
+        /* Cache previous changed set */
+        NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+        if( previousIndexSet != nil ) [previousIndexSet release];
+        previousIndexSet = [changedSet mutableCopy];
+        
+        /* update changed set */
+        [changedSet addIndex:selectedSample];
+        
+        /* make copy of all samples */
+        if( storedSamples != nil ) free( storedSamples );
+        
+        storedSamples = malloc( audioFramesLength );
+        memcpy(storedSamples, audioFrames, audioFramesLength);
+
+        /* Pencil in new sample value */
+        AudioSampleType new_value = (locationMouseDownSelf.y / viewWaveHalfHeight) - 1.0;
+        frameStart[0] = new_value;
+        
+        /* update anaylization */
+        resample = YES;
+        [self setNeedsDisplay:YES];
+    }
     else if( toolMode == WFVSelection && scale > DOT_HANDLE_SCALE )
         mouseDown = NO; /* no selecting samples if zoomed out too far */
 }
 
 - (void) mouseDragged:(NSEvent *)theEvent
 {
+    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
     locationPrevious = locationNow;
     locationNow = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
     
@@ -563,7 +705,7 @@ typedef struct
             CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
             CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
             
-            AudioSampleType *audioFrames = [[self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] mutableBytes];
+            AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
             AudioSampleType *frameStart = audioFrames + selectedSample;
             
             AudioSampleType delta = (locationNowSelf.y - locationMouseDownSelf.y) / viewWaveHalfHeight;
@@ -611,6 +753,24 @@ typedef struct
             
             [self setNeedsDisplay:YES];
         }
+    }
+    else if( toolMode == WFVPencil )
+    {
+        NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
+        NSUInteger sampleUnderMouse = locationNowSelf.x;
+        CGFloat viewHeight = [self frame].size.height;
+        CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
+        CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
+        AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
+        AudioSampleType *frameStart = audioFrames + sampleUnderMouse;
+        AudioSampleType new_value = (locationNowSelf.y / viewWaveHalfHeight) - 1.0;
+        frameStart[0] = new_value;
+        
+        NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+        [changedSet addIndex:sampleUnderMouse];
+        
+        resample = YES;
+        [self setNeedsDisplay:YES];
     }
 }
 
@@ -683,6 +843,7 @@ typedef struct
             
             currentFrame = 0;
             panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
+            
         }
     }
     else if( toolMode == WFVSelection && mouseDownOnPoint == NO )
@@ -716,8 +877,59 @@ typedef struct
             [self setNeedsDisplay:YES];
         }
     }
+    else if( toolMode == WFVPencil )
+    {   
+        /* calculate contigious range of modified samples */
+        NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+        NSIndexSet *modifiedSet = [changedSet gsSubtractWithIndexSet:previousIndexSet];
+        NSRange modifiedRange = NSMakeRange([modifiedSet firstIndex], [modifiedSet lastIndex] - [modifiedSet firstIndex] + 1);
+        
+        /* Create and register undo object */
+        NSValue *rangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType)*modifiedRange.location, sizeof(AudioSampleType)*modifiedRange.length)];
+        NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
+        NSData *previousSamples = [NSData dataWithBytes:storedSamples+modifiedRange.location length:sizeof(AudioSampleType)*modifiedRange.length];
+        NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", rangeValue, @"range", previousIndexSet, @"indexSet", nil];
+
+        id modelObject = [self.cachedAnaylizer anaylizerObject];
+        [[parentContext undoManager] registerUndoWithTarget:modelObject selector:@selector(setPreviousState:) object:previousState];
+        [[parentContext undoManager] setActionName:@"Draw Samples"];
+
+        /* Release samples */
+        free( storedSamples );
+        storedSamples = nil;
+        
+        /* re-anaylize */
+        [modelObject anaylizeAudioData];
+        [self setNeedsDisplay:YES];
+    }
     
     mouseDown = NO;
+}
+
+- (void)zoomToCharacter:(NSRange)range
+{
+    toolMode = WFVLupe;
+    NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
+    NSRange *characters = (NSRange *)[charactersObject mutableBytes];
+    
+    NSRect currentBounds = [[self superview] bounds];
+    double timeToAccel = ZOOM_FRAMES/3.0;
+    double timeCruising = ZOOM_FRAMES / 3.0;
+    double timeToDecel = ZOOM_FRAMES/3.0;
+    double finalPositionOrigin = characters[range.location].location - currentBounds.origin.x;
+    double finalPositionWidth = (characters[range.location + range.length].location - characters[range.location].location) - currentBounds.size.width;
+
+    for( int currentTime=0; currentTime<ZOOM_FRAMES; currentTime++ )
+    {
+        originFrames[currentTime] = currentBounds.origin.x + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionOrigin, currentTime);
+        sizeFrames[currentTime] = currentBounds.size.width + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionWidth, currentTime);
+    }
+    
+    originFrames[ZOOM_FRAMES-1] = characters[range.location].location;
+    sizeFrames[ZOOM_FRAMES-1] = (characters[range.location + range.length].location - characters[range.location].location);
+    
+    currentFrame = 0;
+    panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
 }
 
 - (void)mouseMomentum:(NSTimer*)theTimer
@@ -750,7 +962,7 @@ typedef struct
         
         currentBounds.origin.x = originFrames[currentFrame];
         currentBounds.size.width = sizeFrames[currentFrame];
-        
+
         [viewController updateBounds:currentBounds];
         
         currentFrame++;

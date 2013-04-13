@@ -29,8 +29,10 @@
 @dynamic editEnabled;
 @dynamic blockSettingsHidden;
 @dynamic title;
+@synthesize viewRange;
 @synthesize viewController;
 @dynamic canChangeEditor;
+@dynamic edits;
 
 @dynamic anaylizerObject;
 
@@ -81,6 +83,8 @@
         [anaylizerObject setRepresentedObject:nil];
         [anaylizerObject release];
     }
+    
+    self.viewRange = nil;
     
     [super dealloc];
 }
@@ -349,6 +353,20 @@
     result = ( self == [[[self parentStream] anaylizers] lastObject] );
     
     return result;
+}
+
+- (StAnaylizer *)previousAnaylizer
+{
+    return [[self parentStream] previousAnayliser:self];    
+}
+
+- (void) postEdit: (NSData *)data atLocation: (int64_t)location withLength: (int64_t)length
+{
+    AnaylizerEdit *theEdit = [NSEntityDescription insertNewObjectForEntityForName:@"AnaylizerEdit" inManagedObjectContext:[self managedObjectContext]];
+    theEdit.location = location;
+    theEdit.length = length;
+    theEdit.data = data;
+    [self addEditsObject:theEdit];
 }
 
 @end

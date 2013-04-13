@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7700637617128E730037055D /* AnaylizerPencil.tiff */; };
 		770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */; };
 		7714BC5713EA580600892495 /* ViewAutoLayoutSubView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */; };
 		771AD296141D06C800E0FE41 /* CoCoAudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */; };
@@ -55,11 +56,14 @@
 		778A597E140703DB00B68EB4 /* StStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597D140703DB00B68EB4 /* StStream.m */; };
 		778A598B14072E6A00B68EB4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A598A14072E6A00B68EB4 /* AppDelegate.m */; };
 		778A59911407524900B68EB4 /* BlockerDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778A59901407524900B68EB4 /* BlockerDataViewController.xib */; };
+		778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
 		77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */; };
 		77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */; };
 		77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77AE7556141568BD0052A93D /* BlockIcon.tiff */; };
+		77B014681717AFB2008CAF1A /* StreamEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B014671717AFB2008CAF1A /* StreamEdit.m */; };
+		77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */; };
 		77C17FBD140F450100E23921 /* HexFiendAnaylizerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */; };
 		77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */; };
 		77C17FC3140F469700E23921 /* AudioAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */; };
@@ -135,6 +139,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7700637617128E730037055D /* AnaylizerPencil.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerPencil.tiff; path = Stream/AudioAnaylizer/AnaylizerPencil.tiff; sourceTree = "<group>"; };
 		770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataViewController.h; path = Stream/BlockerDataViewController.h; sourceTree = "<group>"; };
 		770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataViewController.m; path = Stream/BlockerDataViewController.m; sourceTree = "<group>"; };
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
@@ -215,6 +220,8 @@
 		778A598914072E6A00B68EB4 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		778A598A14072E6A00B68EB4 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		778A59901407524900B68EB4 /* BlockerDataViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockerDataViewController.xib; path = Stream/BlockerDataViewController.xib; sourceTree = "<group>"; };
+		778A6DFC1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+GSIndexSetAdditions.h"; sourceTree = "<group>"; };
+		778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+GSIndexSetAdditions.m"; sourceTree = "<group>"; };
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7799CD2913E63C1F007D5B8E /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnaylizer/WaveFormView.h; sourceTree = "<group>"; };
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
@@ -222,6 +229,10 @@
 		77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewController.m; path = Stream/BlockAttributeViewController.m; sourceTree = "<group>"; };
 		77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewController.xib; path = Stream/BlockAttributeViewController.xib; sourceTree = "<group>"; };
 		77AE7556141568BD0052A93D /* BlockIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = BlockIcon.tiff; sourceTree = "<group>"; };
+		77B014661717AFB2008CAF1A /* StreamEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamEdit.h; path = Stream/StreamEdit.h; sourceTree = "<group>"; };
+		77B014671717AFB2008CAF1A /* StreamEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StreamEdit.m; path = Stream/StreamEdit.m; sourceTree = "<group>"; };
+		77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerEdit.h; path = Stream/AnaylizerEdit.h; sourceTree = "<group>"; };
+		77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerEdit.m; path = Stream/AnaylizerEdit.m; sourceTree = "<group>"; };
 		77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnaylizerController.h; path = Stream/HexFiendAnaylizerController.h; sourceTree = "<group>"; };
 		77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnaylizerController.m; path = Stream/HexFiendAnaylizerController.m; sourceTree = "<group>"; };
 		77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HexFiendAnaylizerController.xib; path = Stream/HexFiendAnaylizerController.xib; sourceTree = "<group>"; };
@@ -457,6 +468,8 @@
 		7759CF3D13DBA1A300789DB3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				778A6DFC1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.h */,
+				778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */,
 				77AE7556141568BD0052A93D /* BlockIcon.tiff */,
 				77CB933E1404AE7F0032F56F /* Zoom.tif */,
 				7759CF3E13DBA1A300789DB3 /* Stream-Info.plist */,
@@ -514,6 +527,10 @@
 			isa = PBXGroup;
 			children = (
 				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
+				77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */,
+				77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */,
+				77B014661717AFB2008CAF1A /* StreamEdit.h */,
+				77B014671717AFB2008CAF1A /* StreamEdit.m */,
 				778A597C140703DB00B68EB4 /* StStream.h */,
 				778A597D140703DB00B68EB4 /* StStream.m */,
 				77FEA6D613F57D4B0082B946 /* StAnaylizer.h */,
@@ -575,15 +592,16 @@
 				7799CD2A13E63C1F007D5B8E /* WaveFormView.m */,
 				771DC21913F0374800579077 /* AudioAnaScrollView.h */,
 				771DC21A13F0374800579077 /* AudioAnaScrollView.m */,
-				772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */,
-				772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */,
-				772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */,
 				77C17FC0140F469700E23921 /* AudioAnaylizerViewController.h */,
 				77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */,
 				771C998413F624DC00C3A263 /* AudioAnaylizer.xib */,
 				77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */,
 				771AD294141D06C800E0FE41 /* CoCoAudioAnaylizer.h */,
 				771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */,
+				7700637617128E730037055D /* AnaylizerPencil.tiff */,
+				772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */,
+				772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */,
+				772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */,
 			);
 			name = AudioAnaylizer;
 			sourceTree = "<group>";
@@ -763,6 +781,9 @@
 /* Begin PBXProject section */
 		7759CF2913DBA1A200789DB3 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
 			buildConfigurationList = 7759CF2C13DBA1A200789DB3 /* Build configuration list for PBXProject "Stream" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -809,6 +830,7 @@
 				77C17FC4140F469700E23921 /* AudioAnaylizerViewController.xib in Resources */,
 				776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */,
 				77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */,
+				7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -922,6 +944,9 @@
 				771AD2A0141D43AE00E0FE41 /* BlockAttributeAnaylizer.m in Sources */,
 				776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */,
 				77DA26CD1421BAA2007BE635 /* BlockerViewOutlineView.m in Sources */,
+				778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */,
+				77B014681717AFB2008CAF1A /* StreamEdit.m in Sources */,
+				77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

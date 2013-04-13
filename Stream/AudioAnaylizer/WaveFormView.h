@@ -36,8 +36,8 @@
     CGFloat panMomentumValue;
     BOOL mouseDown, mouseDownOnPoint;
     NSRect dragRect;
-    CGFloat originFrames[ZOOM_FRAMES];
-    CGFloat sizeFrames[ZOOM_FRAMES];
+    double originFrames[ZOOM_FRAMES];
+    double sizeFrames[ZOOM_FRAMES];
     int currentFrame;
     BOOL needsAnaylyzation;
 }
@@ -51,5 +51,7 @@
 - (IBAction)chooseTool:(id)sender;
 - (void) activateObservations;
 - (void) deactivateObservations;
+- (BOOL) acceptsFirstResponder;
+- (void)zoomToCharacter: (NSRange)range;
 
 @end

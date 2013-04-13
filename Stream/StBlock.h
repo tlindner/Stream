@@ -70,6 +70,7 @@
 - (void) smartSetFail;
 - (void) checkEdited:(StBlock *)newBlock;
 - (void) checkFail:(StBlock *)newBlock;
+- (NSRange)getUnionRange;
 
 @end
 

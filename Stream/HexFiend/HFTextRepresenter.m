@@ -123,6 +123,9 @@
     if (bits & (HFControllerSelectedRanges | HFControllerDisplayedLineRange)) {
         [[self view] updateSelectedRanges];
     }
+    if (bits & (HFControllerEditedRanges)) {
+        [[self view] updateEditedRanges];
+    }
     if (bits & (HFControllerSelectionPulseAmount)) {
         [[self view] updateSelectionPulse];
     }
@@ -187,7 +190,7 @@
     return result;
 }
 
-- (NSArray *)displayedEditContentsRanges {
+- (NSArray *)displayedEditedContentsRanges {
     HFController *controller = [self controller];
     NSArray *result;
     NSArray *editedRanges = [controller editContentsRanges];

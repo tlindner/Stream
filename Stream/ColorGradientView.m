@@ -21,7 +21,7 @@
 @synthesize startingColor;
 @synthesize endingColor;
 @synthesize angle;
-@synthesize newConstraints;
+@synthesize additionalConstraints;
 @synthesize actionPopOverNib;
 @synthesize popupArrayController;
 @synthesize avc;
@@ -305,7 +305,7 @@
 - (void)dealloc
 {
     self.popupArrayController = nil;
-    self.newConstraints = nil;
+    self.additionalConstraints = nil;
     self.actionPopOverNib = nil;
     self.avc = nil;
     [super dealloc];

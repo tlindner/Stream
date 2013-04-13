@@ -3,7 +3,7 @@
 @interface HFTextRepresenter (HFInternal)
 
 - (NSArray *)displayedSelectedContentsRanges; //returns an array of NSValues representing the selected ranges (as NSRanges) clipped to the displayed range.
-- (NSArray *)displayedEditContentsRanges;
+- (NSArray *)displayedEditedContentsRanges;
 
 - (void)beginSelectionWithEvent:(NSEvent *)event forCharacterIndex:(NSUInteger)characterIndex;
 - (void)continueSelectionWithEvent:(NSEvent *)event forCharacterIndex:(NSUInteger)characterIndex;

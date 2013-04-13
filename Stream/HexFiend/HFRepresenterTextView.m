@@ -44,7 +44,10 @@ static const NSTimeInterval HFCaretBlinkFrequency = 0.56;
 }
 
 - (NSArray *)displayedEditedContentsRanges {
-    return [[[self representer] displayedEditContentsRanges] copy];
+    if (! cachedEditedRanges) {
+        cachedEditedRanges = [[[self representer] displayedEditedContentsRanges] copy];
+    }
+    return cachedEditedRanges;
 }
 
 - (BOOL)_shouldHaveCaretTimer {
@@ -354,6 +357,33 @@ enum LineCoverage_t {
     
     if (lastCaretRectNeedsRedraw) [self setNeedsDisplayInRect:lastDrawnCaretRect];
     [oldSelectedRanges release]; //balance the retain we borrowed from the ivar
+    [self _updateCaretTimer];
+    [self _forceCaretOnIfHasCaretTimer];
+}
+
+- (void)updateEditedRanges {
+    NSArray *oldEditedRanges = cachedEditedRanges;
+    cachedEditedRanges = [[[self representer] displayedEditedContentsRanges] copy];
+    NSIndexSet *indexSet = [self _indexSetOfLinesNeedingRedrawWhenChangingSelectionFromRanges:oldEditedRanges toRanges:cachedEditedRanges];
+    BOOL lastCaretRectNeedsRedraw = ! NSIsEmptyRect(lastDrawnCaretRect);
+    NSRange lineRangeToInvalidate = NSMakeRange(NSUIntegerMax, 0);
+    for (NSUInteger lineIndex = [indexSet firstIndex]; ; lineIndex = [indexSet indexGreaterThanIndex:lineIndex]) {
+        if (lineIndex != NSNotFound && NSMaxRange(lineRangeToInvalidate) == lineIndex) {
+            lineRangeToInvalidate.length++;
+        }
+        else {
+            if (lineRangeToInvalidate.length > 0) {
+                NSRect rectToInvalidate = [self _rectForLineRange:lineRangeToInvalidate];
+                [self setNeedsDisplayInRect:rectToInvalidate];
+                lastCaretRectNeedsRedraw = lastCaretRectNeedsRedraw && ! NSContainsRect(rectToInvalidate, lastDrawnCaretRect);
+            }
+            lineRangeToInvalidate = NSMakeRange(lineIndex, 1);
+        }
+        if (lineIndex == NSNotFound) break;
+    }
+    
+    if (lastCaretRectNeedsRedraw) [self setNeedsDisplayInRect:lastDrawnCaretRect];
+    [oldEditedRanges release]; //balance the retain we borrowed from the ivar
     [self _updateCaretTimer];
     [self _forceCaretOnIfHasCaretTimer];
 }
@@ -715,6 +745,7 @@ enum LineCoverage_t {
     [font release];
     [data release];
     [cachedSelectedRanges release];
+    [cachedEditedRanges release];
     NSWindow *window = [self window];
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     if (window) {

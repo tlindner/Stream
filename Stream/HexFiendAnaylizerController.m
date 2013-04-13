@@ -185,13 +185,14 @@
             else if( [[self representedObject] isKindOfClass:[StBlock class]] )
             {
                 StBlock *theBlock = [self representedObject];
-                if( ![[[theBlock managedObjectContext] undoManager] isUndoing] )
+                if( ! ( [[[theBlock managedObjectContext] undoManager] isUndoing] || [[[theBlock managedObjectContext] undoManager] isRedoing] ) )
                 {
                     StStream *theStream = [theBlock getStream];
                     HFTextView *hexView = (HFTextView *)[self view];
                     
                     [changes enumerateRangesUsingBlock: ^(NSRange range, BOOL *stop)
                      {
+                         NSLog( @"Calling set block: %@", NSStringFromRange(range) );
                          [theStream setBlock:theBlock withData:[hexView data] inRange:range];
                      }];
                 }

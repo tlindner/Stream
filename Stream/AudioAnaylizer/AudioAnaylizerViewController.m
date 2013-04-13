@@ -9,10 +9,12 @@
 #import "AudioAnaylizerViewController.h"
 #include "AudioToolbox/AudioToolbox.h"
 #import "Analyzation.h"
+#import "CoCoAudioAnaylizer.h"
 
 #define MAXZOOM 16.0
 
 @implementation AudioAnaylizerViewController
+@synthesize toolControl;
 @synthesize slider;
 @synthesize scroller;
 
@@ -65,7 +67,8 @@
     self.scroller.viewController = self;
 
     wfv.cachedAnaylizer = theAna;
-    NSUInteger frameCount = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"] length] / sizeof(AudioSampleType);
+    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[theAna anaylizerObject];
+    NSUInteger frameCount = [modelObject.frameBuffer length] / sizeof(AudioSampleType);
     
     NSView *clipView = [self.scroller contentView];
     self.slider.maxValue = frameCount;

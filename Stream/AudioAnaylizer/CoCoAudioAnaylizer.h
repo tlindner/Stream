@@ -10,6 +10,7 @@
 #import "Analyzation.h"
 #import "StStream.h"
 #import "StAnaylizer.h"
+#import "StreamEdit.h"
 #import "StBlock.h"
 #include "AudioToolbox/AudioToolbox.h"
 
@@ -21,15 +22,21 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
     BOOL anaylizationError;
     BOOL observationsActive;
     StAnaylizer *representedObject;
-    
+    NSMutableData *frameBuffer;
     int currentAudioChannel;
 }
 
 @property (assign) StAnaylizer * representedObject;
+@property (nonatomic, retain) NSMutableData *frameBuffer;
 
 - (void) loadAudioChannel:(int)audioChannel;
 - (void) anaylizeAudioData;
+- (void) applyAmplify;
+- (void) applyAllEdits;
+- (void) reloadChachedAudioFrames;
 - (void) updateWaveFormForCharacter:(NSUInteger)idx;
 - (void) setPreviousState:(NSDictionary *)previousState;
+- (NSURL*) makeTemporaryWavFileWithData: (NSData *)data;
+- (NSURL*) makeWavFile:(NSURL *)waveFile withData:(NSData *)data;
 
 @end

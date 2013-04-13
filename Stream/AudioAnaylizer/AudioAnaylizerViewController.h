@@ -16,7 +16,7 @@
     AudioAnaScrollView *scroller;
     NSSlider *slider;
 }
-
+@property (assign) IBOutlet NSSegmentedControl *toolControl;
 @property (assign) IBOutlet NSSlider *slider;
 @property (assign) IBOutlet AudioAnaScrollView *scroller;
 

@@ -26,6 +26,7 @@
 @private;
     HFTextRepresenter *representer;
     NSArray *cachedSelectedRanges;
+    NSArray *cachedEditedRanges;
     NSFont *font;
     NSData *data;
     CGFloat verticalOffset;
@@ -110,6 +111,7 @@
 - (NSUInteger)maximumGlyphCountForByteCount:(NSUInteger)byteCount;
 
 - (void)updateSelectedRanges;
+- (void)updateEditedRanges;
 - (void)updateSelectionPulse;
 
 /* The background color for the line at the given index.  You may override this to return different colors.  You may return nil to draw no color in this line (and then the empty space color will appear) */

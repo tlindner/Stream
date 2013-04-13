@@ -10,17 +10,22 @@
 #import "AudioAnaylizerViewController.h"
 #import "Accelerate/Accelerate.h"
 
+inline UInt32 CalculateLPCMFlags (UInt32 inValidBitsPerChannel, UInt32 inTotalBitsPerChannel, bool inIsFloat, bool inIsBigEndian, bool inIsNonInterleaved );
+void FillOutASBDForLPCM(AudioStreamBasicDescription *outASBD, Float64 inSampleRate, UInt32 inChannelsPerFrame, UInt32 inValidBitsPerChannel,UInt32 inTotalBitsPerChannel, bool inIsFloat, bool inIsBigEndian, bool inIsNonInterleaved);
+
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 
 @implementation CoCoAudioAnaylizer
 
 @dynamic representedObject;
+@synthesize frameBuffer;
 
 - (id)init
 {
     self = [super init];
     if (self) {
         // Initialization code here.
+        self.frameBuffer = nil;
     }
     
     return self;
@@ -42,6 +47,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+            [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
             [theAna removeObserver:self forKeyPath:@"resultingData"];
             observationsActive = NO;
         } 
@@ -60,10 +66,13 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
             [self loadAudioChannel:audioChannel];
             [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"];
         }
-        
+        else {
+            [self reloadChachedAudioFrames];
+        }
         /* setup observations */
         if( observationsActive == NO )
         {
+            [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
@@ -79,6 +88,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     if( observationsActive == YES )
     {
         StAnaylizer *theAna = [self representedObject];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
@@ -87,6 +97,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         observationsActive = NO;
     } 
     
+    self.frameBuffer = nil;
     [super dealloc];
 }
 
@@ -150,12 +161,12 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", myErr );
         
         size_t frameBufferSize = sizeof(AudioSampleType) * fileFrameCount * channelCount;
-        AudioSampleType *frameBuffer = malloc(frameBufferSize+1);
+        AudioSampleType *frameBufferAS = malloc(frameBufferSize+1);
         
         AudioBufferList bufList;
         bufList.mNumberBuffers = 1;
         bufList.mBuffers[0].mNumberChannels = (UInt32)channelCount;
-        bufList.mBuffers[0].mData = frameBuffer;
+        bufList.mBuffers[0].mData = frameBufferAS;
         bufList.mBuffers[0].mDataByteSize = (UInt32)frameBufferSize;
         UInt32 ioFrameCount = (unsigned int)fileFrameCount;
         myErr = ExtAudioFileRead(af, &ioFrameCount, &bufList);
@@ -164,17 +175,24 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         /* destride audio sample so we only have the one selected channel */
         NSMutableData *frameBufferObject = [NSMutableData dataWithLength:sizeof(AudioSampleType) * fileFrameCount];
         AudioSampleType *frameBufferObjectBytes = [frameBufferObject mutableBytes];
-        AudioSampleType *sourceAudioFrame = frameBuffer + (audioChannel - 1);
+        AudioSampleType *sourceAudioFrame = frameBufferAS + (audioChannel - 1);
         
         for( size_t i=0; i<fileFrameCount; i++ )
         {
             frameBufferObjectBytes[i] = sourceAudioFrame[i*channelCount];
         }
         
-        free( frameBuffer );
+        free( frameBufferAS );
         
-        [theAna setValue:frameBufferObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+        [self willChangeValueForKey:@"frameBuffer"];
+        self.frameBuffer = frameBufferObject;
+        NSMutableData *frameBufferCopy = [frameBufferObject copy];
+        [theAna setValue:frameBufferCopy forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.cachedframeBuffer"];
+        [frameBufferCopy release];
+        [self applyAmplify];
+        [self applyAllEdits];
         [self anaylizeAudioData];
+        [self didChangeValueForKey:@"frameBuffer"];
         
         myErr = ExtAudioFileDispose(af);
         NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
@@ -183,6 +201,53 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     {
         NSLog(@"CoCoAudioAnaylizer: ExtAudioFileOpenURL: could not open file");
         return;
+    }
+}
+
+- (NSURL*) makeTemporaryWavFileWithData: (NSData *)data
+{
+    NSString *tempFileTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:@"myapptempfile.XXXXXX.wav"];
+    const char *tempFileTemplateCString = [tempFileTemplate fileSystemRepresentation];
+    int desc = mkstemps((char *)tempFileTemplateCString, 4);
+    close( desc );
+    NSString *filePathString = [NSString stringWithCString:tempFileTemplateCString encoding:NSASCIIStringEncoding];
+    NSURL *temporaryURL = [NSURL fileURLWithPath:filePathString isDirectory:NO];
+
+    return [self makeWavFile:temporaryURL withData:data];
+}   
+
+- (NSURL*) makeWavFile:(NSURL *)waveFile withData:(NSData *)data
+{
+        
+    StAnaylizer *theAna = self.representedObject;
+    Float64 _sample_rate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
+    UInt32 _channel_count = 1;
+    float *_samples = (float *)[data bytes];
+    UInt32 _frame_count = [data length] / sizeof(float);
+    
+    
+    AudioStreamBasicDescription file_desc = {0};
+    ExtAudioFileRef fout;
+    FillOutASBDForLPCM(&file_desc, _sample_rate, _channel_count, sizeof(float)*8, sizeof(float)*8, false, false, true);
+    file_desc.mFormatFlags = kAudioFormatFlagsCanonical;
+    
+    OSStatus rv = ExtAudioFileCreateWithURL((CFURLRef)waveFile, kAudioFileWAVEType, &file_desc, NULL, kAudioFileFlags_EraseFile, &fout);
+    if (rv == noErr)
+    {
+        int buff_size = sizeof(AudioBufferList) + sizeof(AudioBuffer);
+        AudioBufferList* bufferList = (AudioBufferList*)malloc(buff_size);
+        bufferList->mNumberBuffers = 1;
+        bufferList->mBuffers[0].mData = _samples;
+        bufferList->mBuffers[0].mNumberChannels = _channel_count;
+        bufferList->mBuffers[0].mDataByteSize = _channel_count * _frame_count * sizeof(float);
+        ExtAudioFileWrite(fout, _frame_count, bufferList);
+        free(bufferList);
+        ExtAudioFileDispose(fout);
+        return waveFile;
+    }
+    else
+    {
+        return nil;
     }
 }
 
@@ -200,7 +265,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     vDSP_Length i;
     int zc_count;
     
-    NSMutableData *frameBufferObject = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+//    NSMutableData *frameBufferObject = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
+    NSMutableData *frameBufferObject = self.frameBuffer;
     AudioSampleType *audioFrames = [frameBufferObject mutableBytes];
     NSUInteger frameCount = [frameBufferObject length] / sizeof(AudioSampleType);
     AudioSampleType *frameStart = audioFrames;
@@ -229,6 +295,10 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     /* remove unused space in zero crossing array */
     zero_crossings = realloc(zero_crossings, sizeof(float)*zc_count);
     
+    /* Store zero crossing array for wave form display */
+    NSData *zerocrossingObject = [NSData dataWithBytesNoCopy:zero_crossings length:sizeof(float)*zc_count];
+    [theAna setValue:zerocrossingObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.zeroCrossingArray"];
+
     /* Scan zero crossings looking for valid data */
     int max_possible_characters = (zc_count*2*8)+1;
     NSMutableData *charactersObject = [NSMutableData dataWithLength:sizeof(NSRange)*max_possible_characters];
@@ -256,6 +326,9 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     /* start by scanning zero crossing looking for the start of a block */
     for (i=2; i<zc_count; i+=2)
     {
+        
+        if( (zero_crossings[i] - zero_crossings[i-1]) < (sampleRate/(2400.0*2.0)) ) i++;
+        
         /* test frequency of 2 zero crossings */
         even_parity >>= 1;
         test1 = (zero_crossings[i] - zero_crossings[i-2]);
@@ -269,6 +342,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
             odd_parity |= 0x8000;
         
         /* test for start block bit pattern */
+              
         if( (even_parity & 0xfff0) == 0x3c50 || (odd_parity & 0xfff0) == 0x3c50 )
         {
             if( (odd_parity & 0xfff0) == 0x3c50 )
@@ -278,7 +352,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
                 even_parity = odd_parity;
             }
             
-            /* capture (0x0f & 0x05) sync byte */
+            /* capture (0x5x) sync byte */
             characters[char_count].location = zero_crossings[i-(16*2)];
             characters[char_count].length = zero_crossings[i-(8*2)] - zero_crossings[i-(16*2)];
             character[char_count] = even_parity & 0x00ff;
@@ -319,7 +393,18 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
                     char_count++;
                     bit_count = 0;
                 }
-                else if( test1 > resyncThreshold )
+                
+                if( test1 > resyncThreshold )
+                {
+                    /* lost sync, finish off last byte, break out of loop to try to re-synchronize */
+                    characters[char_count].length = zero_crossings[i-1] - characters[char_count].location + resyncThreshold;
+                    character[char_count] = even_parity >> 8;
+                    char_count++;
+                    bit_count = 0;
+                    i += 2;
+                    break;
+                }
+                else if( test1 < sampleRate/(2400.0*1.5) )
                 {
                     /* lost sync, finish off last byte, break out of loop to try to re-synchronize */
                     characters[char_count].length = zero_crossings[i-1] - characters[char_count].location + resyncThreshold;
@@ -342,7 +427,8 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         }
     }
     
-    free(zero_crossings);
+    /* no need to free buffer, it was wrapped in an NSData object */
+    //free(zero_crossings);
     
     /* shirnk buffers to actual size */
     [charactersObject setLength:sizeof(NSRange)*char_count];
@@ -432,6 +518,41 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     [changedIndexSetObject release];
 }
 
+- (void) applyAllEdits
+{
+    for (AnaylizerEdit *edit in [representedObject edits])
+    {
+        [self.frameBuffer replaceBytesInRange:NSMakeRange(edit.location, edit.length) withBytes:[edit.data bytes] length:[edit.data length]];
+    }
+}
+
+- (void) reloadChachedAudioFrames
+{
+    StAnaylizer *theAna = self.representedObject;
+    NSMutableData *cachedAudio = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.cachedframeBuffer"] mutableCopy];
+    self.frameBuffer = cachedAudio;
+    [cachedAudio release];
+    [self applyAllEdits];
+    [self applyAmplify];
+}
+
+- (void) applyAmplify
+{
+    StAnaylizer *theAna = self.representedObject;
+    NSInteger amplify = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"] integerValue];
+    
+    if( amplify != 0 )
+    {
+        if( amplify > 100 ) amplify *= 5.0;
+        
+        float *frames = (float *)[self.frameBuffer bytes];
+        NSUInteger length = [self.frameBuffer length] / sizeof(float);
+        float divisor = amplify/100.0;
+
+        vDSP_vsmul( frames, 1, &divisor, frames, 1, length );
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     //NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
@@ -454,6 +575,15 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     {
         if( [change objectForKey:@"new"] != [NSNull null] )
             [self anaylizeAudioData];
+        return;
+    }
+    
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.amplify"])
+    {
+        if( [change objectForKey:@"new"] != [NSNull null] )
+        {
+            [self reloadChachedAudioFrames];
+        }
         return;
     }
     
@@ -491,7 +621,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
         
         return;
     }
-    
+
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
@@ -503,7 +633,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     NSDictionary *optionsDictionary = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
     NSMutableData *charactersObject = [optionsDictionary objectForKey:@"charactersObject"];
     NSRange *characters = (NSRange *)[charactersObject mutableBytes];
-    NSMutableData *audioFramesObject = [optionsDictionary objectForKey:@"frameBufferObject"];
+    NSMutableData *audioFramesObject = self.frameBuffer;
     AudioSampleType *audioFrames = [audioFramesObject mutableBytes];
     AudioSampleType *frameStart = audioFrames + characters[idx].location;
     AudioSampleType maxValue = [[optionsDictionary objectForKey:@"averagedMaximumSample"] floatValue];
@@ -552,7 +682,9 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     /* replace old wave buffer with new wave buffer */
     NSRange oldRange = NSMakeRange(sizeof(AudioSampleType) * characters[idx].location, sizeof(AudioSampleType) * characters[idx].length);
     [audioFramesObject replaceBytesInRange:oldRange withBytes:newByteWaveForm length:sizeof(AudioSampleType) * totalLength];
-    free( newByteWaveForm );
+    
+    NSData *newByteWaveFormObject = [NSData dataWithBytesNoCopy:newByteWaveForm length:sizeof(AudioSampleType) * totalLength];
+    //free( newByteWaveForm );
     
     /* slide changed byte to accomadate new size */
     unsigned long delta = totalLength - characters[idx].length;
@@ -575,13 +707,17 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     [previousChangedSet release];
     [um registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
     [um setActionName:@"Byte Change"];
+    
+    /* post edit to anaylizer */
+    [theAna postEdit:newByteWaveFormObject atLocation:oldRange.location withLength:oldRange.length];
 }
+
 
 - (void) setPreviousState:(NSDictionary *)previousState
 {
     StAnaylizer *theAna = self.representedObject;
     NSMutableDictionary *optionsDict = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
-    NSMutableData *frameBufferObject = [optionsDict objectForKey:@"frameBufferObject"];
+    NSMutableData *frameBufferObject = self.frameBuffer;
     
     /* setup redo */
     NSValue *priorRange = [previousState objectForKey:@"range"];
@@ -598,10 +734,10 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
     [[parentContext undoManager] setActionName:@"Change"];
     
     /* apply previous state */
-    [optionsDict willChangeValueForKey:@"frameBufferObject"];
+//    [optionsDict willChangeValueForKey:@"frameBufferObject"];
     NSData *previousSamplesObject = [previousState objectForKey:@"data"];
     [frameBufferObject replaceBytesInRange:range withBytes:[previousSamplesObject bytes] length:[previousSamplesObject length]];
-    [optionsDict didChangeValueForKey:@"frameBufferObject"];
+//    [optionsDict didChangeValueForKey:@"frameBufferObject"];
     [optionsDict setObject:previousChangedSet forKey:@"changedIndexes"];
     
     /* re anaylize */
@@ -635,7 +771,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"coalescedObject", [NSNull null], @"frameBufferObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"coalescedObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", [NSNull null], @"zeroCrossingArray", [NSNumber numberWithInteger:100], @"amplify", [NSNull null], @"cachedframeBuffer", nil] autorelease];
 }
 
 @end
@@ -658,6 +794,25 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
         clientFormat->mFormatFlags |= kAudioFormatFlagIsNonInterleaved;
     }
 }
+
+UInt32 CalculateLPCMFlags (UInt32 inValidBitsPerChannel, UInt32 inTotalBitsPerChannel, bool inIsFloat, bool inIsBigEndian, bool inIsNonInterleaved )
+{
+    return (inIsFloat ? kAudioFormatFlagIsFloat : kAudioFormatFlagIsSignedInteger) | (inIsBigEndian ? ((UInt32)kAudioFormatFlagIsBigEndian) : 0)             | ((!inIsFloat && (inValidBitsPerChannel == inTotalBitsPerChannel)) ? kAudioFormatFlagIsPacked : kAudioFormatFlagIsAlignedHigh)           | (inIsNonInterleaved ? ((UInt32)kAudioFormatFlagIsNonInterleaved) : 0);
+}
+
+
+void FillOutASBDForLPCM(AudioStreamBasicDescription *outASBD, Float64 inSampleRate, UInt32 inChannelsPerFrame, UInt32 inValidBitsPerChannel,UInt32 inTotalBitsPerChannel, bool inIsFloat, bool inIsBigEndian, bool inIsNonInterleaved)
+{
+    outASBD->mSampleRate = inSampleRate;
+    outASBD->mFormatID = kAudioFormatLinearPCM;
+    outASBD->mFormatFlags = CalculateLPCMFlags(inValidBitsPerChannel, inTotalBitsPerChannel, inIsFloat, inIsBigEndian, inIsNonInterleaved);
+    outASBD->mBytesPerPacket = (inIsNonInterleaved ? 1 : inChannelsPerFrame) * (inTotalBitsPerChannel/8);
+    outASBD->mFramesPerPacket = 1;
+    outASBD->mBytesPerFrame = (inIsNonInterleaved ? 1 : inChannelsPerFrame) * (inTotalBitsPerChannel/8);
+    outASBD->mChannelsPerFrame = inChannelsPerFrame;
+    outASBD->mBitsPerChannel = inValidBitsPerChannel;
+}
+
 
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )
 {

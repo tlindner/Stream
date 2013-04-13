@@ -10,7 +10,7 @@
 
 @implementation ViewAutoLayoutSubView
 
-@synthesize newConstraints;
+@synthesize additionalConstraints;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -24,34 +24,34 @@
 
 - (void)didAddSubview:(NSView *)subview
 {
-    if (newConstraints != nil) {
+    if (additionalConstraints != nil) {
         [self removeConstraints:self.constraints];
-        [newConstraints removeAllObjects];
+        [additionalConstraints removeAllObjects];
     }
     else
-        self.newConstraints = [[[NSMutableArray alloc] init] autorelease];
+        self.additionalConstraints = [[[NSMutableArray alloc] init] autorelease];
 
     NSDictionary *views = NSDictionaryOfVariableBindings(subview);
-    self.newConstraints = [[[NSMutableArray alloc] init] autorelease];
-    [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[subview]-0-|" options:0 metrics:nil views:views]];
-    [newConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[subview]-0-|" options:0 metrics:nil views:views]];
-    [self addConstraints:newConstraints];
+    self.additionalConstraints = [[[NSMutableArray alloc] init] autorelease];
+    [additionalConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[subview]-0-|" options:0 metrics:nil views:views]];
+    [additionalConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[subview]-0-|" options:0 metrics:nil views:views]];
+    [self addConstraints:additionalConstraints];
 }
 
 - (void)willRemoveSubview:(NSView *)subview
 {
-    if (newConstraints != nil)
+    if (additionalConstraints != nil)
     {
         [self removeConstraints:self.constraints];
-        [newConstraints removeAllObjects];
-        self.newConstraints = nil;
+        [additionalConstraints removeAllObjects];
+        self.additionalConstraints = nil;
     }
 
 }
 
 - (void)dealloc
 {
-    self.newConstraints = nil;
+    self.additionalConstraints = nil;
     [super dealloc];
 }
 @end

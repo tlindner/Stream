@@ -8,7 +8,7 @@
     NSColor *startingColor;
     NSColor *endingColor;
     int angle;
-    NSMutableArray *newConstraints;
+    NSMutableArray *additionalConstraints;
     IBOutlet NSButton *tlDisclosure;
     IBOutlet NSButton *tlTitle;
     IBOutlet NSButton *tlAction;
@@ -30,7 +30,7 @@
 @property (assign) IBOutlet NSTextField *labelEditor;
 
 // Define the variables as properties
-@property(nonatomic, retain) NSMutableArray *newConstraints;
+@property(nonatomic, retain) NSMutableArray *additionalConstraints;
 @property(nonatomic, retain) NSColor *startingColor;
 @property(nonatomic, retain) NSColor *endingColor;
 @property(nonatomic, retain) NSNib *actionPopOverNib;
