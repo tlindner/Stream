@@ -73,6 +73,7 @@
 		77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D94C8B13E8F704009192BA /* DragRegionView.m */; };
 		77DA26CD1421BAA2007BE635 /* BlockerViewOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */; };
 		77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */; };
+		77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */; };
 		77F2045613DD3AD000FA5B1F /* HFBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FC13DD3ACF00FA5B1F /* HFBTree.m */; };
 		77F2045713DD3AD000FA5B1F /* HFBTreeByteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FE13DD3ACF00FA5B1F /* HFBTreeByteArray.m */; };
 		77F2045813DD3AD000FA5B1F /* HFByteArray_FileWriting.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FF13DD3ACF00FA5B1F /* HFByteArray_FileWriting.m */; };
@@ -247,6 +248,8 @@
 		77DA26CB1421BAA2007BE635 /* BlockerViewOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerViewOutlineView.h; path = Stream/BlockerViewOutlineView.h; sourceTree = "<group>"; };
 		77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerViewOutlineView.m; path = Stream/BlockerViewOutlineView.m; sourceTree = "<group>"; };
 		77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerSettingPopover.xib; path = Stream/AnaylizerSettingPopover.xib; sourceTree = "<group>"; };
+		77DFCB75171A159100C4A876 /* CoCoCassetteFileBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoCassetteFileBlocker.h; path = Stream/CoCoBlockers/CoCoCassetteFileBlocker.h; sourceTree = "<group>"; };
+		77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoCassetteFileBlocker.m; path = Stream/CoCoBlockers/CoCoCassetteFileBlocker.m; sourceTree = "<group>"; };
 		77F203FA13DD3ACF00FA5B1F /* HexFiend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiend.h; path = Stream/HexFiend/HexFiend.h; sourceTree = "<group>"; };
 		77F203FB13DD3ACF00FA5B1F /* HFBTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HFBTree.h; path = Stream/HexFiend/HFBTree.h; sourceTree = "<group>"; };
 		77F203FC13DD3ACF00FA5B1F /* HFBTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HFBTree.m; path = Stream/HexFiend/HFBTree.m; sourceTree = "<group>"; };
@@ -566,6 +569,8 @@
 			children = (
 				778A59791406EE7600B68EB4 /* CoCoCassetteBlocker.h */,
 				778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */,
+				77DFCB75171A159100C4A876 /* CoCoCassetteFileBlocker.h */,
+				77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */,
 			);
 			name = CoCoBlockers;
 			sourceTree = "<group>";
@@ -947,6 +952,7 @@
 				778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */,
 				77B014681717AFB2008CAF1A /* StreamEdit.m in Sources */,
 				77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */,
+				77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

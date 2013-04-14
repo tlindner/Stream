@@ -436,6 +436,11 @@
     return result;
 }
 
+- (NSData *)getAttributeData
+{
+    return [[self subBlockNamed:@"attributes"] getData];
+}
+
 - (NSArray *)getArrayOfBlocks
 {
     NSMutableArray *result = [[NSMutableArray alloc] init];
@@ -697,7 +702,17 @@
         }
         else
         {
-            NSRange range = {self.offset, self.length};
+            NSRange range;
+            
+            if( self.length == 0 )
+            {
+                StStream *ourStream = [self getStream];
+                NSData *blockData = [ourStream dataOfBlockNamed:self.source];
+                range = NSMakeRange( self.offset, [blockData length] - self.offset );
+            }
+            else
+                range = NSMakeRange( self.offset, self.length );
+
             NSMutableIndexSet *set = [[[self getStream] blockNamed:self.source] editSet];
             NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:^(NSUInteger idx, BOOL *stop){ return YES; }] mutableCopy];
             [setInRange shiftIndexesStartingAtIndex:0 by:-self.offset];

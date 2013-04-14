@@ -92,7 +92,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
                 [newBlock addDataRange:@"stream" start:i+11 length:1 name:@"File Type" transformation:@"BlocksUnsignedBigEndian"];
                 [newBlock addDataRange:@"stream" start:i+12 length:1 name:@"Data Type" transformation:@"BlocksUnsignedBigEndian"];
                 [newBlock addDataRange:@"stream" start:i+13 length:1 name:@"Gaps" transformation:@"BlocksUnsignedBigEndian"];
-                [newBlock addDataRange:@"stream" start:i+14 length:2 name:@"ML Exec Addr" transformation:@"BlocksUnsignedBigEndian"];
+                [newBlock addDataRange:@"stream" start:i+14 length:2 name:@"ML Exec Address" transformation:@"BlocksUnsignedBigEndian"];
                 [newBlock addDataRange:@"stream" start:i+16 length:2 name:@"ML Load Address" transformation:@"BlocksUnsignedBigEndian"];
             }
             else if( blockLength != 0 )

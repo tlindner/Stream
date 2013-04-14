@@ -823,6 +823,9 @@ typedef struct
                 sizeFrames[currentTime] = currentBounds.size.width + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionWidth, currentTime);
             }
             
+            originFrames[ZOOM_FRAMES] = dragRect.origin.x;
+            sizeFrames[ZOOM_FRAMES] = dragRect.size.width;
+            
             currentFrame = 0;
             panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
         }
@@ -840,6 +843,9 @@ typedef struct
                 originFrames[currentTime] = currentBounds.origin.x + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionOrigin, currentTime);
                 sizeFrames[currentTime] = currentBounds.size.width + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionWidth, currentTime);
             }
+            
+            originFrames[ZOOM_FRAMES] = dragRect.origin.x;
+            sizeFrames[ZOOM_FRAMES] = dragRect.size.width;
             
             currentFrame = 0;
             panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
@@ -925,8 +931,8 @@ typedef struct
         sizeFrames[currentTime] = currentBounds.size.width + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionWidth, currentTime);
     }
     
-    originFrames[ZOOM_FRAMES-1] = characters[range.location].location;
-    sizeFrames[ZOOM_FRAMES-1] = (characters[range.location + range.length].location - characters[range.location].location);
+    originFrames[ZOOM_FRAMES] = characters[range.location].location - 5;
+    sizeFrames[ZOOM_FRAMES] = (characters[range.location + range.length].location - characters[range.location].location) + 5;
     
     currentFrame = 0;
     panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];
@@ -954,7 +960,7 @@ typedef struct
     {
         NSRect currentBounds = [[self superview] bounds];
         
-        if (currentFrame == ZOOM_FRAMES)
+        if (currentFrame == ZOOM_FRAMES+1)
         {
             [theTimer invalidate];
             return;

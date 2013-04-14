@@ -239,7 +239,6 @@
         HFTextView *hexView = (HFTextView *)[self view];
         NSMutableArray *editRanges = [[NSMutableArray alloc] init];
         NSIndexSet *theEditSet = [theBlock editSet];
-        NSLog( @"new index set: %@", theEditSet );
         
         [theEditSet enumerateRangesUsingBlock:
          ^(NSRange range, BOOL *stop)

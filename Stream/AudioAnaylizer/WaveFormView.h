@@ -36,8 +36,8 @@
     CGFloat panMomentumValue;
     BOOL mouseDown, mouseDownOnPoint;
     NSRect dragRect;
-    double originFrames[ZOOM_FRAMES];
-    double sizeFrames[ZOOM_FRAMES];
+    double originFrames[ZOOM_FRAMES+1];
+    double sizeFrames[ZOOM_FRAMES+1];
     int currentFrame;
     BOOL needsAnaylyzation;
 }

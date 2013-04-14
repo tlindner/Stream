@@ -366,7 +366,12 @@
     theEdit.location = location;
     theEdit.length = length;
     theEdit.data = data;
-    [self addEditsObject:theEdit];
+//    [self addEditsObject:theEdit];
+    
+    NSMutableOrderedSet *theSet = [self mutableOrderedSetValueForKey:@"edits"];
+//    [self willChangeValueForKey:@"edits" withSetMutation:NSKeyValueUnionSetMutation usingObjects:[NSSet setWithObject:theEdit]];
+    [theSet addObject:theEdit];
+//    [self didChangeValueForKey:@"edits" withSetMutation:NSKeyValueUnionSetMutation usingObjects:[NSSet setWithObject:theEdit]];
 }
 
 @end

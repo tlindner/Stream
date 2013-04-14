@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "CoCoCassetteBlocker.h"
+#import "CoCoCassetteFileBlocker.h"
 
 @implementation AppDelegate
 
@@ -29,6 +30,11 @@
 
     NSMenuItem *newMenuItem = [[NSMenuItem alloc] initWithTitle:@"CoCo Cassette Blocker" action:@selector(makeNewBlocker:) keyEquivalent:@""];
     [newMenuItem setRepresentedObject:[CoCoCassetteBlocker class]];
+    [blocksMenu addItem:newMenuItem];
+    [newMenuItem release];
+
+    newMenuItem = [[NSMenuItem alloc] initWithTitle:@"CoCo Cassette File Blocker" action:@selector(makeNewBlocker:) keyEquivalent:@""];
+    [newMenuItem setRepresentedObject:[CoCoCassetteFileBlocker class]];
     [blocksMenu addItem:newMenuItem];
     [newMenuItem release];
 }
