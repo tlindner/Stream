@@ -10,4 +10,7 @@
 
 @interface AnaylizerSettingPopOverAccessoryViewController : NSViewController
 
+- (IBAction)ConfigurableButton1:(id)sender;
+
 @end
+

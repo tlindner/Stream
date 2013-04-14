@@ -48,6 +48,8 @@
 - (void) postEdit: (NSData *)data atLocation: (int64_t)location withLength: (int64_t)length;
 - (StAnaylizer *)previousAnaylizer;
 
+- (IBAction)ConfigurableButton1:(id)sender;
+
 @end
 
 @interface streamLockValueTransformer : NSValueTransformer {
@@ -77,3 +79,8 @@
 - (void)removeEdits:(NSOrderedSet *)values;
 
 @end
+
+@interface NSViewController (StreamViewControllerExtras)
+- (IBAction)ConfigurableButton1:(id)sender;
+@end
+

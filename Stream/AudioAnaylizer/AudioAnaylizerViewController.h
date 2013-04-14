@@ -24,5 +24,7 @@
 - (void)updateBounds:(NSRect)inRect;
 - (void)deltaSlider:(float)delta fromPoint:(NSPoint)point;
 - (void) reloadView;
+- (IBAction)ConfigurableButton1:(id)sender;
+- (void)anaylizerIsDeallocating;
 
 @end

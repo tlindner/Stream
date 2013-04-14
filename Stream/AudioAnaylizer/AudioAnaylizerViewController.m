@@ -189,6 +189,25 @@
     [[self.scroller documentView] setFrame:rect];
 }
 
+- (void)anaylizerIsDeallocating
+{
+    WaveFormView *wfv = [self.scroller documentView];
+    [wfv deactivateObservations];
+}
+
+- (IBAction)ConfigurableButton1:(id)sender
+{
+   /* this should be hooked up the the anaylize button */
+    
+    StAnaylizer *theAna = [self representedObject];
+    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[theAna anaylizerObject];
+    WaveFormView *wfv = [self.scroller documentView];
+    NSUInteger origin, width;
+    
+    [wfv getSelectionOrigin:&origin width:&width];
+    [modelObject determineFrequencyOrigin:origin width:width];    
+}
+
 -(NSString *)nibName
 {
     return @"AudioAnaylizerViewController";

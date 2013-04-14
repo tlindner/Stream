@@ -7,6 +7,7 @@
 //
 
 #import "AnaylizerSettingPopOverAccessoryViewController.h"
+#import "StAnaylizer.h"
 
 @implementation AnaylizerSettingPopOverAccessoryViewController
 
@@ -18,6 +19,14 @@
     }
     
     return self;
+}
+- (IBAction)ConfigurableButton1:(id)sender {
+
+    StAnaylizer *anaylizer = [self representedObject];
+    
+    if ([anaylizer respondsToSelector:@selector(ConfigurableButton1:)]) {
+        [anaylizer ConfigurableButton1:sender];
+    }
 }
 
 @end

@@ -48,11 +48,12 @@
             {
                 /* make sure view editor is actually changing */
 
-                if( [[[theAna anaylizerObject] viewController] isSubclassOfClass:[self.editorController class]] ) return;
+                //if( [[[theAna anaylizerObject] viewController] isSubclassOfClass:[self.editorController class]] ) return;
 
                 /* teardown existing sub view editor */
                 
                 [[self.editorController view] removeFromSuperview];
+                [self.editorController setRepresentedObject:nil];
                 self.editorController = nil;
 
                 [[[theAna managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Set Stream Anaylizer “%@”", [theAna valueForKey:@"currentEditorView"]]];

@@ -325,8 +325,14 @@
     {
         if( self.parentStream != nil )
         {
-            /* This is a top level block, return data from data block */
+            /* This is a top level block, return range from data block */
             result = [[self subBlockNamed:@"data"] getUnionRange];
+            
+            if( result.length == 0 )
+            {
+                /* data range was empty, try attribute range instead */
+                result = [[self subBlockNamed:@"attributes"] getUnionRange];
+            }
         }
         else
         {

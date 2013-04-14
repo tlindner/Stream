@@ -360,6 +360,14 @@
     return [[self parentStream] previousAnayliser:self];    
 }
 
+- (IBAction)ConfigurableButton1:(id)sender
+{
+    if( [viewController respondsToSelector:@selector(ConfigurableButton1:)] )
+    {
+        [viewController ConfigurableButton1:(id)sender];
+    }
+}
+
 - (void) postEdit: (NSData *)data atLocation: (int64_t)location withLength: (int64_t)length
 {
     AnaylizerEdit *theEdit = [NSEntityDescription insertNewObjectForEntityForName:@"AnaylizerEdit" inManagedObjectContext:[self managedObjectContext]];

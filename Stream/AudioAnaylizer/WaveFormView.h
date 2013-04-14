@@ -10,6 +10,7 @@
 #import "StAnaylizer.h"
 #import "CoreAudio/CoreAudioTypes.h"
 #import "AudioAnaylizerViewController.h"
+#import "CoCoAudioAnaylizer.h"
 
 #define ZOOM_FRAMES 10
 
@@ -40,6 +41,8 @@
     double sizeFrames[ZOOM_FRAMES+1];
     int currentFrame;
     BOOL needsAnaylyzation;
+    StAnaylizer *cachedAnaylizer;
+    CoCoAudioAnaylizer *modelObject;
 }
 
 @property (nonatomic, assign) AudioAnaylizerViewController *viewController;
@@ -53,5 +56,6 @@
 - (void) deactivateObservations;
 - (BOOL) acceptsFirstResponder;
 - (void)zoomToCharacter: (NSRange)range;
+- (void) getSelectionOrigin:(NSUInteger *)origin width:(NSUInteger *)width;
 
 @end

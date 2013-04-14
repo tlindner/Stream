@@ -211,7 +211,7 @@
             /* Editview changed, update UI */
             [[accessoryView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             
-            /* ask current anaylization the name of it accessory nib */
+            /* ask current anaylization the name of its accessory nib */
             Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:[editorPopup titleOfSelectedItem]];
             //NSLog( @"anaClass: %@", anaClass );
             NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");

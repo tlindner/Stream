@@ -41,7 +41,7 @@ typedef struct
 @implementation WaveFormView
 
 @synthesize viewController;
-@synthesize cachedAnaylizer;
+@dynamic cachedAnaylizer;
 @synthesize anaylizationError;
 @synthesize errorString;
 @synthesize observationsActive;
@@ -71,7 +71,7 @@ typedef struct
         [self.cachedAnaylizer addObserver:self forKeyPath:@"failIndexSet" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"viewRange" options:NSKeyValueChangeSetting context:nil];
-        CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
+        modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
         [modelObject addObserver:self forKeyPath:@"frameBuffer" options:NSKeyValueChangeSetting context:nil];
         
         observationsActive = YES;
@@ -91,21 +91,34 @@ typedef struct
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"failIndexSet"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"editIndexSet"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"viewRange"];
-        CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
         [modelObject removeObserver:self forKeyPath:@"frameBuffer"];
         observationsActive = NO;
     }     
 }
 
+- (StAnaylizer *)cachedAnaylizer
+{
+    return cachedAnaylizer;
+}
+
+- (void) setCachedAnaylizer:(StAnaylizer *)inAna
+{
+    if (inAna != cachedAnaylizer)
+    {
+        [self deactivateObservations];
+    }
+    [cachedAnaylizer release];
+    cachedAnaylizer = [inAna retain];
+}
+
 - (void)drawRect:(NSRect)dirtyRect
 {
     NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
-    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
+    //CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
     NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
     
     NSMutableData *coalescedObject = [optionsDict objectForKey:@"coalescedObject"];
     NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
-//    AudioSampleType *audioFrames = [[optionsDict objectForKey:@"frameBufferObject"] mutableBytes];
     AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
     NSRange *characters = [[optionsDict objectForKey:@"charactersObject"] mutableBytes];
     NSInteger currentChannel = [[optionsDict objectForKey:@"audioChannel"] intValue];
@@ -279,9 +292,10 @@ typedef struct
                 lastHeight = thisHeight;
             }
             
-            /* draw handles */
+            /* draw selection */
             if( scale <= DOT_HANDLE_SCALE )
             {
+                /* Draw handle boxes */
                 CGFloat x = floor(origin);
                 i = 0;
                 
@@ -361,6 +375,15 @@ typedef struct
             }
         }
 
+        /* Draw hi-lite selection */
+        if( scale >= DOT_HANDLE_SCALE && selectedSample != NSUIntegerMax)
+        {
+            [[[NSColor selectedControlColor] colorWithAlphaComponent:0.5] set];
+            rect = NSMakeRect(selectedSample/scale, 0, selectedSampleLength/scale, viewWaveHeight);
+            NSBezierPath* aPath = [NSBezierPath bezierPathWithRect:rect];
+            [aPath fill];            
+        }
+        
         /* draw green modification tints */
         [[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:0.5] set];
         NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
@@ -405,7 +428,7 @@ typedef struct
         /* draw lupe & selection rect */
         if( mouseDownOnPoint == NO )
         {
-            if( (toolMode == WFVSelection || toolMode == WFVLupe) && mouseDown == YES )
+            if( (toolMode == WFVSelection && scale <= DOT_HANDLE_SCALE && mouseDown == YES) || (toolMode == WFVLupe && mouseDown == YES) )
             {
                 NSDottedFrameRect(NSMakeRect(dragRect.origin.x/scale, dragRect.origin.y, dragRect.size.width/scale, dragRect.size.height));
             }
@@ -435,6 +458,8 @@ typedef struct
     
     if( previousIndexSet != nil )
         [previousIndexSet release];
+    
+    [self setCachedAnaylizer:nil];
     
     [super dealloc];
 }
@@ -531,7 +556,7 @@ typedef struct
 {
     if( selectedSample != NSUIntegerMax )
     {
-        CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
+//        CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
 
 //        NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
 
@@ -560,7 +585,7 @@ typedef struct
 
 - (void) mouseDown:(NSEvent *)theEvent
 {
-    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
+//    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
     mouseDown = YES;
     mouseDownOnPoint = NO;
     locationPrevious = locationNow = locationMouseDown = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
@@ -628,6 +653,11 @@ typedef struct
             }
         }
     }
+    else if( toolMode == WFVSelection && scale > DOT_HANDLE_SCALE )
+    {
+        mouseDown = YES;
+        mouseDownOnPoint = NO;
+    }
     else if( toolMode == WFVPencil )
     {
         NSPoint locationMouseDownSelf = [self convertPoint:locationMouseDown fromView:nil];
@@ -663,13 +693,11 @@ typedef struct
         resample = YES;
         [self setNeedsDisplay:YES];
     }
-    else if( toolMode == WFVSelection && scale > DOT_HANDLE_SCALE )
-        mouseDown = NO; /* no selecting samples if zoomed out too far */
 }
 
 - (void) mouseDragged:(NSEvent *)theEvent
 {
-    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
+//    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
     locationPrevious = locationNow;
     locationNow = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
     
@@ -858,6 +886,8 @@ typedef struct
         {
             selectedSample = NSUIntegerMax;
             selectedSampleLength = 1;
+            
+            [self.cachedAnaylizer setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.selected"];
         }
         
         [self setNeedsDisplay:YES];
@@ -871,7 +901,7 @@ typedef struct
             NSValue *rangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType)*selectedSample, sizeof(AudioSampleType)*selectedSampleLength)];
             NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", rangeValue, @"range", previousIndexSet, @"indexSet", nil];
             
-            id modelObject = [self.cachedAnaylizer anaylizerObject];
+//            id modelObject = [self.cachedAnaylizer anaylizerObject];
             [[parentContext undoManager] registerUndoWithTarget:modelObject selector:@selector(setPreviousState:) object:previousState];
             
             if( selectedSampleLength == 1 )
@@ -896,7 +926,7 @@ typedef struct
         NSData *previousSamples = [NSData dataWithBytes:storedSamples+modifiedRange.location length:sizeof(AudioSampleType)*modifiedRange.length];
         NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", rangeValue, @"range", previousIndexSet, @"indexSet", nil];
 
-        id modelObject = [self.cachedAnaylizer anaylizerObject];
+//        id modelObject = [self.cachedAnaylizer anaylizerObject];
         [[parentContext undoManager] registerUndoWithTarget:modelObject selector:@selector(setPreviousState:) object:previousState];
         [[parentContext undoManager] setActionName:@"Draw Samples"];
 
@@ -909,6 +939,11 @@ typedef struct
         [self setNeedsDisplay:YES];
     }
     
+    if (selectedSample == NSUIntegerMax)
+        [self.cachedAnaylizer setValue:[NSNumber numberWithBool:NO] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.selected"];
+    else
+        [self.cachedAnaylizer setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.selected"];
+
     mouseDown = NO;
 }
 
@@ -973,6 +1008,12 @@ typedef struct
         
         currentFrame++;
     }
+}
+
+- (void) getSelectionOrigin:(NSUInteger *)origin width:(NSUInteger *)width
+{
+    *origin = selectedSample;
+    *width = selectedSampleLength;
 }
 
 @end

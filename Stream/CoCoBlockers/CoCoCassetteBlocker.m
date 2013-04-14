@@ -72,33 +72,38 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
         {
             /* we found a header */
             
-            StBlock *newBlock = [stream startNewBlockNamed:[NSString stringWithFormat:@"Block %d", blockName++] owner:[CoCoCassetteBlocker anaylizerKey]];
-            
-            unsigned char blockType = streamBytes[i+1];
-            unsigned char checksumCheck = 0;
-            unsigned char fixed = 0x55;
-            NSUInteger blockLength = streamBytes[i+2];
-            
-            for( NSUInteger j=i+1; j<i+3+blockLength; j++ ) checksumCheck += streamBytes[j];
-
-            [newBlock addAttributeRange:@"stream" start:i+1 length:1 name:@"Block Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
-            [newBlock addAttributeRange:@"stream" start:i+2 length:1 name:@"Length" verification:nil transformation:@"BlocksUnsignedBigEndian"];
-            [newBlock addAttributeRange:@"stream" start:i+blockLength+3 length:1 name:@"Check Sum" verification:[NSData dataWithBytes:&checksumCheck length:1] transformation:@"BlocksUnsignedBigEndian"];
-            [newBlock addAttributeRange:@"stream" start:i+blockLength+4 length:1 name:@"Fixed" verification:[NSData dataWithBytes:&fixed length:1] transformation:@"BlocksUnsignedBigEndian"];
-            
-            if( (blockType == 0) && (blockLength == 0x0f) )
+            if( i + 3 < length ) /* Are there enough bytes to parse the header? */
             {
-                [newBlock addDataRange:@"stream" start:i+3 length:8 name:@"File Name" transformation:@"RSDOSString"];
-                [newBlock addDataRange:@"stream" start:i+11 length:1 name:@"File Type" transformation:@"BlocksUnsignedBigEndian"];
-                [newBlock addDataRange:@"stream" start:i+12 length:1 name:@"Data Type" transformation:@"BlocksUnsignedBigEndian"];
-                [newBlock addDataRange:@"stream" start:i+13 length:1 name:@"Gaps" transformation:@"BlocksUnsignedBigEndian"];
-                [newBlock addDataRange:@"stream" start:i+14 length:2 name:@"ML Exec Address" transformation:@"BlocksUnsignedBigEndian"];
-                [newBlock addDataRange:@"stream" start:i+16 length:2 name:@"ML Load Address" transformation:@"BlocksUnsignedBigEndian"];
+                unsigned char blockType = streamBytes[i+1];
+                unsigned char checksumCheck = 0;
+                unsigned char fixed = 0x55;
+                NSUInteger blockLength = streamBytes[i+2];
+                unsigned char actualLength = MIN(blockLength, length - (i+3));
+           
+                StBlock *newBlock = [stream startNewBlockNamed:[NSString stringWithFormat:@"Block %d", blockName++] owner:[CoCoCassetteBlocker anaylizerKey]];
+                
+                NSUInteger calculatedEnd = MIN(i+3+blockLength, length);
+                for( NSUInteger j=i+1; j<calculatedEnd; j++ ) checksumCheck += streamBytes[j];
+
+                [newBlock addAttributeRange:@"stream" start:i+1 length:1 name:@"Block Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
+                [newBlock addAttributeRange:@"stream" start:i+2 length:1 name:@"Length" verification:[NSData dataWithBytes:&actualLength length:1] transformation:@"BlocksUnsignedBigEndian"];
+                if( i+blockLength+3 < length ) [newBlock addAttributeRange:@"stream" start:i+blockLength+3 length:1 name:@"Check Sum" verification:[NSData dataWithBytes:&checksumCheck length:1] transformation:@"BlocksUnsignedBigEndian"];
+                if( i+blockLength+4 < length ) [newBlock addAttributeRange:@"stream" start:i+blockLength+4 length:1 name:@"Fixed" verification:[NSData dataWithBytes:&fixed length:1] transformation:@"BlocksUnsignedBigEndian"];
+                
+                if( (blockType == 0) && (blockLength == 0x0f) )
+                {
+                    [newBlock addDataRange:@"stream" start:i+3 length:8 name:@"File Name" transformation:@"RSDOSString"];
+                    [newBlock addDataRange:@"stream" start:i+11 length:1 name:@"File Type" transformation:@"BlocksUnsignedBigEndian"];
+                    [newBlock addDataRange:@"stream" start:i+12 length:1 name:@"Data Type" transformation:@"BlocksUnsignedBigEndian"];
+                    [newBlock addDataRange:@"stream" start:i+13 length:1 name:@"Gaps" transformation:@"BlocksUnsignedBigEndian"];
+                    [newBlock addDataRange:@"stream" start:i+14 length:2 name:@"ML Exec Address" transformation:@"BlocksUnsignedBigEndian"];
+                    [newBlock addDataRange:@"stream" start:i+16 length:2 name:@"ML Load Address" transformation:@"BlocksUnsignedBigEndian"];
+                }
+                else if( blockLength != 0 )
+                    [newBlock addDataRange:@"stream" start:i+3 length:actualLength];
+                
+                i += 1 + blockLength + 2;
             }
-            else if( blockLength != 0 )
-                [newBlock addDataRange:@"stream" start:i+3 length:blockLength];
-            
-            i += 1 + blockLength + 2;
         }
     }
 }
