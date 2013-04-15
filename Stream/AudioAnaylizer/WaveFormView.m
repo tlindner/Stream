@@ -73,7 +73,8 @@ typedef struct
         [self.cachedAnaylizer addObserver:self forKeyPath:@"viewRange" options:NSKeyValueChangeSetting context:nil];
         modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
         [modelObject addObserver:self forKeyPath:@"frameBuffer" options:NSKeyValueChangeSetting context:nil];
-        
+        StStream *theStream = [self.cachedAnaylizer parentStream];
+        [theStream addObserver:self forKeyPath:@"anaylizers" options:NSKeyValueChangeSetting context:nil];
         observationsActive = YES;
     }
 }
@@ -92,6 +93,8 @@ typedef struct
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"editIndexSet"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"viewRange"];
         [modelObject removeObserver:self forKeyPath:@"frameBuffer"];
+        StStream *theStream = [self.cachedAnaylizer parentStream];
+        [theStream removeObserver:self forKeyPath:@"anaylizers"];
         observationsActive = NO;
     }     
 }
@@ -138,8 +141,12 @@ typedef struct
         [at scaleXBy:scale yBy:1.0f];
         [at concat];
         
+        StStream *stream = [self.cachedAnaylizer parentStream];
+        NSOrderedSet *anaylizers = [stream anaylizers];
+        
         CGFloat viewHeight = [self frame].size.height;
-        CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
+        CGFloat viewWaveHeight = viewHeight - (DATA_SPACE*[anaylizers count]);
+        if( viewWaveHeight < 0 ) viewWaveHeight = 0;
         CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
         float origin = dirtyRect.origin.x / scale;
@@ -214,7 +221,8 @@ typedef struct
                 //NSLog( @"Scale: %f", ((sampleRate / 2400.0) * 8 / scale) );
                 
                 NSSize charWidth = [string sizeWithAttributes:nil];
-                NSPoint thePoint = NSMakePoint((characters[i].location+(characters[i].length/2)-(charWidth.width/2))/scale, viewHeight-(DATA_SPACE)+1.0);
+                NSPoint thePoint = NSMakePoint((characters[i].location+(characters[i].length/2.0)-(charWidth.width/2.0*scale))/scale, viewWaveHeight+1.0);
+
                 [string drawAtPoint:thePoint withAttributes:nil];
                 
                 /* Draw byte grouping */
@@ -418,6 +426,55 @@ typedef struct
                 NSDottedFrameRect(NSMakeRect(dragRect.origin.x/scale, dragRect.origin.y, dragRect.size.width/scale, dragRect.size.height));
             }
         }
+        
+        NSMutableArray *blocksAsRanges = [[NSMutableArray alloc] init];
+        NSMutableArray *blocksAsNames = [[NSMutableArray alloc] init];
+        
+        for (int i=1; i<[anaylizers count]; i++)
+        {
+            StAnaylizer *theAna = [anaylizers objectAtIndex:i];
+            NSSet *blocksSet = [stream blocksWithKey:[theAna anaylizerKind]];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+            NSArray *blocksArray = [blocksSet sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            NSArray *nameArray = [blocksArray valueForKey:@"name"];
+            [blocksAsNames addObject:nameArray];
+            NSArray *rangeArrayObject = [blocksArray valueForKey:@"unionRangeObject"];
+            NSRange *rangeArray = (NSRange *)malloc(sizeof(NSRange) * [rangeArrayObject count]);
+            
+            for (int j=0; j<[rangeArrayObject count]; j++ )
+            {
+                NSRange theRange = [[rangeArrayObject objectAtIndex:j] rangeValue];
+                rangeArray[j].location = characters[theRange.location].location;
+                rangeArray[j].length = (characters[theRange.location + theRange.length].location + characters[theRange.location + theRange.length].length) - rangeArray[j].location;
+            }
+            
+            [blocksAsRanges addObject:[NSData dataWithBytesNoCopy:rangeArray length:sizeof(NSRange) * [rangeArrayObject count]]];
+            
+            CGFloat bottom = viewWaveHeight + (DATA_SPACE * i) - 2.0;
+            NSColor *lightColor = [NSColor colorWithCalibratedWhite:0.8 alpha:0.5];
+            NSColor *darkColor = [NSColor colorWithCalibratedWhite:0.65 alpha:0.5];
+            
+            for (int j=0; j<[rangeArrayObject count]; j++ )
+            {
+                /* Draw byte grouping */
+                if (j & 0x1 )
+                    [lightColor set];
+                else
+                    [darkColor set];
+                
+                NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(rangeArray[j].location/scale, bottom, rangeArray[j].length/scale, DATA_SPACE-1) xRadius:5.0 yRadius:5.0];
+                [aPath fill];
+                
+                NSSize charWidth = [[nameArray objectAtIndex:j] sizeWithAttributes:nil];
+                CGFloat xStart = (rangeArray[j].location+(rangeArray[j].length/2.0)-(charWidth.width/2.0*scale))/scale;
+
+                NSPoint thePoint = NSMakePoint(xStart, bottom+2.0);
+                [[nameArray objectAtIndex:j] drawAtPoint:thePoint withAttributes:nil];
+            }
+        }
+        
+        [blocksAsRanges release];
+        [blocksAsNames release];
     }
     else
     {
@@ -500,6 +557,10 @@ typedef struct
     else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.amplify"] )
     {
         resample = YES;
+        [self setNeedsDisplay:YES];
+    }
+    else if( [keyPath isEqualToString:@"anaylizers"] )
+    {
         [self setNeedsDisplay:YES];
     }
     else
@@ -775,36 +836,45 @@ typedef struct
             CGFloat currentFrameWidth = [[self superview] frame].size.width;
             CGFloat scale = currentBoundsWidth/currentFrameWidth;
             
-            if( scale <= DOT_HANDLE_SCALE )
+            /* Handle floating info window */
+            if( attachedWindow == nil )
             {
-                if( attachedWindow == nil )
+                NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
+                double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
+                NSView *toolView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
+                textView = [[NSTextView alloc] initWithFrame:NSMakeRect(5, 5, 90, 15)];
+                
+                
+                NSMutableParagraphStyle *mutParaStyle=[[NSMutableParagraphStyle alloc] init];
+                [mutParaStyle setAlignment:NSCenterTextAlignment];
+                NSAttributedString *string;
+                
+                if( scale <= DOT_HANDLE_SCALE )
                 {
-                    NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
-                    double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
-                    NSView *toolView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
-                    textView = [[NSTextView alloc] initWithFrame:NSMakeRect(5, 5, 90, 15)];
-                    
-                    
-                    NSMutableParagraphStyle *mutParaStyle=[[NSMutableParagraphStyle alloc] init];
-                    [mutParaStyle setAlignment:NSCenterTextAlignment];
-     
-                    NSAttributedString *string = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%4.1f Hertz", sampleRate/selectedSampleLength] attributes:[NSDictionary dictionaryWithObjectsAndKeys:mutParaStyle, NSParagraphStyleAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil] ];
-                    [mutParaStyle release];
-                    [textView setDrawsBackground:NO];
-                    [textView insertText:string];
-                    [string release];
-                    [toolView addSubview:textView];
-                    [textView release];
-                    attachedWindow = [[MAAttachedWindow alloc] initWithView:toolView attachedToPoint:locationNow inWindow:[self window] onSide:MAPositionBottom atDistance:10.0];
-                    [toolView release];
-                    [[self window] addChildWindow:attachedWindow ordered:NSWindowAbove];
+                    string = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%4.1f Hertz", sampleRate/selectedSampleLength] attributes:[NSDictionary dictionaryWithObjectsAndKeys:mutParaStyle, NSParagraphStyleAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil] ];
                 }
                 else {
-                    NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
-                    double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
-                    [textView setString:[NSString stringWithFormat:@"%4.1f Hertz", sampleRate/selectedSampleLength]];
-                    [attachedWindow setPoint:locationNow side:MAPositionBottom];
+                    string = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%4.2fs", selectedSampleLength/sampleRate] attributes:[NSDictionary dictionaryWithObjectsAndKeys:mutParaStyle, NSParagraphStyleAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil] ];
                 }
+                
+                [mutParaStyle release];
+                [textView setDrawsBackground:NO];
+                [textView insertText:string];
+                [string release];
+                [toolView addSubview:textView];
+                [textView release];
+                attachedWindow = [[MAAttachedWindow alloc] initWithView:toolView attachedToPoint:locationNow inWindow:[self window] onSide:MAPositionBottom atDistance:10.0];
+                [toolView release];
+                [[self window] addChildWindow:attachedWindow ordered:NSWindowAbove];
+            }
+            else {
+                NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
+                double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
+                if( scale <= DOT_HANDLE_SCALE )
+                    [textView setString:[NSString stringWithFormat:@"%4.1f Hertz", sampleRate/selectedSampleLength]];
+                else
+                    [textView setString:[NSString stringWithFormat:@"%4.2fs", selectedSampleLength/sampleRate]];
+                [attachedWindow setPoint:locationNow side:MAPositionBottom];
             }
             
             [self setNeedsDisplay:YES];

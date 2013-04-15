@@ -315,6 +315,35 @@
     return nil;
 }
 
+- (NSValue *)getUnionRangeObject
+{
+    NSRange result;
+    
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* This is a top level block, return range from data block */
+            NSRange dataRange = [[self subBlockNamed:@"data"] getUnionRange];
+            NSRange attributeRange = [[self subBlockNamed:@"attributes"] getUnionRange];
+            
+            if (dataRange.length == 0) {
+                result = attributeRange;
+            }else if (attributeRange.length == 0) {
+                result = dataRange;
+            }else {
+                result = NSUnionRange(attributeRange, dataRange);
+            }
+        } else {
+            result = [self getUnionRange];
+        }
+    } else {
+        result = [self getUnionRange];
+    }
+        
+    return [NSValue valueWithRange:result];
+}
+
 - (NSRange)getUnionRange
 {
     /* This returns the largest range that encompasses all of child blocks */

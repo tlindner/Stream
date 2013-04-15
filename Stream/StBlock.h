@@ -72,6 +72,7 @@
 - (void) checkEdited:(StBlock *)newBlock;
 - (void) checkFail:(StBlock *)newBlock;
 - (NSRange)getUnionRange;
+- (NSValue *)getUnionRangeObject;
 
 @end
 

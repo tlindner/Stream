@@ -750,7 +750,9 @@ double movingavg(int which, double newvalue, int seed);
     double sampleRate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
     double diff1, diff2, diff3, diff4, diff5;
     double movingAverage1, movingAverage2, movingAverage3, movingAverage4, movingAverageHigh, movingAverageLow;
-
+    diff1 = diff2 = diff3 = diff4 = diff5 = 0.0;
+    movingAverage1 = movingAverage2 = movingAverage3 = movingAverage4 = 0;
+    
     for( int i=1; i<crossingCount/4; i++ )
     {
         /* create sliding window of four consecutive differences */
