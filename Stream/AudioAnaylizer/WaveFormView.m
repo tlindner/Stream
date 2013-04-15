@@ -41,7 +41,7 @@ typedef struct
 @implementation WaveFormView
 
 @synthesize viewController;
-@dynamic cachedAnaylizer;
+@synthesize cachedAnaylizer;
 @synthesize anaylizationError;
 @synthesize errorString;
 @synthesize observationsActive;
@@ -94,21 +94,6 @@ typedef struct
         [modelObject removeObserver:self forKeyPath:@"frameBuffer"];
         observationsActive = NO;
     }     
-}
-
-- (StAnaylizer *)cachedAnaylizer
-{
-    return cachedAnaylizer;
-}
-
-- (void) setCachedAnaylizer:(StAnaylizer *)inAna
-{
-    if (inAna != cachedAnaylizer)
-    {
-        [self deactivateObservations];
-    }
-    [cachedAnaylizer release];
-    cachedAnaylizer = [inAna retain];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -524,6 +509,14 @@ typedef struct
     }
 }
 
+- (NSString *)view:(NSView *)view stringForToolTip:(NSToolTipTag)tag point:(NSPoint)point userData:(void *)userData
+{
+    NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
+    double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
+
+    return [NSString stringWithFormat:@"%f Hertz", sampleRate / selectedSampleLength];
+}
+
 - (IBAction)chooseTool:(id)sender
 {
     NSSegmentedControl *seggy = sender;
@@ -778,6 +771,41 @@ typedef struct
             
             selectedSample = ceil(dragRect.origin.x);
             selectedSampleLength = dragRect.size.width + 0.25;
+            CGFloat currentBoundsWidth = [[self superview] bounds].size.width;
+            CGFloat currentFrameWidth = [[self superview] frame].size.width;
+            CGFloat scale = currentBoundsWidth/currentFrameWidth;
+            
+            if( scale <= DOT_HANDLE_SCALE )
+            {
+                if( attachedWindow == nil )
+                {
+                    NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
+                    double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
+                    NSView *toolView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
+                    textView = [[NSTextView alloc] initWithFrame:NSMakeRect(5, 5, 90, 15)];
+                    
+                    
+                    NSMutableParagraphStyle *mutParaStyle=[[NSMutableParagraphStyle alloc] init];
+                    [mutParaStyle setAlignment:NSCenterTextAlignment];
+     
+                    NSAttributedString *string = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%4.1f Hertz", sampleRate/selectedSampleLength] attributes:[NSDictionary dictionaryWithObjectsAndKeys:mutParaStyle, NSParagraphStyleAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil] ];
+                    [mutParaStyle release];
+                    [textView setDrawsBackground:NO];
+                    [textView insertText:string];
+                    [string release];
+                    [toolView addSubview:textView];
+                    [textView release];
+                    attachedWindow = [[MAAttachedWindow alloc] initWithView:toolView attachedToPoint:locationNow inWindow:[self window] onSide:MAPositionBottom atDistance:10.0];
+                    [toolView release];
+                    [[self window] addChildWindow:attachedWindow ordered:NSWindowAbove];
+                }
+                else {
+                    NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
+                    double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
+                    [textView setString:[NSString stringWithFormat:@"%4.1f Hertz", sampleRate/selectedSampleLength]];
+                    [attachedWindow setPoint:locationNow side:MAPositionBottom];
+                }
+            }
             
             [self setNeedsDisplay:YES];
         }
@@ -944,6 +972,13 @@ typedef struct
     else
         [self.cachedAnaylizer setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.selected"];
 
+    if( attachedWindow != nil )
+    {
+        [[self window] removeChildWindow:attachedWindow];
+        [attachedWindow orderOut:self];
+        [attachedWindow release];
+        attachedWindow = nil;
+    }
     mouseDown = NO;
 }
 

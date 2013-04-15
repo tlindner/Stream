@@ -51,6 +51,7 @@
 		7768590613F0FF92006BE753 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7768590513F0FF92006BE753 /* Accelerate.framework */; };
 		776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */; };
 		776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776EB7E4142069060019329F /* BlockAttributeViewTableView.m */; };
+		777745AC171B558300700BB7 /* MAAttachedWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 777745AB171B558300700BB7 /* MAAttachedWindow.m */; };
 		777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 777984BC13E99E96007198EE /* StreamsTreeController.m */; };
 		778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */; };
 		778A597E140703DB00B68EB4 /* StStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597D140703DB00B68EB4 /* StStream.m */; };
@@ -212,6 +213,8 @@
 		776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewAccessory.xib; path = Stream/BlockAttributeViewAccessory.xib; sourceTree = "<group>"; };
 		776EB7E3142069060019329F /* BlockAttributeViewTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeViewTableView.h; path = Stream/BlockAttributeViewTableView.h; sourceTree = "<group>"; };
 		776EB7E4142069060019329F /* BlockAttributeViewTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewTableView.m; path = Stream/BlockAttributeViewTableView.m; sourceTree = "<group>"; };
+		777745AA171B558300700BB7 /* MAAttachedWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAAttachedWindow.h; path = Stream/MAAttachedWindow.h; sourceTree = "<group>"; };
+		777745AB171B558300700BB7 /* MAAttachedWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAAttachedWindow.m; path = Stream/MAAttachedWindow.m; sourceTree = "<group>"; };
 		777984BB13E99E96007198EE /* StreamsTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamsTreeController.h; sourceTree = "<group>"; };
 		777984BC13E99E96007198EE /* StreamsTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamsTreeController.m; sourceTree = "<group>"; };
 		778A59791406EE7600B68EB4 /* CoCoCassetteBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoCassetteBlocker.h; path = Stream/CoCoBlockers/CoCoCassetteBlocker.h; sourceTree = "<group>"; };
@@ -426,6 +429,8 @@
 		7759CF3513DBA1A300789DB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				777745AA171B558300700BB7 /* MAAttachedWindow.h */,
+				777745AB171B558300700BB7 /* MAAttachedWindow.m */,
 				7768590513F0FF92006BE753 /* Accelerate.framework */,
 				7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */,
 				7759CF3613DBA1A300789DB3 /* Cocoa.framework */,
@@ -953,6 +958,7 @@
 				77B014681717AFB2008CAF1A /* StreamEdit.m in Sources */,
 				77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */,
 				77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */,
+				777745AC171B558300700BB7 /* MAAttachedWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

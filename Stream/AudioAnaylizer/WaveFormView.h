@@ -11,6 +11,7 @@
 #import "CoreAudio/CoreAudioTypes.h"
 #import "AudioAnaylizerViewController.h"
 #import "CoCoAudioAnaylizer.h"
+#import "MAAttachedWindow.h"
 
 #define ZOOM_FRAMES 10
 
@@ -43,6 +44,8 @@
     BOOL needsAnaylyzation;
     StAnaylizer *cachedAnaylizer;
     CoCoAudioAnaylizer *modelObject;
+    MAAttachedWindow *attachedWindow;
+    NSTextView *textView;
 }
 
 @property (nonatomic, assign) AudioAnaylizerViewController *viewController;

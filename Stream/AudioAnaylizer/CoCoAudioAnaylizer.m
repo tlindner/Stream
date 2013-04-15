@@ -14,7 +14,7 @@ inline UInt32 CalculateLPCMFlags (UInt32 inValidBitsPerChannel, UInt32 inTotalBi
 void FillOutASBDForLPCM(AudioStreamBasicDescription *outASBD, Float64 inSampleRate, UInt32 inChannelsPerFrame, UInt32 inValidBitsPerChannel,UInt32 inTotalBitsPerChannel, bool inIsFloat, bool inIsBigEndian, bool inIsNonInterleaved);
 
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
-float *FindZeroCrossings( AudioSampleType *samples, NSUInteger frameCount, NSUInteger *crossingCount );
+float *FindZeroCrossings( AudioSampleType *samples, NSUInteger frameCount, int interpolate, NSUInteger *crossingCount );
 double movingavg(int which, double newvalue, int seed);
 
 @implementation CoCoAudioAnaylizer
@@ -50,6 +50,7 @@ double movingavg(int which, double newvalue, int seed);
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
+            [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"];
             [theAna removeObserver:self forKeyPath:@"resultingData"];
             observationsActive = NO;
         } 
@@ -75,6 +76,7 @@ double movingavg(int which, double newvalue, int seed);
         if( observationsActive == NO )
         {
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify" options:NSKeyValueChangeSetting context:nil];
+            [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
@@ -95,6 +97,7 @@ double movingavg(int which, double newvalue, int seed);
     {
         StAnaylizer *theAna = [self representedObject];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
@@ -268,6 +271,7 @@ double movingavg(int which, double newvalue, int seed);
     double sampleRate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
     float lowCycle = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] floatValue];
     float highCycle = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
+    BOOL interpolate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"] boolValue];
     
 //    NSMutableData *frameBufferObject = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
     NSMutableData *frameBufferObject = self.frameBuffer;
@@ -276,8 +280,8 @@ double movingavg(int which, double newvalue, int seed);
     AudioSampleType *frameStart = audioFrames;
     NSUInteger crossingCount;
     
-    float *zero_crossings = FindZeroCrossings( frameStart, frameCount, &crossingCount ); 
-    
+    float *zero_crossings = FindZeroCrossings( frameStart, frameCount, interpolate, &crossingCount ); 
+        
     /* Store zero crossing array for wave form display */
     NSData *zerocrossingObject = [NSData dataWithBytesNoCopy:zero_crossings length:sizeof(float)*crossingCount];
     [theAna setValue:zerocrossingObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.zeroCrossingArray"];
@@ -364,7 +368,7 @@ double movingavg(int which, double newvalue, int seed);
                 if( test1 < dataThreashold )
                     even_parity |= 0x8000;
                 bit_count++;
-                
+
                 if( bit_count == 8 )
                 {
                     /* we have eight bits, finish byte capture */
@@ -539,6 +543,13 @@ double movingavg(int which, double newvalue, int seed);
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     //NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
+    
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.interpolate"] )
+    {
+        if( [change objectForKey:@"new"] != [NSNull null] )
+            [self anaylizeAudioData];
+        return;
+    }
     
     if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] )
     {
@@ -732,9 +743,10 @@ double movingavg(int which, double newvalue, int seed);
     NSMutableData *frameBufferObject = self.frameBuffer;
     AudioSampleType *audioFrames = [frameBufferObject mutableBytes];
     NSUInteger crossingCount;
-    float *zero_crossings = FindZeroCrossings( audioFrames+origin, width, &crossingCount );
-    
     StAnaylizer *theAna = self.representedObject;
+    BOOL interpolate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"] boolValue];
+    float *zero_crossings = FindZeroCrossings( audioFrames+origin, width, interpolate, &crossingCount );
+    
     double sampleRate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
     double diff1, diff2, diff3, diff4, diff5;
     double movingAverage1, movingAverage2, movingAverage3, movingAverage4, movingAverageHigh, movingAverageLow;
@@ -793,7 +805,7 @@ double movingavg(int which, double newvalue, int seed);
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"coalescedObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", [NSNull null], @"zeroCrossingArray", [NSNumber numberWithInteger:100], @"amplify", [NSNull null], @"cachedframeBuffer", [NSNumber numberWithBool:NO], @"selected", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"coalescedObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", [NSNull null], @"zeroCrossingArray", [NSNumber numberWithInteger:100], @"amplify", [NSNull null], @"cachedframeBuffer", [NSNumber numberWithBool:NO], @"selected", [NSNumber numberWithBool:NO], @"interpolate", nil] autorelease];
 }
 
 @end
@@ -846,7 +858,7 @@ CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 )
     return (-b)/m;
 }
 
-float *FindZeroCrossings( AudioSampleType *samples, NSUInteger frameCount, NSUInteger *crossingCount )
+float *FindZeroCrossings( AudioSampleType *samples, NSUInteger frameCount, int interpolate, NSUInteger *crossingCount )
 {
     vDSP_Length i;
     int zc_count;
@@ -855,21 +867,42 @@ float *FindZeroCrossings( AudioSampleType *samples, NSUInteger frameCount, NSUIn
     float *zero_crossings = malloc(sizeof(float)*max_possible_zero_crossings);
     zc_count = 0;
     
-    /* Create temporary array of zero crossing points */
-    for( i=1; i<frameCount; i++ )
+    if (interpolate)
     {
-        vDSP_Length crossing;
-        vDSP_Length total;
-        const vDSP_Length findOneCrossing = 1;
-        
-        vDSP_nzcros(samples+i, 1, findOneCrossing, &crossing, &total, frameCount-i);
-        
-        if( crossing == 0 ) break;
-        
-        zero_crossings[zc_count++] = i+crossing;
-        //zero_crossings[zc_count++] = XIntercept(i+crossing-1, frameStart[i+crossing-1], i+crossing, frameStart[i+crossing]);
-        
-        i += crossing-1;
+        /* Create temporary array of zero crossing points */
+        for( i=1; i<frameCount; i++ )
+        {
+            vDSP_Length crossing;
+            vDSP_Length total;
+            const vDSP_Length findOneCrossing = 1;
+            
+            vDSP_nzcros(samples+i, 1, findOneCrossing, &crossing, &total, frameCount-i);
+            
+            if( crossing == 0 ) break;
+            
+            zero_crossings[zc_count++] = XIntercept(i+crossing-1, samples[i+crossing-1], i+crossing, samples[i+crossing]);
+
+            i += crossing-1;
+        }
+    }
+    else
+    {
+        /* Create temporary array of zero crossing points */
+        for( i=1; i<frameCount; i++ )
+        {
+            vDSP_Length crossing;
+            vDSP_Length total;
+            const vDSP_Length findOneCrossing = 1;
+            
+            vDSP_nzcros(samples+i, 1, findOneCrossing, &crossing, &total, frameCount-i);
+            
+            if( crossing == 0 ) break;
+            
+            zero_crossings[zc_count++] = i+crossing;
+            
+            i += crossing-1;
+        }
+
     }
     
     /* remove unused space in zero crossing array */
