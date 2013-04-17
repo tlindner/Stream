@@ -16,6 +16,7 @@
 @private
     NSUInteger dataIndex, attrIndex, depIndex; 
     NSObject * anaylizerObject;
+    NSValue *streamRangeObject;
 }
 @property (nonatomic, retain) NSString * anaylizerKind;
 @property (nonatomic, retain) NSString * currentEditorView;

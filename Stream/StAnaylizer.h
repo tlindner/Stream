@@ -45,6 +45,7 @@
 - (NSURL *)urlForCachedData;
 - (void) setResultingData:(NSMutableData *)inData andChangedIndexSet:(NSMutableIndexSet *)inIndexSet;
 - (BOOL) streamEditedInRange:(NSRange)range;
+- (void) poseEdit:(NSData *)data range:(NSRange)range;
 - (void) postEdit: (NSData *)data atLocation: (int64_t)location withLength: (int64_t)length;
 - (StAnaylizer *)previousAnaylizer;
 

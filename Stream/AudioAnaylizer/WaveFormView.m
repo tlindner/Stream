@@ -101,8 +101,11 @@ typedef struct
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+//    NSLog( @"self frame height: %f, bounds height: %f", [self frame].size.height, [self bounds].size.height );
+//    NSLog( @"Super frame height: %f, bounds height: %f", [[self superview] frame].size.height, [[self superview] bounds].size.height );
+//    NSLog( @"" );
+    
     NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
-    //CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
     NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
     
     NSMutableData *coalescedObject = [optionsDict objectForKey:@"coalescedObject"];
@@ -427,8 +430,6 @@ typedef struct
             }
         }
         
-        NSMutableArray *blocksAsRanges = [[NSMutableArray alloc] init];
-        NSMutableArray *blocksAsNames = [[NSMutableArray alloc] init];
         
         for (int i=1; i<[anaylizers count]; i++)
         {
@@ -437,7 +438,6 @@ typedef struct
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
             NSArray *blocksArray = [blocksSet sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
             NSArray *nameArray = [blocksArray valueForKey:@"name"];
-            [blocksAsNames addObject:nameArray];
             NSArray *rangeArrayObject = [blocksArray valueForKey:@"unionRangeObject"];
             NSRange *rangeArray = (NSRange *)malloc(sizeof(NSRange) * [rangeArrayObject count]);
             
@@ -445,36 +445,42 @@ typedef struct
             {
                 NSRange theRange = [[rangeArrayObject objectAtIndex:j] rangeValue];
                 rangeArray[j].location = characters[theRange.location].location;
-                rangeArray[j].length = (characters[theRange.location + theRange.length].location + characters[theRange.location + theRange.length].length) - rangeArray[j].location;
+                rangeArray[j].length = (characters[theRange.location + theRange.length - 1].location + characters[theRange.location + theRange.length - 1].length) - rangeArray[j].location;
             }
-            
-            [blocksAsRanges addObject:[NSData dataWithBytesNoCopy:rangeArray length:sizeof(NSRange) * [rangeArrayObject count]]];
             
             CGFloat bottom = viewWaveHeight + (DATA_SPACE * i) - 2.0;
             NSColor *lightColor = [NSColor colorWithCalibratedWhite:0.8 alpha:0.5];
             NSColor *darkColor = [NSColor colorWithCalibratedWhite:0.65 alpha:0.5];
             
-            for (int j=0; j<[rangeArrayObject count]; j++ )
+            for (int j=0; j<[nameArray count]; j++ )
             {
-                /* Draw byte grouping */
                 if (j & 0x1 )
                     [lightColor set];
                 else
                     [darkColor set];
                 
-                NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(rangeArray[j].location/scale, bottom, rangeArray[j].length/scale, DATA_SPACE-1) xRadius:5.0 yRadius:5.0];
+                NSRect blobRect, textRect;
+                
+                textRect = blobRect = NSMakeRect(rangeArray[j].location, bottom, rangeArray[j].length, DATA_SPACE-2);
+                blobRect.origin.x /= scale;
+                blobRect.size.width /= scale;
+                NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:blobRect xRadius:5.0 yRadius:5.0];
                 [aPath fill];
                 
-                NSSize charWidth = [[nameArray objectAtIndex:j] sizeWithAttributes:nil];
-                CGFloat xStart = (rangeArray[j].location+(rangeArray[j].length/2.0)-(charWidth.width/2.0*scale))/scale;
-
-                NSPoint thePoint = NSMakePoint(xStart, bottom+2.0);
-                [[nameArray objectAtIndex:j] drawAtPoint:thePoint withAttributes:nil];
+                textRect = NSIntersectionRect(textRect, [[self superview] bounds]);
+                
+                if( ! NSIsEmptyRect( textRect ) )
+                {
+                    textRect.origin.x /= scale;
+                    textRect.size.width /= scale;
+                    NSSize charWidth = [[nameArray objectAtIndex:j] sizeWithAttributes:nil];
+                    CGFloat xStart = NSMidX(textRect) - ((charWidth.width/2.0*scale)/scale);
+                    NSPoint thePoint = NSMakePoint(xStart, bottom+1.0);
+                    [[nameArray objectAtIndex:j] drawAtPoint:thePoint withAttributes:nil];
+                }
             }
+            free( rangeArray );
         }
-        
-        [blocksAsRanges release];
-        [blocksAsNames release];
     }
     else
     {
@@ -561,6 +567,7 @@ typedef struct
     }
     else if( [keyPath isEqualToString:@"anaylizers"] )
     {
+        resample = YES;
         [self setNeedsDisplay:YES];
     }
     else
@@ -610,11 +617,7 @@ typedef struct
 {
     if( selectedSample != NSUIntegerMax )
     {
-//        CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
-
-//        NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
-
-        /* Package chunk of sound into a WAV file*/
+        /* Package chunk of sound into a WAV file */
         NSRange subRange = NSMakeRange(selectedSample * sizeof(float), selectedSampleLength * sizeof(float));
         
         NSData *selectedSamples = [NSData dataWithData:[modelObject.frameBuffer subdataWithRange:subRange]];
@@ -631,7 +634,8 @@ typedef struct
             [sound writeToPasteboard:pasteboard];
             [sound release];
         }
-        else {
+        else
+        {
             NSBeep();
         }
     }   
@@ -639,7 +643,6 @@ typedef struct
 
 - (void) mouseDown:(NSEvent *)theEvent
 {
-//    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
     mouseDown = YES;
     mouseDownOnPoint = NO;
     locationPrevious = locationNow = locationMouseDown = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
@@ -662,8 +665,11 @@ typedef struct
         NSPoint locationNowSelf = [self convertPoint:locationNow fromView:nil];
         selectedSampleUnderMouse = locationNowSelf.x;
         
+        StStream *stream = [self.cachedAnaylizer parentStream];
+        NSOrderedSet *anaylizers = [stream anaylizers];
         CGFloat viewHeight = [self frame].size.height;
-        CGFloat viewWaveHeight = viewHeight - DATA_SPACE;
+        CGFloat viewWaveHeight = viewHeight - (DATA_SPACE*[anaylizers count]);
+        if( viewWaveHeight < 0 ) viewWaveHeight = 0;
         CGFloat viewWaveHalfHeight = viewWaveHeight / 2.0;
         
         AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
@@ -751,7 +757,6 @@ typedef struct
 
 - (void) mouseDragged:(NSEvent *)theEvent
 {
-//    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[self.cachedAnaylizer anaylizerObject];
     locationPrevious = locationNow;
     locationNow = [self convertPoint:[theEvent locationInWindow] fromView:[self superview]];
     
@@ -996,10 +1001,10 @@ typedef struct
         {
             NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
             NSData *previousSamples = [NSData dataWithBytes:storedSamples length:sizeof(AudioSampleType)*selectedSampleLength];
-            NSValue *rangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType)*selectedSample, sizeof(AudioSampleType)*selectedSampleLength)];
+            NSRange range = NSMakeRange(sizeof(AudioSampleType)*selectedSample, sizeof(AudioSampleType)*selectedSampleLength);
+            NSValue *rangeValue = [NSValue valueWithRange:range];
             NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", rangeValue, @"range", previousIndexSet, @"indexSet", nil];
             
-//            id modelObject = [self.cachedAnaylizer anaylizerObject];
             [[parentContext undoManager] registerUndoWithTarget:modelObject selector:@selector(setPreviousState:) object:previousState];
             
             if( selectedSampleLength == 1 )
@@ -1007,6 +1012,11 @@ typedef struct
             else
                 [[parentContext undoManager] setActionName:@"Move Samples"];
             
+            /* post edit to anaylizer */
+            AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
+            NSData *editedSamples = [NSData dataWithBytes:audioFrames + range.location length:range.length];
+            [[self cachedAnaylizer] poseEdit:editedSamples range:range];
+
             [modelObject anaylizeAudioData];
             [self setNeedsDisplay:YES];
         }
@@ -1019,14 +1029,19 @@ typedef struct
         NSRange modifiedRange = NSMakeRange([modifiedSet firstIndex], [modifiedSet lastIndex] - [modifiedSet firstIndex] + 1);
         
         /* Create and register undo object */
-        NSValue *rangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType)*modifiedRange.location, sizeof(AudioSampleType)*modifiedRange.length)];
+        NSRange range = NSMakeRange(sizeof(AudioSampleType)*modifiedRange.location, sizeof(AudioSampleType)*modifiedRange.length);
+        NSValue *rangeValue = [NSValue valueWithRange:range];
         NSManagedObjectContext *parentContext = [(NSPersistentDocument *)[[[self window] windowController] document] managedObjectContext];
         NSData *previousSamples = [NSData dataWithBytes:storedSamples+modifiedRange.location length:sizeof(AudioSampleType)*modifiedRange.length];
         NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousSamples, @"data", rangeValue, @"range", previousIndexSet, @"indexSet", nil];
 
-//        id modelObject = [self.cachedAnaylizer anaylizerObject];
         [[parentContext undoManager] registerUndoWithTarget:modelObject selector:@selector(setPreviousState:) object:previousState];
         [[parentContext undoManager] setActionName:@"Draw Samples"];
+
+        /* post edit to anaylizer */
+        AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
+        NSData *editedSamples = [NSData dataWithBytes:audioFrames + range.location length:range.length];
+        [[self cachedAnaylizer] poseEdit:editedSamples range:range];
 
         /* Release samples */
         free( storedSamples );

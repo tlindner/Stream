@@ -77,6 +77,10 @@
         [anaylizerObject release];
     }
     
+    if (streamRangeObject != nil) {
+        [streamRangeObject release];
+    }
+    
     [super dealloc];
 }
 
@@ -317,31 +321,12 @@
 
 - (NSValue *)getUnionRangeObject
 {
-    NSRange result;
-    
-    if( self.source == nil )
-    {
-        if( self.parentStream != nil )
-        {
-            /* This is a top level block, return range from data block */
-            NSRange dataRange = [[self subBlockNamed:@"data"] getUnionRange];
-            NSRange attributeRange = [[self subBlockNamed:@"attributes"] getUnionRange];
-            
-            if (dataRange.length == 0) {
-                result = attributeRange;
-            }else if (attributeRange.length == 0) {
-                result = dataRange;
-            }else {
-                result = NSUnionRange(attributeRange, dataRange);
-            }
-        } else {
-            result = [self getUnionRange];
-        }
-    } else {
-        result = [self getUnionRange];
+    if (streamRangeObject == nil) {
+        return streamRangeObject = [[NSValue valueWithRange:[self getUnionRange]] retain];
     }
-        
-    return [NSValue valueWithRange:result];
+    else {
+        return streamRangeObject;
+    }
 }
 
 - (NSRange)getUnionRange
@@ -354,13 +339,17 @@
     {
         if( self.parentStream != nil )
         {
-            /* This is a top level block, return range from data block */
-            result = [[self subBlockNamed:@"data"] getUnionRange];
+            /* This is a top level block, try to return range from data & attributes block */
+            NSRange dataRange = [[self subBlockNamed:@"data"] getUnionRange];
             
-            if( result.length == 0 )
-            {
-                /* data range was empty, try attribute range instead */
-                result = [[self subBlockNamed:@"attributes"] getUnionRange];
+            NSRange attributeRange = [[self subBlockNamed:@"attributes"] getUnionRange];
+            
+            if (dataRange.length == 0 && attributeRange.length != 0) {
+                result = attributeRange;
+            } else if (dataRange.length != 0 && attributeRange.length == 0) {
+                result = dataRange;
+            } else {
+                result = NSUnionRange(attributeRange, dataRange);
             }
         }
         else
@@ -371,43 +360,36 @@
             
             for (StBlock *theBlock in subBlocks)
             {
-                StStream *ourStream = [self getStream];
-                NSData *blockData = [ourStream dataOfBlockNamed:theBlock.source];
-                NSUInteger useLength;
-                
-                if( theBlock.length == 0 )
-                {
-                    /* length of zero means "to the end of the block" */
-                    useLength = [blockData length] - theBlock.offset;
+                if( result.location == 0 && result.length == 0 )
+                    result = [theBlock getUnionRange];
+                else {
+                    result = NSUnionRange( result, [theBlock getUnionRange] );
                 }
-                else
-                    useLength = theBlock.length;
-                
-                if( result.location == 0 && result.length == 0 ) result = NSMakeRange( theBlock.offset, useLength );
-                
-                result = NSUnionRange( result, NSMakeRange( theBlock.offset, useLength ));
             }
         }
     }
-    else {
+    else
+    {
         /* This is a leaf block */
-        StStream *ourStream = [self getStream];
-        NSData *blockData = [ourStream dataOfBlockNamed:self.source];
-        NSUInteger useLength;
         
-        if( self.length == 0 )
+        if( [[self source] isEqualToString:@"stream"] )
         {
-            /* length of zero means "to the end of the block" */
-            useLength = [blockData length] - self.offset;
+            result = NSMakeRange(self.offset, self.length);
         }
         else
-            useLength = self.length;
-        
-        result = NSMakeRange(self.offset, useLength);
+        {
+            NSRange fullRange = [[[self getStream] blockNamed:self.source] getUnionRange];
+            NSUInteger useLength = self.length;
+            
+            if (useLength == 0) {
+                useLength = (fullRange.location + fullRange.length) - (fullRange.location + self.offset);
+            }
+            
+            result = NSMakeRange(fullRange.location + self.offset, useLength);
+        }
     }
     
     return result;
-    
 }
 
 - (NSData *)getData

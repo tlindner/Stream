@@ -16,6 +16,9 @@ void FillOutASBDForLPCM(AudioStreamBasicDescription *outASBD, Float64 inSampleRa
 CGFloat XIntercept( vDSP_Length x1, double y1, vDSP_Length x2, double y2 );
 float *FindZeroCrossings( AudioSampleType *samples, NSUInteger frameCount, int interpolate, NSUInteger *crossingCount );
 double movingavg(int which, double newvalue, int seed);
+float DCBlockFloat( float inSample );
+unsigned short DCBlocking( unsigned short inSample );
+
 
 @implementation CoCoAudioAnaylizer
 
@@ -51,6 +54,7 @@ double movingavg(int which, double newvalue, int seed);
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"];
+            [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"];
             [theAna removeObserver:self forKeyPath:@"resultingData"];
             observationsActive = NO;
         } 
@@ -77,6 +81,7 @@ double movingavg(int which, double newvalue, int seed);
         {
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate" options:NSKeyValueChangeSetting context:nil];
+            [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
@@ -98,6 +103,7 @@ double movingavg(int which, double newvalue, int seed);
         StAnaylizer *theAna = [self representedObject];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
@@ -199,6 +205,7 @@ double movingavg(int which, double newvalue, int seed);
         [theAna setValue:frameBufferCopy forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.cachedframeBuffer"];
         [frameBufferCopy release];
         [self applyAmplify];
+        [self applyDCBlocking];
         [self applyAllEdits];
         [self anaylizeAudioData];
         [self didChangeValueForKey:@"frameBuffer"];
@@ -519,8 +526,9 @@ double movingavg(int which, double newvalue, int seed);
     NSMutableData *cachedAudio = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.cachedframeBuffer"] mutableCopy];
     self.frameBuffer = cachedAudio;
     [cachedAudio release];
-    [self applyAllEdits];
     [self applyAmplify];
+    [self applyDCBlocking];
+    [self applyAllEdits];
 }
 
 - (void) applyAmplify
@@ -537,6 +545,21 @@ double movingavg(int which, double newvalue, int seed);
         float divisor = amplify/100.0;
 
         vDSP_vsmul( frames, 1, &divisor, frames, 1, length );
+    }
+}
+
+- (void) applyDCBlocking
+{
+    StAnaylizer *theAna = self.representedObject;
+    Boolean dcblock = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"] boolValue];
+    
+    if( dcblock )
+    {
+        float *frames = (float *)[self.frameBuffer bytes];
+        NSUInteger length = [self.frameBuffer length] / sizeof(float);
+
+        for( int i=0; i<length; i++ )
+            frames[i] = DCBlockFloat(frames[i]);
     }
 }
 
@@ -573,6 +596,15 @@ double movingavg(int which, double newvalue, int seed);
     }
     
     if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.amplify"])
+    {
+        if( [change objectForKey:@"new"] != [NSNull null] )
+        {
+            [self reloadChachedAudioFrames];
+        }
+        return;
+    }
+    
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"])
     {
         if( [change objectForKey:@"new"] != [NSNull null] )
         {
@@ -807,7 +839,7 @@ double movingavg(int which, double newvalue, int seed);
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"coalescedObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", [NSNull null], @"zeroCrossingArray", [NSNumber numberWithInteger:100], @"amplify", [NSNull null], @"cachedframeBuffer", [NSNumber numberWithBool:NO], @"selected", [NSNumber numberWithBool:NO], @"interpolate", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"coalescedObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", [NSNull null], @"zeroCrossingArray", [NSNumber numberWithInteger:100], @"amplify", [NSNull null], @"cachedframeBuffer", [NSNumber numberWithBool:NO], @"selected", [NSNumber numberWithBool:NO], @"interpolate", [NSNumber numberWithBool:NO], @"dcblocking", nil] autorelease];
 }
 
 @end
@@ -956,3 +988,51 @@ double movingavg(int which, double newvalue, int seed)
     return 0.0;
 }
 
+//float DCBlockFloat( float inSample )
+//{
+//    float result;
+//    if( inSample < -1.0 ) inSample = -1.0;
+//    if( inSample > 1.0 ) inSample = 1.0;
+//    
+//    result = DCBlocking( inSample * 16383.0 );
+//    result /= 16383.0;
+//    
+//    return result;
+//}
+
+float DCBlockFloat( float inSample )
+{
+    float result;
+    static float lastInput = 0, lastOutput = 0;
+    
+    result = inSample - lastInput + 0.995 * lastOutput;
+
+    lastInput  = inSample;
+    lastOutput = result;
+    
+    return result;
+}
+
+
+unsigned short DCBlocking( unsigned short inSample )
+{
+    // let's say sizeof(short) = 2 (16 bits) and sizeof(long) = 4 (32 bits)
+    
+    static long acc = 0, prev_x = 0, prev_y = 0;
+    long A;
+    double pole;
+    short outSample;
+    
+    pole = 0.9999;
+    
+    A = (long)(32768.0*(1.0 - pole));
+    
+    acc   -= prev_x;
+    prev_x = (long)inSample<<15;
+    acc   += prev_x;
+    acc   -= A*prev_y;
+    prev_y = acc>>15;               // quantization happens here
+    outSample   = (short)prev_y;    // acc has y[n] in upper 17 bits and -e[n] in lower 15 bits
+    
+    return outSample;
+}

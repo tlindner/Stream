@@ -368,18 +368,33 @@
     }
 }
 
+- (void) poseEdit:(NSData *)data range:(NSRange)range
+{
+    [self postEdit:data atLocation:range.location withLength:range.length];
+}
+
 - (void) postEdit: (NSData *)data atLocation: (int64_t)location withLength: (int64_t)length
 {
-    AnaylizerEdit *theEdit = [NSEntityDescription insertNewObjectForEntityForName:@"AnaylizerEdit" inManagedObjectContext:[self managedObjectContext]];
-    theEdit.location = location;
-    theEdit.length = length;
-    theEdit.data = data;
-//    [self addEditsObject:theEdit];
+    AnaylizerEdit *previousEdit = [[self edits] lastObject];
     
-    NSMutableOrderedSet *theSet = [self mutableOrderedSetValueForKey:@"edits"];
-//    [self willChangeValueForKey:@"edits" withSetMutation:NSKeyValueUnionSetMutation usingObjects:[NSSet setWithObject:theEdit]];
-    [theSet addObject:theEdit];
-//    [self didChangeValueForKey:@"edits" withSetMutation:NSKeyValueUnionSetMutation usingObjects:[NSSet setWithObject:theEdit]];
+    if( previousEdit.location == location && previousEdit.length == length && [previousEdit.data length] == [data length] )
+    {
+        /* This edit replaced last edit */
+        previousEdit.data = data;        
+    }
+    else
+    {
+        AnaylizerEdit *theEdit = [NSEntityDescription insertNewObjectForEntityForName:@"AnaylizerEdit" inManagedObjectContext:[self managedObjectContext]];
+        theEdit.location = location;
+        theEdit.length = length;
+        theEdit.data = data;
+        //    [self addEditsObject:theEdit];
+
+        NSMutableOrderedSet *theSet = [self mutableOrderedSetValueForKey:@"edits"];
+        //    [self willChangeValueForKey:@"edits" withSetMutation:NSKeyValueUnionSetMutation usingObjects:[NSSet setWithObject:theEdit]];
+        [theSet addObject:theEdit];
+        //    [self didChangeValueForKey:@"edits" withSetMutation:NSKeyValueUnionSetMutation usingObjects:[NSSet setWithObject:theEdit]];
+    }
 }
 
 @end
