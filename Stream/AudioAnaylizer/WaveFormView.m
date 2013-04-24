@@ -337,10 +337,14 @@ typedef struct
                 /* Draw zero crossing lines */
                 [[NSColor darkGrayColor] set];
                 NSData *zerocrossingObject = [optionsDict objectForKey:@"zeroCrossingArray"];
+                NSUInteger zc_size = [zerocrossingObject length] / sizeof(float);
                 float *zeroCrossings = (float *)[zerocrossingObject bytes];
                 i=0;
-                while (zeroCrossings[i] < dirtyRect.origin.x) i++;
-                while (zeroCrossings[i] < dirtyRect.origin.x + dirtyRect.size.width )
+
+                while (i < zc_size && zeroCrossings[i] < dirtyRect.origin.x)
+                    i++;
+  
+                while ( i < zc_size && zeroCrossings[i] < dirtyRect.origin.x + dirtyRect.size.width )
                 {
                     NSBezierPath *line = [NSBezierPath bezierPath];
                     [line moveToPoint:NSMakePoint(zeroCrossings[i]/scale, 0.0)];
@@ -444,7 +448,7 @@ typedef struct
             }
         }
         
-        
+        /* draw block goupings above wave form */
         for (int i=1; i<[anaylizers count]; i++)
         {
             StAnaylizer *theAna = [anaylizers objectAtIndex:i];
