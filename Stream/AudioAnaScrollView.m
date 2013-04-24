@@ -62,4 +62,24 @@
     [[self documentView] scrollPoint:currentScrollPosition];
 }
 
+
+- (void)awakeFromNib
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(viewFrameDidChange:)
+                                                 name:NSViewFrameDidChangeNotification
+                                               object:self];
+}
+
+- (void)viewFrameDidChange:(NSNotification *)note
+{
+    [viewController updateSlider:self];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:self];
+
+    [super dealloc];
+}
 @end

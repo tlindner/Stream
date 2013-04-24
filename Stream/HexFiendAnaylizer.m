@@ -109,7 +109,7 @@
     return @"HFAccessoryView";
 }
 
-- (Class)viewController
+- (Class)viewControllerClass
 {
     return [HexFiendAnaylizerController class];
 }

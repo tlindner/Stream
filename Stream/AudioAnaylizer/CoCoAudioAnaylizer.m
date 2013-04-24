@@ -827,7 +827,7 @@ unsigned short DCBlocking( unsigned short inSample );
     return @"AudioAnaylizerViewController";
 }
 
-- (Class)viewController
+- (Class)viewControllerClass
 {
     return [AudioAnaylizerViewController class];
 }

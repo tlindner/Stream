@@ -254,7 +254,7 @@
                 if( self.observingBlock != theBlock )
                 {
                     [self stopObservingBlockEditor];
-                    Class anaClass = [[theBlock anaylizerObject] viewController];
+                    Class anaClass = [[theBlock anaylizerObject] viewControllerClass];
                     
                     if( [[self.editorViewController class] isSubclassOfClass:anaClass] )
                     {
@@ -350,8 +350,8 @@
 
 - (void)dealloc
 {
-    StAnaylizer *theAna = [self representedObject];
-    theAna.viewController = nil;
+//    StAnaylizer *theAna = [self representedObject];
+//    theAna.viewController = nil;
 
     [[self.editorViewController view] removeFromSuperview];
 

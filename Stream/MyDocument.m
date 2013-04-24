@@ -10,12 +10,16 @@
 #import "StStream.h"
 #import "StAnaylizer.h"
 #import "AppDelegate.h"
+#import "AnaylizerListViewItem.h"
 
 @implementation MyDocument
-@synthesize tableColumn;
 
+@synthesize documentWindow;
+@synthesize streamTreeControler;
+@synthesize observingStream;
 @synthesize streamListView;
 @synthesize zoomCursor;
+@synthesize listView;
 
 - (id)init
 {
@@ -43,7 +47,45 @@
     //    NSManagedObjectContext *newMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
     //    [newMOC setPersistentStoreCoordinator:psc];
     //    [self setManagedObjectContext:newMOC];
-    self.zoomCursor = [[[NSCursor alloc] initWithImage:[NSImage imageNamed:@"Zoom"] hotSpot:NSMakePoint(5.0, 5.0)] autorelease];
+
+    [streamTreeControler addObserver:self forKeyPath:@"selectionIndexPaths" options:0 context:self];
+    listView.prototypeItem = [[[AnaylizerListViewItem alloc] initWithNibName:@"AnaylizerListViewItem" bundle:nil] autorelease];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(documentWindowWillClose:) name:NSWindowWillCloseNotification object:documentWindow];
+}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == self) {
+        if ([keyPath isEqualToString:@"selectionIndexPaths"]) {
+            NSArray *selectedObjects = [streamTreeControler selectedObjects];
+            
+            if( observingStream != nil )
+            {
+                [observingStream removeObserver:self forKeyPath:@"anaylizers" context:self];
+                self.observingStream = nil;
+            }
+            
+            if( [selectedObjects count] > 0 )
+            {
+                StStream *selectedStream = [selectedObjects objectAtIndex:0];
+                NSOrderedSet *anaylizers = [[selectedStream anaylizers] reversedOrderedSet];
+                listView.content = [anaylizers array];
+                
+                self.observingStream = selectedStream;
+                [observingStream addObserver:self forKeyPath:@"anaylizers" options:0 context:self];
+                 
+            }
+            else {
+                listView.content = [NSArray array];
+            }
+        } else if ([keyPath isEqualToString:@"anaylizers"]) {
+            NSOrderedSet *anaylizers = [[self.observingStream anaylizers] reversedOrderedSet];
+            listView.content = [anaylizers array];
+        }
+        
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 + (BOOL)autosavesInPlace
@@ -238,9 +280,24 @@
         return YES;
 }
 
+- (void)documentWindowWillClose:(NSNotification *)note
+{
+    [streamTreeControler removeObserver:self forKeyPath:@"selectionIndexPaths" context:self];
+    
+    if( observingStream != nil )
+    {
+        [observingStream removeObserver:self forKeyPath:@"anaylizers" context:self];
+        self.observingStream = nil;
+    }
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowWillCloseNotification object:documentWindow];
+}
+
 - (void)dealloc
 {
     self.zoomCursor = nil;
+    self.observingStream = nil;
+
     [super dealloc];
 }
 @end

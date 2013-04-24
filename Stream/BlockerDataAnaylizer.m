@@ -64,7 +64,7 @@
     return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"initializedOD", nil] autorelease];
 }
 
-- (Class)viewController
+- (Class)viewControllerClass
 {
     return [BlockerDataViewController class];
 }

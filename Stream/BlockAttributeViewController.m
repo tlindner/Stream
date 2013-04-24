@@ -88,8 +88,8 @@
 
 - (void)dealloc
 {
-    StAnaylizer *theAna = [self representedObject];
-    theAna.viewController = nil;
+//    StAnaylizer *theAna = [self representedObject];
+//    theAna.viewController = nil;
 
     if( observationsActive == YES )
     {

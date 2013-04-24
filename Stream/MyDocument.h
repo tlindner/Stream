@@ -7,17 +7,22 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SDListView.h"
+
+@class StStream;
 
 @interface MyDocument : NSPersistentDocument {
 
-    IBOutlet NSTreeController *streamTreeControler;
-
-    NSTableColumn *tableColumn;
     NSScrollView *streamListView;
+    SDListView *listView;
 }
+
+@property (assign) IBOutlet NSTreeController *streamTreeControler;
+@property (assign) IBOutlet NSWindow *documentWindow;
 @property (assign) IBOutlet NSScrollView *streamListView;
-@property (assign) IBOutlet NSTableColumn *tableColumn;
 @property (nonatomic, retain) NSCursor *zoomCursor;
+@property (assign) IBOutlet SDListView *listView;
+@property (retain) StStream *observingStream;
 
 - (IBAction)add:(id)sender;
 - (void) addStreamFromURL:(NSURL *)aURL;

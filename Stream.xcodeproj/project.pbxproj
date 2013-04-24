@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7700637617128E730037055D /* AnaylizerPencil.tiff */; };
 		770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */; };
-		7714BC5713EA580600892495 /* ViewAutoLayoutSubView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */; };
 		771AD296141D06C800E0FE41 /* CoCoAudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */; };
 		771AD29A141D414B00E0FE41 /* HexFiendAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */; };
 		771AD29D141D431400E0FE41 /* BlockerDataAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD29C141D431400E0FE41 /* BlockerDataAnaylizer.m */; };
@@ -22,7 +21,6 @@
 		772C658F13FEC0960060AB7F /* AnaylizerArrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */; };
 		772C659013FEC0960060AB7F /* AnaylizerHand.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */; };
 		772C659113FEC0960060AB7F /* AnaylizerLupe.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */; };
-		773F17C813E4F77E002606A0 /* AnaylizerTableViewCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */; };
 		7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
 		7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */; };
 		7759CF4313DBA1A300789DB3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF4213DBA1A300789DB3 /* main.m */; };
@@ -52,6 +50,9 @@
 		776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */; };
 		776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776EB7E4142069060019329F /* BlockAttributeViewTableView.m */; };
 		777745AC171B558300700BB7 /* MAAttachedWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 777745AB171B558300700BB7 /* MAAttachedWindow.m */; };
+		77793EB8172391E500E607F6 /* SDListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77793EB2172391E500E607F6 /* SDListView.m */; };
+		77793EB9172391E500E607F6 /* SDListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 77793EB5172391E500E607F6 /* SDListViewItem.m */; };
+		77793EBB1723A29800E607F6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77793EBA1723A29800E607F6 /* QuartzCore.framework */; };
 		777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 777984BC13E99E96007198EE /* StreamsTreeController.m */; };
 		778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */; };
 		778A597E140703DB00B68EB4 /* StStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597D140703DB00B68EB4 /* StStream.m */; };
@@ -60,6 +61,8 @@
 		778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
+		779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F74C91724779F00EC509B /* AnaylizerListViewItem.m */; };
+		779F74CC172478F500EC509B /* AnaylizerListViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 779F74CB172478F500EC509B /* AnaylizerListViewItem.xib */; };
 		77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */; };
 		77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */; };
 		77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77AE7556141568BD0052A93D /* BlockIcon.tiff */; };
@@ -215,6 +218,13 @@
 		776EB7E4142069060019329F /* BlockAttributeViewTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewTableView.m; path = Stream/BlockAttributeViewTableView.m; sourceTree = "<group>"; };
 		777745AA171B558300700BB7 /* MAAttachedWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAAttachedWindow.h; path = Stream/MAAttachedWindow.h; sourceTree = "<group>"; };
 		777745AB171B558300700BB7 /* MAAttachedWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAAttachedWindow.m; path = Stream/MAAttachedWindow.m; sourceTree = "<group>"; };
+		77793EB1172391E500E607F6 /* SDListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDListView.h; path = "Stream/SDListView-master/SDListView.h"; sourceTree = "<group>"; };
+		77793EB2172391E500E607F6 /* SDListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDListView.m; path = "Stream/SDListView-master/SDListView.m"; sourceTree = "<group>"; };
+		77793EB3172391E500E607F6 /* SDListView+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SDListView+Private.h"; path = "Stream/SDListView-master/SDListView+Private.h"; sourceTree = "<group>"; };
+		77793EB4172391E500E607F6 /* SDListViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDListViewItem.h; path = "Stream/SDListView-master/SDListViewItem.h"; sourceTree = "<group>"; };
+		77793EB5172391E500E607F6 /* SDListViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDListViewItem.m; path = "Stream/SDListView-master/SDListViewItem.m"; sourceTree = "<group>"; };
+		77793EB6172391E500E607F6 /* SDListViewItem+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SDListViewItem+Private.h"; path = "Stream/SDListView-master/SDListViewItem+Private.h"; sourceTree = "<group>"; };
+		77793EBA1723A29800E607F6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		777984BB13E99E96007198EE /* StreamsTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamsTreeController.h; sourceTree = "<group>"; };
 		777984BC13E99E96007198EE /* StreamsTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamsTreeController.m; sourceTree = "<group>"; };
 		778A59791406EE7600B68EB4 /* CoCoCassetteBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoCassetteBlocker.h; path = Stream/CoCoBlockers/CoCoCassetteBlocker.h; sourceTree = "<group>"; };
@@ -229,6 +239,9 @@
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7799CD2913E63C1F007D5B8E /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnaylizer/WaveFormView.h; sourceTree = "<group>"; };
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
+		779F74C81724779F00EC509B /* AnaylizerListViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerListViewItem.h; path = Stream/AnaylizerListViewItem.h; sourceTree = "<group>"; };
+		779F74C91724779F00EC509B /* AnaylizerListViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerListViewItem.m; path = Stream/AnaylizerListViewItem.m; sourceTree = "<group>"; };
+		779F74CB172478F500EC509B /* AnaylizerListViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerListViewItem.xib; path = Stream/AnaylizerListViewItem.xib; sourceTree = "<group>"; };
 		77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeViewController.h; path = Stream/BlockAttributeViewController.h; sourceTree = "<group>"; };
 		77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewController.m; path = Stream/BlockAttributeViewController.m; sourceTree = "<group>"; };
 		77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewController.xib; path = Stream/BlockAttributeViewController.xib; sourceTree = "<group>"; };
@@ -353,6 +366,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77793EBB1723A29800E607F6 /* QuartzCore.framework in Frameworks */,
 				7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */,
 				7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */,
 				7768590613F0FF92006BE753 /* Accelerate.framework in Frameworks */,
@@ -413,6 +427,7 @@
 				7759CF7913DBA1A300789DB3 /* StreamImporter */,
 				7759CF3513DBA1A300789DB3 /* Frameworks */,
 				7759CF3313DBA1A300789DB3 /* Products */,
+				77793EAE172391A600E607F6 /* SDListView */,
 			);
 			sourceTree = "<group>";
 		};
@@ -429,6 +444,7 @@
 		7759CF3513DBA1A300789DB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				77793EBA1723A29800E607F6 /* QuartzCore.framework */,
 				777745AA171B558300700BB7 /* MAAttachedWindow.h */,
 				777745AB171B558300700BB7 /* MAAttachedWindow.m */,
 				7768590513F0FF92006BE753 /* Accelerate.framework */,
@@ -549,6 +565,19 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		77793EAE172391A600E607F6 /* SDListView */ = {
+			isa = PBXGroup;
+			children = (
+				77793EB1172391E500E607F6 /* SDListView.h */,
+				77793EB2172391E500E607F6 /* SDListView.m */,
+				77793EB3172391E500E607F6 /* SDListView+Private.h */,
+				77793EB4172391E500E607F6 /* SDListViewItem.h */,
+				77793EB5172391E500E607F6 /* SDListViewItem.m */,
+				77793EB6172391E500E607F6 /* SDListViewItem+Private.h */,
+			);
+			name = SDListView;
+			sourceTree = "<group>";
+		};
 		7788588B13EDC1B30057E042 /* AnaylizerUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -565,6 +594,9 @@
 				77263A8813F734EC00EBD507 /* AnaylizerSettingPopOverViewController.h */,
 				77263A8913F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m */,
 				77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */,
+				779F74C81724779F00EC509B /* AnaylizerListViewItem.h */,
+				779F74C91724779F00EC509B /* AnaylizerListViewItem.m */,
+				779F74CB172478F500EC509B /* AnaylizerListViewItem.xib */,
 			);
 			name = AnaylizerUI;
 			sourceTree = "<group>";
@@ -841,6 +873,7 @@
 				776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */,
 				77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */,
 				7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */,
+				779F74CC172478F500EC509B /* AnaylizerListViewItem.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -930,12 +963,10 @@
 				77F2048013DD3AD000FA5B1F /* HFTextView.m in Sources */,
 				77F2048113DD3AD000FA5B1F /* HFVerticalScrollerRepresenter.m in Sources */,
 				776139AF13E1BA4200CA80BB /* ColorGradientView.m in Sources */,
-				773F17C813E4F77E002606A0 /* AnaylizerTableViewCellView.m in Sources */,
 				7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */,
 				77C8DE1613E6F2C000AD079E /* Analyzation.m in Sources */,
 				77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */,
 				777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */,
-				7714BC5713EA580600892495 /* ViewAutoLayoutSubView.m in Sources */,
 				771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */,
 				77FEA6D813F57D4B0082B946 /* StAnaylizer.m in Sources */,
 				77263A8413F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m in Sources */,
@@ -959,6 +990,9 @@
 				77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */,
 				77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */,
 				777745AC171B558300700BB7 /* MAAttachedWindow.m in Sources */,
+				77793EB8172391E500E607F6 /* SDListView.m in Sources */,
+				77793EB9172391E500E607F6 /* SDListViewItem.m in Sources */,
+				779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

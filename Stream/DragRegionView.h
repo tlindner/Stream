@@ -8,6 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class AnaylizerListViewItem;
+
 @interface DragRegionView : NSView
+{
+    BOOL ignoreEvent;
+    float rowHeight;    
+}
+
+@property (assign) IBOutlet AnaylizerListViewItem *viewOwner;
 
 @end

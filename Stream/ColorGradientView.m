@@ -7,15 +7,16 @@
 //
 
 #import "ColorGradientView.h"
-#import "AnaylizerTableViewCellView.h"
 #import "BlockerDataViewController.h"
 #import "Analyzation.h"
 #import "StAnaylizer.h"
 #import "StBlock.h"
 
 @implementation ColorGradientView
+@synthesize tlTitle;
 @synthesize labelUTI;
 @synthesize labelEditor;
+@synthesize viewOwner;
 
 // Automatically create accessor methods
 @synthesize startingColor;
@@ -44,7 +45,7 @@
     self.endingColor = [NSColor colorWithCalibratedRed:0.74f green:0.76f blue:0.83f alpha:1.0f];
     [self setAngle:270];
     
-    [self updateConstraints];
+//    [self updateConstraints];
     [super awakeFromNib];
 }
 
@@ -74,7 +75,7 @@
 
 - (IBAction)doPopOver:(id)sender
 {
-    StAnaylizer *anaylizer = [[self superview] valueForKey:@"objectValue"];
+    StAnaylizer *anaylizer = [viewOwner representedObject];
     
     if( self.actionPopOverNib == nil )
     {
@@ -95,8 +96,7 @@
         [self.labelUTI setStringValue:@"Block UTI:"];
         [self.labelEditor setStringValue:@"Block Editor:"];
         
-        AnaylizerTableViewCellView *anaTableViewCell = (AnaylizerTableViewCellView *)[self superview];
-        BlockerDataViewController *blockerController = (BlockerDataViewController *)anaTableViewCell.editorController;
+        BlockerDataViewController *blockerController = (BlockerDataViewController *)self.viewOwner.editorController;
         NSArray *selectedObjects = [blockerController.treeController selectedObjects];
         
         if( [selectedObjects count] == 1 )
@@ -170,7 +170,7 @@
         newSubViewHeight = 0;
     }
     
-    NSViewController *editorController = [[self superview] valueForKey:@"editorController"];
+    NSViewController *editorController = self.viewOwner.editorController; // [[self superview] valueForKey:@"editorController"];
     if( [editorController isKindOfClass:anaClass] )
     {
         if( [editorController respondsToSelector:@selector(prepareAccessoryView:)] )
@@ -185,15 +185,15 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    id objectValue = [[self superview] valueForKey:@"objectValue"];
+    id objectValue = self.viewOwner.representedObject; //[[self superview] valueForKey:@"objectValue"];
     
     //NSLog( @"Observied: kp: %@, object: %@, change: %@", keyPath, object, change );
     if( [keyPath isEqualToString:@"currentEditorView"] )
     {
         if( [[objectValue class] isSubclassOfClass:[StBlock class]] )
         {
-            AnaylizerTableViewCellView *anaTableViewCell = (AnaylizerTableViewCellView *)[self superview];
-            BlockerDataViewController *blockerController = (BlockerDataViewController *)anaTableViewCell.editorController;
+            //AnaylizerTableViewCellView *anaTableViewCell = (AnaylizerTableViewCellView *)[self superview];
+            BlockerDataViewController *blockerController = (BlockerDataViewController *)self.viewOwner.editorController; //anaTableViewCell.editorController;
             NSArray *selectedObjects = [blockerController.treeController selectedObjects];
             
             if( [selectedObjects count] == 1 )
@@ -251,7 +251,7 @@
             contentsize.height += newSubViewHeight - currentAVHeight;
             [actionPopOver setContentSize:contentsize];
             
-            NSViewController *editorController = [[self superview] valueForKey:@"editorController"];
+            NSViewController *editorController = self.viewOwner.editorController; // [[self superview] valueForKey:@"editorController"];
             if( [editorController isKindOfClass:anaClass] )
             {
                 if( [editorController respondsToSelector:@selector(prepareAccessoryView:)] )
@@ -299,7 +299,6 @@
     [observableSourceUTI removeObserver:self forKeyPath:@"sourceUTI"];
     
     [actionPopOver performClose:self];
-    
 }
 
 - (void)dealloc

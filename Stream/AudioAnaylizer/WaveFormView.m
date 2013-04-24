@@ -46,6 +46,20 @@ typedef struct
 @synthesize errorString;
 @synthesize observationsActive;
 
+//- (void)setFrame:(NSRect)frameRect
+//{
+//    NSLog( @"wfv Set Frame: %@", NSStringFromRect(frameRect) );
+//    
+//    [super setFrame:frameRect];
+//}
+//
+//- (void)setBounds:(NSRect)boundsRect
+//{
+//    NSLog( @"wfv Set Bounds: %@", NSStringFromRect(boundsRect) );
+//    
+//    [super setBounds:boundsRect];
+//}
+//
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];

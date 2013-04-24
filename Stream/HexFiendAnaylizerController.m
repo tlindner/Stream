@@ -273,7 +273,7 @@
 - (void)dealloc
 {
     StAnaylizer *theAna = [self representedObject];
-    theAna.viewController = nil;
+//    theAna.viewController = nil;
 
     if( observationsActive == YES )
     {

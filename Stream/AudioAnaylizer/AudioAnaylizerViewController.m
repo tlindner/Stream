@@ -75,7 +75,7 @@
     self.slider.minValue = [clipView frame].size.width / MAXZOOM;
     self.slider.floatValue = frameCount;
     
-    [wfv setAutoresizingMask:NSViewHeightSizable];
+//    [wfv setAutoresizingMask:NSViewHeightSizable];
     [[self.scroller documentView] setFrameSize:NSMakeSize(frameCount, [self.scroller contentSize].height)];
     
     float retrieveScale = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.scale"] floatValue];
@@ -109,8 +109,8 @@
 
 - (void)dealloc
 {
-    StAnaylizer *theAna = [self representedObject];
-    theAna.viewController = nil;
+//    StAnaylizer *theAna = [self representedObject];
+//    theAna.viewController = nil;
 
     WaveFormView *wfv = [self.scroller documentView];
     [wfv deactivateObservations];

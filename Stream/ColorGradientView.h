@@ -3,6 +3,8 @@
 
 #import "StAnaylizer.h"
 
+@class AnaylizerListViewItem;
+
 @interface ColorGradientView : NSView
 {
     NSColor *startingColor;
@@ -26,8 +28,10 @@
     id observableSourceUTI;
 }
 
+@property (assign) IBOutlet NSButton *tlTitle;
 @property (assign) IBOutlet NSTextField *labelUTI;
 @property (assign) IBOutlet NSTextField *labelEditor;
+@property (assign) IBOutlet AnaylizerListViewItem *viewOwner;
 
 // Define the variables as properties
 @property(nonatomic, retain) NSMutableArray *additionalConstraints;

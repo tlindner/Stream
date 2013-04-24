@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "AnaylizerEdit.h"
+#import "AnaylizerListViewItem.h"
 
 @class StStream;
 
@@ -35,7 +36,7 @@
 @property (nonatomic, readonly) BOOL editEnabled;
 @property (nonatomic, readonly) BOOL blockSettingsHidden;
 @property (nonatomic, readonly) NSString * title;
-@property (nonatomic, assign ) NSViewController * viewController;
+//@property (nonatomic, assign ) NSViewController * viewController;
 @property (nonatomic, readonly) BOOL canChangeEditor;
 @property (nonatomic, retain) NSOrderedSet * edits;
 @property (nonatomic, retain) NSValue *viewRange;
@@ -85,3 +86,6 @@
 - (IBAction)ConfigurableButton1:(id)sender;
 @end
 
+@interface NSObject (StAnaylizerExtensions)
+- (Class)viewControllerClass;
+@end
