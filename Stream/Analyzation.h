@@ -30,7 +30,7 @@
 + (NSString *)anaylizerKey;
 + (NSString *)AnaylizerPopoverAccessoryViewNib;
 + (NSMutableDictionary *)defaultOptions;
-- (Class)viewController;
+- (Class)viewControllerClass;
 - (void)setRepresentedObject:(id)representedObject;
 - (void)prepareAccessoryView: (NSView *)baseView;
 @end

@@ -36,7 +36,7 @@
 @property (nonatomic, readonly) BOOL editEnabled;
 @property (nonatomic, readonly) BOOL blockSettingsHidden;
 @property (nonatomic, readonly) NSString * title;
-//@property (nonatomic, assign ) NSViewController * viewController;
+@property (nonatomic, assign ) NSViewController * viewController;
 @property (nonatomic, readonly) BOOL canChangeEditor;
 @property (nonatomic, retain) NSOrderedSet * edits;
 @property (nonatomic, retain) NSValue *viewRange;

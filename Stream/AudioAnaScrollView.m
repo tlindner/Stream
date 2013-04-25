@@ -65,10 +65,7 @@
 
 - (void)awakeFromNib
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(viewFrameDidChange:)
-                                                 name:NSViewFrameDidChangeNotification
-                                               object:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewFrameDidChange:) name:NSViewFrameDidChangeNotification object:self];
 }
 
 - (void)viewFrameDidChange:(NSNotification *)note
@@ -79,7 +76,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:self];
-
+    
     [super dealloc];
 }
 @end

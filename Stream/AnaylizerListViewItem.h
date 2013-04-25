@@ -22,6 +22,7 @@
 @property (assign) IBOutlet NSView *customView;
 @property (retain) NSViewController *editorController;
 @property (assign) IBOutlet ColorGradientView *colorGradientView;
+@property (retain) NSView *savedCustomView;
 
 - (IBAction)removeAnaylizer:(id)sender;
 - (IBAction)collapse:(id)sender;

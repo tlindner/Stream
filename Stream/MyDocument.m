@@ -140,6 +140,11 @@
     [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Stream “%@”", [newObject valueForKey:@"displayName"]]];
 }
 
+- (void) addSubStreamFromTopLevelBlock:(StBlock *)theBlock ofParent:(StStream *)theParent
+{
+    NSLog( @"Add substreamfromtoplevel block: %@, with parent: %@", theBlock, theParent );
+}
+
 - (IBAction)wftSave:(id)sender
 {
     NSManagedObjectContext *moc = [self managedObjectContext];
@@ -175,6 +180,40 @@
     
     //[streamTreeControler removeObject:removeStream];
     [[self managedObjectContext] deleteObject:removeStream];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    if ([menuItem action] == @selector(makeSubStream:)) {
+        return NO;
+    }
+    else if ([menuItem action] == @selector(add:)) {
+        return YES;
+    }
+    else if ([[menuItem representedObject] respondsToSelector:@selector(anaylizerKey)]) {
+        NSArray *selectedObjects = [streamTreeControler selectedObjects];
+        
+        if ([selectedObjects count] > 0) {
+            StStream *selectedStream = [selectedObjects objectAtIndex:0];
+            NSOrderedSet *anaylizers = [selectedStream anaylizers];
+            Class <BlockerProtocol>menuAnaylizerClass = menuItem.representedObject;
+            for (StAnaylizer *theAna in anaylizers) {
+                if ([theAna.anaylizerKind isEqualToString:[menuAnaylizerClass anaylizerKey]]) {
+                    return NO;
+                }
+            }
+        }
+        else {
+            return NO;
+        }
+    }
+    
+    return [super validateMenuItem:menuItem];
+}
+
+- (IBAction)makeSubStream:(id)sender
+{
+    [self addSubStreamFromTopLevelBlock:sender ofParent:observingStream];
 }
 
 - (IBAction)removeAnaylizer:(id)sender

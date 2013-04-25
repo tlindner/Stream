@@ -293,7 +293,7 @@
         if( [selectedObjects count] > 0 )
         {
             StBlock *theBlock = [selectedObjects objectAtIndex:0];
-            Class anaClass = [[theBlock anaylizerObject] viewController];
+            Class anaClass = [[theBlock anaylizerObject] viewControllerClass];
             
             if( ![[self.editorViewController class] isSubclassOfClass:anaClass] )
             {
@@ -369,6 +369,15 @@
 - (NSColor *)tableView:(NSOutlineView *)aTableView backgroundColorForRow:(NSInteger)rowIndex
 {
     return [[[aTableView itemAtRow:rowIndex] representedObject] attributeColor];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    if ([menuItem action] == @selector(makeSubStream:)) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 -(NSString *)nibName

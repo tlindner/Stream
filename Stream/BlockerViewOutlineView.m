@@ -7,6 +7,7 @@
 //
 
 #import "BlockerViewOutlineView.h"
+#import "StBlock.h"
 
 @implementation BlockerViewOutlineView
 
@@ -45,6 +46,23 @@
     
     // draw cells on top of the new row background
     [super drawRow:row clipRect:clipRect];
+}
+
+- (IBAction)makeSubStream:(id)sender
+{
+    [[self nextResponder] tryToPerform:@selector(makeSubStream:) with:[(NSObject *)[self delegate] observingBlock]];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    if ([menuItem action] == @selector(makeSubStream:)) {
+        StBlock *observingBlock = [(NSObject *)[self delegate] observingBlock];
+        if (observingBlock != nil) {
+            return [observingBlock topLevelBlock];
+        }
+    }
+    
+    return [super validateMenuItem:menuItem];
 }
 
 @end

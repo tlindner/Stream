@@ -8,10 +8,17 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class StBlock;
+
 @interface BlockerViewOutlineView : NSOutlineView
+
+- (IBAction)makeSubStream:(id)sender;
 
 @end
 
 @interface NSObject (BlockAttributeTableViewDelegate)
+
 - (NSColor *)tableView:(NSOutlineView *)aTableView backgroundColorForRow:(NSInteger)rowIndex;
+- (StBlock *)observingBlock;
+
 @end

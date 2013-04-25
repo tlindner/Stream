@@ -13,6 +13,6 @@
 
 @interface AudioAnaScrollView : NSScrollView
 
-@property (nonatomic, assign) AudioAnaylizerViewController * viewController;
+@property (nonatomic, assign) AudioAnaylizerViewController *viewController;
 
 @end

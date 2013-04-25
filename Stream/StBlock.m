@@ -392,6 +392,20 @@
     return result;
 }
 
+- (Boolean) topLevelBlock
+{
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* This is a top level block, return data from data block */
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 - (NSData *)getData
 {
     NSMutableData *result;

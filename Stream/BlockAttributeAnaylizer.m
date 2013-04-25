@@ -59,7 +59,7 @@
     return @"BlockAttributeViewAccessory";
 }
 
-- (Class)viewController
+- (Class)viewControllerClass
 {
     return [BlockAttributeViewController class];
 }

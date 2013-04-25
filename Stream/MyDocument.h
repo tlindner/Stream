@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "SDListView.h"
 
-@class StStream;
+@class StBlock, StStream;
 
 @interface MyDocument : NSPersistentDocument {
 
@@ -26,8 +26,10 @@
 
 - (IBAction)add:(id)sender;
 - (void) addStreamFromURL:(NSURL *)aURL;
+- (void) addSubStreamFromTopLevelBlock:(StBlock *)theBlock ofParent:(StStream *)theParent;
 - (IBAction)removeStream:(id)sender;
 - (IBAction)removeAnaylizer:(id)sender;
 - (void) flushAnaylizer:(NSDictionary *)parameter;
+- (IBAction)makeSubStream:(id)sender;
 
 @end

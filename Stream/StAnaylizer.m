@@ -30,7 +30,7 @@
 @dynamic blockSettingsHidden;
 @dynamic title;
 @synthesize viewRange;
-//@synthesize viewController;
+@synthesize viewController;
 @dynamic canChangeEditor;
 @dynamic edits;
 

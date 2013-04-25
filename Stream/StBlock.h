@@ -74,6 +74,7 @@
 - (void) checkFail:(StBlock *)newBlock;
 - (NSRange)getUnionRange;
 - (NSValue *)getUnionRangeObject;
+- (Boolean) topLevelBlock;
 
 @end
 
