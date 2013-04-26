@@ -35,9 +35,12 @@
 {
     NSAssert( [stream respondsToSelector:@selector(dataOfBlockNamed:)] == YES, @"CoCoCassetteFileBlocker: Incompatiable stream" );
     int blockNumber = 0, fileNumber = 0;
+    int noteFileType, noteDataType;
     
     /* Rummage thru data block building up files */
-     
+    
+    noteFileType = -1;
+    noteDataType = -1;
     NSString *currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
     StBlock *theBlock = [stream blockNamed:currentBlock];
 
@@ -54,8 +57,14 @@
             StBlock *newFile = [stream startNewBlockNamed:[NSString stringWithFormat:@"File %d", fileNumber++] owner:[CoCoCassetteFileBlocker anaylizerKey]];
             NSUInteger dataBlockSize = [[theBlock getData] length];
             if( dataBlockSize > 7 ) [newFile addAttributeRange:currentBlock start:0 length:8 name:@"Filename" verification:nil transformation:@"RSDOSString"];
-            if( dataBlockSize > 8 ) [newFile addAttributeRange:currentBlock start:8 length:1 name:@"File Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
-            if( dataBlockSize > 9 ) [newFile addAttributeRange:currentBlock start:9 length:1 name:@"Data Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
+            if( dataBlockSize > 8 ) {
+                [newFile addAttributeRange:currentBlock start:8 length:1 name:@"File Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
+                noteFileType = data[8];
+            }
+            if( dataBlockSize > 9 ) {
+                [newFile addAttributeRange:currentBlock start:9 length:1 name:@"Data Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
+                noteDataType = data[9];
+            }
             if( dataBlockSize > 10 ) [newFile addAttributeRange:currentBlock start:10 length:1 name:@"Gaps" verification:nil transformation:@"BlocksUnsignedBigEndian"];
             if( dataBlockSize > 12 ) [newFile addAttributeRange:currentBlock start:11 length:2 name:@"ML Exec Address" verification:nil transformation:@"BlocksUnsignedBigEndian"];
             if( dataBlockSize > 14 ) [newFile addAttributeRange:currentBlock start:13 length:2 name:@"ML Load Address" verification:nil transformation:@"BlocksUnsignedBigEndian"];
@@ -87,7 +96,16 @@
         }
         
         /* Set up source UTI */
+        if (noteFileType == 0 && noteDataType == 0) {
+            theBlock.resultingUTI = @"org.macmess.cocobasic.binary";
+        }
+        else if (noteFileType == 0 && noteDataType == 0xff) {
+            theBlock.resultingUTI = @"org.macmess.cocobasic.ascii";
+        }
         
+        noteFileType = -1;
+        noteDataType = -1;
+
         currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
         theBlock = [stream blockNamed:currentBlock];
 
