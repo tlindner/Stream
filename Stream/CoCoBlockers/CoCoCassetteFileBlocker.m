@@ -55,21 +55,37 @@
         {
             /* We found a start of a file! */
             StBlock *newFile = [stream startNewBlockNamed:[NSString stringWithFormat:@"File %d", fileNumber++] owner:[CoCoCassetteFileBlocker anaylizerKey]];
-            NSUInteger dataBlockSize = [[theBlock getData] length];
+            NSData *dataBlock = [theBlock getData];
+            unsigned char *dataBlockBytes = (unsigned char *)[dataBlock bytes];
+            NSUInteger dataBlockSize = [dataBlock length];
             if( dataBlockSize > 7 ) [newFile addAttributeRange:currentBlock start:0 length:8 name:@"Filename" verification:nil transformation:@"RSDOSString"];
             if( dataBlockSize > 8 ) {
                 [newFile addAttributeRange:currentBlock start:8 length:1 name:@"File Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
-                noteFileType = data[8];
+                noteFileType = dataBlockBytes[8];
             }
             if( dataBlockSize > 9 ) {
                 [newFile addAttributeRange:currentBlock start:9 length:1 name:@"Data Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
-                noteDataType = data[9];
+                noteDataType = dataBlockBytes[9];
             }
             if( dataBlockSize > 10 ) [newFile addAttributeRange:currentBlock start:10 length:1 name:@"Gaps" verification:nil transformation:@"BlocksUnsignedBigEndian"];
             if( dataBlockSize > 12 ) [newFile addAttributeRange:currentBlock start:11 length:2 name:@"ML Exec Address" verification:nil transformation:@"BlocksUnsignedBigEndian"];
             if( dataBlockSize > 14 ) [newFile addAttributeRange:currentBlock start:13 length:2 name:@"ML Load Address" verification:nil transformation:@"BlocksUnsignedBigEndian"];
 
-            currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
+            /* Set up source UTI */
+            if (noteFileType == 0 && noteDataType == 0) {
+                newFile.resultingUTI = @"coco.basic.binary";
+            }
+            else if (noteFileType == 0 && noteDataType == 0xff) {
+                newFile.resultingUTI = @"coco.basic.ascii";
+            }
+            else if (noteFileType == 0x02 && noteDataType == 0) {
+                newFile.resultingUTI = @"coco.object";
+            }
+            else {
+                newFile.resultingUTI = @"public.data";
+            }
+            
+           currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
             theBlock = [stream blockNamed:currentBlock];
             if( theBlock == nil ) break;
             attributeDataObject = [theBlock getAttributeData];
@@ -95,13 +111,6 @@
             /* All is well, files successfully processed. Now onto the next file */
         }
         
-        /* Set up source UTI */
-        if (noteFileType == 0 && noteDataType == 0) {
-            theBlock.resultingUTI = @"org.macmess.cocobasic.binary";
-        }
-        else if (noteFileType == 0 && noteDataType == 0xff) {
-            theBlock.resultingUTI = @"org.macmess.cocobasic.ascii";
-        }
         
         noteFileType = -1;
         noteDataType = -1;

@@ -199,6 +199,8 @@ unsigned short DCBlocking( unsigned short inSample );
         
         free( frameBufferAS );
         
+        theAna.resultingUTI = @"coco.tape";
+
         [self willChangeValueForKey:@"frameBuffer"];
         self.frameBuffer = frameBufferObject;
         NSMutableData *frameBufferCopy = [frameBufferObject copy];
