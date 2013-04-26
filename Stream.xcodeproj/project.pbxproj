@@ -206,6 +206,7 @@
 		7759CF8413DBA1A300789DB3 /* MySpotlightImporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MySpotlightImporter.m; sourceTree = "<group>"; };
 		7759CF8613DBA1A300789DB3 /* Importer Read Me.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Importer Read Me.txt"; sourceTree = "<group>"; };
 		7759CF8713DBA1A300789DB3 /* StreamImporter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StreamImporter-Prefix.pch"; sourceTree = "<group>"; };
+		775B34D4172A3DC7006DB5B0 /* HexFiend_2_Framework_Prefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiend_2_Framework_Prefix.h; path = Stream/HexFiend/HexFiend_2_Framework_Prefix.h; sourceTree = "<group>"; };
 		775ED2CD13DCF86500BC96C9 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		7760145E140987A500777D60 /* StBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StBlock.h; path = Stream/StBlock.h; sourceTree = "<group>"; };
 		7760145F140987A600777D60 /* StBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StBlock.m; path = Stream/StBlock.m; sourceTree = "<group>"; };
@@ -666,6 +667,7 @@
 		77F203F913DD3A5F00FA5B1F /* HexFiend */ = {
 			isa = PBXGroup;
 			children = (
+				775B34D4172A3DC7006DB5B0 /* HexFiend_2_Framework_Prefix.h */,
 				77F2048213DD3AEF00FA5B1F /* HFCancelOff.tiff */,
 				77F2048313DD3AEF00FA5B1F /* HFCancelOn.tiff */,
 				77F2048413DD3AEF00FA5B1F /* HFModalProgress.xib */,
