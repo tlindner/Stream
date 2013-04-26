@@ -14,6 +14,7 @@
 
 @implementation ColorGradientView
 @synthesize tlTitle;
+@synthesize acceptsTextField;
 @synthesize labelUTI;
 @synthesize labelEditor;
 @synthesize viewOwner;
@@ -136,9 +137,10 @@
     /* Editview changed, update UI */
     [[accessoryView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
-    /* ask current anaylization the name of it accessory nib */
+    /* ask current anaylization the name of it's accessory nib */
     NSString *editorPopupTitle = [editorPopup titleOfSelectedItem];
     Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:editorPopupTitle];
+    [acceptsTextField setStringValue: [[anaClass anaylizerUTIs] componentsJoinedByString:@", "]];
     
     NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");
     [anaylizer addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
@@ -201,7 +203,8 @@
                 StBlock *theBlock = [selectedObjects objectAtIndex:0];
                 [self.avc setRepresentedObject:theBlock];
             }
-            
+            [acceptsTextField setStringValue: @""];
+           
             return;
         }
         else
@@ -215,6 +218,7 @@
             Class anaClass = [[Analyzation sharedInstance] anaylizerClassforName:[editorPopup titleOfSelectedItem]];
             //NSLog( @"anaClass: %@", anaClass );
             NSAssert(anaClass != nil, @"Do Popover: Returned class is nil");
+            [acceptsTextField setStringValue: [[anaClass anaylizerUTIs] componentsJoinedByString:@", "]];
             [anaylizer addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
             NSString *nibName = [anaClass AnaylizerPopoverAccessoryViewNib];
             

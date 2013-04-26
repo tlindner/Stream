@@ -82,6 +82,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
            
                 StBlock *newBlock = [stream startNewBlockNamed:[NSString stringWithFormat:@"Block %d", blockName++] owner:[CoCoCassetteBlocker anaylizerKey]];
                 
+                newBlock.sourceUTI = newBlock.resultingUTI = @"public.data";
                 NSUInteger calculatedEnd = MIN(i+3+blockLength, length);
                 for( NSUInteger j=i+1; j<calculatedEnd; j++ ) checksumCheck += streamBytes[j];
 

@@ -35,12 +35,13 @@
 {
     NSAssert( [stream respondsToSelector:@selector(dataOfBlockNamed:)] == YES, @"CoCoCassetteFileBlocker: Incompatiable stream" );
     int blockNumber = 0, fileNumber = 0;
-    int noteFileType, noteDataType;
+    int noteFileType, noteDataType, noteGaps;
     
     /* Rummage thru data block building up files */
     
     noteFileType = -1;
     noteDataType = -1;
+    noteGaps = -1;
     NSString *currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
     StBlock *theBlock = [stream blockNamed:currentBlock];
 
@@ -67,22 +68,31 @@
                 [newFile addAttributeRange:currentBlock start:9 length:1 name:@"Data Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];
                 noteDataType = dataBlockBytes[9];
             }
-            if( dataBlockSize > 10 ) [newFile addAttributeRange:currentBlock start:10 length:1 name:@"Gaps" verification:nil transformation:@"BlocksUnsignedBigEndian"];
+            if( dataBlockSize > 10 ) {
+                [newFile addAttributeRange:currentBlock start:10 length:1 name:@"Gaps" verification:nil transformation:@"BlocksUnsignedBigEndian"];
+                noteGaps = dataBlockBytes[10];
+            }
             if( dataBlockSize > 12 ) [newFile addAttributeRange:currentBlock start:11 length:2 name:@"ML Exec Address" verification:nil transformation:@"BlocksUnsignedBigEndian"];
             if( dataBlockSize > 14 ) [newFile addAttributeRange:currentBlock start:13 length:2 name:@"ML Load Address" verification:nil transformation:@"BlocksUnsignedBigEndian"];
 
-            /* Set up source UTI */
+            /* Set up UTIs */
             if (noteFileType == 0 && noteDataType == 0) {
-                newFile.resultingUTI = @"coco.basic.binary";
+                newFile.sourceUTI = newFile.resultingUTI = @"com.microsoft.cocobasic.binary";
             }
             else if (noteFileType == 0 && noteDataType == 0xff) {
-                newFile.resultingUTI = @"coco.basic.ascii";
+                newFile.sourceUTI = newFile.resultingUTI = @"com.microsoft.cocobasic.ascii";
             }
-            else if (noteFileType == 0x02 && noteDataType == 0) {
-                newFile.resultingUTI = @"coco.object";
+            else if (noteFileType == 0x01 && noteDataType == 0xff) {
+                newFile.sourceUTI = newFile.resultingUTI = @"public.text";
+            }
+            else if (noteFileType == 0x02 && noteDataType == 0 && noteGaps == 0) {
+                newFile.sourceUTI = newFile.resultingUTI = @"com.microsoft.cocobasic.object";
+            }
+            else if (noteFileType == 0x02 && noteDataType == 0 && noteGaps == 0xff) {
+                newFile.sourceUTI = newFile.resultingUTI = @"com.microsoft.cocobasic.gapsobject";
             }
             else {
-                newFile.resultingUTI = @"public.data";
+                newFile.sourceUTI = newFile.resultingUTI = @"public.data";
             }
             
            currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
@@ -114,7 +124,8 @@
         
         noteFileType = -1;
         noteDataType = -1;
-
+        noteGaps = -1;
+        
         currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
         theBlock = [stream blockNamed:currentBlock];
 

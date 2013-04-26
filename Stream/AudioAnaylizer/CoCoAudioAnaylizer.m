@@ -199,7 +199,7 @@ unsigned short DCBlocking( unsigned short inSample );
         
         free( frameBufferAS );
         
-        theAna.resultingUTI = @"coco.tape";
+        theAna.resultingUTI = @"com.microsoft.cocobasic.tape";
 
         [self willChangeValueForKey:@"frameBuffer"];
         self.frameBuffer = frameBufferObject;

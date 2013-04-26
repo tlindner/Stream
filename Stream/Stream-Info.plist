@@ -106,18 +106,102 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array/>
+			<key>UTTypeDescription</key>
+			<string>Stream Block</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.macmess.stream.block</string>
+			<key>UTTypeTagSpecification</key>
+			<dict/>
 		</dict>
 		<dict>
-			<key>UTTypeDescription</key>
-			<string>Type/Value Pairs</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
 			</array>
+			<key>UTTypeDescription</key>
+			<string>Type/Value Pairs</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.macmess.stream.attribute</string>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Color Computer Binary BASIC File</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.cocobasic.binary</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>BAS</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Color Computer ASCII BASIC File</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.cocobasic.ascii</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>BAS</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Color Computer Binary Executable</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.cocobasic.object</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>BIN</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Color Computer Binary Segemented Executable</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.cocobasic.gapsobject</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>BIN</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Color Computer Decoded Audio File</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.cocobasic.tape</string>
+			<key>UTTypeTagSpecification</key>
+			<dict/>
 		</dict>
 	</array>
 </dict>

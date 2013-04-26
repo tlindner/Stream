@@ -18,6 +18,7 @@
     NSNib *actionPopOverNib;
     IBOutlet NSPopUpButton *editorPopup;
     IBOutlet NSTextField *utiTextField;
+    IBOutlet NSTextField *acceptsTextField;
     IBOutlet NSPopover *actionPopOver;
     IBOutlet NSView *accessoryView;
     NSArrayController *popupArrayController;
@@ -31,6 +32,7 @@
 @property (assign) IBOutlet NSButton *tlTitle;
 @property (assign) IBOutlet NSTextField *labelUTI;
 @property (assign) IBOutlet NSTextField *labelEditor;
+@property (assign) IBOutlet NSTextField *acceptsTextField;
 @property (assign) IBOutlet AnaylizerListViewItem *viewOwner;
 
 // Define the variables as properties
