@@ -243,6 +243,10 @@
 		779F74C81724779F00EC509B /* AnaylizerListViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerListViewItem.h; path = Stream/AnaylizerListViewItem.h; sourceTree = "<group>"; };
 		779F74C91724779F00EC509B /* AnaylizerListViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerListViewItem.m; path = Stream/AnaylizerListViewItem.m; sourceTree = "<group>"; };
 		779F74CB172478F500EC509B /* AnaylizerListViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerListViewItem.xib; path = Stream/AnaylizerListViewItem.xib; sourceTree = "<group>"; };
+		77A98C12172AD392001A9A55 /* AnaylizerArrow.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnaylizerArrow.psd; path = Stream/AudioAnaylizer/AnaylizerArrow.psd; sourceTree = "<group>"; };
+		77A98C13172AD392001A9A55 /* AnaylizerHand.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnaylizerHand.psd; path = Stream/AudioAnaylizer/AnaylizerHand.psd; sourceTree = "<group>"; };
+		77A98C14172AD392001A9A55 /* AnaylizerLupe.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnaylizerLupe.psd; path = Stream/AudioAnaylizer/AnaylizerLupe.psd; sourceTree = "<group>"; };
+		77A98C15172AD392001A9A55 /* AnaylizerPencil.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnaylizerPencil.psd; path = Stream/AudioAnaylizer/AnaylizerPencil.psd; sourceTree = "<group>"; };
 		77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeViewController.h; path = Stream/BlockAttributeViewController.h; sourceTree = "<group>"; };
 		77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewController.m; path = Stream/BlockAttributeViewController.m; sourceTree = "<group>"; };
 		77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewController.xib; path = Stream/BlockAttributeViewController.xib; sourceTree = "<group>"; };
@@ -641,10 +645,14 @@
 				77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */,
 				771AD294141D06C800E0FE41 /* CoCoAudioAnaylizer.h */,
 				771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */,
-				7700637617128E730037055D /* AnaylizerPencil.tiff */,
 				772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */,
+				77A98C12172AD392001A9A55 /* AnaylizerArrow.psd */,
+				7700637617128E730037055D /* AnaylizerPencil.tiff */,
+				77A98C15172AD392001A9A55 /* AnaylizerPencil.psd */,
 				772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */,
+				77A98C13172AD392001A9A55 /* AnaylizerHand.psd */,
 				772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */,
+				77A98C14172AD392001A9A55 /* AnaylizerLupe.psd */,
 			);
 			name = AudioAnaylizer;
 			sourceTree = "<group>";
