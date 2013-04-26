@@ -63,13 +63,13 @@
         <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock" inverseName="parentStream" inverseEntity="StBlock"/>
         <relationship name="childStreams" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StStream" inverseName="parentStream" inverseEntity="StStream"/>
         <relationship name="edits" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StreamEdit" inverseName="parentStream" inverseEntity="StreamEdit" syncable="YES"/>
-        <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
+        <relationship name="parentStream" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
     </entity>
     <elements>
         <element name="AnaylizerEdit" positionX="160" positionY="192" width="128" height="105"/>
         <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="210"/>
         <element name="StBlock" positionX="0" positionY="0" width="0" height="375"/>
         <element name="StreamEdit" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="StStream" positionX="0" positionY="0" width="0" height="225"/>
+        <element name="StStream" positionX="0" positionY="0" width="0" height="240"/>
     </elements>
 </model>

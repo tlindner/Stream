@@ -27,6 +27,7 @@
 @dynamic parentBlock;
 @dynamic blocks;
 @dynamic sourceUTI;
+@dynamic resultingUTI;
 @dynamic currentEditorView;
 @dynamic optionsDictionary;
 @dynamic isFail;
@@ -470,6 +471,32 @@
 - (NSData *)getAttributeData
 {
     return [[self subBlockNamed:@"attributes"] getData];
+}
+
+- (id)getAttributeDatawithUIName:(NSString *)name
+{
+    StBlock *attributeBlock = [self subBlockNamed:@"attributes"];
+
+    for (StBlock *aBlock in [attributeBlock blocks])
+    {
+        if( [aBlock.uiName isEqualToString:name] )
+        {
+            if (aBlock.valueTransformer != nil) {
+                NSValueTransformer *tf = [NSValueTransformer valueTransformerForName:aBlock.valueTransformer];
+                
+                if (tf != nil) {
+                    return [tf transformedValue:[aBlock getData]];
+                }
+                else {
+                    return [aBlock getData];
+                }
+            }
+            else {
+                return [aBlock getData];
+            }
+        }
+     }
+     return nil;
 }
 
 - (NSArray *)getArrayOfBlocks

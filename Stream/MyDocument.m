@@ -134,7 +134,7 @@
     newAnaylizer.anaylizerKind = @"base anaylizer";
     [theSet addObject:newAnaylizer];
     
-    [streamTreeControler addObject:newObject];
+//    [streamTreeControler addObject:newObject];
     
     /* setup undo */
     [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Stream “%@”", [newObject valueForKey:@"displayName"]]];
@@ -142,7 +142,35 @@
 
 - (void) addSubStreamFromTopLevelBlock:(StBlock *)theBlock ofParent:(StStream *)theParent
 {
-    NSLog( @"Add substreamfromtoplevel block: %@, with parent: %@", theBlock, theParent );
+//    NSLog( @"Add substreamfromtoplevel block: %@, with parent: %@", theBlock, theParent );
+    NSManagedObject *newObject = [[streamTreeControler newObject] autorelease];
+    NSString *name = [theBlock getAttributeDatawithUIName:@"Filename"];
+    
+    if( ![[name class] isSubclassOfClass:[NSString class]] ) {
+        name = [theBlock getAttributeDatawithUIName:@"Name"];
+        
+        if( ![[name class] isSubclassOfClass:[NSString class]] ) {
+            name = [theBlock source];
+        }
+    }
+
+//    theBlock.parentStream = theParent;
+    [theParent addChildStreamsObject:(StStream *)newObject];
+    [newObject setValue:name forKey:@"displayName"];
+    [newObject setValue:[theBlock resultingUTI] forKey:@"sourceUTI"];
+    [newObject setValue:[theBlock getData] forKey:@"bytesCache"];
+  
+    /* Setup first anaylizer */
+    NSMutableOrderedSet *theSet = [newObject mutableOrderedSetValueForKey:@"anaylizers"];
+    
+    StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
+    newAnaylizer.anaylizerKind = @"base anaylizer";
+    [theSet addObject:newAnaylizer];
+    
+//    [streamTreeControler addChild:newObject];
+    
+    /* setup undo */
+    [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Sub-Stream “%@”", name]];
 }
 
 - (IBAction)wftSave:(id)sender
@@ -296,14 +324,6 @@
 
         [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Blocker “%@”", newAnaylizer.anaylizerKind]];
     }
-}
-
-- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
-{
-    NSMutableOrderedSet *oSet = [streamTreeControler valueForKeyPath:@"selection.anaylizers"];
-    StAnaylizer *ana = [oSet objectAtIndex:row];
-    float value = ana.computedAnaylizerHeight;
-    return value;
 }
 
 - (BOOL)selectionShouldChangeInTableView:(NSTableView *)aTableView

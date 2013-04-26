@@ -31,6 +31,7 @@
 @property (nonatomic, retain) NSData * checkBytes;
 @property (nonatomic, retain) NSString * source;
 @property (nonatomic, retain) NSString * sourceUTI;
+@property (nonatomic, retain) NSString * resultingUTI;
 @property (nonatomic) int64_t index;
 @property (nonatomic) BOOL markForDeletion;
 @property (nonatomic, retain) StStream *parentStream;
@@ -64,6 +65,7 @@
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 - (NSData *)getData;
 - (NSData *)getAttributeData;
+- (id)getAttributeDatawithUIName:(NSString *)name;
 - (NSArray *)getArrayOfBlocks;
 - (StBlock *)subBlockNamed:(NSString *)inName;
 - (BOOL)writeByte:(unsigned char)byte atOffset:(NSUInteger)offset;

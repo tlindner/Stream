@@ -86,14 +86,16 @@
             /* All is well, files successfully processed. Now onto the next file */
         }
         
+        /* Set up source UTI */
+        
         currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
         theBlock = [stream blockNamed:currentBlock];
 
         if( theBlock == nil ) break;
 
-        attributeDataObject = [stream dataOfBlockNamed:currentBlock];
+        attributeDataObject = [theBlock getAttributeData];
         data = (unsigned char *)[attributeDataObject bytes];
-     }
+    }
  }
 
 @end
