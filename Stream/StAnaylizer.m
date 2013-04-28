@@ -362,10 +362,10 @@
 
 - (IBAction)ConfigurableButton1:(id)sender
 {
-//    if( [viewController respondsToSelector:@selector(ConfigurableButton1:)] )
-//    {
-//        [viewController ConfigurableButton1:(id)sender];
-//    }
+    if( [viewController respondsToSelector:@selector(ConfigurableButton1:)] )
+    {
+        [viewController ConfigurableButton1:(id)sender];
+    }
 }
 
 - (void) poseEdit:(NSData *)data range:(NSRange)range

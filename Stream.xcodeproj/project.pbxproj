@@ -68,6 +68,10 @@
 		77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77AE7556141568BD0052A93D /* BlockIcon.tiff */; };
 		77B014681717AFB2008CAF1A /* StreamEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B014671717AFB2008CAF1A /* StreamEdit.m */; };
 		77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */; };
+		77B617FD172B8A81008E8F1A /* TextAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B617FC172B8A81008E8F1A /* TextAnaylizer.m */; };
+		77B61801172B8BA1008E8F1A /* TextAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */; };
+		77B61802172B8BA1008E8F1A /* TextAnaylizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77B61800172B8BA1008E8F1A /* TextAnaylizerViewController.xib */; };
+		77B61804172B8CD3008E8F1A /* TextAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77B61803172B8CD3008E8F1A /* TextAccessoryView.xib */; };
 		77C17FBD140F450100E23921 /* HexFiendAnaylizerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */; };
 		77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */; };
 		77C17FC3140F469700E23921 /* AudioAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */; };
@@ -255,6 +259,12 @@
 		77B014671717AFB2008CAF1A /* StreamEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StreamEdit.m; path = Stream/StreamEdit.m; sourceTree = "<group>"; };
 		77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerEdit.h; path = Stream/AnaylizerEdit.h; sourceTree = "<group>"; };
 		77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerEdit.m; path = Stream/AnaylizerEdit.m; sourceTree = "<group>"; };
+		77B617FB172B8A81008E8F1A /* TextAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextAnaylizer.h; path = Stream/TextAnaylizer/TextAnaylizer.h; sourceTree = "<group>"; };
+		77B617FC172B8A81008E8F1A /* TextAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextAnaylizer.m; path = Stream/TextAnaylizer/TextAnaylizer.m; sourceTree = "<group>"; };
+		77B617FE172B8BA1008E8F1A /* TextAnaylizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextAnaylizerViewController.h; path = Stream/TextAnaylizer/TextAnaylizerViewController.h; sourceTree = "<group>"; };
+		77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextAnaylizerViewController.m; path = Stream/TextAnaylizer/TextAnaylizerViewController.m; sourceTree = "<group>"; };
+		77B61800172B8BA1008E8F1A /* TextAnaylizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextAnaylizerViewController.xib; path = Stream/TextAnaylizer/TextAnaylizerViewController.xib; sourceTree = "<group>"; };
+		77B61803172B8CD3008E8F1A /* TextAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextAccessoryView.xib; path = Stream/TextAnaylizer/TextAccessoryView.xib; sourceTree = "<group>"; };
 		77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnaylizerController.h; path = Stream/HexFiendAnaylizerController.h; sourceTree = "<group>"; };
 		77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnaylizerController.m; path = Stream/HexFiendAnaylizerController.m; sourceTree = "<group>"; };
 		77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HexFiendAnaylizerController.xib; path = Stream/HexFiendAnaylizerController.xib; sourceTree = "<group>"; };
@@ -424,6 +434,7 @@
 				778A598C1407516500B68EB4 /* BlockerDataView */,
 				7799CD1E13E5C651007D5B8E /* AudioAnaylizer */,
 				772D952814088129001A449B /* HexFiendAnaylizer */,
+				77B617F9172B8A4E008E8F1A /* TextAnaylizer */,
 				778A59771406EE0700B68EB4 /* CoCoBlockers */,
 				77614F3413DC9B6C00041279 /* Models */,
 				7788588B13EDC1B30057E042 /* AnaylizerUI */,
@@ -672,6 +683,19 @@
 			name = BlockAttributeView;
 			sourceTree = "<group>";
 		};
+		77B617F9172B8A4E008E8F1A /* TextAnaylizer */ = {
+			isa = PBXGroup;
+			children = (
+				77B617FB172B8A81008E8F1A /* TextAnaylizer.h */,
+				77B617FC172B8A81008E8F1A /* TextAnaylizer.m */,
+				77B617FE172B8BA1008E8F1A /* TextAnaylizerViewController.h */,
+				77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */,
+				77B61800172B8BA1008E8F1A /* TextAnaylizerViewController.xib */,
+				77B61803172B8CD3008E8F1A /* TextAccessoryView.xib */,
+			);
+			name = TextAnaylizer;
+			sourceTree = "<group>";
+		};
 		77F203F913DD3A5F00FA5B1F /* HexFiend */ = {
 			isa = PBXGroup;
 			children = (
@@ -884,6 +908,8 @@
 				77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */,
 				7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */,
 				779F74CC172478F500EC509B /* AnaylizerListViewItem.xib in Resources */,
+				77B61802172B8BA1008E8F1A /* TextAnaylizerViewController.xib in Resources */,
+				77B61804172B8CD3008E8F1A /* TextAccessoryView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,6 +1029,8 @@
 				77793EB8172391E500E607F6 /* SDListView.m in Sources */,
 				77793EB9172391E500E607F6 /* SDListViewItem.m in Sources */,
 				779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */,
+				77B617FD172B8A81008E8F1A /* TextAnaylizer.m in Sources */,
+				77B61801172B8BA1008E8F1A /* TextAnaylizerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -83,14 +83,10 @@
 }
 
 - (void)doubleClick:(id)object {
-//    NSInteger rowNumber = [outlineView clickedRow];
-    ;
-    
     StAnaylizer *thePreviousAna = [(StAnaylizer *)[self representedObject] previousAnaylizer];
     [thePreviousAna willChangeValueForKey:@"viewRange"];
     thePreviousAna.viewRange = [NSValue valueWithRange:observingBlock.getUnionRange];
     [thePreviousAna didChangeValueForKey:@"viewRange"];
-    
 }
 
 - (void)restoreSelection

@@ -27,7 +27,7 @@ static Analyzation *sharedSingleton;
         [sharedSingleton addAnalyzer:@"BlockerDataAnaylizer"];
         [sharedSingleton addAnalyzer:@"BlockAttributeAnaylizer"];
         [sharedSingleton addAnalyzer:@"HexFiendAnaylizer"];
-        //[sharedSingleton addAnalyzer:@"TextViewAnaylizerController"];
+        [sharedSingleton addAnalyzer:@"TextAnaylizer"];
     }
 }
 

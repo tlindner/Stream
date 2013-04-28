@@ -65,6 +65,9 @@
 
 - (void)dealloc
 {
+    StAnaylizer *theAna = [self representedObject];
+    [theAna setViewController:nil];
+
     if (self.representedObject != nil) {
         [self.representedObject removeObserver:self forKeyPath:@"currentEditorView" context:self];
         self.representedObject = nil;
@@ -96,6 +99,7 @@
     adjustedFrame.origin.x = 0;
     adjustedFrame.origin.y = 0;
     self.editorController = [[[[anaylizerObject viewControllerClass] alloc] initWithNibName:nil bundle:nil] autorelease];
+    [theAna setViewController:self.editorController];
     [self.editorController setRepresentedObject:self.representedObject];
     [self.editorController loadView];
     [[self.editorController view] setFrame:adjustedFrame];
