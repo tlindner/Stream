@@ -83,9 +83,20 @@
 }
 
 - (void)doubleClick:(id)object {
+    NSRange unionRange = NSMakeRange(0, 0);
+    NSArray *selectionObjects = [[self treeController] selectedObjects];
+    
+    for (StBlock *block in selectionObjects) {
+        if (unionRange.length == 0) {
+            unionRange = [block getUnionRange];
+        } else {
+            unionRange = NSUnionRange(unionRange, [block getUnionRange]);
+        }
+    }
+    
     StAnaylizer *thePreviousAna = [(StAnaylizer *)[self representedObject] previousAnaylizer];
     [thePreviousAna willChangeValueForKey:@"viewRange"];
-    thePreviousAna.viewRange = [NSValue valueWithRange:observingBlock.getUnionRange];
+    thePreviousAna.viewRange = [NSValue valueWithRange:unionRange];
     [thePreviousAna didChangeValueForKey:@"viewRange"];
 }
 
@@ -182,6 +193,8 @@
         [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:self];
         lastFilterAnaylizer = [[[[self representedObject] parentStream] lastFilterAnayliser] retain];
         [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+        [[self representedObject] addObserver:self forKeyPath:@"viewRange" options:NSKeyValueChangeSetting context:self];
+        
     }
 
     self.observing = YES;
@@ -193,6 +206,7 @@
     {
         [treeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
         [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        [[self representedObject] removeObserver:self forKeyPath:@"viewRange" context:self];
         [lastFilterAnaylizer release];
     }
     
@@ -321,6 +335,29 @@
     else if( [keyPath isEqualToString:@"editIndexSet"] )
     {
         [outlineView setNeedsDisplay];
+    }
+    else if( [keyPath isEqualToString:@"viewRange"] )
+    {
+        /* Figure out which of our top level blocks should be selected based on the byte range */
+        NSRange bytesRange = [[[self representedObject] valueForKey:@"viewRange"] rangeValue];
+        NSArray *topLevelNodes = [[[self treeController] arrangedObjects] childNodes];
+        NSMutableArray *selectionIndexPaths = [[[NSMutableArray alloc] init] autorelease];
+        
+        int i=0;
+        for (NSTreeNode *treeNode in topLevelNodes) {
+            StBlock *theBlock = [treeNode representedObject];
+            NSRange range = [theBlock getUnionRange];
+            NSRange intersectionRange = NSIntersectionRange(bytesRange, range);
+            if (intersectionRange.length > 0) {
+                [selectionIndexPaths addObject:[NSIndexPath indexPathWithIndex:i]];
+            }
+            
+            i++;
+        }
+        
+        if ([selectionIndexPaths count] > 0) {
+            [[self treeController] setSelectionIndexPaths:selectionIndexPaths];
+        }
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

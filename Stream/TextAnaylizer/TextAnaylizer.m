@@ -94,7 +94,7 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
     NSUInteger size = [bufferObject length];
     
     NSUInteger file_size, value, line_number, pos;
-    unsigned char character;
+    unsigned char c;
     
     if (*buffer == 0xff && size > 3) {
         pos = 1;
@@ -122,33 +122,33 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
         
         [result appendFormat:@"%d ", line_number];
         
-        while ((character = buffer[pos++]) != 0 && pos < size) {
-            if (character == 0xff) {
+        while ((c = buffer[pos++]) != 0 && pos < size) {
+            if (c == 0xff) {
                 /* a function call */
-                character = buffer[pos++];
+                c = buffer[pos++];
                 
-                if( functions[character - 0x80] != nil ) {
-                    [result appendString:functions[character-0x80]];
+                if( functions[c - 0x80] != nil ) {
+                    [result appendString:functions[c-0x80]];
                 }
                 else {
                     [result appendString:@"!"];
                 }
             }
-            else if (character >= 0x80) {
+            else if (c >= 0x80) {
                 /* a command call */
-                if (commands[character-0x80] != nil) {
-                    [result appendString:commands[character - 0x80]];
+                if (commands[c-0x80] != nil) {
+                    [result appendString:commands[c - 0x80]];
                 }
                 else {
                     [result appendString:@"!"];
                 }
             }
-            else if (character == ':' && (buffer[pos] == 0x83 || buffer[pos] == 0x84) ) {
+            else if (c == ':' && (buffer[pos] == 0x83 || buffer[pos] == 0x84) ) {
                 /* When colon-apostrophe is encountered, the colon is dropped. */
                 /* When colon-ELSE is encountered, the colon is dropped */
             }
             else {
-                [result appendFormat:@"%c", character];
+                [result appendFormat:@"%c", c];
             }
         }
         

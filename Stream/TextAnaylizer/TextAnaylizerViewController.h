@@ -10,9 +10,14 @@
 #import "StAnaylizer.h"
 
 @interface TextAnaylizerViewController : NSViewController
+{
+    BOOL observationsActive;
+}
+
 @property (assign) IBOutlet NSTextView *textView;
 @property (nonatomic,retain) StAnaylizer *lastAnaylizer;
 
+- (void)reloadView;
 - (NSString *) transformInput;
 
 @end

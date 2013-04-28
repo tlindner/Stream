@@ -37,6 +37,6 @@
 - (void) restoreSelection;
 - (void) notifyOfImpendingDeletion:(NSArray *)blocks;
 - (void) reloadView;
-- (void)doubleClick:(id)nid;
+- (void) doubleClick:(id)nid;
 
 @end
