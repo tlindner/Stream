@@ -63,7 +63,8 @@
     {
         StAnaylizer *object = [self representedObject];
         [[hexView controller] setInOverwriteMode:NO];
-        [hexView setData:[object.parentStream valueForKey:@"bytesCache"]];      
+        [hexView setData:[object.parentStream valueForKey:@"bytesCache"]];
+        [object setResultingData:[[[object.parentStream valueForKey:@"bytesCache"] mutableCopy] autorelease]];
         [self setupRepresentedObject];
     }
     else if( [[self representedObject] isKindOfClass:[StBlock class]] )

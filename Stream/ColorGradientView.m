@@ -12,6 +12,8 @@
 #import "StAnaylizer.h"
 #import "StBlock.h"
 
+void AbleAllControlsInView( NSView *inView, BOOL able );
+
 @implementation ColorGradientView
 @synthesize tlTitle;
 @synthesize acceptsTextField;
@@ -27,6 +29,8 @@
 @synthesize actionPopOverNib;
 @synthesize popupArrayController;
 @synthesize avc;
+@synthesize blockTreeController;
+@synthesize boundAndObserved;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -35,6 +39,7 @@
         self.startingColor = [NSColor colorWithCalibratedWhite:1.0 alpha:1.0];
         self.endingColor = nil;
         [self setAngle:270];
+        boundAndObserved = NO;
     }
     
     return self;
@@ -45,7 +50,7 @@
     self.startingColor = [NSColor colorWithCalibratedRed:0.92f green:0.93f blue:0.98f alpha:1.0f];
     self.endingColor = [NSColor colorWithCalibratedRed:0.74f green:0.76f blue:0.83f alpha:1.0f];
     [self setAngle:270];
-    
+    boundAndObserved = NO;
 //    [self updateConstraints];
     [super awakeFromNib];
 }
@@ -77,7 +82,9 @@
 - (IBAction)doPopOver:(id)sender
 {
     StAnaylizer *anaylizer = [viewOwner representedObject];
-    
+
+    [self unbindAndUnobserve];
+   
     if( self.actionPopOverNib == nil )
     {
         self.actionPopOverNib = [[[NSNib alloc] initWithNibNamed:@"AnaylizerSettingPopover" bundle:nil] autorelease];
@@ -98,7 +105,8 @@
         [self.labelEditor setStringValue:@"Block Editor:"];
         
         BlockerDataViewController *blockerController = (BlockerDataViewController *)self.viewOwner.editorController;
-        NSArray *selectedObjects = [blockerController.treeController selectedObjects];
+        blockTreeController = blockerController.treeController;
+        NSArray *selectedObjects = [blockTreeController selectedObjects];
         
         if( [selectedObjects count] == 1 )
         {
@@ -106,21 +114,46 @@
             observableSourceUTI = observableEditorView = theBlock;
             stuff = [[Analyzation sharedInstance] anaylizersforUTI:[theBlock valueForKey:@"sourceUTI"]];
             ro = theBlock;
+            
+            [blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
+
+            [utiTextField setEnabled:YES];
+            [editorPopup setEnabled:YES];
+            AbleAllControlsInView([self.avc groupBox], YES);
         }
         else
         {
-            NSLog( @"Multiple selection! Ohy, vey!" );
             observableEditorView = nil;
-            observableSourceUTI = nil; 
+            observableSourceUTI = nil;
+            
+            [blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
+            
+            if (self.avc) {
+                [utiTextField setEnabled:NO];
+                [editorPopup setEnabled:NO];
+                AbleAllControlsInView([self.avc groupBox], NO);
+            }
+
+            [actionPopOver showRelativeToRect:[tlAction bounds] ofView:tlAction preferredEdge:NSMaxYEdge];
+//            NSSize contentsize = [actionPopOver contentSize];
+//            contentsize.height += newSubViewHeight - currentAVHeight;
+//            [actionPopOver setContentSize:contentsize];
+
+            return;
         }
     }
     else
     {
+        blockTreeController = nil;
         observableEditorView = anaylizer;
         observableSourceUTI = anaylizer.parentStream;
         stuff = [[Analyzation sharedInstance] anaylizersforUTI:[anaylizer valueForKey:@"sourceUTI"]];
         ro = anaylizer;
-    }
+ 
+        [utiTextField setEnabled:YES];
+        [editorPopup setEnabled:YES];
+        AbleAllControlsInView([self.avc groupBox], YES);
+}
     
     self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
     [self.popupArrayController addObjects:stuff];
@@ -133,6 +166,7 @@
     
     [observableEditorView addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:nil];
     [observableSourceUTI addObserver:self forKeyPath:@"sourceUTI" options:NSKeyValueChangeSetting context:nil];
+    boundAndObserved = YES;
     
     /* Editview changed, update UI */
     [[accessoryView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -172,7 +206,7 @@
         newSubViewHeight = 0;
     }
     
-    NSViewController *editorController = self.viewOwner.editorController; // [[self superview] valueForKey:@"editorController"];
+    NSViewController *editorController = self.viewOwner.editorController;
     if( [editorController isKindOfClass:anaClass] )
     {
         if( [editorController respondsToSelector:@selector(prepareAccessoryView:)] )
@@ -273,40 +307,51 @@
         
         return;
     }
+    else if ([keyPath isEqualToString:@"selectedObjects"]) {
+        [self unbindAndUnobserve];
+        [self doPopOver:self];
+        return;
+    }
     
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 - (IBAction)popOverOK:(id)sender
 {
-    [utiTextField unbind:@"value"];
-    [utiTextField unbind:@"enabled"];
-    [editorPopup unbind:@"contentObjects"];
-    [editorPopup unbind:@"selectedObject"];
-    [editorPopup unbind:@"enabled"];
-    
-    [observableEditorView removeObserver:self forKeyPath:@"currentEditorView"];
-    [observableSourceUTI removeObserver:self forKeyPath:@"sourceUTI"];
-    
+    [self unbindAndUnobserve];
     [actionPopOver performClose:self];
 }
 
 - (IBAction)popOverCancel:(id)sender
 {
-    [utiTextField unbind:@"value"];
-    [utiTextField unbind:@"enabled"];
-    [editorPopup unbind:@"contentObjects"];
-    [editorPopup unbind:@"selectedObject"];
-    [editorPopup unbind:@"enabled"];
-    
-    [observableEditorView removeObserver:self forKeyPath:@"currentEditorView"];
-    [observableSourceUTI removeObserver:self forKeyPath:@"sourceUTI"];
-    
+    [self unbindAndUnobserve];
     [actionPopOver performClose:self];
+}
+
+- (void)unbindAndUnobserve
+{
+    if (boundAndObserved == YES) {
+        [utiTextField unbind:@"value"];
+        [utiTextField unbind:@"enabled"];
+        [editorPopup unbind:@"contentObjects"];
+        [editorPopup unbind:@"selectedObject"];
+        [editorPopup unbind:@"enabled"];
+        
+        [observableEditorView removeObserver:self forKeyPath:@"currentEditorView"];
+        [observableSourceUTI removeObserver:self forKeyPath:@"sourceUTI"];
+                
+        boundAndObserved = NO;
+    }
+
+    if (blockTreeController) {
+        [blockTreeController removeObserver:self forKeyPath:@"selectedObjects"];
+        blockTreeController = nil;
+    }
 }
 
 - (void)dealloc
 {
+    [self unbindAndUnobserve];
     self.popupArrayController = nil;
     self.additionalConstraints = nil;
     self.actionPopOverNib = nil;
@@ -315,3 +360,17 @@
 }
 
 @end
+
+void AbleAllControlsInView( NSView *inView, BOOL able )
+{
+    NSArray *subViews = [inView subviews];
+    
+    for (NSView *view in subViews) {
+        if ([[view class] isSubclassOfClass:[NSControl class]]) {
+            NSControl *control = (NSControl *)view;
+            [control setEnabled:able];
+        }
+        
+        AbleAllControlsInView(view, able);
+    }
+}

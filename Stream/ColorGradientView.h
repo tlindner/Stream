@@ -42,9 +42,12 @@
 @property(nonatomic, retain) NSNib *actionPopOverNib;
 @property(nonatomic, retain) NSArrayController *popupArrayController;
 @property(nonatomic, retain) AnaylizerSettingPopOverAccessoryViewController *avc;
+@property(nonatomic, assign) NSTreeController *blockTreeController;
+@property(assign) BOOL boundAndObserved;
 @property(assign) int angle;
 
 - (IBAction)doPopOver:(id)sender;
 - (IBAction)popOverOK:(id)sender;
 - (IBAction)popOverCancel:(id)sender;
+- (void)unbindAndUnobserve;
 @end

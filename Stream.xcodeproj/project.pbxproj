@@ -59,6 +59,7 @@
 		778A598B14072E6A00B68EB4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A598A14072E6A00B68EB4 /* AppDelegate.m */; };
 		778A59911407524900B68EB4 /* BlockerDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778A59901407524900B68EB4 /* BlockerDataViewController.xib */; };
 		778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */; };
+		778BFDAA172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778BFDA9172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
 		779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F74C91724779F00EC509B /* AnaylizerListViewItem.m */; };
@@ -241,6 +242,8 @@
 		778A59901407524900B68EB4 /* BlockerDataViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockerDataViewController.xib; path = Stream/BlockerDataViewController.xib; sourceTree = "<group>"; };
 		778A6DFC1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+GSIndexSetAdditions.h"; sourceTree = "<group>"; };
 		778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+GSIndexSetAdditions.m"; sourceTree = "<group>"; };
+		778BFDA8172E0BA300C9005C /* CoCoSegmentedObjectBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoSegmentedObjectBlocker.h; path = Stream/CoCoBlockers/CoCoSegmentedObjectBlocker.h; sourceTree = "<group>"; };
+		778BFDA9172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoSegmentedObjectBlocker.m; path = Stream/CoCoBlockers/CoCoSegmentedObjectBlocker.m; sourceTree = "<group>"; };
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7799CD2913E63C1F007D5B8E /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnaylizer/WaveFormView.h; sourceTree = "<group>"; };
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
@@ -624,6 +627,8 @@
 				778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */,
 				77DFCB75171A159100C4A876 /* CoCoCassetteFileBlocker.h */,
 				77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */,
+				778BFDA8172E0BA300C9005C /* CoCoSegmentedObjectBlocker.h */,
+				778BFDA9172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m */,
 			);
 			name = CoCoBlockers;
 			sourceTree = "<group>";
@@ -1031,6 +1036,7 @@
 				779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */,
 				77B617FD172B8A81008E8F1A /* TextAnaylizer.m in Sources */,
 				77B61801172B8BA1008E8F1A /* TextAnaylizerViewController.m in Sources */,
+				778BFDAA172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

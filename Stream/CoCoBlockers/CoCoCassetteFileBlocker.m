@@ -10,7 +10,6 @@
 
 @implementation CoCoCassetteFileBlocker
 
-
 + (NSString *)anayliserName
 {
     return @"Color Computer Cassette File Blocker";

@@ -43,6 +43,8 @@
     
     if (representedObject != nil) {
         [representedObject addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+        [representedObject addObserver:self forKeyPath:@"collapse" options:0 context:self];
+        
     }
 }
 
@@ -58,6 +60,9 @@
         if ([keyPath isEqualToString:@"currentEditorView"]) {
             [self loadStreamEditor];
         }
+        else if ([keyPath isEqualToString:@"collapse"]) {
+            [self noteViewHeightChanged];
+        }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -70,6 +75,7 @@
 
     if (self.representedObject != nil) {
         [self.representedObject removeObserver:self forKeyPath:@"currentEditorView" context:self];
+        [self.representedObject removeObserver:self forKeyPath:@"collapse" context:self];
         self.representedObject = nil;
     }
     
@@ -111,25 +117,25 @@
     float result = MINIMUM_HEIGHT;
 
     
-    if (ana.collapse && ana.anaylizerHeight > MINIMUM_HEIGHT + 75) {
-        if (self.savedCustomView != nil) {
-            if ([[self view] frame].size.height > MINIMUM_HEIGHT + 75 ) {
-                [[self view] addSubview:self.savedCustomView];
-                self.customView = self.savedCustomView;
-                self.savedCustomView = nil;
-                NSRect frame = [self.customView frame];
-                frame.size.height = [[self view] frame].size.height - MINIMUM_HEIGHT;
-                [self.customView setFrame:frame];
-            }
-        }
+    if (ana.collapse) {
+//        if (self.savedCustomView != nil) {
+//            if ([[self view] frame].size.height > MINIMUM_HEIGHT + 75 ) {
+//                [[self view] addSubview:self.savedCustomView];
+//                self.customView = self.savedCustomView;
+//                self.savedCustomView = nil;
+//                NSRect frame = [self.customView frame];
+//                frame.size.height = [[self view] frame].size.height - MINIMUM_HEIGHT;
+//                [self.customView setFrame:frame];
+//            }
+//        }
         
         result = ana.anaylizerHeight;
     }
     else {
-        if (self.savedCustomView == nil) {
-            self.savedCustomView = self.customView;
-            [[self customView] removeFromSuperviewWithoutNeedingDisplay];
-        }
+//        if (self.savedCustomView == nil) {
+//            self.savedCustomView = self.customView;
+//            [[self customView] removeFromSuperviewWithoutNeedingDisplay];
+//        }
     }
     
     return floor(result);

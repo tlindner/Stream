@@ -40,6 +40,7 @@
     StAnaylizer *ana = [viewOwner representedObject];
     BOOL keepOn = YES;
     float startAnaylizerHeight = ana.anaylizerHeight;
+    BOOL startCollaspe = ana.collapse;
     start = [theEvent locationInWindow].y;
     offset = [[self superview] bounds].size.height;
     
@@ -60,10 +61,11 @@
                 if( distance < MINIMUM_HEIGHT )
                 {
                     distance = MINIMUM_HEIGHT;
-                    ana.collapse = NO;
+//                    ana.collapse = NO;
                 }
-                else
-                    ana.collapse = YES;
+                else {
+//                    ana.collapse = YES;
+                }
                 
                 ana.anaylizerHeight = distance;
                 [viewOwner noteViewHeightChanged];
@@ -80,12 +82,12 @@
                 {
                     if( distance <= MINIMUM_HEIGHT )
                     {
-                        ana.collapse = NO;
+                        if( startCollaspe == YES ) ana.collapse = NO;
                         ana.anaylizerHeight = startAnaylizerHeight;
                     }
                     else
                     {
-                        ana.collapse = YES;
+                        if( startCollaspe == NO ) ana.collapse = YES;
                     }
                 }
                 

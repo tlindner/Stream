@@ -96,7 +96,10 @@
     
     StAnaylizer *thePreviousAna = [(StAnaylizer *)[self representedObject] previousAnaylizer];
     [thePreviousAna willChangeValueForKey:@"viewRange"];
+    [thePreviousAna willChangeValueForKey:@"collapse"];
     thePreviousAna.viewRange = [NSValue valueWithRange:unionRange];
+    thePreviousAna.collapse = YES;
+    [thePreviousAna didChangeValueForKey:@"collapse"];
     [thePreviousAna didChangeValueForKey:@"viewRange"];
 }
 

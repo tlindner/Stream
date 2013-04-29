@@ -10,6 +10,8 @@
 
 @interface AnaylizerSettingPopOverAccessoryViewController : NSViewController
 
+@property (assign) IBOutlet NSBox *groupBox;
+
 - (IBAction)ConfigurableButton1:(id)sender;
 
 @end
