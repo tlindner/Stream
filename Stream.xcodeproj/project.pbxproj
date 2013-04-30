@@ -60,6 +60,10 @@
 		778A59911407524900B68EB4 /* BlockerDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778A59901407524900B68EB4 /* BlockerDataViewController.xib */; };
 		778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */; };
 		778BFDAA172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778BFDA9172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m */; };
+		778E46F1172F666400736D51 /* DisasemblerAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 778E46F0172F666400736D51 /* DisasemblerAnaylizer.m */; };
+		778E46F4172F672100736D51 /* DisasemblerAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778E46F3172F672100736D51 /* DisasemblerAccessoryView.xib */; };
+		778E46F8172F700C00736D51 /* DisasemblerAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 778E46F6172F700C00736D51 /* DisasemblerAnaylizerViewController.m */; };
+		778E46F9172F700C00736D51 /* DisasemblerAnaylizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778E46F7172F700C00736D51 /* DisasemblerAnaylizerViewController.xib */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
 		779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F74C91724779F00EC509B /* AnaylizerListViewItem.m */; };
@@ -244,6 +248,14 @@
 		778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+GSIndexSetAdditions.m"; sourceTree = "<group>"; };
 		778BFDA8172E0BA300C9005C /* CoCoSegmentedObjectBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoSegmentedObjectBlocker.h; path = Stream/CoCoBlockers/CoCoSegmentedObjectBlocker.h; sourceTree = "<group>"; };
 		778BFDA9172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoSegmentedObjectBlocker.m; path = Stream/CoCoBlockers/CoCoSegmentedObjectBlocker.m; sourceTree = "<group>"; };
+		778E46EE172F660B00736D51 /* dasm09.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dasm09.h; path = Stream/DisasemblerAnaylizer/dasm09.h; sourceTree = "<group>"; };
+		778E46EF172F666400736D51 /* DisasemblerAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DisasemblerAnaylizer.h; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizer.h; sourceTree = "<group>"; };
+		778E46F0172F666400736D51 /* DisasemblerAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DisasemblerAnaylizer.m; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizer.m; sourceTree = "<group>"; };
+		778E46F2172F667A00736D51 /* dasm09.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = dasm09.c; path = Stream/DisasemblerAnaylizer/dasm09.c; sourceTree = "<group>"; };
+		778E46F3172F672100736D51 /* DisasemblerAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DisasemblerAccessoryView.xib; path = Stream/DisasemblerAnaylizer/DisasemblerAccessoryView.xib; sourceTree = "<group>"; };
+		778E46F5172F700C00736D51 /* DisasemblerAnaylizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DisasemblerAnaylizerViewController.h; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizerViewController.h; sourceTree = "<group>"; };
+		778E46F6172F700C00736D51 /* DisasemblerAnaylizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DisasemblerAnaylizerViewController.m; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizerViewController.m; sourceTree = "<group>"; };
+		778E46F7172F700C00736D51 /* DisasemblerAnaylizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DisasemblerAnaylizerViewController.xib; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizerViewController.xib; sourceTree = "<group>"; };
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7799CD2913E63C1F007D5B8E /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnaylizer/WaveFormView.h; sourceTree = "<group>"; };
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
@@ -438,6 +450,7 @@
 				7799CD1E13E5C651007D5B8E /* AudioAnaylizer */,
 				772D952814088129001A449B /* HexFiendAnaylizer */,
 				77B617F9172B8A4E008E8F1A /* TextAnaylizer */,
+				778E46EC172F649C00736D51 /* DisasemblerAnaylizer */,
 				778A59771406EE0700B68EB4 /* CoCoBlockers */,
 				77614F3413DC9B6C00041279 /* Models */,
 				7788588B13EDC1B30057E042 /* AnaylizerUI */,
@@ -646,6 +659,21 @@
 				77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */,
 			);
 			name = BlockerDataView;
+			sourceTree = "<group>";
+		};
+		778E46EC172F649C00736D51 /* DisasemblerAnaylizer */ = {
+			isa = PBXGroup;
+			children = (
+				778E46EE172F660B00736D51 /* dasm09.h */,
+				778E46F2172F667A00736D51 /* dasm09.c */,
+				778E46EF172F666400736D51 /* DisasemblerAnaylizer.h */,
+				778E46F0172F666400736D51 /* DisasemblerAnaylizer.m */,
+				778E46F3172F672100736D51 /* DisasemblerAccessoryView.xib */,
+				778E46F5172F700C00736D51 /* DisasemblerAnaylizerViewController.h */,
+				778E46F6172F700C00736D51 /* DisasemblerAnaylizerViewController.m */,
+				778E46F7172F700C00736D51 /* DisasemblerAnaylizerViewController.xib */,
+			);
+			name = DisasemblerAnaylizer;
 			sourceTree = "<group>";
 		};
 		7799CD1E13E5C651007D5B8E /* AudioAnaylizer */ = {
@@ -915,6 +943,8 @@
 				779F74CC172478F500EC509B /* AnaylizerListViewItem.xib in Resources */,
 				77B61802172B8BA1008E8F1A /* TextAnaylizerViewController.xib in Resources */,
 				77B61804172B8CD3008E8F1A /* TextAccessoryView.xib in Resources */,
+				778E46F4172F672100736D51 /* DisasemblerAccessoryView.xib in Resources */,
+				778E46F9172F700C00736D51 /* DisasemblerAnaylizerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1037,6 +1067,8 @@
 				77B617FD172B8A81008E8F1A /* TextAnaylizer.m in Sources */,
 				77B61801172B8BA1008E8F1A /* TextAnaylizerViewController.m in Sources */,
 				778BFDAA172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m in Sources */,
+				778E46F1172F666400736D51 /* DisasemblerAnaylizer.m in Sources */,
+				778E46F8172F700C00736D51 /* DisasemblerAnaylizerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

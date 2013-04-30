@@ -88,7 +88,7 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
     }
     else if( [object isKindOfClass:[NSData class]] )
     {
-        // Nothing to do.
+        bytes = object;
     }
 
     if (bytes != nil) {

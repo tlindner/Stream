@@ -28,6 +28,7 @@ static Analyzation *sharedSingleton;
         [sharedSingleton addAnalyzer:@"BlockAttributeAnaylizer"];
         [sharedSingleton addAnalyzer:@"HexFiendAnaylizer"];
         [sharedSingleton addAnalyzer:@"TextAnaylizer"];
+        [sharedSingleton addAnalyzer:@"DisasemblerAnaylizer"];
     }
 }
 
