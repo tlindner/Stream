@@ -306,19 +306,19 @@
     [allBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
      {
          StBlock *theBlock = obj;
-         theBlock.markForDeletion = YES;
+         [theBlock setMarkForDeletion:YES];
          
          NSMutableSet *subBlocks = [theBlock mutableSetValueForKey:@"blocks"];
          [subBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
           {
               StBlock *theSubBlock = obj;
-              theSubBlock.markForDeletion = YES;
+              [theSubBlock setMarkForDeletion:YES];
               
               NSMutableSet *subSubBlocks = [theSubBlock mutableSetValueForKey:@"blocks"];
               [subSubBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
                {
                    StBlock *theSubSubBlock = obj;
-                   theSubSubBlock.markForDeletion = YES;
+                   [theSubSubBlock setMarkForDeletion:YES];
                }];
           }];
      }];

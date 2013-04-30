@@ -17,7 +17,9 @@
     NSUInteger dataIndex, attrIndex, depIndex; 
     NSObject * anaylizerObject;
     NSValue *streamRangeObject;
+    BOOL markForDeletion;
 }
+
 @property (nonatomic, retain) NSString * anaylizerKind;
 @property (nonatomic, retain) NSString * currentEditorView;
 @property (nonatomic, readonly) NSObject * anaylizerObject;

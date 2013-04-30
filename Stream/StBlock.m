@@ -782,6 +782,14 @@
     return [indexSet autorelease];
 }
 
+- (void)setMarkForDeletion:(BOOL)del
+{
+    markForDeletion = del;
+    [streamRangeObject release];
+    streamRangeObject = nil;
+    
+}
+
 - (void)willTurnIntoFault
 {
     if( anaylizerObject != nil)

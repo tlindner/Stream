@@ -18,7 +18,7 @@ float *FindZeroCrossings( AudioSampleType *samples, NSUInteger frameCount, int i
 double movingavg(int which, double newvalue, int seed);
 float DCBlockFloat( float inSample );
 unsigned short DCBlocking( unsigned short inSample );
-
+BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFrames[]);
 
 @implementation CoCoAudioAnaylizer
 
@@ -53,6 +53,7 @@ unsigned short DCBlocking( unsigned short inSample );
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
+            [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"];
             [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"];
             [theAna removeObserver:self forKeyPath:@"resultingData"];
@@ -80,6 +81,7 @@ unsigned short DCBlocking( unsigned short inSample );
         if( observationsActive == NO )
         {
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify" options:NSKeyValueChangeSetting context:nil];
+            [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking" options:NSKeyValueChangeSetting context:nil];
             [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
@@ -101,6 +103,7 @@ unsigned short DCBlocking( unsigned short inSample );
     if( observationsActive == YES )
     {
         StAnaylizer *theAna = [self representedObject];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"];
@@ -206,6 +209,7 @@ unsigned short DCBlocking( unsigned short inSample );
         NSMutableData *frameBufferCopy = [frameBufferObject copy];
         [theAna setValue:frameBufferCopy forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.cachedframeBuffer"];
         [frameBufferCopy release];
+        [self applyInvert];
         [self applyAmplify];
         [self applyDCBlocking];
         [self applyAllEdits];
@@ -304,7 +308,7 @@ unsigned short DCBlocking( unsigned short inSample );
     NSUInteger char_count = 0;
     
     crossingCount -= 1;
-    unsigned short even_parity = 0, odd_parity = 0;
+    unsigned short even_parity = 0, odd_parity = 0, *found_parity = nil;
     double dataThreashold = ((sampleRate/lowCycle) + (sampleRate/highCycle)) / 2.0, test1, test2;
     float resyncThresholdHertz = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"] floatValue];
     
@@ -317,14 +321,11 @@ unsigned short DCBlocking( unsigned short inSample );
     }
     
     double resyncThreshold = sampleRate/resyncThresholdHertz;
-    int bit_count = 0;
+    int bit_count = 0, bump;
     
     /* start by scanning zero crossing looking for the start of a block */
-    for (int i=2; i<crossingCount; i+=2)
+    for (int i=2; i<crossingCount-1; i+=2)
     {
-        
-        if( (zero_crossings[i] - zero_crossings[i-1]) < (sampleRate/(2400.0*2.0)) ) i++;
-        
         /* test frequency of 2 zero crossings */
         even_parity >>= 1;
         test1 = (zero_crossings[i] - zero_crossings[i-2]);
@@ -337,89 +338,63 @@ unsigned short DCBlocking( unsigned short inSample );
         if( test2 < dataThreashold )
             odd_parity |= 0x8000;
         
-        /* test for start block bit pattern */
-              
-        if( (even_parity & 0xfff0) == 0x3c50 || (odd_parity & 0xfff0) == 0x3c50 )
-        {
-            if( (odd_parity & 0xfff0) == 0x3c50 )
-            {
-                /* adjust position one zero crossing into the future */
-                i++;
-                even_parity = odd_parity;
+        if (found_parity) {
+            if (test1 > resyncThreshold || test2 > resyncThreshold) {
+                /* finish off byte */
+                character[char_count] = *found_parity >> 8;
+                characters[char_count].length = resyncThreshold * 8;
+                char_count++;
+                bit_count = 0;
+                found_parity = nil;
             }
-            
-            /* capture (0x5x) sync byte */
-            characters[char_count].location = zero_crossings[i-(16*2)];
-            characters[char_count].length = zero_crossings[i-(8*2)] - zero_crossings[i-(16*2)];
-            character[char_count] = even_parity & 0x00ff;
-            char_count++;
-            
-            /* capture 0x3c sync byte */
-            characters[char_count].location = zero_crossings[i-(8*2)];
-            characters[char_count].length = zero_crossings[i] - zero_crossings[i-(8*2)];
-            character[char_count] = even_parity >> 8;
-            char_count++;
-            
-            /* start capturing synchronized bits */
-            i += 2;
-            for( ; i<crossingCount; i+=2 )
-            {
-                /* mark begining of byte */
-                if(bit_count == 0)
-                {
-                    characters[char_count].location = zero_crossings[i-2];
-                    //characters[char_count].length = 0;
-                }
-                
-                /* test frequency of 2 zero crossings */ 
-                even_parity >>= 1;
-                test1 = (zero_crossings[i] - zero_crossings[i-2]);
-                if( test1 < dataThreashold )
-                    even_parity |= 0x8000;
-                bit_count++;
-
-                if( bit_count == 8 )
-                {
-                    /* we have eight bits, finish byte capture */
-                    if( test1 > resyncThreshold )
-                        characters[char_count].length = zero_crossings[i-1] - characters[char_count].location + resyncThreshold;
-                    else
-                        characters[char_count].length = zero_crossings[i] - characters[char_count].location;
-                    character[char_count] = even_parity >> 8;
+            else {
+            /* continue building bytes */
+                if (bit_count == 7) {
+                    character[char_count] = *found_parity >> 8;
+                    characters[char_count].length = zero_crossings[i+bump] - characters[char_count].location;
                     char_count++;
                     bit_count = 0;
-                }
-                
-                if( test1 > resyncThreshold )
-                {
-                    /* lost sync, finish off last byte, break out of loop to try to re-synchronize */
-                    characters[char_count].length = zero_crossings[i-1] - characters[char_count].location + resyncThreshold;
-                    character[char_count] = even_parity >> 8;
-                    char_count++;
-                    bit_count = 0;
-                    i += 2;
-                    break;
-                }
-                else if( test1 < sampleRate/(2400.0*1.5) )
-                {
-                    /* lost sync, finish off last byte, break out of loop to try to re-synchronize */
-                    characters[char_count].length = zero_crossings[i-1] - characters[char_count].location + resyncThreshold;
-                    character[char_count] = even_parity >> 8;
-                    char_count++;
-                    bit_count = 0;
-                    i += 2;
-                    break;
+                    
+                    characters[char_count].location = zero_crossings[i+bump];
+                    characters[char_count].length = 0;
+                } else {
+                    bit_count++;
                 }
             }
         }
-        
-        /* done testing zero crossings, finish off last byte capture */
-        if( bit_count == 7 )
-        {
-            even_parity >>= 1;
-            characters[char_count].length = frameCount - characters[char_count].location;
-            character[char_count] = even_parity >> 8;
-            char_count++;
+        else {
+            /* test for start block bit pattern */
+            
+            if ((even_parity & 0xfff0) == 0x3c50 && hi_to_low_at(i-2, zero_crossings, audioFrames)) {
+                found_parity = &even_parity;
+                bump = 0;
+            } else if ((odd_parity & 0xfff0) == 0x3c50 && hi_to_low_at(i-1, zero_crossings, audioFrames)) {
+                found_parity = &odd_parity;
+                bump = 1;
+            }
+            else {
+                found_parity = nil;
+            }
+            
+            if (found_parity) {
+
+                /* capture (0x5x) sync byte */
+                characters[char_count].location = zero_crossings[i+bump-(16*2)];
+                characters[char_count].length = zero_crossings[i+bump-(8*2)] - zero_crossings[i+bump-(16*2)];
+                character[char_count] = *found_parity & 0x00ff;
+                char_count++;
+                
+                /* capture 0x3c sync byte */
+                characters[char_count].location = zero_crossings[i+bump-(8*2)];
+                characters[char_count].length = zero_crossings[i+bump] - zero_crossings[i+bump-(8*2)];
+                character[char_count] = *found_parity >> 8;
+                char_count++;
+                
+                characters[char_count].location = zero_crossings[i+bump];
+                characters[char_count].length = 0;
+
+                bit_count = 0;
+            }
         }
     }
     
@@ -528,6 +503,7 @@ unsigned short DCBlocking( unsigned short inSample );
     NSMutableData *cachedAudio = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.cachedframeBuffer"] mutableCopy];
     self.frameBuffer = cachedAudio;
     [cachedAudio release];
+    [self applyInvert];
     [self applyAmplify];
     [self applyDCBlocking];
     [self applyAllEdits];
@@ -545,7 +521,22 @@ unsigned short DCBlocking( unsigned short inSample );
         float *frames = (float *)[self.frameBuffer bytes];
         NSUInteger length = [self.frameBuffer length] / sizeof(float);
         float divisor = amplify/100.0;
+        
+        vDSP_vsmul( frames, 1, &divisor, frames, 1, length );
+    }
+}
 
+- (void) applyInvert
+{
+    StAnaylizer *theAna = self.representedObject;
+    BOOL invert = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert"] boolValue];
+    
+    if( invert )
+    {
+        float *frames = (float *)[self.frameBuffer bytes];
+        NSUInteger length = [self.frameBuffer length] / sizeof(float);
+        float divisor = -1.0;
+        
         vDSP_vsmul( frames, 1, &divisor, frames, 1, length );
     }
 }
@@ -602,6 +593,16 @@ unsigned short DCBlocking( unsigned short inSample );
         if( [change objectForKey:@"new"] != [NSNull null] )
         {
             [self reloadChachedAudioFrames];
+        }
+        return;
+    }
+    
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.invert"])
+    {
+        if( [change objectForKey:@"new"] != [NSNull null] )
+        {
+            [self reloadChachedAudioFrames];
+            [self anaylizeAudioData];
         }
         return;
     }
@@ -841,7 +842,7 @@ unsigned short DCBlocking( unsigned short inSample );
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"coalescedObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", [NSNull null], @"zeroCrossingArray", [NSNumber numberWithInteger:100], @"amplify", [NSNull null], @"cachedframeBuffer", [NSNumber numberWithBool:NO], @"selected", [NSNumber numberWithBool:NO], @"interpolate", [NSNumber numberWithBool:NO], @"dcblocking", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNull null], @"coalescedObject",[NSNumber numberWithBool:NO], @"initializedOD", [NSMutableIndexSet indexSet], @"changedIndexes", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", [NSNull null], @"zeroCrossingArray", [NSNumber numberWithInteger:100], @"amplify", [NSNull null], @"cachedframeBuffer", [NSNumber numberWithBool:NO], @"selected", [NSNumber numberWithBool:NO], @"interpolate", [NSNumber numberWithBool:NO], @"dcblocking", [NSNumber numberWithBool:NO], @"invert", nil] autorelease];
 }
 
 @end
@@ -1037,4 +1038,12 @@ unsigned short DCBlocking( unsigned short inSample )
     outSample   = (short)prev_y;    // acc has y[n] in upper 17 bits and -e[n] in lower 15 bits
     
     return outSample;
+}
+
+BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFrames[])
+{
+    AudioSampleType nowSample = audioFrames[(int)zero_crossings[i]];
+    AudioSampleType pastSample = audioFrames[(int)zero_crossings[i-1]];
+    
+    return pastSample > nowSample;
 }

@@ -1031,8 +1031,9 @@ typedef struct
                 [[parentContext undoManager] setActionName:@"Move Samples"];
             
             /* post edit to anaylizer */
-            AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
-            NSData *editedSamples = [NSData dataWithBytes:audioFrames + range.location length:range.length];
+//            AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
+//            NSData *editedSamples = [NSData dataWithBytes:audioFrames + range.location length:range.length];
+            NSData *editedSamples = [modelObject.frameBuffer subdataWithRange:range];
             [[self cachedAnaylizer] poseEdit:editedSamples range:range];
 
             [modelObject anaylizeAudioData];
