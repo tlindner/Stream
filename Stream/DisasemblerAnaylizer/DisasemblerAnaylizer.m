@@ -8,6 +8,7 @@
 
 #import "DisasemblerAnaylizer.h"
 #import "DisasemblerAnaylizerViewController.h"
+#import "StBlock.h"
 
 unsigned char *memory = NULL;
 #define OPCODE(address)  memory[address&0xffff]
@@ -27,6 +28,30 @@ unsigned char *memory = NULL;
     {
         [inRepresentedObject addSubOptionsDictionary:[DisasemblerAnaylizer anaylizerKey] withDictionary:[DisasemblerAnaylizer defaultOptions]];
     }
+    
+    if( [representedObject respondsToSelector:@selector(sourceUTI)] )
+    {
+        NSString *uti = [representedObject sourceUTI];
+        StBlock *ro = (StBlock *)representedObject;
+        
+        if ([uti isEqualToString:@"com.microsoft.cocobasic.object"]) {
+            NSMutableArray *transferAddresses = [ro valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"];
+            
+            if ([transferAddresses count] == 0) {
+                NSNumber *transferAddressNumber = [ro getAttributeDatawithUIName:@"ML Exec Address"];
+                tlValue *transferAddress = [[tlValue alloc] init];
+                transferAddress.stringValue = [transferAddressNumber stringValue];
+                [transferAddresses addObject:transferAddress];
+            }
+            
+            NSNumber *offsetAddress = [ro valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
+            
+            if ([offsetAddress intValue] == -1) {
+                offsetAddress = [ro getAttributeDatawithUIName:@"ML Load Address"];
+                [representedObject setValue:offsetAddress forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
+            }
+        }
+    }
 }
 
 - (NSString *)disasemble6809:(NSData *)bufferObject
@@ -37,7 +62,8 @@ unsigned char *memory = NULL;
     NSPointerArray *pa = [NSPointerArray pointerArrayWithStrongObjects];
     [pa setCount:0x10000];
     
-    unsigned int pc = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddress"] intValue];
+    NSArray *transferAddresses = [[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"];
+    unsigned int pc = [[[transferAddresses objectAtIndex:0] stringValue] intValue];
     unsigned int offsetAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"] intValue];
     pc &= 0xffff;
     offsetAddress &= 0xffff;
@@ -86,7 +112,42 @@ unsigned char *memory = NULL;
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSNumber numberWithInt:0], @"transferAddress", [NSNumber numberWithInt:0], @"offsetAddress", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:NO], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:NO], @"showHex", nil] autorelease];
+}
+
+@end
+
+@implementation tlValue
+
+@synthesize stringValue;
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.stringValue = nil;
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    if (self) {
+        self.stringValue = [coder decodeObjectForKey:@"TLStringValue"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.stringValue forKey:@"TLStringValue"];
+}
+
+- (void)dealloc
+{
+    self.stringValue = nil;
+    
+    [super dealloc];
 }
 
 @end

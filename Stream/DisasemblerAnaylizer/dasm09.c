@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
    FILE *f;
    FILE *out=stdout;
 
-   printf("dasm09: M6809/H6309/OS9 disassembler V0.1 © 2000 Arto Salmi\n");
+   printf("dasm09: M6809/H6309/OS9 disassembler V0.1 Â© 2000 Arto Salmi\n");
 
    for (i=1,n=0;i<argc;++i)
    {
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
      if((!showaddr)&&(!showhex)) fprintf(out,"\t");
 
      fprintf(out,"%s \n",buf);
-   } while( pc <= end);
+   } while( pc < end);
 
    printf("Done\n");
 

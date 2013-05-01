@@ -30,6 +30,16 @@
     return self;
 }
 
+- (void) setRepresentedObject:(id)inRepresentedObject
+{
+    super.representedObject = inRepresentedObject;
+
+    if( [inRepresentedObject respondsToSelector:@selector(addSubOptionsDictionary:withDictionary:)] )
+    {
+        [inRepresentedObject addSubOptionsDictionary:[DisasemblerAnaylizer anaylizerKey] withDictionary:[DisasemblerAnaylizer defaultOptions]];
+    }
+}
+
 - (void) loadView
 {
     [super loadView];
@@ -45,7 +55,7 @@
         NSString *uti = [ro sourceUTI];
         if ([uti isEqualToString:@"com.microsoft.cocobasic.object"]) {
             NSNumber *transfterAddress = [ro getAttributeDatawithUIName:@"ML Exec Address"];
-            [ro setValue:transfterAddress forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddress"];
+            [ro setValue:[NSMutableArray arrayWithObject:transfterAddress] forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"];
             NSNumber *offsetAddress = [ro getAttributeDatawithUIName:@"ML Load Address"];
             [ro setValue:offsetAddress forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
         }

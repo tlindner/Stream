@@ -120,6 +120,9 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
             [utiTextField setEnabled:YES];
             [editorPopup setEnabled:YES];
             AbleAllControlsInView([self.avc groupBox], YES);
+
+            /* Trigger creating this now, before the view is loaded */
+            [theBlock anaylizerObject];
         }
         else
         {
@@ -236,7 +239,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
             {
                 StBlock *theBlock = [selectedObjects objectAtIndex:0];
                 [self.avc setRepresentedObject:theBlock];
-            }
+}
             [acceptsTextField setStringValue: @""];
            
             return;
@@ -256,6 +259,21 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
             [anaylizer addSubOptionsDictionary:[anaClass anaylizerKey]  withDictionary:[anaClass defaultOptions]];
             NSString *nibName = [anaClass AnaylizerPopoverAccessoryViewNib];
             
+            if( [anaylizer.currentEditorView isEqualToString:@"Blocker View"] )
+            {
+                BlockerDataViewController *blockerController = (BlockerDataViewController *)self.viewOwner.editorController;
+                blockTreeController = blockerController.treeController;
+                NSArray *selectedObjects = [blockTreeController selectedObjects];
+                
+                if( [selectedObjects count] == 1 )
+                {
+                    /* Trigger creating this now, before the view is loaded */
+                    StBlock *theBlock = [selectedObjects objectAtIndex:0];
+                    [theBlock anaylizerObject];
+                    anaylizer = (StAnaylizer *)theBlock;
+                }
+            }
+
             /* record some geometry */
             NSRect accessoryFrame = [accessoryView frame];
             CGFloat currentAVHeight = accessoryFrame.size.height;
@@ -269,7 +287,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
                 
                 self.avc = [[[AnaylizerSettingPopOverAccessoryViewController alloc] initWithNibName:nibName bundle:nil] autorelease];
                 [self.avc setRepresentedObject:anaylizer];
-                [self.avc loadView];
+                 [self.avc loadView];
                 
                 newSubViewHeight = [[self.avc view] frame].size.height;
                 accessoryFrame.size = [[self.avc view] frame].size;

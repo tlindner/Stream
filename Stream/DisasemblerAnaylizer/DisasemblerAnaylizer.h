@@ -22,3 +22,11 @@
 - (NSString *)disasemble6809:(NSData *)bufferObject;
 
 @end
+
+@interface tlValue : NSObject <NSCoding>
+{
+    NSString *stringValue;
+}
+@property (nonatomic, retain) NSString *stringValue;
+
+@end
