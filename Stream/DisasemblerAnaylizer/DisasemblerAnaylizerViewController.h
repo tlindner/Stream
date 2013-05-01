@@ -11,7 +11,11 @@
 @class StAnaylizer;
 
 @interface DisasemblerAnaylizerViewController : NSViewController
+{
+    BOOL observationsActive;
+}
 
 @property (assign) IBOutlet NSTextView *textView;
+@property (nonatomic,retain) StAnaylizer *lastAnaylizer;
 
 @end

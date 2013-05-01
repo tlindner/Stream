@@ -27,7 +27,6 @@
 @property (nonatomic) float customeSortOrder;
 @property (nonatomic, retain) NSString * displayName;
 @property (nonatomic) NSTimeInterval modificationDateofURL;
-@property (nonatomic, retain) NSString * parentBlock;
 @property (nonatomic, retain) id sourceURL;
 @property (nonatomic, retain) NSString * sourceUTI;
 @property (nonatomic, retain) NSString * streamTransform;
@@ -36,6 +35,7 @@
 @property (nonatomic, retain) NSSet * childStreams;
 @property (nonatomic, retain) NSOrderedSet * edits;
 @property (nonatomic, retain) StStream * parentStream;
+@property (nonatomic, retain) StBlock * sourceBlock;
 
 - (NSData *) dataOfBlockNamed:(NSString *)name;
 - (StBlock *) startNewBlockNamed:(NSString *)name owner:(NSString *)owner;

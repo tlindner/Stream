@@ -159,7 +159,8 @@
     [newObject setValue:name forKey:@"displayName"];
     [newObject setValue:[theBlock resultingUTI] forKey:@"sourceUTI"];
     [newObject setValue:[theBlock getData] forKey:@"bytesCache"];
-  
+    [newObject setValue:theBlock forKey:@"sourceBlock"];
+    
     /* Setup first anaylizer */
     NSMutableOrderedSet *theSet = [newObject mutableOrderedSetValueForKey:@"anaylizers"];
     

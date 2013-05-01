@@ -16,7 +16,6 @@
 @dynamic customeSortOrder;
 @dynamic displayName;
 @dynamic modificationDateofURL;
-@dynamic parentBlock;
 @dynamic sourceURL;
 @dynamic sourceUTI;
 @dynamic streamTransform;
@@ -25,6 +24,7 @@
 @dynamic blocks;
 @dynamic childStreams;
 @dynamic parentStream;
+@dynamic sourceBlock;
 
 - (NSData *)dataOfBlockNamed:(NSString *)name
 {
@@ -361,15 +361,15 @@
                     else
                     {
                         /* This is a midlevel block */
-                        NSMutableSet *parentBlock = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
-                        [parentBlock removeObject:aBlock];
+                        NSMutableSet *parentBlockSet = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
+                        [parentBlockSet removeObject:aBlock];
                     }
                 }
                 else
                 {
                     /* This is a leaf block */
-                    NSMutableSet *parentBlock = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
-                    [parentBlock removeObject:aBlock];
+                    NSMutableSet *parentBlockSet = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
+                    [parentBlockSet removeObject:aBlock];
                 }
             }
         }

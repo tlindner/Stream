@@ -32,23 +32,50 @@ unsigned char *memory = NULL;
     if( [representedObject respondsToSelector:@selector(sourceUTI)] )
     {
         NSString *uti = [representedObject sourceUTI];
-        StBlock *ro = (StBlock *)representedObject;
         
-        if ([uti isEqualToString:@"com.microsoft.cocobasic.object"]) {
-            NSMutableArray *transferAddresses = [ro valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"];
-            
-            if ([transferAddresses count] == 0) {
-                NSNumber *transferAddressNumber = [ro getAttributeDatawithUIName:@"ML Exec Address"];
-                tlValue *transferAddress = [[tlValue alloc] init];
-                transferAddress.stringValue = [transferAddressNumber stringValue];
-                [transferAddresses addObject:transferAddress];
-            }
-            
-            NSNumber *offsetAddress = [ro valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
-            
-            if ([offsetAddress intValue] == -1) {
-                offsetAddress = [ro getAttributeDatawithUIName:@"ML Load Address"];
-                [representedObject setValue:offsetAddress forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
+        StBlock *getObject;
+        id setObject;
+
+        if ([[representedObject class] isSubclassOfClass:[StAnaylizer class]]) {
+            getObject = [[representedObject parentStream] sourceBlock];
+            setObject = representedObject;
+        }
+        else if ([[representedObject class] isSubclassOfClass:[StBlock class]]) {
+            getObject = (StBlock *)representedObject;
+            setObject = representedObject;
+        }
+        else {
+            getObject = nil;
+            setObject = nil;
+        }
+        
+        if (getObject != nil) {
+            if ([uti isEqualToString:@"com.microsoft.cocobasic.object"]) {
+                NSMutableArray *transferAddresses = [setObject valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"];
+                
+                if ([transferAddresses count] == 0) {
+                    NSNumber *transferAddressNumber = [getObject getAttributeDatawithUIName:@"ML Exec Address"];
+                    
+                    if (transferAddressNumber == nil) {
+                        /* no transfer address found in that block. This might be a multi segment block, so let's look for the transfer address block */
+                        StStream *sourceStream = [getObject parentStream];
+                        StBlock *transferBlock = [sourceStream blockNamed:@"Transfer 0"];
+                        transferAddressNumber = [transferBlock getAttributeDatawithUIName:@"ML Exec Address"];
+                    }
+                    
+                    if (transferAddressNumber != nil) {
+                        tlValue *transferAddress = [[tlValue alloc] init];
+                        transferAddress.stringValue = [transferAddressNumber stringValue];
+                        [transferAddresses addObject:transferAddress];
+                    }
+                }
+                
+                NSNumber *offsetAddress = [getObject valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
+                
+                if ([offsetAddress intValue] == -1) {
+                    offsetAddress = [getObject getAttributeDatawithUIName:@"ML Load Address"];
+                    [setObject setValue:offsetAddress forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
+                }
             }
         }
     }
@@ -62,25 +89,69 @@ unsigned char *memory = NULL;
     NSPointerArray *pa = [NSPointerArray pointerArrayWithStrongObjects];
     [pa setCount:0x10000];
     
+    BOOL showAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showAddresses"] boolValue];
+    BOOL showHex = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex"] boolValue];
+    BOOL support6309 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309"] boolValue];
+    BOOL showOS9 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9"] boolValue];
     NSArray *transferAddresses = [[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"];
-    unsigned int pc = [[[transferAddresses objectAtIndex:0] stringValue] intValue];
-    unsigned int offsetAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"] intValue];
-    pc &= 0xffff;
-    offsetAddress &= 0xffff;
-    const unsigned char *bufferBytes = [bufferObject bytes];
-    NSUInteger length = [bufferObject length];
-    NSUInteger lengthToCopy = MIN( length, 0x10000-offsetAddress );
-    memcpy( &memory[offsetAddress], bufferBytes, lengthToCopy);
     
-    do {
-        char string[30];
-        int add;
+    if (transferAddresses != nil && [transferAddresses count] > 0) {
         
-        add=Dasm(string,pc);
-        [result appendFormat:@"%04X: %s\r", pc, string];
-        pc += add;
+        unsigned int pc = [[[transferAddresses objectAtIndex:0] stringValue] intValue];
+        unsigned int offsetAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"] intValue];
+        pc &= 0xffff;
+        offsetAddress &= 0xffff;
+        const unsigned char *bufferBytes = [bufferObject bytes];
+        NSUInteger length = [bufferObject length];
+        NSUInteger lengthToCopy = MIN( length, 0x10000-offsetAddress );
+        memcpy( &memory[offsetAddress], bufferBytes, lengthToCopy);
+     
+        if (support6309) {
+            codes             = h6309_codes;
+            codes10           = h6309_codes10;
+            codes11           = h6309_codes11;
+            exg_tfr           = h6309_exg_tfr;
+            allow_6309_codes  = TRUE;
+        }
         
-    } while( pc <= offsetAddress+lengthToCopy);
+        if (showOS9) {
+            os9_patch = TRUE;
+        }
+
+        [result appendFormat:@"; org $%04X \n",pc];
+
+        do {
+            char string[30];
+            int add;
+            
+            if (showAddress) {
+                [result appendFormat:@"%04X: ", pc];
+            }
+            
+            add=Dasm(string,pc);
+
+            if (showHex) {
+                for( int i=0; i<5; i++) {
+                    if (add) {
+                        add--;
+                        [result appendFormat:@"%02X ",memory[(pc++)&0xFFFF]];
+                    }
+                    else
+                        [result appendFormat:@"   "];
+                }
+            } else
+                pc+=add;
+
+            if ((!showAddress)&&(!showHex))
+                [result appendFormat:@"\t"];
+
+            [result appendFormat:@"%s\n", string];
+                    
+        } while( pc < offsetAddress+lengthToCopy);
+    }
+    else {
+        [result appendString:@"No transfer addresses found"];
+    }
     
     return result;
 }
@@ -112,7 +183,7 @@ unsigned char *memory = NULL;
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:NO], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:NO], @"showHex", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:YES], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:YES], @"showHex", nil] autorelease];
 }
 
 @end

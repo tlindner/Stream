@@ -19,6 +19,7 @@
 @implementation DisasemblerAnaylizerViewController
 
 @synthesize textView;
+@synthesize lastAnaylizer;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -48,33 +49,14 @@
 
 - (void)reloadView
 {
+//    [self stopObserving];
+
     id ro = [self representedObject];
 
-    if( [ro respondsToSelector:@selector(sourceUTI)] )
-    {
-        NSString *uti = [ro sourceUTI];
-        if ([uti isEqualToString:@"com.microsoft.cocobasic.object"]) {
-            NSNumber *transfterAddress = [ro getAttributeDatawithUIName:@"ML Exec Address"];
-            [ro setValue:[NSMutableArray arrayWithObject:transfterAddress] forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"];
-            NSNumber *offsetAddress = [ro getAttributeDatawithUIName:@"ML Load Address"];
-            [ro setValue:offsetAddress forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
-        }
-    }
-    
     [textView setUsesFontPanel:YES];
     [textView setRichText:NO];
     [textView setEditable:![[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.readOnly"] boolValue]];
-    BOOL fixedWidth = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.fixedWidthFont"] boolValue];
-    NSFont *font;
-    
-    if (fixedWidth) {
-        font = [NSFont fontWithName:@"Monaco" size:12.0];
-    }
-    else {
-        font = [NSFont systemFontOfSize:12.0];
-    }
-    
-    [textView setFont:font];
+    [textView setFont:[NSFont fontWithName:@"Monaco" size:12.0]];
     
     NSData *bytes;
     if( [ro isKindOfClass:[StAnaylizer class]] )
@@ -92,7 +74,70 @@
     
     DisasemblerAnaylizer *modelObject = (DisasemblerAnaylizer *)[ro anaylizerObject];
     [textView setString:[modelObject disasemble6809:bytes]];
+    [self startObserving];
  }
+
+- (void)startObserving
+{
+    if (observationsActive) {
+        [self stopObserving];
+    }
+    
+    self.lastAnaylizer = [self representedObject];
+    
+    [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses" options:NSKeyValueChangeSetting context:self];
+    [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress" options:NSKeyValueChangeSetting context:self];
+    [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309" options:NSKeyValueChangeSetting context:self];
+    [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showAddresses" options:NSKeyValueChangeSetting context:self];
+    [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9" options:NSKeyValueChangeSetting context:self];
+    [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex" options:NSKeyValueChangeSetting context:self];
+    observationsActive = YES;
+}
+
+- (void)stopObserving
+{
+    if (observationsActive) {
+        [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses" context:self];
+        [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress" context:self];
+        [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309" context:self];
+        [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showAddresses" context:self];
+        [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9" context:self];
+        [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex" context:self];
+        self.lastAnaylizer = nil;
+        observationsActive = NO;
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == self) {
+        if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"]) {
+            [self reloadView];
+        } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"]) {
+            [self reloadView];
+        } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309"]) {
+            [self reloadView];
+        } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.showAddresses"]) {
+            [self reloadView];
+        } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9"]) {
+            [self reloadView];
+        } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex"]) {
+            [self reloadView];
+        } else {
+            NSLog( @"DisasemblerAnaylizerViewController: Unknown keypath for observerValueForKeyPath:ofObject:change:context: %@", keyPath );
+        }    
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)dealloc
+{
+    [self stopObserving];
+    self.lastAnaylizer = nil;
+    
+    [super dealloc];
+}
 
 - (NSString *)nibName
 {

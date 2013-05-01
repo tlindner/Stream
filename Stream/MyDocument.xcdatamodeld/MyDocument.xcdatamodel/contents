@@ -55,7 +55,6 @@
         <attribute name="customeSortOrder" attributeType="Float" defaultValueString="500"/>
         <attribute name="displayName" attributeType="String" defaultValueString="Untitled"/>
         <attribute name="modificationDateofURL" attributeType="Date"/>
-        <attribute name="parentBlock" optional="YES" attributeType="String" indexed="YES"/>
         <attribute name="sourceURL" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <attribute name="sourceUTI" attributeType="String" defaultValueString="public.data"/>
         <attribute name="streamTransform" attributeType="String" defaultValueString="none"/>
@@ -64,6 +63,7 @@
         <relationship name="childStreams" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StStream" inverseName="parentStream" inverseEntity="StStream"/>
         <relationship name="edits" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StreamEdit" inverseName="parentStream" inverseEntity="StreamEdit" syncable="YES"/>
         <relationship name="parentStream" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
+        <relationship name="sourceBlock" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="StBlock" syncable="YES"/>
     </entity>
     <elements>
         <element name="AnaylizerEdit" positionX="160" positionY="192" width="128" height="105"/>
