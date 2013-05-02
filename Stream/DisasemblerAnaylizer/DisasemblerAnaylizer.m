@@ -64,8 +64,7 @@ unsigned char *memory = NULL;
                     }
                     
                     if (transferAddressNumber != nil) {
-                        tlValue *transferAddress = [[tlValue alloc] init];
-                        transferAddress.stringValue = [transferAddressNumber stringValue];
+                        tlValue *transferAddress = [tlValue valueWithString:[transferAddressNumber stringValue]];
                         [transferAddresses addObject:transferAddress];
                     }
                 }
@@ -83,9 +82,8 @@ unsigned char *memory = NULL;
 
 - (NSString *)disasemble6809:(NSData *)bufferObject
 {
-    NSMutableString *result = [[[NSMutableString alloc] init] autorelease];
+    NSMutableString *result = [NSMutableString string];
     memory = calloc(0x10000, 1);
-//    NSPointerArray *pa = [[NSPointerArray alloc] initWithOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPersonality | NSPointerFunctionsCopyIn];
     NSPointerArray *pa = [NSPointerArray pointerArrayWithStrongObjects];
     [pa setCount:0x10000];
     
@@ -93,19 +91,26 @@ unsigned char *memory = NULL;
     BOOL showHex = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex"] boolValue];
     BOOL support6309 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309"] boolValue];
     BOOL showOS9 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9"] boolValue];
-    NSArray *transferAddresses = [[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"];
+    BOOL followPC = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC"] boolValue];
+    NSMutableArray *transferAddressesStack = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"] mutableCopy];
     
-    if (transferAddresses != nil && [transferAddresses count] > 0) {
-        
-        unsigned int pc = [[[transferAddresses objectAtIndex:0] stringValue] intValue];
+    if (transferAddressesStack != nil && [transferAddressesStack count] > 0) {
+        NSNull *aNull = [NSNull null];
+        tlValue *value = [transferAddressesStack lastObject];
+        unsigned int pc = [value intValue];
+        [transferAddressesStack removeLastObject];
         unsigned int offsetAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"] intValue];
+        
         pc &= 0xffff;
         offsetAddress &= 0xffff;
+        unsigned pc_mode;
+        unsigned address;
         const unsigned char *bufferBytes = [bufferObject bytes];
         NSUInteger length = [bufferObject length];
         NSUInteger lengthToCopy = MIN( length, 0x10000-offsetAddress );
         memcpy( &memory[offsetAddress], bufferBytes, lengthToCopy);
-     
+        NSMutableArray *filledRanges = [NSMutableArray arrayWithObject:[NSValue valueWithRange:NSMakeRange(offsetAddress, lengthToCopy)]];
+        
         if (support6309) {
             codes             = h6309_codes;
             codes10           = h6309_codes10;
@@ -113,46 +118,194 @@ unsigned char *memory = NULL;
             exg_tfr           = h6309_exg_tfr;
             allow_6309_codes  = TRUE;
         }
+        else {
+            codes             = m6809_codes;
+            codes10           = m6809_codes10;
+            codes11           = m6809_codes11;
+            exg_tfr           = m6809_exg_tfr;
+            allow_6309_codes  = FALSE;
+        }
         
         if (showOS9) {
             os9_patch = TRUE;
+        } else {
+            os9_patch = FALSE;
         }
 
-        [result appendFormat:@"; org $%04X \n",pc];
+        if (!followPC) [result appendFormat:@"; org $%04X \n",pc];
 
         do {
             char string[30];
             int add;
             
-            if (showAddress) {
-                [result appendFormat:@"%04X: ", pc];
+            if ([pa pointerAtIndex:pc] == NULL) {
+
+                if (showAddress) {
+                    [result appendFormat:@"%04X: ", pc];
+                }
+                
+                add=Dasm(string,pc,&pc_mode,&address);
+
+                if (showHex) {
+                    for( int i=0, j=add; i<5; i++) {
+                        if (j) {
+                            j--;
+                            [result appendFormat:@"%02X ",memory[(pc+i)&0xFFFF]];
+                        }
+                        else
+                            [result appendFormat:@"   "];
+                    }
+                }
+                
+                if ((!showAddress)&&(!showHex)) [result appendFormat:@"\t"];
+                
+                [result appendFormat:@"%s", string];
+                
+                if (followPC) {
+                    [pa replacePointerAtIndex:pc withPointer: result];
+                    
+                    for (int i=1; i<add; i++) {
+                        [pa replacePointerAtIndex:pc+i withPointer:aNull];
+                    }
+                         
+                    switch (pc_mode) {
+                        case _pc_pul:
+                        case _pc_ret:
+                        case _pc_end:
+                            value = [transferAddressesStack lastObject];
+                            
+                            if (value != nil) {
+                                pc = [value intValue];
+                                [transferAddressesStack removeLastObject];
+                            }
+                            else {
+                                pc = 0x10000;
+                            }
+                            break;
+                            
+                        case _pc_jmp:
+                        case _pc_tfr:
+                            /* Need to check if the new address is in range */
+                            pc = address;
+                            break;
+                            
+                        case _pc_bra:
+                            /* Need to check if the new address is in range */
+                            [transferAddressesStack addObject:[tlValue valueWithString:[NSString stringWithFormat:@"%d",address]]];
+                            pc+=add;
+                            break;
+                            
+                        default:
+                            pc+=add;
+                            break;
+                    }
+                    
+                    result = [NSMutableString string];
+                }
+                else {
+                    [result appendFormat:@"\n"];
+                    pc+=add;
+               }
+                
+            }
+            else {
+                value = [transferAddressesStack lastObject];
+                
+                if (value != nil) {
+                    pc = [value intValue];
+                    [transferAddressesStack removeLastObject];
+                }
+                else {
+                    pc = 0x10000;
+                }
+                
             }
             
-            add=Dasm(string,pc);
-
-            if (showHex) {
-                for( int i=0; i<5; i++) {
-                    if (add) {
-                        add--;
-                        [result appendFormat:@"%02X ",memory[(pc++)&0xFFFF]];
-                    }
-                    else
-                        [result appendFormat:@"   "];
-                }
-            } else
-                pc+=add;
-
-            if ((!showAddress)&&(!showHex))
-                [result appendFormat:@"\t"];
-
-            [result appendFormat:@"%s\n", string];
-                    
         } while( pc < offsetAddress+lengthToCopy);
+        
+        if (followPC) {
+            int i = 0, nil_start = 0, nil_end = 0;
+
+            for (NSString *line in pa) {
+                
+                if (line == nil) {
+                    nil_end = i;
+                }
+                else {
+                    if (line == (void *)aNull) {
+                        nil_start = i+1;
+                    }
+                    else {
+                        if( nil_start != i )
+                        {
+//                            [result appendFormat:@"nil from %x to %x\n", nil_start, nil_end];
+                            NSRange nillRange = NSMakeRange(nil_start, nil_end - nil_start);
+                            
+                            /* display FCBs for unassembled bytes */
+                            for (NSValue *aRange in filledRanges) {
+                                NSRange theRange = [aRange rangeValue];
+                                NSRange intersectionRange = NSIntersectionRange(nillRange, theRange);
+                                
+                                if (intersectionRange.length > 0) {
+                                    for (int j=0; j<intersectionRange.length; j += 8) {
+                                        if (showAddress) [result appendFormat:@"%4X: ", intersectionRange.location+j];
+                                        if (showHex) [result appendFormat:@"               "];
+                                        if ((!showAddress)&&(!showHex)) [result appendFormat:@"\t"];
+                                        [result appendFormat:@"FCB", intersectionRange.location+j];
+                                        int min = MIN(8, j - intersectionRange.length);
+                                        
+                                        for (int k=0; k<min; k++) {
+                                            [result appendFormat:@" $%02X%s", memory[intersectionRange.location+j+k], k<min-1 ? "," : ""];
+                                        }
+                                        
+                                        [result appendFormat:@"\n"];
+                                    }
+                                }
+                            }
+                        }
+                        
+                        nil_start = i+1;
+
+                        [result appendFormat:@"%@\n", line];
+                    }
+                  }
+                
+                i++;
+            }
+            
+            if (nil_start < 0x10000) {
+//                [result appendFormat:@"nill from %x to 0xffff\n", nil_start];
+                NSRange nillRange = NSMakeRange(nil_start, 0xffff - nil_start);
+                
+                /* display FCBs for unassembled bytes */
+                for (NSValue *aRange in filledRanges) {
+                    NSRange theRange = [aRange rangeValue];
+                    NSRange intersectionRange = NSIntersectionRange(nillRange, theRange);
+                    
+                    if (intersectionRange.length > 0) {
+                        for (int j=0; j<intersectionRange.length; j += 8) {
+                            if (showAddress) [result appendFormat:@"%4X: ", intersectionRange.location+j];
+                            if (showHex) [result appendFormat:@"               "];
+                            if ((!showAddress)&&(!showHex)) [result appendFormat:@"\t"];
+                            [result appendFormat:@"FCB", intersectionRange.location+j];
+                            int min = MIN(8, j - intersectionRange.length);
+                            
+                            for (int k=0; k<min; k++) {
+                                [result appendFormat:@" $%02X%s", memory[intersectionRange.location+j+k], k<min-1 ? "," : ""];
+                            }
+                            
+                            [result appendFormat:@"\n"];
+                        }
+                    }
+                }
+            }
+        }
     }
     else {
         [result appendString:@"No transfer addresses found"];
     }
     
+    free(memory);
     return result;
 }
 
@@ -183,7 +336,7 @@ unsigned char *memory = NULL;
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:YES], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:YES], @"showHex", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:YES], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:YES], @"showHex", [NSNumber numberWithBool:NO], @"followPC", nil] autorelease];
 }
 
 @end
@@ -192,11 +345,25 @@ unsigned char *memory = NULL;
 
 @synthesize stringValue;
 
++ (id)valueWithString: (NSString *)aString
+{
+    return [[[self alloc] initWithString:aString] autorelease];
+}
+
 - (id)init
 {
     self = [super init];
     if (self) {
         self.stringValue = nil;
+    }
+    return self;
+}
+
+- (id)initWithString:(NSString *)aString
+{
+    self = [super init];
+    if (self) {
+        self.stringValue = aString;
     }
     return self;
 }
@@ -212,6 +379,25 @@ unsigned char *memory = NULL;
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
     [encoder encodeObject:self.stringValue forKey:@"TLStringValue"];
+}
+
+- (int)intValue
+{
+    NSScanner *pScanner = [NSScanner scannerWithString: self.stringValue];
+    unsigned int result;
+    
+    if ([self.stringValue hasPrefix:@"0x"]) {
+        [pScanner scanHexInt: &result];
+    } else {
+        result = [self.stringValue intValue];
+    }
+
+    return result;
+}
+
+-(NSString *)description
+{
+    return self.stringValue;
 }
 
 - (void)dealloc

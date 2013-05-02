@@ -29,4 +29,8 @@
 }
 @property (nonatomic, retain) NSString *stringValue;
 
++ (id)valueWithString: (NSString *)aString;
+- (id)initWithString:(NSString *)aString;
+- (int)intValue;
+
 @end

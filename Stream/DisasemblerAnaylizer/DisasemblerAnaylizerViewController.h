@@ -16,6 +16,7 @@
 }
 
 @property (assign) IBOutlet NSTextView *textView;
+
 @property (nonatomic,retain) StAnaylizer *lastAnaylizer;
 
 @end

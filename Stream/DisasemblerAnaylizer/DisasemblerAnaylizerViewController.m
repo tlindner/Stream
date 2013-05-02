@@ -91,6 +91,8 @@
     [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showAddresses" options:NSKeyValueChangeSetting context:self];
     [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9" options:NSKeyValueChangeSetting context:self];
     [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex" options:NSKeyValueChangeSetting context:self];
+    [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC" options:NSKeyValueChangeSetting context:self];
+    
     observationsActive = YES;
 }
 
@@ -103,6 +105,7 @@
         [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showAddresses" context:self];
         [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9" context:self];
         [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex" context:self];
+        [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC" context:self];
         self.lastAnaylizer = nil;
         observationsActive = NO;
     }
@@ -122,6 +125,8 @@
         } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9"]) {
             [self reloadView];
         } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex"]) {
+            [self reloadView];
+        } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC"]) {
             [self reloadView];
         } else {
             NSLog( @"DisasemblerAnaylizerViewController: Unknown keypath for observerValueForKeyPath:ofObject:change:context: %@", keyPath );
