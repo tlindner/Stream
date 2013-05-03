@@ -110,10 +110,10 @@ unsigned char *memory = NULL;
             
             if (bufferBytes[i] == 0) {
                 /* read a block header */
-                unsigned char segAmble;
+//                unsigned char segAmble;
                 unsigned short segAddress, segLength, actualLength, actualActualLength;
                 
-                segAmble = bufferBytes[i+0];
+//                segAmble = bufferBytes[i+0];
                 segLength = bufferBytes[i+1] << 8;
                 segLength += bufferBytes[i+2];
                 segAddress = bufferBytes[i+3] << 8;
@@ -138,12 +138,13 @@ unsigned char *memory = NULL;
                 
             } else if (bufferBytes[i] == 0xff) {
                 /* insert transfer address into stack if not already there */
-                unsigned char segAmble;
-                unsigned short segAddress, segLength;
+//                unsigned char segAmble;
+                unsigned short segAddress;
+//                unsigned short segLength;
                 
-                segAmble = bufferBytes[i+0];
-                segLength = bufferBytes[i+1] << 8;
-                segLength += bufferBytes[i+2];
+//                segAmble = bufferBytes[i+0];
+//                segLength = bufferBytes[i+1] << 8;
+//                segLength += bufferBytes[i+2];
                 segAddress = bufferBytes[i+3] << 8;
                 segAddress += bufferBytes[i+4];
                 
@@ -166,10 +167,10 @@ unsigned char *memory = NULL;
     }
     else {
         offsetAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"] intValue];
+        offsetAddress &= 0xffff;
         NSUInteger lengthToCopy = MIN( length, 0x10000-offsetAddress );
         memcpy( &memory[offsetAddress], bufferBytes, lengthToCopy);
         filledRanges = [NSMutableArray arrayWithObject:[NSValue valueWithRange:NSMakeRange(offsetAddress, lengthToCopy)]];
-        offsetAddress &= 0xffff;
     }
 
     

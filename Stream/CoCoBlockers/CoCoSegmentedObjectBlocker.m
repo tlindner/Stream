@@ -59,6 +59,8 @@
         actualLengthBE[0] = actualLength >> 8;
         actualLengthBE[1] = actualLength & 0x00ff;
         
+        assert(segAddress < 0x10000);
+        
         if (segAmble == 0x00) {
             /* preamble */
             StBlock *newSegement = [stream startNewBlockNamed:[NSString stringWithFormat:@"Segment %d", segmentNumber++] owner:[CoCoSegmentedObjectBlocker anaylizerKey]];
@@ -81,12 +83,12 @@
             [newSegement addAttributeRange:@"stream" start:i+0 length:1 name:@"Amble" verification:nil transformation:@"BlocksUnsignedBigEndian"];
             [newSegement addAttributeRange:@"stream" start:i+1 length:2 name:@"Length" verification:[NSData dataWithBytes:&actualLength length:2] transformation:@"BlocksUnsignedBigEndian"];
             [newSegement addAttributeRange:@"stream" start:i+3 length:2 name:@"ML Exec Address" verification:nil transformation:@"BlocksUnsignedBigEndian"];
-            i += 5 + segLength;
+//            i += 5 + segLength;
             break;
             
         } else {
             /* unknown amble */
-            i += 5;
+//            i += 5;
             break;
         }
     }

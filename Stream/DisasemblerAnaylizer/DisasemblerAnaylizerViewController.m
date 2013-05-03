@@ -71,6 +71,10 @@
     {
         bytes = ro;
     }
+    else {
+        [textView setString:@"No data supplied"];
+        return;
+    }
     
     DisasemblerAnaylizer *modelObject = (DisasemblerAnaylizer *)[ro anaylizerObject];
     [textView setString:[modelObject disasemble6809:bytes]];
