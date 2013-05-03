@@ -296,6 +296,7 @@
 		77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerSettingPopover.xib; path = Stream/AnaylizerSettingPopover.xib; sourceTree = "<group>"; };
 		77DFCB75171A159100C4A876 /* CoCoCassetteFileBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoCassetteFileBlocker.h; path = Stream/CoCoBlockers/CoCoCassetteFileBlocker.h; sourceTree = "<group>"; };
 		77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoCassetteFileBlocker.m; path = Stream/CoCoBlockers/CoCoCassetteFileBlocker.m; sourceTree = "<group>"; };
+		77E9E6EA173379110027C7E9 /* BlockIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = BlockIcon.psd; sourceTree = "<group>"; };
 		77F203FA13DD3ACF00FA5B1F /* HexFiend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiend.h; path = Stream/HexFiend/HexFiend.h; sourceTree = "<group>"; };
 		77F203FB13DD3ACF00FA5B1F /* HFBTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HFBTree.h; path = Stream/HexFiend/HFBTree.h; sourceTree = "<group>"; };
 		77F203FC13DD3ACF00FA5B1F /* HFBTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HFBTree.m; path = Stream/HexFiend/HFBTree.m; sourceTree = "<group>"; };
@@ -527,6 +528,7 @@
 				778A6DFC1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.h */,
 				778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */,
 				77AE7556141568BD0052A93D /* BlockIcon.tiff */,
+				77E9E6EA173379110027C7E9 /* BlockIcon.psd */,
 				77CB933E1404AE7F0032F56F /* Zoom.tif */,
 				7759CF3E13DBA1A300789DB3 /* Stream-Info.plist */,
 				7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */,
