@@ -262,7 +262,7 @@ unsigned char *memory = NULL;
                                 [transferAddressesStack addObject:[tlValue valueWithString:[NSString stringWithFormat:@"%d",pc+add]]];
                             }
                             
-                            pc = PopAddressFromStack( transferAddressesStack );
+                            pc = address;
                             break;
                             
                         default:
