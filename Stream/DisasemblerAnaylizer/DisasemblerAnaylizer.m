@@ -34,6 +34,7 @@ unsigned char *memory = NULL;
         [inRepresentedObject addSubOptionsDictionary:[DisasemblerAnaylizer anaylizerKey] withDictionary:[DisasemblerAnaylizer defaultOptions]];
     }
     
+    /* fill in some seeting for known blocks */
     if( [representedObject respondsToSelector:@selector(sourceUTI)] )
     {
         NSString *uti = [representedObject sourceUTI];
@@ -80,6 +81,9 @@ unsigned char *memory = NULL;
                     offsetAddress = [getObject getAttributeDatawithUIName:@"ML Load Address"];
                     [setObject setValue:offsetAddress forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
                 }
+            } else if ([uti isEqualToString:@"com.microsoft.cocobasic.gapsobject"]) {
+                [setObject setValue:[NSNumber numberWithBool:NO] forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetEnable"];
+                [setObject setValue:@"Using Segment Offsets" forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
             }
         }
     }
@@ -91,22 +95,91 @@ unsigned char *memory = NULL;
     memory = calloc(0x10000, 1);
     NSPointerArray *pa = [NSPointerArray pointerArrayWithStrongObjects];
     [pa setCount:0x10000];
+    const unsigned char *bufferBytes = [bufferObject bytes];
+    NSUInteger length = [bufferObject length];
+    NSUInteger i;
+    unsigned int offsetAddress;
+    NSMutableArray *filledRanges;
+    NSMutableArray *transferAddressesStack = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"] mutableCopy];
+    
+    NSString *uti = [representedObject sourceUTI];
+    if ([uti isEqualToString:@"com.microsoft.cocobasic.gapsobject"]) {
+        filledRanges = [NSMutableArray array];
+        i = 0;
+        while (i<length) {
+            
+            if (bufferBytes[i] == 0) {
+                /* read a block header */
+                unsigned char segAmble;
+                unsigned short segAddress, segLength, actualLength, actualActualLength;
+                
+                segAmble = bufferBytes[i+0];
+                segLength = bufferBytes[i+1] << 8;
+                segLength += bufferBytes[i+2];
+                segAddress = bufferBytes[i+3] << 8;
+                segAddress += bufferBytes[i+4];
+                actualLength = MIN(segLength, (i + 5 + segLength) - length); /* don't read past the block */
+                actualActualLength = MIN( actualLength, 0xffff - segAddress ); /* don't write past the buffer */
+               
+                /* copy block data */
+                [filledRanges addObject:[NSValue valueWithRange:NSMakeRange(segAddress, actualActualLength)]];
+                memcpy(&(memory[segAddress]), &(bufferBytes[i+5]), actualActualLength);
+                
+                if (actualLength > actualActualLength) {
+                    /* wrap around back to zero and write remaining bytes */
+                    unsigned short remainingLength = actualLength - actualActualLength;
+
+                    [filledRanges addObject:[NSValue valueWithRange:NSMakeRange(0, remainingLength)]];
+                    memcpy(&(memory[0]), &(bufferBytes[i+5+actualActualLength]), remainingLength);
+                    
+                }
+                
+                i += 5 + segLength;
+                
+            } else if (bufferBytes[i] == 0xff) {
+                /* insert transfer address into stack if not already there */
+                unsigned char segAmble;
+                unsigned short segAddress, segLength;
+                
+                segAmble = bufferBytes[i+0];
+                segLength = bufferBytes[i+1] << 8;
+                segLength += bufferBytes[i+2];
+                segAddress = bufferBytes[i+3] << 8;
+                segAddress += bufferBytes[i+4];
+                
+                BOOL found = NO;
+                NSString *transferString = [NSString stringWithFormat:@"%d", segAddress];
+                for (tlValue *value in transferAddressesStack) {
+                    if ([[value stringValue] isEqualToString:transferString]) {
+                        found = YES;
+                        break;
+                    }
+                }
+                
+                if (found == NO) {
+                    [transferAddressesStack addObject:[tlValue valueWithString:transferString]];
+                }
+                
+                break;
+            }
+        }
+    }
+    else {
+        offsetAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"] intValue];
+        NSUInteger lengthToCopy = MIN( length, 0x10000-offsetAddress );
+        memcpy( &memory[offsetAddress], bufferBytes, lengthToCopy);
+        filledRanges = [NSMutableArray arrayWithObject:[NSValue valueWithRange:NSMakeRange(offsetAddress, lengthToCopy)]];
+        offsetAddress &= 0xffff;
+    }
+
+    
     
     BOOL showAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showAddresses"] boolValue];
     BOOL showHex = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex"] boolValue];
     BOOL support6309 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309"] boolValue];
     BOOL showOS9 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9"] boolValue];
     BOOL followPC = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC"] boolValue];
-    NSMutableArray *transferAddressesStack = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"] mutableCopy];
     unsigned int pc;
-    
-    unsigned int offsetAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"] intValue];
-    offsetAddress &= 0xffff;
-    const unsigned char *bufferBytes = [bufferObject bytes];
-    NSUInteger length = [bufferObject length];
-    NSUInteger lengthToCopy = MIN( length, 0x10000-offsetAddress );
-    memcpy( &memory[offsetAddress], bufferBytes, lengthToCopy);
-    NSMutableArray *filledRanges = [NSMutableArray arrayWithObject:[NSValue valueWithRange:NSMakeRange(offsetAddress, lengthToCopy)]];
 
     if (transferAddressesStack != nil && [transferAddressesStack count] > 0 && (pc = PopAddressFromStack (transferAddressesStack)) < 0xffff) {
         NSNull *aNull = [NSNull null];
@@ -282,7 +355,7 @@ unsigned char *memory = NULL;
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:YES], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:YES], @"showHex", [NSNumber numberWithBool:NO], @"followPC", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:YES], @"offsetEnable", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:YES], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:YES], @"showHex", [NSNumber numberWithBool:NO], @"followPC", nil] autorelease];
 }
 
 @end
