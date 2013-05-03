@@ -37,6 +37,7 @@
 @property (nonatomic) int64_t index;
 @property (nonatomic) BOOL markForDeletion;
 @property (nonatomic, retain) StStream *parentStream;
+@property (nonatomic, retain) StStream *sourceSubStreamParent;
 @property (nonatomic, retain) StBlock *parentBlock;
 @property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
 @property (nonatomic, retain) NSSet *blocks;

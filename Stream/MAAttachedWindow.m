@@ -774,6 +774,7 @@
 
 - (void)windowDidResize:(NSNotification *)note
 {
+    #pragma unused(note)
     [self _redisplay];
 }
 

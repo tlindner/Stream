@@ -305,18 +305,21 @@
     NSMutableSet *allBlocks = [self mutableSetValueForKey:@"blocks"];
     [allBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
      {
+         #pragma unused(stop)
          StBlock *theBlock = obj;
          [theBlock setMarkForDeletion:YES];
          
          NSMutableSet *subBlocks = [theBlock mutableSetValueForKey:@"blocks"];
          [subBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
           {
+              #pragma unused(stop)
               StBlock *theSubBlock = obj;
               [theSubBlock setMarkForDeletion:YES];
               
               NSMutableSet *subSubBlocks = [theSubBlock mutableSetValueForKey:@"blocks"];
               [subSubBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
                {
+                   #pragma unused(stop)
                    StBlock *theSubSubBlock = obj;
                    [theSubSubBlock setMarkForDeletion:YES];
                }];

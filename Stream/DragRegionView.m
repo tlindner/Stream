@@ -28,6 +28,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+    #pragma unused(dirtyRect)
     NSGradient* aGradient = [[[NSGradient alloc]
                               initWithStartingColor:[NSColor grayColor]
                               endingColor:[NSColor lightGrayColor]] autorelease];

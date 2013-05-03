@@ -81,6 +81,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
 
 - (IBAction)doPopOver:(id)sender
 {
+    #pragma unused(sender)
     StAnaylizer *anaylizer = [viewOwner representedObject];
 
     [self unbindAndUnobserve];
@@ -336,12 +337,14 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
 
 - (IBAction)popOverOK:(id)sender
 {
+    #pragma unused(sender)
     [self unbindAndUnobserve];
     [actionPopOver performClose:self];
 }
 
 - (IBAction)popOverCancel:(id)sender
 {
+    #pragma unused(sender)
     [self unbindAndUnobserve];
     [actionPopOver performClose:self];
 }

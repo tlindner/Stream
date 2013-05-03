@@ -428,6 +428,7 @@
     [indexes enumerateRangesUsingBlock:
      ^(NSRange range, BOOL *stop)
      {
+         #pragma unused(stop)
          [ma addObject:[self subdataWithRange:range]];
      }];
     

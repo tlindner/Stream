@@ -10,7 +10,7 @@
 
 @implementation BlockAttributeViewTableView
 
-- (void)drawRow:(NSInteger)row clipRect:(NSRect)clipRect;
+- (void)drawRow:(NSInteger)row clipRect:(NSRect)clipRect
 {
     NSColor *color = [(NSObject *)[self delegate] tableView:self backgroundColorForRow:row];
     

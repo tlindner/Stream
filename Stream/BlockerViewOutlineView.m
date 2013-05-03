@@ -11,7 +11,7 @@
 
 @implementation BlockerViewOutlineView
 
-- (void)drawRow:(NSInteger)row clipRect:(NSRect)clipRect;
+- (void)drawRow:(NSInteger)row clipRect:(NSRect)clipRect
 {
     NSColor *color = [(NSObject *)[self delegate] tableView:self backgroundColorForRow:row];
     
@@ -50,6 +50,7 @@
 
 - (IBAction)makeSubStream:(id)sender
 {
+    #pragma unused(sender)
     [[self nextResponder] tryToPerform:@selector(makeSubStream:) with:[(NSObject *)[self delegate] observingBlock]];
 }
 

@@ -83,6 +83,7 @@
 }
 
 - (void)doubleClick:(id)object {
+    #pragma unused(object)
     NSRange unionRange = NSMakeRange(0, 0);
     NSArray *selectionObjects = [[self treeController] selectedObjects];
     
@@ -115,6 +116,8 @@
         paths[0] = [treeArray1 indexOfObjectPassingTest:
                     ^(id obj, NSUInteger idx, BOOL *stop)
                     {
+                        #pragma unused(idx)
+                        #pragma unused(stop)
                         if( [[[obj representedObject] valueForKey:@"name"] isEqualToString:self.selectedBlockLevel1] )
                             return YES;
                         
@@ -129,6 +132,8 @@
                 paths[1] = [treeArray2 indexOfObjectPassingTest:
                             ^(id obj, NSUInteger idx, BOOL *stop)
                             {
+                                #pragma unused(idx)
+                                #pragma unused(stop)
                                 if( [[[obj representedObject] valueForKey:@"name"] isEqualToString:self.selectedBlockLevel2] )
                                     return YES;
                                 
@@ -143,6 +148,8 @@
                         paths[2] = [treeArray3 indexOfObjectPassingTest:
                                     ^(id obj, NSUInteger idx, BOOL *stop)
                                     {
+                                        #pragma unused(idx)
+                                        #pragma unused(stop)
                                         if( [[[obj representedObject] valueForKey:@"name"] isEqualToString:self.selectedBlockLevel3] )
                                             return YES;
                                         
@@ -203,7 +210,7 @@
     self.observing = YES;
 }
 
-- (void) stopObserving;
+- (void) stopObserving
 {
     if( self.observing == YES )
     {

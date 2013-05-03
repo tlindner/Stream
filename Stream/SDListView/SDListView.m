@@ -109,6 +109,9 @@
 // MARK: Dynamic Observing
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    #pragma unused(object)
+    #pragma unused(change)
+    #pragma unused(context)
     if ([keyPath isEqualToString:@"content"]) {
         [[self class] cancelPreviousPerformRequestsWithTarget:self
                                                      selector:@selector(_contentDidChange)
@@ -275,6 +278,7 @@
 	
     __block CGFloat totalHeight = 0.0;
     [listViewItems enumerateObjectsUsingBlock: ^ (SDListViewItem *item, NSUInteger i, BOOL *stop) {
+        #pragma unused(stop)
         heights[i] = [item heightForGivenWidth:width];
         totalHeight += heights[i];
     }];
@@ -289,6 +293,7 @@
     
     [NSAnimationContext beginGrouping];
     [listViewItems enumerateObjectsUsingBlock: ^ (SDListViewItem *item, NSUInteger i, BOOL *stop) {
+        #pragma unused(stop)
         CGFloat height = heights[i];
         NSRect newItemFrame = NSMakeRect(0.0, y, width, height);
         
@@ -320,6 +325,7 @@
 // Giving this a try - tjl;
 
 - (void) noteHeightChangedForItem:(SDListViewItem*)listItem {
+    #pragma unused(listItem)
     [self _layout];
 }
 
@@ -328,11 +334,13 @@
 // MARK: Drawing
 
 - (void) drawRect:(NSRect)dirtyRect {
+    #pragma unused(dirtyRect)
 	if ([self.content count] == 0)
 		return;
 }
 
 - (void) setFrameSize:(NSSize)newSize {
+    #pragma unused(newSize)
     [self _layout]; // this method will call super's -setFrameSize:
 }
 
@@ -444,6 +452,7 @@
 }
 
 - (void) mouseUp:(NSEvent*)theEvent {
+    #pragma unused(theEvent)
 	if (self.allowsMultipleSelection == NO) {
 	}
 	else {
@@ -466,6 +475,7 @@
 }
 
 - (void)keyUp:(NSEvent *)theEvent {
+    #pragma unused(theEvent)
 }
 
 // for now, [space] moves down. in the future, we may want to make it deal with selection instead.
@@ -479,6 +489,7 @@
 // TODO: keep track of whether the index fell off the top or bottom, so we can recover easily
 
 - (void) moveDown:(id)sender {
+    #pragma unused(sender)
 	if (self.allowsMultipleSelection == NO) {
 		[self _moveSelectionInDirection:(1)];
 	}
@@ -487,6 +498,7 @@
 }
 
 - (void) moveUp:(id)sender {
+    #pragma unused(sender)
 	if (self.allowsMultipleSelection == NO) {
 		[self _moveSelectionInDirection:(-1)];
 	}
@@ -515,7 +527,8 @@
 		firstIndex -= direction;
 		
 		BOOL fellOffBottom = (firstIndex < 0);
-		BOOL fellOffTop = (firstIndex >= [listViewItems count]);
+        NSInteger countListViewItems = [listViewItems count];
+		BOOL fellOffTop = (firstIndex >= countListViewItems);
 		
 		if (fellOffBottom) {
 			selectionFellOfSide = -1;

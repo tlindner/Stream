@@ -95,6 +95,7 @@
 
 - (IBAction)add:(id)sender
 {
+    #pragma unused(sender)
     NSOpenPanel *myOpenPanel = [NSOpenPanel openPanel];
     [myOpenPanel setAllowsMultipleSelection:YES];
     
@@ -176,6 +177,7 @@
 
 - (IBAction)wftSave:(id)sender
 {
+    #pragma unused(sender)
     NSManagedObjectContext *moc = [self managedObjectContext];
     
     NSError *err = nil;
@@ -255,6 +257,7 @@
 
 - (void) deleteAnayliserAlertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
+    #pragma unused(alert)
     if (returnCode == 0)
     {
         StAnaylizer *anaylizer = contextInfo;
@@ -329,11 +332,13 @@
 
 - (BOOL)selectionShouldChangeInTableView:(NSTableView *)aTableView
 {
+    #pragma unused(aTableView)
     return NO;
 }
 
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)subview
 {
+    #pragma unused(splitView)
     if( subview == streamListView )
         return NO;
     else
@@ -342,6 +347,7 @@
 
 - (void)documentWindowWillClose:(NSNotification *)note
 {
+    #pragma unused(note)
     [streamTreeControler removeObserver:self forKeyPath:@"selectionIndexPaths" context:self];
     
     if( observingStream != nil )

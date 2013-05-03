@@ -181,7 +181,7 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
     return [TextAnaylizerViewController class];
 }
 
-+ (NSString *)anaylizerKey;
++ (NSString *)anaylizerKey
 {
     return @"TextAnaylizerViewController";
 }

@@ -113,6 +113,7 @@
 }
 
 - (CGFloat) heightForGivenWidth:(CGFloat)width {
+    #pragma unused(width)
     StAnaylizer *ana = (StAnaylizer *)self.representedObject;
     float result = MINIMUM_HEIGHT;
 
@@ -143,11 +144,13 @@
 
 - (IBAction)removeAnaylizer:(id)sender
 {
+    #pragma unused(sender)
     MyDocument *ourPerstantDocument = [[[[self view] window] windowController] document];
     [ourPerstantDocument removeAnaylizer:[self representedObject]];
 }
 
 - (IBAction)collapse:(id)sender {
+    #pragma unused(sender)
     StAnaylizer *ana = (StAnaylizer *)self.representedObject;
     ana.collapse = !ana.collapse;
 

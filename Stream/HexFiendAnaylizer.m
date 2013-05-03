@@ -114,7 +114,7 @@
     return [HexFiendAnaylizerController class];
 }
 
-+ (NSString *)anaylizerKey;
++ (NSString *)anaylizerKey
 {
     return @"HexFiendAnaylizerController";
 }

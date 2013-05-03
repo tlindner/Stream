@@ -104,6 +104,7 @@
 
 - (NSColor *)tableView:(NSTableView *)aTableView backgroundColorForRow:(NSInteger)rowIndex
 {
+    #pragma unused(aTableView)
     StBlock *theBlock = [self representedObject];
     return [[theBlock subBlockAtIndex:rowIndex] attributeColor];
 }

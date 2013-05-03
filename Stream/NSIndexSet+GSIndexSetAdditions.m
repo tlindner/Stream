@@ -13,6 +13,7 @@
   NSMutableIndexSet *finalSet = [[[NSMutableIndexSet alloc] init] autorelease];
 	
   [self enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
+      #pragma unused(stop)
     if ([otherSet containsIndex:index]) [finalSet addIndex:index];
   }];
 
@@ -23,6 +24,7 @@
     NSMutableIndexSet *finalSet = [self mutableCopy];
     
     [otherSet enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
+        #pragma unused(stop)
         [finalSet removeIndex:index];
     }];
     

@@ -125,6 +125,7 @@
 
 - (IBAction)updateSlider:(id)sender
 {
+    #pragma unused(sender)
     NSView *clipView = [[self.scroller documentView] superview];
     NSRect boundsRect = [clipView bounds];
     float width = boundsRect.size.width;
@@ -197,6 +198,7 @@
 
 - (IBAction)ConfigurableButton1:(id)sender
 {
+    #pragma unused(sender)
    /* this should be hooked up the the anaylize button */
     
     StAnaylizer *theAna = [self representedObject];

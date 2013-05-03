@@ -70,6 +70,7 @@
 
 - (void)viewFrameDidChange:(NSNotification *)note
 {
+    #pragma unused(note)
     [viewController updateSlider:self];
 }
 

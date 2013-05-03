@@ -34,7 +34,7 @@
 @dynamic isEdit;
 @dynamic canChangeEditor;
 @dynamic markForDeletion;
-
+@dynamic sourceSubStreamParent;
 @dynamic data;
 @dynamic dataForUI;
 @dynamic checkBytesForUI;
@@ -223,7 +223,7 @@
     [self checkFail:newBlock];
 }
 
-- (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
+- (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
 {
     StBlock *depBlock = [self subBlockNamed:@"dependencies"];
     StBlock *newBlock = [depBlock subBlockAtIndex:depIndex];
@@ -753,7 +753,11 @@
             NSRange range = {self.offset, self.length};
             StAnaylizer *lastFilterAnaylizer = [[self getStream] lastFilterAnayliser];
             NSIndexSet *set = lastFilterAnaylizer.editIndexSet;
-            NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:^(NSUInteger idx, BOOL *stop){ return YES; }] mutableCopy];
+            NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:
+                                              ^(NSUInteger idx, BOOL *stop){
+                                                #pragma unused(idx)
+                                                #pragma unused(stop)
+                                                return YES; }] mutableCopy];
             [setInRange shiftIndexesStartingAtIndex:0 by:-self.offset];
             [indexSet addIndexes:setInRange];
             [setInRange release];
@@ -772,7 +776,11 @@
                 range = NSMakeRange( self.offset, self.length );
 
             NSMutableIndexSet *set = [[[self getStream] blockNamed:self.source] editSet];
-            NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:^(NSUInteger idx, BOOL *stop){ return YES; }] mutableCopy];
+            NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:
+                                              ^(NSUInteger idx, BOOL *stop){
+                                                  #pragma unused(idx)
+                                                  #pragma unused(stop)
+                                                  return YES; }] mutableCopy];
             [setInRange shiftIndexesStartingAtIndex:0 by:-self.offset];
             [indexSet addIndexes:setInRange];
             [setInRange release];
@@ -852,6 +860,7 @@
 
 - (BOOL)getObjectValue:(id *)anObject forString:(NSString *)string errorDescription:(NSString **)error
 {
+    #pragma unused(error)
     if( [[string class] isSubclassOfClass:[NSString class]] )
     {
         /* just send the string back, we'll parse in the StBlock */

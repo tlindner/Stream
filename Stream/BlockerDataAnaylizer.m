@@ -49,7 +49,7 @@
     return @"Blocker View";
 }
 
-+ (NSString *)anaylizerKey;
++ (NSString *)anaylizerKey
 {
     return @"BlockerDataViewController";
 }

@@ -259,7 +259,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
 	{
 		NSUInteger intermediate;
 		unsigned char *buffer = (unsigned char *)malloc(size);
-		int i;
+		size_t i;
 		
 		intermediate = [value unsignedIntegerValue];
 		
@@ -323,7 +323,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
 	{
 		NSUInteger intermediate;
 		unsigned char *buffer = (unsigned char *)malloc(size);
-		int i;
+		size_t i;
 		
 		intermediate = [value unsignedIntegerValue];
 		

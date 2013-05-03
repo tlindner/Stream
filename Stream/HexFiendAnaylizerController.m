@@ -193,6 +193,7 @@
                     
                     [changes enumerateRangesUsingBlock: ^(NSRange range, BOOL *stop)
                      {
+                         #pragma unused(stop)
                          NSLog( @"Calling set block: %@", NSStringFromRange(range) );
                          [theStream setBlock:theBlock withData:[hexView data] inRange:range];
                      }];
@@ -244,6 +245,7 @@
         [theEditSet enumerateRangesUsingBlock:
          ^(NSRange range, BOOL *stop)
          {
+             #pragma unused(stop)
              [editRanges addObject:[NSValue valueWithRange:range]];
          }];
         

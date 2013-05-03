@@ -29,7 +29,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 @property (assign) StAnaylizer * representedObject;
 @property (nonatomic, retain) NSMutableData *frameBuffer;
 
-- (void) loadAudioChannel:(int)audioChannel;
+- (void) loadAudioChannel:(NSUInteger)audioChannel;
 - (void) anaylizeAudioData;
 - (void) applyInvert;
 - (void) applyAmplify;

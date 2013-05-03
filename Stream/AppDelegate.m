@@ -27,6 +27,7 @@
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
+    #pragma unused(notification)
     //NSLog( @"Im alive: %@", notification );
 
     NSMenuItem *newMenuItem = [[NSMenuItem alloc] initWithTitle:@"CoCo Cassette Blocker" action:@selector(makeNewBlocker:) keyEquivalent:@""];

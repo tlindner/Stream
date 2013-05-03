@@ -126,7 +126,7 @@ typedef struct
     NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
     AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
     NSRange *characters = [[optionsDict objectForKey:@"charactersObject"] mutableBytes];
-    NSInteger currentChannel = [[optionsDict objectForKey:@"audioChannel"] intValue];
+    NSUInteger currentChannel = [[optionsDict objectForKey:@"audioChannel"] intValue];
     NSUInteger frameCount = [modelObject.frameBuffer length] / sizeof(AudioSampleType);
     double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
     
@@ -211,7 +211,7 @@ typedef struct
         NSRectFill(rect);
         
         /* decoded data values and data regions */
-        int i = 0;
+        NSUInteger i = 0;
         if( ((sampleRate / 2400.0) * 8 / scale) > 9.5)
         {
             /* we're zoomed enought to draw segemented frames around byte groups and actual values */
@@ -405,6 +405,7 @@ typedef struct
         [changedSet enumerateRangesInRange:range options:0 usingBlock:
          ^(NSRange range, BOOL *stop)
          {
+             #pragma unused(stop)
              NSRect rect = NSMakeRect(range.location/scale, 0.0, range.length/scale, viewWaveHeight);
              NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
              [aPath fill];
@@ -421,6 +422,7 @@ typedef struct
         [failSet enumerateRangesInRange:range options:0 usingBlock:
          ^(NSRange range, BOOL *stop)
          {
+             #pragma unused(stop)
              NSRect rect = NSMakeRect(characters[range.location].location, 0.0, 0.0, viewWaveHeight);
              
              for( NSUInteger i = 0; i<range.length; i++ )
@@ -449,7 +451,7 @@ typedef struct
         }
         
         /* draw block goupings above wave form */
-        for (int i=1; i<[anaylizers count]; i++)
+        for (NSUInteger i=1; i<[anaylizers count]; i++)
         {
             StAnaylizer *theAna = [anaylizers objectAtIndex:i];
             NSSet *blocksSet = [stream blocksWithKey:[theAna anaylizerKind]];
@@ -459,7 +461,7 @@ typedef struct
             NSArray *rangeArrayObject = [blocksArray valueForKey:@"unionRangeObject"];
             NSRange *rangeArray = (NSRange *)malloc(sizeof(NSRange) * [rangeArrayObject count]);
             
-            for (int j=0; j<[rangeArrayObject count]; j++ )
+            for (NSUInteger j=0; j<[rangeArrayObject count]; j++ )
             {
                 NSRange theRange = [[rangeArrayObject objectAtIndex:j] rangeValue];
                 rangeArray[j].location = characters[theRange.location].location;
@@ -470,7 +472,7 @@ typedef struct
             NSColor *lightColor = [NSColor colorWithCalibratedWhite:0.8 alpha:0.5];
             NSColor *darkColor = [NSColor colorWithCalibratedWhite:0.65 alpha:0.5];
             
-            for (int j=0; j<[nameArray count]; j++ )
+            for (NSUInteger j=0; j<[nameArray count]; j++ )
             {
                 if (j & 0x1 )
                     [lightColor set];
@@ -597,6 +599,10 @@ typedef struct
 
 - (NSString *)view:(NSView *)view stringForToolTip:(NSToolTipTag)tag point:(NSPoint)point userData:(void *)userData
 {
+    #pragma unused(userData)
+    #pragma unused(tag)
+    #pragma unused(view)
+    #pragma unused(point)
     NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
     double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
 
@@ -611,6 +617,7 @@ typedef struct
 
 -(void)cursorUpdate:(NSEvent *)theEvent
 {
+    #pragma unused(theEvent)
     if( toolMode == WFVSelection )
     {
         [[NSCursor arrowCursor] set];
@@ -633,6 +640,7 @@ typedef struct
 
 - (IBAction)copy:(id)sender
 {
+    #pragma unused(sender)
     if( selectedSample != NSUIntegerMax )
     {
         /* Package chunk of sound into a WAV file */
@@ -1229,7 +1237,7 @@ void SamplesSamples_resample( Float64 sampleRate, Float32 *outBuffer, AudioSampl
     vDSP_Length inputLength = viewWidth / sampleSize;
     AudioSampleType *destrideBuffer = malloc(sizeof(AudioSampleType)*inputLength);
     
-    for( int i=0; i<inputLength; i++ )
+    for( vDSP_Length i=0; i<inputLength; i++ )
     {
         if( &(inBuffer[i]) < lastFrame )
             destrideBuffer[i] = inBuffer[i];
@@ -1293,6 +1301,7 @@ void SamplesSamples_resample( Float64 sampleRate, Float32 *outBuffer, AudioSampl
 /* data provider for resampling routine in SamplesSamples_resample() */
 OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription**	outDataPacketDescription, void* inUserData)
 {
+    #pragma unused(inAudioConverter)
 	AudioFileIO* afio = (AudioFileIO*)inUserData;
     
     if( afio->done == YES )
@@ -1315,6 +1324,9 @@ OSStatus EncoderDataProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDat
 
 void SamplesSamples_1to1( Float64 sampleRate, Float32 *outBuffer, AudioSampleType *inBuffer, double sampleSize, NSInteger viewWidth, AudioSampleType *lastFrame )
 {
+    #pragma unused(sampleRate)
+    #pragma unused(sampleSize)
+    #pragma unused(lastFrame)
     for( int i = 0; i<viewWidth; i++ )
     {
         outBuffer[i] = inBuffer[i];

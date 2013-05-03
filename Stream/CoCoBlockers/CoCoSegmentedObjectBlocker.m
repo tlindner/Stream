@@ -33,7 +33,7 @@
 {
     NSAssert( [stream respondsToSelector:@selector(dataOfBlockNamed:)] == YES, @"CoCoSegmentedObjectBlocker: Incompatiable stream" );
     int segmentNumber, transferNumber;
-    int i;
+    NSUInteger i;
     
     NSData  *streamBytesObject = [stream dataOfBlockNamed:@"stream"];
     NSAssert( streamBytesObject != nil, @"CoCoSegmentedObjectBlocker: no stream object" );

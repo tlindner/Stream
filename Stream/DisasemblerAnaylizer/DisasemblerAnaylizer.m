@@ -13,7 +13,7 @@
 BOOL ValueInRanges( unsigned int value, NSArray *rangesArray );
 unsigned int PopAddressFromStack( NSMutableArray *stack );
 void FCB_Dump( NSMutableString *result, unsigned char *memory, NSRange nilRange, NSArray *filledRanges, BOOL showAddress, BOOL showHex );
-NSString *PrintORG (int i, NSArray *filledRanges);
+NSString *PrintORG (NSUInteger i, NSArray *filledRanges);
 
 unsigned char *memory = NULL;
 #define OPCODE(address)  memory[address&0xffff]
@@ -275,7 +275,7 @@ unsigned char *memory = NULL;
     return [DisasemblerAnaylizerViewController class];
 }
 
-+ (NSString *)anaylizerKey;
++ (NSString *)anaylizerKey
 {
     return @"DisasemblerAnaylizerViewController";
 }
@@ -398,12 +398,12 @@ void FCB_Dump( NSMutableString *result, unsigned char *memory, NSRange nilRange,
         
         if (intersectionRange.length > 0) {
             [result appendString:PrintORG (intersectionRange.location, filledRanges)];
-            for (int j=0; j<intersectionRange.length; j += 8) {
+            for (NSUInteger j=0; j<intersectionRange.length; j += 8) {
                 if (showAddress) [result appendFormat:@"%4X: ", intersectionRange.location+j];
                 if (showHex) [result appendFormat:@"               "];
                 if ((!showAddress)&&(!showHex)) [result appendFormat:@"\t"];
                 [result appendFormat:@"FCB", intersectionRange.location+j];
-                int min = MIN(8, intersectionRange.length - j);
+                int min = MIN((NSUInteger)8, intersectionRange.length - j);
                 for (int k=0; k<min; k++) {
                     [result appendFormat:@" $%02X%s", memory[intersectionRange.location+j+k], k<min-1 ? "," : ""];
                 }
@@ -414,7 +414,7 @@ void FCB_Dump( NSMutableString *result, unsigned char *memory, NSRange nilRange,
     }
 }
 
-NSString *PrintORG (int i, NSArray *filledRanges)
+NSString *PrintORG (NSUInteger i, NSArray *filledRanges)
 {
     NSString *result = @"";
     

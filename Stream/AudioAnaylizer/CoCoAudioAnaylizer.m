@@ -119,7 +119,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     [super dealloc];
 }
 
-- (void) loadAudioChannel:(int)audioChannel
+- (void) loadAudioChannel:(NSUInteger)audioChannel
 {
     currentAudioChannel = audioChannel;
     StAnaylizer *theAna = self.representedObject;    
@@ -160,7 +160,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
         
         /* Build array for channel popup list in accessory view */
         NSMutableArray *theChannelList = [[NSMutableArray alloc] init];
-        for( int i=1; i<=channelCount; i++ )
+        for( NSUInteger i=1; i<=channelCount; i++ )
         {
             [theChannelList addObject:[NSString stringWithFormat:@"%d", i]];
         }
@@ -195,7 +195,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
         AudioSampleType *frameBufferObjectBytes = [frameBufferObject mutableBytes];
         AudioSampleType *sourceAudioFrame = frameBufferAS + (audioChannel - 1);
         
-        for( size_t i=0; i<fileFrameCount; i++ )
+        for( SInt64 i=0; i<fileFrameCount; i++ )
         {
             frameBufferObjectBytes[i] = sourceAudioFrame[i*channelCount];
         }
@@ -248,7 +248,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     UInt32 _frame_count = [data length] / sizeof(float);
     
     
-    AudioStreamBasicDescription file_desc = {0};
+    AudioStreamBasicDescription file_desc = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     ExtAudioFileRef fout;
     FillOutASBDForLPCM(&file_desc, _sample_rate, _channel_count, sizeof(float)*8, sizeof(float)*8, false, false, true);
     file_desc.mFormatFlags = kAudioFormatFlagsCanonical;
@@ -324,7 +324,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     int bit_count = 0, bump;
     
     /* start by scanning zero crossing looking for the start of a block */
-    for (int i=2; i<crossingCount-1; i+=2)
+    for (NSUInteger i=2; i<crossingCount-1; i+=2)
     {
         /* test frequency of 2 zero crossings */
         even_parity >>= 1;
@@ -416,7 +416,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     
     /* coalesce nearby found byte rectangles into single continous rectangle */
     /* this greatly speeds up the "found data" tint when zoomed out */
-    for(int i=1; i<char_count; i++ )
+    for(NSUInteger i=1; i<char_count; i++ )
     {
         if( characters[i].location-5.0 <= coalescedCharacters[coa_char_count-1].location + coalescedCharacters[coa_char_count-1].length )
             coalescedCharacters[coa_char_count-1].length += characters[i].length - (coalescedCharacters[coa_char_count-1].location + coalescedCharacters[coa_char_count-1].length - characters[i].location);
@@ -435,7 +435,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     {
         average = 0;
         
-        for(int i=0; i<coa_char_count; i++ )
+        for(NSUInteger i=0; i<coa_char_count; i++ )
         {
             AudioSampleType maxValue;
             vDSP_maxv( audioFrames + coalescedCharacters[i].location, 1, &maxValue, coalescedCharacters[i].length );
@@ -464,7 +464,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     [changedIndexes getIndexes:indexBuffer maxCount:count inIndexRange:&maximumRange];
 
     NSUInteger j = 0;
-    int i = 0;
+    NSUInteger i = 0;
     
     while( i < count && j < char_count)
     {
@@ -551,7 +551,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
         float *frames = (float *)[self.frameBuffer bytes];
         NSUInteger length = [self.frameBuffer length] / sizeof(float);
 
-        for( int i=0; i<length; i++ )
+        for( NSUInteger i=0; i<length; i++ )
             frames[i] = DCBlockFloat(frames[i]);
     }
 }
@@ -640,7 +640,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
             NSUInteger *indexes = malloc( sizeof(NSUInteger)*count );
             [idxSet getIndexes:indexes maxCount:count inIndexRange:nil];
             
-            for( int i=0; i<count; i++ )
+            for( NSUInteger i=0; i<count; i++ )
             {
                 [self updateWaveFormForCharacter:indexes[i]];
             }
@@ -788,7 +788,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     diff1 = diff2 = diff3 = diff4 = diff5 = 0.0;
     movingAverage1 = movingAverage2 = movingAverage3 = movingAverage4 = 0;
     
-    for( int i=1; i<crossingCount/4; i++ )
+    for( unsigned long i=1; i<crossingCount/4; i++ )
     {
         /* create sliding window of four consecutive differences */
         for( int j=0; j<4; j++ )
