@@ -251,6 +251,10 @@ unsigned char *memory = NULL;
                                 pc = address;
                                 break;
                             }
+                            else {
+                                pc = PopAddressFromStack( transferAddressesStack );
+                                break;
+                            }
                         case _pc_pul:
                         case _pc_ret:
                         case _pc_end:
