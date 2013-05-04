@@ -30,6 +30,7 @@
     if( observationsActive )
     {
         StAnaylizer *theAna = [self representedObject];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.readOnly"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
@@ -91,6 +92,7 @@
     HFTextView *hexView = (HFTextView *)[self view];
 
     BOOL showOffset = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"] boolValue];
+    BOOL readOnly = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.readOnly"] boolValue];
     NSString *offsetBase = [[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
     
     if( showOffset == YES && lcRepresenter == nil )
@@ -111,10 +113,12 @@
 
     BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"] boolValue];
     [[hexView controller] setInOverwriteMode:overWriteMode];
+    [[hexView controller] setEditable:!readOnly];
     [self setEditContentRanges];
     
     NSAssert(observationsActive == NO, @"HexFieldAnaylizerController: double observer fault");
     
+    [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.readOnly" options:NSKeyValueChangeSetting context:nil];
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset" options:NSKeyValueChangeSetting context:nil];
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase" options:NSKeyValueChangeSetting context:nil];
     [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode" options:NSKeyValueChangeSetting context:nil];
@@ -130,6 +134,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     BOOL showOffset = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"] boolValue];
+    BOOL readOnly = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.readOnly"] boolValue];
     NSString *offsetBase = [[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
     BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"] boolValue];
     
@@ -158,6 +163,14 @@
         if( [change objectForKey:@"new"] != [NSNull null] )
         {
             [self setLineNumberFormatString:offsetBase];
+        }
+    }
+    else if ([keyPath isEqualToString:@"optionsDictionary.HexFiendAnaylizerController.readOnly"])
+    {
+        if( [change objectForKey:@"new"] != [NSNull null] )
+        {
+            HFTextView *hexView = (HFTextView *)[self view];
+            [[hexView controller] setEditable:!readOnly];
         }
     }
     else if ([keyPath isEqualToString:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"])
@@ -280,6 +293,7 @@
 
     if( observationsActive == YES )
     {
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.readOnly"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];

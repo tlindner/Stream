@@ -11,9 +11,10 @@
 #import "StBlock.h"
 
 BOOL ValueInRanges( unsigned int value, NSArray *rangesArray );
-unsigned int PopAddressFromStack( NSMutableArray *stack );
+unsigned int PopAddressFromQueue( NSMutableArray *stack );
 void FCB_Dump( NSMutableString *result, unsigned char *memory, NSRange nilRange, NSArray *filledRanges, BOOL showAddress, BOOL showHex );
 NSString *PrintORG (NSUInteger i, NSArray *filledRanges);
+void QueueAddressOnce( unsigned short segAddress, NSMutableArray *queue );
 
 unsigned char *memory = NULL;
 #define OPCODE(address)  memory[address&0xffff]
@@ -63,14 +64,13 @@ unsigned char *memory = NULL;
                     NSNumber *transferAddressNumber = [getObject getAttributeDatawithUIName:@"ML Exec Address"];
                     
                     if (transferAddressNumber == nil) {
-                        /* no transfer address found in that block. This might be a multi segment block, so let's look for the transfer address block */
-                        StStream *sourceStream = [getObject parentStream];
-                        StBlock *transferBlock = [sourceStream blockNamed:@"Transfer 0"];
-                        transferAddressNumber = [transferBlock getAttributeDatawithUIName:@"ML Exec Address"];
+                        /* no transfer address found in that block. Just set the offset to be the transfer address */
+                        transferAddressNumber = [getObject valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"];
                     }
                     
                     if (transferAddressNumber != nil) {
-                        tlValue *transferAddress = [tlValue valueWithString:[transferAddressNumber stringValue]];
+                        NSString *transferAddressHex = [NSString stringWithFormat:@"0x%X", [transferAddressNumber intValue]];
+                        tlValue *transferAddress = [tlValue valueWithString:transferAddressHex];
                         [transferAddresses addObject:transferAddress];
                     }
                 }
@@ -100,15 +100,21 @@ unsigned char *memory = NULL;
     NSUInteger i;
     unsigned int offsetAddress;
     NSMutableArray *filledRanges;
-    NSMutableArray *transferAddressesStack = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"] mutableCopy];
-    
+    NSMutableArray *transferAddressesOptions = [[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses"];
+    BOOL showAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showAddresses"] boolValue];
+    BOOL showHex = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex"] boolValue];
+    BOOL support6309 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309"] boolValue];
+    BOOL showOS9 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9"] boolValue];
+    BOOL followPC = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC"] boolValue];
+                                              
     NSString *uti = [representedObject sourceUTI];
     if ([uti isEqualToString:@"com.microsoft.cocobasic.gapsobject"]) {
+        /* decode coco basic gaps object */
         filledRanges = [NSMutableArray array];
         i = 0;
         while (i<length) {
             
-            if (bufferBytes[i] == 0) {
+            if (i+5 < length && bufferBytes[i] == 0) {
                 /* read a block header */
 //                unsigned char segAmble;
                 unsigned short segAddress, segLength, actualLength, actualActualLength;
@@ -131,12 +137,13 @@ unsigned char *memory = NULL;
 
                     [filledRanges addObject:[NSValue valueWithRange:NSMakeRange(0, remainingLength)]];
                     memcpy(&(memory[0]), &(bufferBytes[i+5+actualActualLength]), remainingLength);
-                    
                 }
                 
                 i += 5 + segLength;
                 
-            } else if (bufferBytes[i] == 0xff) {
+                if (!followPC) QueueAddressOnce( segAddress, transferAddressesOptions );
+                
+            } else if (i+4 < length && bufferBytes[i] == 0xff) {
                 /* insert transfer address into stack if not already there */
 //                unsigned char segAmble;
                 unsigned short segAddress;
@@ -148,18 +155,7 @@ unsigned char *memory = NULL;
                 segAddress = bufferBytes[i+3] << 8;
                 segAddress += bufferBytes[i+4];
                 
-                BOOL found = NO;
-                NSString *transferString = [NSString stringWithFormat:@"%d", segAddress];
-                for (tlValue *value in transferAddressesStack) {
-                    if ([[value stringValue] isEqualToString:transferString]) {
-                        found = YES;
-                        break;
-                    }
-                }
-                
-                if (found == NO) {
-                    [transferAddressesStack addObject:[tlValue valueWithString:transferString]];
-                }
+                if (followPC) QueueAddressOnce( segAddress, transferAddressesOptions );
                 
                 break;
             }
@@ -173,16 +169,10 @@ unsigned char *memory = NULL;
         filledRanges = [NSMutableArray arrayWithObject:[NSValue valueWithRange:NSMakeRange(offsetAddress, lengthToCopy)]];
     }
 
-    
-    
-    BOOL showAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showAddresses"] boolValue];
-    BOOL showHex = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex"] boolValue];
-    BOOL support6309 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309"] boolValue];
-    BOOL showOS9 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9"] boolValue];
-    BOOL followPC = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC"] boolValue];
+    NSMutableArray *transferAddressesQueue = [transferAddressesOptions mutableCopy];
     unsigned int pc;
 
-    if (transferAddressesStack != nil && [transferAddressesStack count] > 0 && (pc = PopAddressFromStack (transferAddressesStack)) < 0xffff) {
+    if (transferAddressesQueue != nil && [transferAddressesQueue count] > 0 && (pc = PopAddressFromQueue (transferAddressesQueue)) < 0xffff) {
         NSNull *aNull = [NSNull null];
         unsigned pc_mode;
         unsigned address;
@@ -208,83 +198,90 @@ unsigned char *memory = NULL;
             os9_patch = FALSE;
         }
 
-        if (!followPC) [result appendFormat:@"; org $%04X\n",pc];
-
         do {
-            char string[30];
-            int add;
-            
-            if ([pa pointerAtIndex:pc] == NULL) {
 
-                if (showAddress) {
-                    [result appendFormat:@"%04X: ", pc];
-                }
+            if (!followPC) [result appendFormat:@"; org $%04X\n",pc];
+
+            do {
+                char string[30];
+                int add;
                 
-                add=Dasm(string,pc,&pc_mode,&address);
+                if ([pa pointerAtIndex:pc] == NULL) {
 
-                if (showHex) {
-                    for( int i=0, j=add; i<5; i++) {
-                        if (j) {
-                            j--;
-                            [result appendFormat:@"%02X ",memory[(pc+i)&0xFFFF]];
-                        }
-                        else
-                            [result appendFormat:@"   "];
+                    if (showAddress) {
+                        [result appendFormat:@"%04X: ", pc];
                     }
-                }
-                
-                if ((!showAddress)&&(!showHex)) [result appendFormat:@"\t"];
-                
-                [result appendFormat:@"%s", string];
-                
-                if (followPC) {
-                    [pa replacePointerAtIndex:pc withPointer: result];
                     
-                    for (int i=1; i<add; i++) {
-                        [pa replacePointerAtIndex:pc+i withPointer:aNull];
+                    add=Dasm(string,pc,&pc_mode,&address);
+
+                    if (showHex) {
+                        for( int i=0, j=add; i<5; i++) {
+                            if (j) {
+                                j--;
+                                [result appendFormat:@"%02X ",memory[(pc+i)&0xFFFF]];
+                            }
+                            else
+                                [result appendFormat:@"   "];
+                        }
                     }
-                         
-                    switch (pc_mode) {
-                        case _pc_jmp:
-                        case _pc_tfr:
-                            if (ValueInRanges (address, filledRanges)) {
+                    
+                    if ((!showAddress)&&(!showHex)) [result appendFormat:@"\t"];
+                    
+                    [result appendFormat:@"%s", string];
+                    
+                    if (followPC) {
+                        [pa replacePointerAtIndex:pc withPointer: result];
+                        
+                        for (int i=1; i<add; i++) {
+                            [pa replacePointerAtIndex:pc+i withPointer:aNull];
+                        }
+                             
+                        switch (pc_mode) {
+                            case _pc_jmp:
+                            case _pc_tfr:
+                                if (ValueInRanges (address, filledRanges)) {
+                                    pc = address;
+                                    break;
+                                }
+                                else {
+                                    pc = PopAddressFromQueue( transferAddressesQueue );
+                                    break;
+                                }
+                            case _pc_pul:
+                            case _pc_ret:
+                            case _pc_end:
+                                pc = PopAddressFromQueue( transferAddressesQueue );
+                                break;
+                                                            
+                            case _pc_bra:
+                                if (ValueInRanges (pc+add, filledRanges)) {
+                                    [transferAddressesQueue addObject:[tlValue valueWithString:[NSString stringWithFormat:@"%d",pc+add]]];
+                                }
+                                
                                 pc = address;
                                 break;
-                            }
-                            else {
-                                pc = PopAddressFromStack( transferAddressesStack );
+                                
+                            default:
+                                pc+=add;
                                 break;
-                            }
-                        case _pc_pul:
-                        case _pc_ret:
-                        case _pc_end:
-                            pc = PopAddressFromStack( transferAddressesStack );
-                            break;
-                                                        
-                        case _pc_bra:
-                            if (ValueInRanges (pc+add, filledRanges)) {
-                                [transferAddressesStack addObject:[tlValue valueWithString:[NSString stringWithFormat:@"%d",pc+add]]];
-                            }
-                            
-                            pc = address;
-                            break;
-                            
-                        default:
-                            pc+=add;
-                            break;
+                        }
+                        
+                        result = [NSMutableString string];
                     }
+                    else {
+                        [result appendFormat:@"\n"];
+                        pc+=add;
+                   }
                     
-                    result = [NSMutableString string];
                 }
                 else {
-                    [result appendFormat:@"\n"];
-                    pc+=add;
-               }
+                    pc = PopAddressFromQueue( transferAddressesQueue );
+                }
                 
-            }
-            else {
-                pc = PopAddressFromStack( transferAddressesStack );
-            }
+            } while (ValueInRanges(pc, filledRanges));
+            
+            pc = PopAddressFromQueue( transferAddressesQueue );
+            if (!followPC) [result appendFormat:@"\n"];
             
         } while (ValueInRanges(pc, filledRanges));
         
@@ -328,7 +325,7 @@ unsigned char *memory = NULL;
         }
     }
     
-    [transferAddressesStack release];
+    [transferAddressesQueue release];
     free(memory);
     return result;
 }
@@ -450,7 +447,7 @@ BOOL ValueInRanges( unsigned int value, NSArray *rangesArray )
     return result;
 }
 
-unsigned int PopAddressFromStack( NSMutableArray *stack )
+unsigned int PopAddressFromQueue( NSMutableArray *stack )
 {
     unsigned int result = 0x10000;
     
@@ -507,3 +504,20 @@ NSString *PrintORG (NSUInteger i, NSArray *filledRanges)
 
     return result;
 }
+
+void QueueAddressOnce( unsigned short address, NSMutableArray *queue )
+{
+    BOOL found = NO;
+    NSString *transferString = [NSString stringWithFormat:@"0x%X", address];
+    for (tlValue *value in queue) {
+        if ([value intValue] == address) {
+            found = YES;
+            break;
+        }
+    }
+
+    if (found == NO) {
+        [queue addObject:[tlValue valueWithString:transferString]];
+    }
+}
+

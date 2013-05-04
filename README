@@ -1,5 +1,16 @@
 Programmer tool to explore data.
 
+*********
+*
+*  Warning: The schema used for the Core data document type can change at anytime.
+*
+*  This means documents saved will not be openable after schema changes are made.
+*
+*********
+
+
+
+
 tim lindner
 tlindner@macmess.org
 

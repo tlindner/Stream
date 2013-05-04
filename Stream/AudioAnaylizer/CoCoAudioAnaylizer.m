@@ -324,7 +324,8 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     int bit_count = 0, bump;
     
     /* start by scanning zero crossing looking for the start of a block */
-    for (NSUInteger i=2; i<crossingCount-1; i+=2)
+    NSUInteger i;
+    for (i=2; i<crossingCount-1; i+=2)
     {
         /* test frequency of 2 zero crossings */
         even_parity >>= 1;
@@ -342,7 +343,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
             if (test1 > resyncThreshold || test2 > resyncThreshold) {
                 /* finish off byte */
                 character[char_count] = *found_parity >> 8;
-                characters[char_count].length = resyncThreshold * 8;
+                characters[char_count].length = zero_crossings[i+bump] - characters[char_count].location;
                 char_count++;
                 bit_count = 0;
                 found_parity = nil;
@@ -396,6 +397,11 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
                 bit_count = 0;
             }
         }
+    }
+    
+    if (bit_count > 0) {
+        assert(i+bump < crossingCount);
+        characters[char_count].length = zero_crossings[i+bump] - characters[char_count].location;
     }
     
     /* no need to free buffer, it was wrapped in an NSData object */
@@ -464,7 +470,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     [changedIndexes getIndexes:indexBuffer maxCount:count inIndexRange:&maximumRange];
 
     NSUInteger j = 0;
-    NSUInteger i = 0;
+    i = 0;
     
     while( i < count && j < char_count)
     {

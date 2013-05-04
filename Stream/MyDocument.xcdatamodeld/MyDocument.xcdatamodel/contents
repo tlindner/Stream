@@ -55,8 +55,8 @@
         <attribute name="bytesCache" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="customeSortOrder" attributeType="Float" defaultValueString="500"/>
         <attribute name="displayName" attributeType="String" defaultValueString="Untitled"/>
-        <attribute name="modificationDateofURL" attributeType="Date"/>
-        <attribute name="sourceURL" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
+        <attribute name="modificationDateofURL" optional="YES" attributeType="Date"/>
+        <attribute name="sourceURL" optional="YES" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
         <attribute name="sourceUTI" attributeType="String" defaultValueString="public.data"/>
         <attribute name="streamTransform" attributeType="String" defaultValueString="none"/>
         <relationship name="anaylizers" toMany="YES" minCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="StAnaylizer" inverseName="parentStream" inverseEntity="StAnaylizer"/>
