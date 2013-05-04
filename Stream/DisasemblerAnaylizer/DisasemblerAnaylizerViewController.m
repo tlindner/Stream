@@ -133,6 +133,8 @@
         } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex"]) {
             [self reloadView];
         } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC"]) {
+            BOOL followPC = [[self.lastAnaylizer valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC"] boolValue];
+            [self.lastAnaylizer setValue:[NSNumber numberWithBool:followPC ] forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddressEnable"];
             [self reloadView];
         } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.directPageValue"]) {
             [self reloadView];

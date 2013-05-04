@@ -745,6 +745,38 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: representedObject.optionsDictionary.DisasemblerAnaylizerViewController.transferAddressEnable</string>
+						<reference key="source" ref="53544854"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="53544854"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: representedObject.optionsDictionary.DisasemblerAnaylizerViewController.transferAddressEnable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.DisasemblerAnaylizerViewController.transferAddressEnable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">112</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: representedObject.optionsDictionary.DisasemblerAnaylizerViewController.transferAddressEnable</string>
+						<reference key="source" ref="1034149093"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1034149093"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: representedObject.optionsDictionary.DisasemblerAnaylizerViewController.transferAddressEnable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.DisasemblerAnaylizerViewController.transferAddressEnable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">113</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: representedObject.optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress</string>
 						<reference key="source" ref="476393440"/>
 						<reference key="destination" ref="1001"/>
@@ -1181,7 +1213,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">108</int>
+			<int key="maxID">113</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

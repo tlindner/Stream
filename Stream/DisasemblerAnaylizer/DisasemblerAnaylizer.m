@@ -106,7 +106,8 @@ unsigned char *memory = NULL;
     BOOL support6309 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309"] boolValue];
     BOOL showOS9 = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.showOS9"] boolValue];
     BOOL followPC = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC"] boolValue];
-                                              
+    NSMutableArray *transferAddressesQueue;
+    
     NSString *uti = [representedObject sourceUTI];
     if ([uti isEqualToString:@"com.microsoft.cocobasic.gapsobject"]) {
         /* decode coco basic gaps object */
@@ -160,6 +161,8 @@ unsigned char *memory = NULL;
                 break;
             }
         }
+        
+        transferAddressesQueue = [transferAddressesOptions mutableCopy];
     }
     else {
         offsetAddress = [[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress"] intValue];
@@ -167,9 +170,15 @@ unsigned char *memory = NULL;
         NSUInteger lengthToCopy = MIN( length, 0x10000-offsetAddress );
         memcpy( &memory[offsetAddress], bufferBytes, lengthToCopy);
         filledRanges = [NSMutableArray arrayWithObject:[NSValue valueWithRange:NSMakeRange(offsetAddress, lengthToCopy)]];
+        
+        if (followPC) {
+            transferAddressesQueue = [transferAddressesOptions mutableCopy];
+        } else {
+            NSString *stringExecAddressHex = [NSString stringWithFormat:@"0x%X", offsetAddress];
+            transferAddressesQueue = [[NSMutableArray alloc] initWithObjects:[tlValue valueWithString:stringExecAddressHex], nil];
+        }
     }
 
-    NSMutableArray *transferAddressesQueue = [transferAddressesOptions mutableCopy];
     unsigned int pc;
 
     if (transferAddressesQueue != nil && [transferAddressesQueue count] > 0 && (pc = PopAddressFromQueue (transferAddressesQueue)) < 0xffff) {
@@ -357,7 +366,7 @@ unsigned char *memory = NULL;
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithInt:0], @"directPageValue", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:YES], @"offsetEnable", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:YES], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:YES], @"showHex", [NSNumber numberWithBool:NO], @"followPC", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithBool:NO], @"transferAddressEnable", [NSNumber numberWithInt:0], @"directPageValue", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:YES], @"offsetEnable", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:YES], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:YES], @"showHex", [NSNumber numberWithBool:NO], @"followPC", nil] autorelease];
 }
 
 @end
@@ -474,7 +483,7 @@ void FCB_Dump( NSMutableString *result, unsigned char *memory, NSRange nilRange,
         if (intersectionRange.length > 0) {
             [result appendString:PrintORG (intersectionRange.location, filledRanges)];
             for (NSUInteger j=0; j<intersectionRange.length; j += 8) {
-                if (showAddress) [result appendFormat:@"%4X: ", intersectionRange.location+j];
+                if (showAddress) [result appendFormat:@"%04X: ", intersectionRange.location+j];
                 if (showHex) [result appendFormat:@"               "];
                 if ((!showAddress)&&(!showHex)) [result appendFormat:@"\t"];
                 [result appendFormat:@"FCB", intersectionRange.location+j];
