@@ -89,6 +89,7 @@
     
     self.lastAnaylizer = [self representedObject];
     
+    [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.directPageValue" options:NSKeyValueChangeSetting context:self];
     [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses" options:NSKeyValueChangeSetting context:self];
     [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress" options:NSKeyValueChangeSetting context:self];
     [self.lastAnaylizer addObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309" options:NSKeyValueChangeSetting context:self];
@@ -103,6 +104,7 @@
 - (void)stopObserving
 {
     if (observationsActive) {
+        [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.directPageValue" context:self];
         [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.transferAddresses" context:self];
         [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.offsetAddress" context:self];
         [self.lastAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.support6309" context:self];
@@ -131,6 +133,8 @@
         } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.showHex"]) {
             [self reloadView];
         } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.followPC"]) {
+            [self reloadView];
+        } else if ([keyPath isEqualToString:@"optionsDictionary.DisasemblerAnaylizerViewController.directPageValue"]) {
             [self reloadView];
         } else {
             NSLog( @"DisasemblerAnaylizerViewController: Unknown keypath for observerValueForKeyPath:ofObject:change:context: %@", keyPath );

@@ -343,7 +343,8 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
             if (test1 > resyncThreshold || test2 > resyncThreshold) {
                 /* finish off byte */
                 character[char_count] = *found_parity >> 8;
-                characters[char_count].length = zero_crossings[i+bump] - characters[char_count].location;
+                NSUInteger actualLength = MIN(zero_crossings[i+bump] - characters[char_count].location, resyncThreshold * 8);
+                characters[char_count].length = actualLength;
                 char_count++;
                 bit_count = 0;
                 found_parity = nil;

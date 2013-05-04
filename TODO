@@ -6,9 +6,10 @@ A record of action items I know I need to get to.
 
 • Make "Follows PC" dissasembler option know about PULS PC and PULU PC, and TFR zero into PC.
 
+• Have dissasembler mark possible PC changes.
+
 • Change option dictionary keys to use regular names, and not View Controller names.
 
 • Make a blocker that needs an accessory settings view.
 
-• Figure out why the database doesn't validate when I add a sub-stream.
-
+• Make Hex Editor View read and write.
