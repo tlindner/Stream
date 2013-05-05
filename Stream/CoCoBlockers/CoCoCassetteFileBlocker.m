@@ -32,7 +32,7 @@
 
 + (void) makeBlocks:(StStream *)stream
 {
-    NSAssert( [stream respondsToSelector:@selector(dataOfBlockNamed:)] == YES, @"CoCoCassetteFileBlocker: Incompatiable stream" );
+    NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoCassetteFileBlocker: Incompatiable stream" );
     int blockNumber = 0, fileNumber = 0;
     int noteFileType, noteDataType, noteGaps;
     
@@ -42,7 +42,7 @@
     noteDataType = -1;
     noteGaps = -1;
     NSString *currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
-    StBlock *theBlock = [stream blockNamed:currentBlock];
+    StBlock *theBlock = [stream topLevelBlockNamed:currentBlock];
 
     if( theBlock == nil ) return;
     
@@ -95,7 +95,7 @@
             }
             
            currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
-            theBlock = [stream blockNamed:currentBlock];
+            theBlock = [stream topLevelBlockNamed:currentBlock];
             if( theBlock == nil ) break;
             attributeDataObject = [theBlock getAttributeData];
             data = (unsigned char *)[attributeDataObject bytes];
@@ -104,7 +104,7 @@
                 [newFile addDataRange:currentBlock start:0 length:0];
                 
                 currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
-                theBlock = [stream blockNamed:currentBlock];
+                theBlock = [stream topLevelBlockNamed:currentBlock];
                 
                 if( theBlock == nil ) break;
                 
@@ -126,7 +126,7 @@
         noteGaps = -1;
         
         currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
-        theBlock = [stream blockNamed:currentBlock];
+        theBlock = [stream topLevelBlockNamed:currentBlock];
 
         if( theBlock == nil ) break;
 

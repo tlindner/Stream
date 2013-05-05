@@ -454,7 +454,7 @@ typedef struct
         for (NSUInteger i=1; i<[anaylizers count]; i++)
         {
             StAnaylizer *theAna = [anaylizers objectAtIndex:i];
-            NSSet *blocksSet = [stream blocksWithKey:[theAna anaylizerKind]];
+            NSSet *blocksSet = [stream blocksWithAnaylizerKey:[theAna anaylizerKind]];
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
             NSArray *blocksArray = [blocksSet sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
             NSArray *nameArray = [blocksArray valueForKey:@"name"];

@@ -198,8 +198,8 @@
 
 - (IBAction)ConfigurableButton1:(id)sender
 {
-    #pragma unused(sender)
-   /* this should be hooked up the the anaylize button */
+#pragma unused(sender)
+    /* this should be hooked up the the anaylize button */
     
     StAnaylizer *theAna = [self representedObject];
     CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[theAna anaylizerObject];
@@ -208,6 +208,20 @@
     
     [wfv getSelectionOrigin:&origin width:&width];
     [modelObject determineFrequencyOrigin:origin width:width];    
+}
+
+- (IBAction)ConfigurableButton2:(id)sender
+{
+#pragma unused(sender)
+    /* this should be hooked up the the Zero button */
+    
+    StAnaylizer *theAna = [self representedObject];
+    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[theAna anaylizerObject];
+    WaveFormView *wfv = [self.scroller documentView];
+    NSUInteger origin, width;
+    
+    [wfv getSelectionOrigin:&origin width:&width];
+    [modelObject zeroSamplesOrigin:origin width:width];
 }
 
 -(NSString *)nibName

@@ -20,6 +20,7 @@
         <relationship name="edits" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="AnaylizerEdit" inverseName="parent" inverseEntity="AnaylizerEdit" syncable="YES"/>
         <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream"/>
     </entity>
+    <entity name="StBaseBlock" syncable="YES"/>
     <entity name="StBlock" representedClassName="StBlock">
         <attribute name="anaylizerKind" optional="YES" attributeType="String"/>
         <attribute name="checkBytes" optional="YES" attributeType="Binary"/>
@@ -35,6 +36,7 @@
         <attribute name="name" attributeType="String" defaultValueString="untitled"/>
         <attribute name="offset" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
+        <attribute name="repeat" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="resultingUTI" optional="YES" attributeType="String"/>
         <attribute name="source" optional="YES" attributeType="String"/>
         <attribute name="sourceUTI" attributeType="String" defaultValueString="public.data"/>
@@ -69,8 +71,9 @@
     <elements>
         <element name="AnaylizerEdit" positionX="160" positionY="192" width="128" height="105"/>
         <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="210"/>
-        <element name="StBlock" positionX="0" positionY="0" width="0" height="390"/>
+        <element name="StBlock" positionX="0" positionY="0" width="0" height="405"/>
         <element name="StreamEdit" positionX="160" positionY="192" width="128" height="105"/>
         <element name="StStream" positionX="0" positionY="0" width="0" height="240"/>
+        <element name="StBaseBlock" positionX="160" positionY="192" width="128" height="45"/>
     </elements>
 </model>

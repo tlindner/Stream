@@ -51,6 +51,7 @@
 - (StAnaylizer *)previousAnaylizer;
 
 - (IBAction)ConfigurableButton1:(id)sender;
+- (IBAction)ConfigurableButton2:(id)sender;
 
 @end
 
@@ -84,6 +85,7 @@
 
 @interface NSViewController (StreamViewControllerExtras)
 - (IBAction)ConfigurableButton1:(id)sender;
+- (IBAction)ConfigurableButton2:(id)sender;
 @end
 
 @interface NSObject (StAnaylizerExtensions)

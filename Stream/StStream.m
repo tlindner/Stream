@@ -26,7 +26,22 @@
 @dynamic parentStream;
 @dynamic sourceBlock;
 
-- (NSData *)dataOfBlockNamed:(NSString *)name
+@synthesize topLevelBlocks;
+
+- (NSMutableDictionary *)topLevelBlocks
+{
+    if (topLevelBlocks == nil) {
+        topLevelBlocks = [[NSMutableDictionary alloc] init];
+    
+        for (StBlock *tlb in self.blocks) {
+            [topLevelBlocks setObject:tlb forKey:tlb.name];
+        }
+    }
+
+    return topLevelBlocks;
+}
+
+- (NSData *)dataOfTopLevelBlockNamed:(NSString *)name
 {
     NSData *result = nil;
     
@@ -37,37 +52,16 @@
     else
     {
         /* find block and returned it's data */
-        result = [[self blockNamed:name] getData];
+        result = [[self topLevelBlockNamed:name] getData];
     }
     
     return result;
 }
 
-- (StBlock *)blockNamed:(NSString *)theName
+- (StBlock *)topLevelBlockNamed:(NSString *)theName
 {
-    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-    [request setEntity:entity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (name == %@)", self, theName ];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *resultBlockArray = [self.managedObjectContext executeFetchRequest:request error:&error];
-    
-    if( error == nil )
-    {
-        if( resultBlockArray != nil && [resultBlockArray count] == 1 )
-        {
-            return [resultBlockArray objectAtIndex:0];
-        }
-        else if( resultBlockArray != nil && [resultBlockArray count] > 1 )
-        {
-            NSAssert(YES==NO, @"blockNamed: more than one blocks named: %@ found: %@", theName, resultBlockArray);
-        }
-    }
-    else
-        NSAssert(YES==NO, @"blockNamed: Error fetching block: %@", error);
-    
-    return nil;
+    StBlock *result = [self.topLevelBlocks objectForKey:theName];
+    return result;
 }
 
 - (StBlock *)startNewBlockNamed:(NSString *)name owner:(NSString *)owner
@@ -78,7 +72,7 @@
         return nil;
     }
     
-    StBlock *newBlock = [self blockNamed:name];
+    StBlock *newBlock = [self topLevelBlockNamed:name];
     
     if( regeneratingBlocks == YES )
     {
@@ -142,55 +136,45 @@
 - (StBlock *)makeNewBlockNamed:(NSString *)name owner:(NSString *)owner
 {
     /* See if named block already exists */
-    
-    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-    [request setEntity:entity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (name == %@)", self, name ];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
-    
-    if( error == nil )
-    {
-        if( result != nil && [result count] == 0 )
-        {
-            /* ok, create new block */
-            StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-            newBlock.name = name;
-            newBlock.anaylizerKind = owner;
-            [self addBlocksObject:newBlock];
-            
-            StBlock *newDataBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-            newDataBlock.name = @"data";
-            newDataBlock.sourceUTI = @"public.data";
-            [newBlock addBlocksObject:newDataBlock];
-            
-            StBlock *newAttributeBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-            newAttributeBlock.name = @"attributes";
-            newAttributeBlock.sourceUTI = @"org.macmess.stream.attribute";
-            newAttributeBlock.currentEditorView = @"Block Attribute View";
-            [newBlock addBlocksObject:newAttributeBlock];
-            
-            StBlock *newdependenciesBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-            newdependenciesBlock.name = @"dependencies";
-            newdependenciesBlock.sourceUTI = @"public.data";
-            [newBlock addBlocksObject:newdependenciesBlock];
-            
-            StBlock *newIntrinsicsBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-            newIntrinsicsBlock.name = @"intrinsic";
-            newIntrinsicsBlock.sourceUTI = @"public.data";
-            [newBlock addBlocksObject:newIntrinsicsBlock];
-            
-            return newBlock;
-        }
-        else
-            NSLog( @"startNewBlockNamed: block already exists: %@", name );
+    StBlock *result = [self.topLevelBlocks objectForKey:name];
+
+    if ( result == nil) {
+        /* ok, create new block */
+        StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        newBlock.name = name;
+        newBlock.anaylizerKind = owner;
+        [self addBlocksObject:newBlock];
+        
+        StBlock *newDataBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        newDataBlock.name = @"data";
+        newDataBlock.sourceUTI = @"public.data";
+        [newBlock addBlocksObject:newDataBlock];
+        
+        StBlock *newAttributeBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        newAttributeBlock.name = @"attributes";
+        newAttributeBlock.sourceUTI = @"org.macmess.stream.attribute";
+        newAttributeBlock.currentEditorView = @"Block Attribute View";
+        [newBlock addBlocksObject:newAttributeBlock];
+        
+        StBlock *newdependenciesBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        newdependenciesBlock.name = @"dependencies";
+        newdependenciesBlock.sourceUTI = @"public.data";
+        [newBlock addBlocksObject:newdependenciesBlock];
+        
+        StBlock *newIntrinsicsBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        newIntrinsicsBlock.name = @"intrinsic";
+        newIntrinsicsBlock.sourceUTI = @"public.data";
+        [newBlock addBlocksObject:newIntrinsicsBlock];
+        
+        [self.topLevelBlocks setObject:newBlock forKey:name];
+        result = newBlock;
     }
     else
-        NSLog(@"startNewBlockNamed: fetch error: %@", error);
+    {
+        NSLog( @"startNewBlockNamed: block already exists: %@", name );
+    }
     
-    return nil;
+    return result;
 }
 
 - (StAnaylizer *)lastFilterAnayliser
@@ -217,23 +201,17 @@
         return [[self anaylizers] objectAtIndex:theIndex - 1];
 }
 
-- (NSArray *)blocksWithKey:(NSString *)key
+- (NSArray *)blocksWithAnaylizerKey:(NSString *)key
 {
-    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-    [request setEntity:entity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (anaylizerKind == %@)", self, key ];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
+    NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
     
-    if( error == nil )
-        return result;
-    else
-    {
-        NSLog( @"Error during blocksWithKey fetch: %@", key );
-        return nil;
-    }    
+    for (StBlock *aBlock in self.blocks) {
+        if ([aBlock.anaylizerKind isEqualToString:key]) {
+            [result addObject:aBlock];
+        }
+    }
+    
+    return result;
 }
 
 - (void)setBlock:(StBlock *)theBlock withData:(NSData *)theData
@@ -385,14 +363,20 @@
 
 - (BOOL)isBlockEdited:(NSString *)blockName
 {
-    StBlock *aBlock = [self blockNamed:blockName];
+    StBlock *aBlock = [self topLevelBlockNamed:blockName];
     return [aBlock isEdit];
 }
 
 - (BOOL)isBlockFailed:(NSString *)blockName
 {
-    StBlock *aBlock = [self blockNamed:blockName];
+    StBlock *aBlock = [self topLevelBlockNamed:blockName];
     return [aBlock isFail];
+}
+
+- (void)dealloc
+{
+    [topLevelBlocks release];
+    [super dealloc];
 }
 
 @end

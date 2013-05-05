@@ -10,6 +10,7 @@
 #import "CoCoCassetteBlocker.h"
 #import "CoCoCassetteFileBlocker.h"
 #import "CoCoSegmentedObjectBlocker.h"
+#import "DunfieldImageDisk.h"
 
 @implementation AppDelegate
 
@@ -42,6 +43,11 @@
     
     newMenuItem = [[NSMenuItem alloc] initWithTitle:@"CoCo Segmented Object Blocker" action:@selector(makeNewBlocker:) keyEquivalent:@""];
     [newMenuItem setRepresentedObject:[CoCoSegmentedObjectBlocker class]];
+    [blocksMenu addItem:newMenuItem];
+    [newMenuItem release];
+
+    newMenuItem = [[NSMenuItem alloc] initWithTitle:@"Dave Dunfield Image Disk Blocker" action:@selector(makeNewBlocker:) keyEquivalent:@""];
+    [newMenuItem setRepresentedObject:[DunfieldImageDisk class]];
     [blocksMenu addItem:newMenuItem];
     [newMenuItem release];
 }

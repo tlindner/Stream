@@ -40,5 +40,6 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 - (NSURL*) makeTemporaryWavFileWithData: (NSData *)data;
 - (NSURL*) makeWavFile:(NSURL *)waveFile withData:(NSData *)data;
 - (void) determineFrequencyOrigin:(NSUInteger)origin width:(NSUInteger)width;
+- (void) zeroSamplesOrigin:(NSUInteger)origin width:(NSUInteger)width;
 
 @end

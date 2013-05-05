@@ -36,6 +36,7 @@
 @property (nonatomic, retain) NSString * resultingUTI;
 @property (nonatomic) int64_t index;
 @property (nonatomic) BOOL markForDeletion;
+@property (nonatomic) BOOL repeat;
 @property (nonatomic, retain) StStream *parentStream;
 @property (nonatomic, retain) StStream *sourceSubStreamParent;
 @property (nonatomic, retain) StBlock *parentBlock;
@@ -58,11 +59,12 @@
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length;
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length expectedLength:(NSUInteger)expectedLength repeat:(BOOL)repeat;
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name;
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify;
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name transformation:(NSString *)transform;
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
-
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform expectedLength:(NSUInteger)expectedLength repeat:(BOOL)repeat;
 - (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;

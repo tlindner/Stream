@@ -22,8 +22,8 @@
     
     return self;
 }
-- (IBAction)ConfigurableButton1:(id)sender {
-
+- (IBAction)ConfigurableButton1:(id)sender
+{
     StAnaylizer *anaylizer = [self representedObject];
     
     if ([anaylizer respondsToSelector:@selector(ConfigurableButton1:)]) {
@@ -31,4 +31,12 @@
     }
 }
 
+- (IBAction)ConfigurableButton2:(id)sender
+{
+    StAnaylizer *anaylizer = [self representedObject];
+    
+    if ([anaylizer respondsToSelector:@selector(ConfigurableButton2:)]) {
+        [anaylizer ConfigurableButton2:sender];
+    }
+}
 @end

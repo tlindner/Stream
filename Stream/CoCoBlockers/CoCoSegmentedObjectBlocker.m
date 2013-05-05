@@ -31,11 +31,11 @@
 
 + (void) makeBlocks:(StStream *)stream
 {
-    NSAssert( [stream respondsToSelector:@selector(dataOfBlockNamed:)] == YES, @"CoCoSegmentedObjectBlocker: Incompatiable stream" );
+    NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoSegmentedObjectBlocker: Incompatiable stream" );
     int segmentNumber, transferNumber;
     NSUInteger i;
     
-    NSData  *streamBytesObject = [stream dataOfBlockNamed:@"stream"];
+    NSData  *streamBytesObject = [stream dataOfTopLevelBlockNamed:@"stream"];
     NSAssert( streamBytesObject != nil, @"CoCoSegmentedObjectBlocker: no stream object" );
     
     unsigned char *streamBytes = (unsigned char *)[streamBytesObject bytes];

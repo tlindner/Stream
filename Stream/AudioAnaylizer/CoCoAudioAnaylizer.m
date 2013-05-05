@@ -818,8 +818,22 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
 
     [theAna setValue:[NSNumber numberWithFloat:movingAverageLow] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
     [theAna setValue:[NSNumber numberWithFloat:movingAverageHigh] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
-    
+    [theAna setValue:[NSNumber numberWithFloat:movingAverageLow/2.0] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
+   
     free( zero_crossings );
+}
+
+- (void) zeroSamplesOrigin:(NSUInteger)origin width:(NSUInteger)width
+{
+    StAnaylizer *theAna = [self representedObject];
+    float *frames = (float *)[self.frameBuffer bytes];
+    float divisor = 0.0;
+    
+    vDSP_vsmul( frames, 1, &divisor, &(frames[origin]), 1, width );
+    
+    NSData *zeros = [NSData dataWithBytes:&(frames[origin]) length:width * sizeof(float)]; 
+    [theAna poseEdit:zeros range:NSMakeRange(origin, width)];
+    [self anaylizeAudioData];
 }
 
 + (NSArray *)anaylizerUTIs

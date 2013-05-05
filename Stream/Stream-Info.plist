@@ -203,6 +203,23 @@
 			<key>UTTypeTagSpecification</key>
 			<dict/>
 		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Dave Dunfield Disk Image Format</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.dunfield.imgdisk</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>IMD</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>

@@ -23,6 +23,7 @@
 @dynamic checkBytes;
 @dynamic source;
 @dynamic index;
+@dynamic repeat;
 @dynamic parentStream;
 @dynamic parentBlock;
 @dynamic blocks;
@@ -166,25 +167,35 @@
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length
 {
-    [self addDataRange:blockName start:start length:length name:nil verification:nil transformation:nil];
+    [self addDataRange:blockName start:start length:length name:nil verification:nil transformation:nil expectedLength:length repeat:NO];
+}
+
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length expectedLength:(NSUInteger)expectedLength repeat:(BOOL)repeat
+{
+    [self addDataRange:blockName start:start length:length name:nil verification:nil transformation:nil expectedLength:expectedLength repeat:repeat];
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name
 {
-    [self addDataRange:blockName start:start length:length name:name verification:nil transformation:nil];
+    [self addDataRange:blockName start:start length:length name:name verification:nil transformation:nil expectedLength:length repeat:NO];
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify
 {
-    [self addDataRange:blockName start:start length:length name:name verification:verify transformation:nil];
+    [self addDataRange:blockName start:start length:length name:name verification:verify transformation:nil expectedLength:length repeat:NO];
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name transformation:(NSString *)transform
 {
-    [self addDataRange:blockName start:start length:length name:name verification:nil transformation:transform];
+    [self addDataRange:blockName start:start length:length name:name verification:nil transformation:transform expectedLength:length repeat:NO];
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
+{
+    [self addDataRange:blockName start:start length:length name:name verification:verify transformation:transform expectedLength:length repeat:NO];
+}
+
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform expectedLength:(NSUInteger)expectedLength repeat:(BOOL)repeat
 {
     StBlock *dataBlock = [self subBlockNamed:@"data"];
     StBlock *newBlock = [dataBlock subBlockAtIndex:dataIndex];
@@ -215,9 +226,11 @@
     newBlock.index = dataIndex++;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
+    newBlock.repeat = repeat;
+    newBlock.expectedSize = expectedLength;
     
     [dataBlock addBlocksObject:newBlock];
-    self.expectedSize += length;
+    self.expectedSize += expectedLength;
     
     [self checkEdited:newBlock];
     [self checkFail:newBlock];
@@ -305,7 +318,7 @@
     };
     
     NSSet *dataBlockSet = [self.blocks objectsPassingTest:predicate];
-    NSAssert( [dataBlockSet count] == 1, @"StBlock: blockNamed: could not find block named: %@", inName );
+    NSAssert( [dataBlockSet count] == 1, @"StBlock: topLevelBlockNamed: could not find block named: %@", inName );
     return [dataBlockSet anyObject];
 }
 
@@ -379,7 +392,7 @@
         }
         else
         {
-            NSRange fullRange = [[[self getStream] blockNamed:self.source] getUnionRange];
+            NSRange fullRange = [[[self getStream] topLevelBlockNamed:self.source] getUnionRange];
             NSUInteger useLength = self.length;
             
             if (useLength == 0) {
@@ -429,7 +442,7 @@
             
             for (StBlock *theBlock in subBlocks)
             {
-                NSData *blockData = [ourStream dataOfBlockNamed:theBlock.source];
+                NSData *blockData = [ourStream dataOfTopLevelBlockNamed:theBlock.source];
                 NSUInteger useLength;
                 
                 if( theBlock.length == 0 )
@@ -449,7 +462,7 @@
     {
         /* This is a leaf block */
         StStream *ourStream = [self getStream];
-        NSData *blockData = [ourStream dataOfBlockNamed:self.source];
+        NSData *blockData = [ourStream dataOfTopLevelBlockNamed:self.source];
         NSUInteger useLength;
         
         if( self.length == 0 )
@@ -460,8 +473,19 @@
         else
             useLength = self.length;
         
+        
         NSRange theRange = NSMakeRange(self.offset, useLength);
         result = [[blockData subdataWithRange:theRange] mutableCopy];
+ 
+        NSUInteger exSz = self.expectedSize;
+        if (self.repeat) {
+            while ([result length] < exSz) {
+                [result appendData:result];
+            }
+            
+            [result setLength:exSz];
+        }
+
         [result autorelease];
     }
     
@@ -572,7 +596,7 @@
             }
             else
             {
-                StBlock *subBlock = [[self getStream] blockNamed:aBlock.source];
+                StBlock *subBlock = [[self getStream] topLevelBlockNamed:aBlock.source];
                 byteWritten = [subBlock writeByte:byte atOffset:offset - place];
             }
         }
@@ -769,13 +793,13 @@
             if( self.length == 0 )
             {
                 StStream *ourStream = [self getStream];
-                NSData *blockData = [ourStream dataOfBlockNamed:self.source];
+                NSData *blockData = [ourStream dataOfTopLevelBlockNamed:self.source];
                 range = NSMakeRange( self.offset, [blockData length] - self.offset );
             }
             else
                 range = NSMakeRange( self.offset, self.length );
 
-            NSMutableIndexSet *set = [[[self getStream] blockNamed:self.source] editSet];
+            NSMutableIndexSet *set = [[[self getStream] topLevelBlockNamed:self.source] editSet];
             NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:
                                               ^(NSUInteger idx, BOOL *stop){
                                                   #pragma unused(idx)

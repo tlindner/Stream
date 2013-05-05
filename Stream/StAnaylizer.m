@@ -368,6 +368,14 @@
     }
 }
 
+- (IBAction)ConfigurableButton2:(id)sender
+{
+    if( [viewController respondsToSelector:@selector(ConfigurableButton2:)] )
+    {
+        [viewController ConfigurableButton2:(id)sender];
+    }
+}
+
 - (void) poseEdit:(NSData *)data range:(NSRange)range
 {
     [self postEdit:data atLocation:range.location withLength:range.length];

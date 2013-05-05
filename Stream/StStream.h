@@ -21,6 +21,7 @@
 {
 @private
     BOOL regeneratingBlocks;
+    NSMutableDictionary *topLevelBlocks;
 }
 
 @property (nonatomic, retain) NSData * bytesCache;
@@ -36,15 +37,16 @@
 @property (nonatomic, retain) NSOrderedSet * edits;
 @property (nonatomic, retain) StStream * parentStream;
 @property (nonatomic, retain) StBlock * sourceBlock;
+@property (nonatomic, retain) NSMutableDictionary *topLevelBlocks;
 
-- (NSData *) dataOfBlockNamed:(NSString *)name;
+- (NSData *) dataOfTopLevelBlockNamed:(NSString *)name;
 - (StBlock *) startNewBlockNamed:(NSString *)name owner:(NSString *)owner;
 - (StBlock *) makeNewBlockNamed:(NSString *)name owner:(NSString *)owner;
-- (NSSet *) blocksWithKey:(NSString *)key;
+- (NSSet *) blocksWithAnaylizerKey:(NSString *)key;
 - (void) setBlock:(StBlock *)theBlock withData:(NSData *)theData;
 - (void) setBlock:(StBlock *)theBlock withData:(NSData *)theData inRange:(NSRange)range;
 - (StAnaylizer *) lastFilterAnayliser;
-- (StBlock *) blockNamed:(NSString *)theName;
+- (StBlock *) topLevelBlockNamed:(NSString *)theName;
 - (StAnaylizer *) previousAnayliser:(StAnaylizer *)inAna;
 - (void) regenerateAllBlocks;
 - (void) markBlocksForDeletion;
