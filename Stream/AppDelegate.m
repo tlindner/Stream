@@ -12,6 +12,13 @@
 #import "CoCoSegmentedObjectBlocker.h"
 #import "DunfieldImageDisk.h"
 
+@interface NSObject (BlockerExtension)
++ (NSString *)anayliserName;
++ (NSString *)anaylizerKey;
++ (NSString *)AnaylizerPopoverAccessoryViewNib;
++ (NSMutableDictionary *)defaultOptions;
+@end
+
 @implementation AppDelegate
 
 @synthesize blocksMenu;
@@ -31,25 +38,28 @@
     #pragma unused(notification)
     //NSLog( @"Im alive: %@", notification );
 
-    NSMenuItem *newMenuItem = [[NSMenuItem alloc] initWithTitle:@"CoCo Cassette Blocker" action:@selector(makeNewBlocker:) keyEquivalent:@""];
-    [newMenuItem setRepresentedObject:[CoCoCassetteBlocker class]];
-    [blocksMenu addItem:newMenuItem];
-    [newMenuItem release];
-
-    newMenuItem = [[NSMenuItem alloc] initWithTitle:@"CoCo Cassette File Blocker" action:@selector(makeNewBlocker:) keyEquivalent:@""];
-    [newMenuItem setRepresentedObject:[CoCoCassetteFileBlocker class]];
-    [blocksMenu addItem:newMenuItem];
-    [newMenuItem release];
+    NSArray *blockers = [NSArray arrayWithObjects:[CoCoCassetteBlocker class], [CoCoCassetteFileBlocker class], [CoCoSegmentedObjectBlocker class], [DunfieldImageDisk class] , nil];
     
-    newMenuItem = [[NSMenuItem alloc] initWithTitle:@"CoCo Segmented Object Blocker" action:@selector(makeNewBlocker:) keyEquivalent:@""];
-    [newMenuItem setRepresentedObject:[CoCoSegmentedObjectBlocker class]];
-    [blocksMenu addItem:newMenuItem];
-    [newMenuItem release];
-
-    newMenuItem = [[NSMenuItem alloc] initWithTitle:@"Dave Dunfield Image Disk Blocker" action:@selector(makeNewBlocker:) keyEquivalent:@""];
-    [newMenuItem setRepresentedObject:[DunfieldImageDisk class]];
-    [blocksMenu addItem:newMenuItem];
-    [newMenuItem release];
+    for (Class blocker in blockers) {
+        NSString *subMenuName = [[[blocker anayliserName] componentsSeparatedByString:@" "] objectAtIndex:0];
+        NSMenuItem *subMenuItem = [blocksMenu itemWithTitle:subMenuName];
+        NSMenu *subMenu;
+        
+        if (subMenuItem == nil) {
+            NSMenuItem *mainItem = [[[NSMenuItem alloc] init] autorelease];
+            [mainItem setTitle:subMenuName];
+            subMenu = [[[NSMenu alloc] initWithTitle:subMenuName] autorelease];
+            [blocksMenu addItem:mainItem];
+            [blocksMenu setSubmenu:subMenu forItem:mainItem];
+        }
+        else {
+            subMenu = [subMenuItem submenu];
+        }
+        
+        NSMenuItem *newMenuItem = [[NSMenuItem alloc] initWithTitle:[blocker anayliserName] action:@selector(makeNewBlocker:) keyEquivalent:@""];
+        [newMenuItem setRepresentedObject:[blocker class]];
+        [subMenu addItem:newMenuItem];
+    }
 }
 
 @end

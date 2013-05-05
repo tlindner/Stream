@@ -87,6 +87,7 @@
 		77DA26CD1421BAA2007BE635 /* BlockerViewOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */; };
 		77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */; };
 		77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */; };
+		77ED69111737092C0024397E /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77ED69101737092C0024397E /* Quartz.framework */; };
 		77F2045613DD3AD000FA5B1F /* HFBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FC13DD3ACF00FA5B1F /* HFBTree.m */; settings = {COMPILER_FLAGS = "-Wno-all -Wno-extra"; }; };
 		77F2045713DD3AD000FA5B1F /* HFBTreeByteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FE13DD3ACF00FA5B1F /* HFBTreeByteArray.m */; settings = {COMPILER_FLAGS = "-Wno-all -Wno-extra"; }; };
 		77F2045813DD3AD000FA5B1F /* HFByteArray_FileWriting.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FF13DD3ACF00FA5B1F /* HFByteArray_FileWriting.m */; settings = {COMPILER_FLAGS = "-Wno-all -Wno-extra"; }; };
@@ -160,7 +161,7 @@
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
 		7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewAutoLayoutSubView.m; path = Stream/ViewAutoLayoutSubView.m; sourceTree = "<group>"; };
 		771AD294141D06C800E0FE41 /* CoCoAudioAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoAudioAnaylizer.h; path = Stream/AudioAnaylizer/CoCoAudioAnaylizer.h; sourceTree = "<group>"; };
-		771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoAudioAnaylizer.m; path = Stream/AudioAnaylizer/CoCoAudioAnaylizer.m; sourceTree = "<group>"; };
+		771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CoCoAudioAnaylizer.m; path = Stream/AudioAnaylizer/CoCoAudioAnaylizer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		771AD298141D414B00E0FE41 /* HexFiendAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnaylizer.h; path = Stream/HexFiendAnaylizer.h; sourceTree = "<group>"; };
 		771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnaylizer.m; path = Stream/HexFiendAnaylizer.m; sourceTree = "<group>"; };
 		771AD29B141D431400E0FE41 /* BlockerDataAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataAnaylizer.h; path = Stream/BlockerDataAnaylizer.h; sourceTree = "<group>"; };
@@ -276,9 +277,9 @@
 		77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerEdit.h; path = Stream/AnaylizerEdit.h; sourceTree = "<group>"; };
 		77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerEdit.m; path = Stream/AnaylizerEdit.m; sourceTree = "<group>"; };
 		77B617FB172B8A81008E8F1A /* TextAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextAnaylizer.h; path = Stream/TextAnaylizer/TextAnaylizer.h; sourceTree = "<group>"; };
-		77B617FC172B8A81008E8F1A /* TextAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextAnaylizer.m; path = Stream/TextAnaylizer/TextAnaylizer.m; sourceTree = "<group>"; };
+		77B617FC172B8A81008E8F1A /* TextAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TextAnaylizer.m; path = Stream/TextAnaylizer/TextAnaylizer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		77B617FE172B8BA1008E8F1A /* TextAnaylizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextAnaylizerViewController.h; path = Stream/TextAnaylizer/TextAnaylizerViewController.h; sourceTree = "<group>"; };
-		77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextAnaylizerViewController.m; path = Stream/TextAnaylizer/TextAnaylizerViewController.m; sourceTree = "<group>"; };
+		77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TextAnaylizerViewController.m; path = Stream/TextAnaylizer/TextAnaylizerViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		77B61800172B8BA1008E8F1A /* TextAnaylizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextAnaylizerViewController.xib; path = Stream/TextAnaylizer/TextAnaylizerViewController.xib; sourceTree = "<group>"; };
 		77B61803172B8CD3008E8F1A /* TextAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextAccessoryView.xib; path = Stream/TextAnaylizer/TextAccessoryView.xib; sourceTree = "<group>"; };
 		77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnaylizerController.h; path = Stream/HexFiendAnaylizerController.h; sourceTree = "<group>"; };
@@ -299,6 +300,7 @@
 		77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CoCoCassetteFileBlocker.m; path = Stream/CoCoBlockers/CoCoCassetteFileBlocker.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		77E9E6EA173379110027C7E9 /* BlockIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = BlockIcon.psd; sourceTree = "<group>"; };
 		77E9E6EF17337F6B0027C7E9 /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		77ED69101737092C0024397E /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		77F203FA13DD3ACF00FA5B1F /* HexFiend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiend.h; path = Stream/HexFiend/HexFiend.h; sourceTree = "<group>"; };
 		77F203FB13DD3ACF00FA5B1F /* HFBTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HFBTree.h; path = Stream/HexFiend/HFBTree.h; sourceTree = "<group>"; };
 		77F203FC13DD3ACF00FA5B1F /* HFBTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HFBTree.m; path = Stream/HexFiend/HFBTree.m; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77ED69111737092C0024397E /* Quartz.framework in Frameworks */,
 				77793EBB1723A29800E607F6 /* QuartzCore.framework in Frameworks */,
 				7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */,
 				7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */,
@@ -448,6 +451,7 @@
 		7759CF2713DBA1A200789DB3 = {
 			isa = PBXGroup;
 			children = (
+				77ED69101737092C0024397E /* Quartz.framework */,
 				774A181613FAB01500510032 /* LICENSE */,
 				775ED2CD13DCF86500BC96C9 /* README */,
 				77E9E6EF17337F6B0027C7E9 /* TODO */,

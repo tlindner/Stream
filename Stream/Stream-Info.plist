@@ -129,7 +129,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Color Computer Binary BASIC File</string>
+			<string>CoCo Binary BASIC File</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.microsoft.cocobasic.binary</string>
 			<key>UTTypeTagSpecification</key>
@@ -146,7 +146,7 @@
 				<string>public.text</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Color Computer ASCII BASIC File</string>
+			<string>CoCo ASCII BASIC File</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.microsoft.cocobasic.ascii</string>
 			<key>UTTypeTagSpecification</key>
@@ -163,7 +163,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Color Computer Binary Executable</string>
+			<string>CoCo Binary Executable</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.microsoft.cocobasic.object</string>
 			<key>UTTypeTagSpecification</key>
@@ -180,7 +180,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Color Computer Binary Segemented Executable</string>
+			<string>CoCo Binary Segemented Executable</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.microsoft.cocobasic.gapsobject</string>
 			<key>UTTypeTagSpecification</key>
@@ -197,7 +197,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Color Computer Decoded Audio File</string>
+			<string>CoCo Decoded Audio File</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.microsoft.cocobasic.tape</string>
 			<key>UTTypeTagSpecification</key>

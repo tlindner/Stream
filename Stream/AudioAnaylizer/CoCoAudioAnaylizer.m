@@ -843,7 +843,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
 
 + (NSString *)anayliserName
 {
-    return @"Color Computer Audio Anaylizer";
+    return @"CoCo Audio Anaylizer";
 }
 
 + (NSString *)anaylizerKey

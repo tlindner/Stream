@@ -48,7 +48,7 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
     {
         NSString *uti = [ro sourceUTI];
         if ([uti isEqualToString:@"com.microsoft.cocobasic.binary"]) {
-            [ro setValue:@"Tokenized Color Computer BASIC Program" forKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
+            [ro setValue:@"Tokenized CoCo BASIC Program" forKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
         }
     }
     
@@ -96,7 +96,7 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
             /* The system can decode this */
             result = [[[NSString alloc] initWithData:bytes encoding:encoding] autorelease];
         }
-        else if ([encodingStringRep isEqualToString:@"Tokenized Color Computer BASIC Program"]) {
+        else if ([encodingStringRep isEqualToString:@"Tokenized CoCo BASIC Program"]) {
             TextAnaylizer *modelObject = (TextAnaylizer *)[object anaylizerObject];
             result = [modelObject decodeColorComputerBASIC:bytes];
         }

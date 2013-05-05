@@ -16,7 +16,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
 
 + (NSString *)anayliserName
 {
-    return @"Dave Dunfield Image Disk Blocker";
+    return @"Dunfield Image Disk Blocker";
 }
 
 + (NSString *)anaylizerKey
@@ -145,7 +145,6 @@ NSUInteger CalculateSectorSize( unsigned char value );
                         actualLength = MIN(sectorSize, length - i);
 
                         [newBlock addDataRange:@"stream" start:i length:1 expectedLength:sectorSize repeat:YES];
-
                         [newBlock addAttributeRange:@"stream" start:i-1 length:1 name:@"Sector Type" verification:[NSData dataWithBytes:&sectorIdealType length:1] transformation:@"BlocksUnsignedBigEndian"];
                         newBlock.sourceUTI = newBlock.resultingUTI = @"public.data";
                         i++;

@@ -20,6 +20,9 @@
 @synthesize streamListView;
 @synthesize zoomCursor;
 @synthesize listView;
+@synthesize leftSplitView;
+@synthesize imageView;
+@synthesize pictureURLs;
 
 - (id)init
 {
@@ -73,7 +76,35 @@
                 
                 self.observingStream = selectedStream;
                 [observingStream addObserver:self forKeyPath:@"anaylizers" options:0 context:self];
-                 
+                
+                if (self.pictureURLs == nil) {
+                    self.pictureURLs = [[NSMutableArray alloc] init];
+                }
+                
+                [self.pictureURLs removeAllObjects];
+                id url = [observingStream sourceURL];
+
+                if (url != nil) {
+                    NSFileManager *fm = [NSFileManager defaultManager];
+                    NSString *baseFilenameString = [[url URLByDeletingPathExtension] lastPathComponent];
+                    NSURL *baseFolder = [url URLByDeletingLastPathComponent];
+                    NSArray *folderContents = [fm contentsOfDirectoryAtURL:baseFolder includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+                    
+                    if (folderContents != nil && [folderContents count] > 0) {
+                        for (NSURL *aFile in folderContents) {
+                            if ([[[aFile URLByDeletingPathExtension] lastPathComponent] isEqualToString:baseFilenameString]) {
+                                if (![[aFile lastPathComponent] isEqualToString:[url lastPathComponent]]) {
+                                    [self.pictureURLs addObject:aFile];
+                                }
+                            }
+                        }
+                    }
+                    
+                    if ([self.pictureURLs count] > 0) {
+                        NSImage *image = [[[NSImage alloc] initByReferencingURL:[self.pictureURLs objectAtIndex:0]] autorelease];
+                        [imageView setImage:image];
+                    }
+                }
             }
             else {
                 listView.content = [NSArray array];
@@ -339,7 +370,7 @@
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)subview
 {
     #pragma unused(splitView)
-    if( subview == streamListView )
+    if( subview == leftSplitView || subview == imageView)
         return NO;
     else
         return YES;
@@ -363,7 +394,8 @@
 {
     self.zoomCursor = nil;
     self.observingStream = nil;
-
+    self.pictureURLs = nil;
+    
     [super dealloc];
 }
 @end

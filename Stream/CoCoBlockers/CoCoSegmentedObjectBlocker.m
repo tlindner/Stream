@@ -11,7 +11,7 @@
 @implementation CoCoSegmentedObjectBlocker
 + (NSString *)anayliserName
 {
-    return @"Color Computer Segmented Object Blocker";
+    return @"CoCo Segmented Object Blocker";
 }
 
 + (NSString *)anaylizerKey

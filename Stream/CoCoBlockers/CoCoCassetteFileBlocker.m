@@ -12,7 +12,7 @@
 
 + (NSString *)anayliserName
 {
-    return @"Color Computer Cassette File Blocker";
+    return @"CoCo Cassette File Blocker";
 }
 
 + (NSString *)anaylizerKey

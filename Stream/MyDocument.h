@@ -20,9 +20,13 @@
 @property (assign) IBOutlet NSTreeController *streamTreeControler;
 @property (assign) IBOutlet NSWindow *documentWindow;
 @property (assign) IBOutlet NSScrollView *streamListView;
+@property (assign) IBOutlet NSSplitView *leftSplitView;
 @property (nonatomic, retain) NSCursor *zoomCursor;
 @property (assign) IBOutlet SDListView *listView;
+@property (assign) IBOutlet NSImageView *imageView;
 @property (retain) StStream *observingStream;
+@property (nonatomic, retain) NSMutableArray *pictureURLs;
+
 
 - (IBAction)add:(id)sender;
 - (void) addStreamFromURL:(NSURL *)aURL;

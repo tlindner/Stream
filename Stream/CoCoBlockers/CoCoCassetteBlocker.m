@@ -111,7 +111,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
 
 + (NSString *)anayliserName
 {
-    return @"Color Computer Cassette Blocker";
+    return @"CoCo Cassette Blocker";
 }
 
 + (NSString *)anaylizerKey
