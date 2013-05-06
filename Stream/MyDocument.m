@@ -23,6 +23,7 @@
 @synthesize leftSplitView;
 @synthesize imageView;
 @synthesize pictureURLs;
+@synthesize outlineView;
 
 - (id)init
 {
@@ -55,6 +56,7 @@
     listView.prototypeItem = [[[AnaylizerListViewItem alloc] initWithNibName:@"AnaylizerListViewItem" bundle:nil] autorelease];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(documentWindowWillClose:) name:NSWindowWillCloseNotification object:documentWindow];
+    [outlineView setFocusRingType:NSFocusRingTypeNone];
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {

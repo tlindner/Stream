@@ -70,47 +70,88 @@ NSUInteger CalculateSectorSize( unsigned char value );
 
         while (i < length) {
             unsigned char sectorTable[256];
-            unsigned char mode = streamBytes[i++];
-            unsigned char cylinder = streamBytes[i++];
-            unsigned char head = streamBytes[i++];
-            unsigned char sectorCount = streamBytes[i++];
-            unsigned char sectorSizeCode = streamBytes[i++];
+            unsigned int sectorSizeMap[256];
+            unsigned char sectorCylinderMap[256];
+            unsigned char sectorHeadMap[256];
+            unsigned char mode;
+            unsigned char cylinder;
+            unsigned char head;
+            unsigned char sectorCount;
+            unsigned char sectorSizeCode;
+            
+            mode = streamBytes[i++];
+            if (i==length) return;
+            cylinder = streamBytes[i++];
+            if (i==length) return;
+            head = streamBytes[i++];
+            if (i==length) return;
+            sectorCount = streamBytes[i++];
+            if (i==length) return;
+            sectorSizeCode = streamBytes[i++];
+            if (i==length) return;
             
 //            NSLog(@"mode: %d, cylinder: %d, head: %d, sector count: %d, sector size code: %d", mode, cylinder, head, sectorCount, sectorSizeCode);
 
-            if (sectorSizeCode == 0xff) {
-                NSLog(@"DunfieldImageDisk: Un implemented sector size map");
-                return;
-            }
-            
-            NSUInteger sectorSize = CalculateSectorSize( sectorSizeCode );
-
             [newBlock addAttributeRange:@"stream" start:i-5 length:1 name:@"Mode" verification:nil transformation:@"BlocksUnsignedBigEndian"];
-
+            
+            if ((i+sectorCount) >= length) return;
+                
             for (NSUInteger j=0; j < sectorCount ; j++ ) {
                 sectorTable[j] = streamBytes[i++];
             }
             
             if ((head & 0x80) == 0x80) {
-                NSLog(@"DunfieldImageDisk: Un implemented sector cylinder map");
-                return;
+                /* sector cylinder map */
+                if ((i+sectorCount) >= length) return;
+                for (NSUInteger j=0; j<sectorCount; j++) {
+                    sectorCylinderMap[j] = streamBytes[i++];
+                }
+            }
+            else {
+                for (NSUInteger j=0; j<sectorCount; j++) {
+                    sectorCylinderMap[j] = cylinder;
+                }
             }
             
             if ((head & 0x40) == 0x40) {
-                NSLog(@"DunfieldImageDisk: Un implemented sector head map");
-                return;
+                /* sector head map */
+                if ((i+sectorCount) >= length) return;
+                for (NSUInteger j=0; j<sectorCount; j++) {
+                    sectorHeadMap[j] = streamBytes[i++];
+                }
+            }
+            else {
+                for (NSUInteger j=0; j<sectorCount; j++) {
+                    sectorHeadMap[j] = head;
+                }
+            }
+            
+            if (sectorSizeCode == 0xff) {
+                /* sector size map */
+                if ((i+sectorCount) >= length) return;
+                for (NSUInteger j=0; j<sectorCount; j++) {
+                    sectorSizeMap[j] = CalculateSectorSize( streamBytes[i++] );
+                }
+            }
+            else {
+                for (NSUInteger j=0; j<sectorCount; j++) {
+                    
+                    sectorSizeMap[j] = CalculateSectorSize( sectorSizeCode );
+                }
             }
             
             for (NSUInteger j=0; j < sectorCount; j++) {
                 unsigned char sectorType = streamBytes[i++], sectorIdealType;
+                if (i == length) return;
                 NSString *blockName;
                 NSUInteger actualLength;
                 
+                blockName = [NSString stringWithFormat:@"Track %d %d Side %d %d Sector %d %d", sectorCylinderMap[j], cylinder, sectorHeadMap[j], head & 0x01, j, sectorTable[j]];
+
                 switch (sectorType) {
                     case 0:
                         /* sector data unavaiable */
                         sectorIdealType = 1;
-                        blockName = [NSString stringWithFormat:@"Track %d Side %d Sector %d %d", cylinder, head & 0x01, j, sectorTable[j]];
                         newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk anaylizerKey]];
                         [newBlock addAttributeRange:@"stream" start:i-1 length:1 name:@"Sector Type" verification:[NSData dataWithBytes:&sectorIdealType length:1] transformation:@"BlocksUnsignedBigEndian"];
                         newBlock.sourceUTI = newBlock.resultingUTI = @"public.data";
@@ -123,10 +164,9 @@ NSUInteger CalculateSectorSize( unsigned char value );
                         if (sectorType == 3) sectorIdealType = 3;
                         if (sectorType == 5) sectorIdealType = 1;
                         if (sectorType == 7) sectorIdealType = 3;
-                        blockName = [NSString stringWithFormat:@"Track %d Side %d Sector %d %d", cylinder, head & 0x01, j, sectorTable[j]];
                         newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk anaylizerKey]];
-                        actualLength = MIN(sectorSize, length - i);
-                        [newBlock addDataRange:@"stream" start:i length:actualLength name:nil verification:nil transformation:nil expectedLength:sectorSize repeat:NO];
+                        actualLength = MIN(sectorSizeMap[j], length - i);
+                        [newBlock addDataRange:@"stream" start:i length:actualLength name:nil verification:nil transformation:nil expectedLength:sectorSizeMap[j] repeat:NO];
                         [newBlock addAttributeRange:@"stream" start:i-1 length:1 name:@"Sector Type" verification:[NSData dataWithBytes:&sectorIdealType length:1] transformation:@"BlocksUnsignedBigEndian"];
                         newBlock.sourceUTI = newBlock.resultingUTI = @"public.data";
                         i += actualLength;
@@ -140,11 +180,9 @@ NSUInteger CalculateSectorSize( unsigned char value );
                         if (sectorType == 4) sectorIdealType = 4;
                         if (sectorType == 6) sectorIdealType = 2;
                         if (sectorType == 8) sectorIdealType = 4;
-                        blockName = [NSString stringWithFormat:@"Track %d Side %d Sector %d %d", cylinder, head & 0x01, j, sectorTable[j]];
                         newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk anaylizerKey]];
-                        actualLength = MIN(sectorSize, length - i);
-
-                        [newBlock addDataRange:@"stream" start:i length:1 expectedLength:sectorSize repeat:YES];
+                        actualLength = MIN(sectorSizeMap[j], length - i);
+                        [newBlock addDataRange:@"stream" start:i length:1 expectedLength:sectorSizeMap[j] repeat:YES];
                         [newBlock addAttributeRange:@"stream" start:i-1 length:1 name:@"Sector Type" verification:[NSData dataWithBytes:&sectorIdealType length:1] transformation:@"BlocksUnsignedBigEndian"];
                         newBlock.sourceUTI = newBlock.resultingUTI = @"public.data";
                         i++;
@@ -154,7 +192,6 @@ NSUInteger CalculateSectorSize( unsigned char value );
                         NSLog(@"DunfieldImageDisk: Unexpected sector type: %d, byte: 0x%lx", sectorType, i-1);
                         return;
                         break;
-                        
                 }
             }
         }

@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSCursor *zoomCursor;
 @property (assign) IBOutlet SDListView *listView;
 @property (assign) IBOutlet NSImageView *imageView;
+@property (assign) IBOutlet NSOutlineView *outlineView;
 @property (retain) StStream *observingStream;
 @property (nonatomic, retain) NSMutableArray *pictureURLs;
 

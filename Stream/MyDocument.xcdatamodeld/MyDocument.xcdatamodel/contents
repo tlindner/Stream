@@ -36,7 +36,7 @@
         <attribute name="name" attributeType="String" defaultValueString="untitled"/>
         <attribute name="offset" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
-        <attribute name="repeat" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="repeat" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="resultingUTI" optional="YES" attributeType="String"/>
         <attribute name="source" optional="YES" attributeType="String"/>
         <attribute name="sourceUTI" attributeType="String" defaultValueString="public.data"/>

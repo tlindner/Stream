@@ -30,8 +30,6 @@
 
 - (void)awakeFromNib
 {
-    NSLog( @"self: %p, awakeFromNib", self );
-    
     [self addObserver:self forKeyPath:@"objectValue.currentEditorView" options:NSKeyValueChangeSetting | NSKeyValueObservingOptionOld context:nil];
     [self addObserver:self forKeyPath:@"objectValue.collapse" options:NSKeyValueChangeSetting context:nil];
     [self addObserver:self forKeyPath:@"objectValue.anaylizerHeight" options:NSKeyValueChangeSetting context:nil];

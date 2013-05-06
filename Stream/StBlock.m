@@ -10,6 +10,7 @@
 #import "StStream.h"
 #import "Analyzation.h"
 #import "HexFiendAnaylizer.h"
+#import "TextAnaylizer.h"
 
 @implementation StBlock
 @dynamic anaylizerKind;
@@ -52,7 +53,14 @@
     Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
     
     if( anaObjectClass == nil )
-        anaObjectClass = [HexFiendAnaylizer class];
+    {
+        if ([self.sourceUTI isEqualToString:@"public.text"]) {
+            anaObjectClass = [TextAnaylizer class];
+        }
+        else {
+            anaObjectClass = [HexFiendAnaylizer class];
+        }
+    }
     
     if( anaylizerObject == nil )
     {
@@ -228,6 +236,9 @@
     newBlock.valueTransformer = transform;
     newBlock.repeat = repeat;
     newBlock.expectedSize = expectedLength;
+    
+    assert(newBlock.repeat == repeat);
+    assert(newBlock.length == length);
     
     [dataBlock addBlocksObject:newBlock];
     self.expectedSize += expectedLength;
@@ -412,7 +423,6 @@
     {
         if( self.parentStream != nil )
         {
-            /* This is a top level block, return data from data block */
             return YES;
         }
     }
@@ -442,19 +452,8 @@
             
             for (StBlock *theBlock in subBlocks)
             {
-                NSData *blockData = [ourStream dataOfTopLevelBlockNamed:theBlock.source];
-                NSUInteger useLength;
-                
-                if( theBlock.length == 0 )
-                {
-                    /* length of zero means "to the end of the block" */
-                    useLength = [blockData length] - theBlock.offset;
-                }
-                else
-                    useLength = theBlock.length;
-                
-                NSRange theRange = NSMakeRange(theBlock.offset, useLength);
-                [result appendData:[blockData subdataWithRange:theRange]];
+                NSData *subBlockData = [theBlock getData];
+                [result appendData:subBlockData];
             }
         }
     }
@@ -473,11 +472,11 @@
         else
             useLength = self.length;
         
-        
         NSRange theRange = NSMakeRange(self.offset, useLength);
         result = [[blockData subdataWithRange:theRange] mutableCopy];
  
         NSUInteger exSz = self.expectedSize;
+        
         if (self.repeat) {
             while ([result length] < exSz) {
                 [result appendData:result];

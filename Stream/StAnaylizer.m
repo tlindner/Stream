@@ -10,6 +10,7 @@
 #import "StStream.h"
 #import "Analyzation.h"
 #import "HexFiendAnaylizer.h"
+#import "TextAnaylizer.h"
 
 @implementation StAnaylizer
 
@@ -57,7 +58,15 @@
     Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
     
     if( anaObjectClass == nil )
-        anaObjectClass = [HexFiendAnaylizer class];
+    {
+        if ([self.sourceUTI isEqualToString:@"public.text"]) {
+            anaObjectClass = [TextAnaylizer class];
+        }
+        else {
+            anaObjectClass = [HexFiendAnaylizer class];
+        }
+    }
+        
     
     if( anaylizerObject == nil )
     {
