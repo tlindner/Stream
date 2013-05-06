@@ -88,6 +88,7 @@
 		77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */; };
 		77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */; };
 		77ED69111737092C0024397E /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77ED69101737092C0024397E /* Quartz.framework */; };
+		77ED691517375CE60024397E /* OS9LogicalSectorsBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ED691417375CE60024397E /* OS9LogicalSectorsBlocker.m */; };
 		77F2045613DD3AD000FA5B1F /* HFBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FC13DD3ACF00FA5B1F /* HFBTree.m */; settings = {COMPILER_FLAGS = "-Wno-all -Wno-extra"; }; };
 		77F2045713DD3AD000FA5B1F /* HFBTreeByteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FE13DD3ACF00FA5B1F /* HFBTreeByteArray.m */; settings = {COMPILER_FLAGS = "-Wno-all -Wno-extra"; }; };
 		77F2045813DD3AD000FA5B1F /* HFByteArray_FileWriting.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FF13DD3ACF00FA5B1F /* HFByteArray_FileWriting.m */; settings = {COMPILER_FLAGS = "-Wno-all -Wno-extra"; }; };
@@ -301,6 +302,8 @@
 		77E9E6EA173379110027C7E9 /* BlockIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = BlockIcon.psd; sourceTree = "<group>"; };
 		77E9E6EF17337F6B0027C7E9 /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		77ED69101737092C0024397E /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		77ED691317375CE60024397E /* OS9LogicalSectorsBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OS9LogicalSectorsBlocker.h; path = "Stream/OS-9Blockers/OS9LogicalSectorsBlocker.h"; sourceTree = "<group>"; };
+		77ED691417375CE60024397E /* OS9LogicalSectorsBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OS9LogicalSectorsBlocker.m; path = "Stream/OS-9Blockers/OS9LogicalSectorsBlocker.m"; sourceTree = "<group>"; };
 		77F203FA13DD3ACF00FA5B1F /* HexFiend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiend.h; path = Stream/HexFiend/HexFiend.h; sourceTree = "<group>"; };
 		77F203FB13DD3ACF00FA5B1F /* HFBTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HFBTree.h; path = Stream/HexFiend/HFBTree.h; sourceTree = "<group>"; };
 		77F203FC13DD3ACF00FA5B1F /* HFBTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HFBTree.m; path = Stream/HexFiend/HFBTree.m; sourceTree = "<group>"; };
@@ -462,6 +465,7 @@
 				77B617F9172B8A4E008E8F1A /* TextAnaylizer */,
 				778E46EC172F649C00736D51 /* DisasemblerAnaylizer */,
 				778A59771406EE0700B68EB4 /* CoCoBlockers */,
+				77ED691217375CA90024397E /* OS-9Blockers */,
 				77764F051736026F007F34D3 /* DiskImageBlockers */,
 				77614F3413DC9B6C00041279 /* Models */,
 				7788588B13EDC1B30057E042 /* AnaylizerUI */,
@@ -748,6 +752,15 @@
 				77B61803172B8CD3008E8F1A /* TextAccessoryView.xib */,
 			);
 			name = TextAnaylizer;
+			sourceTree = "<group>";
+		};
+		77ED691217375CA90024397E /* OS-9Blockers */ = {
+			isa = PBXGroup;
+			children = (
+				77ED691317375CE60024397E /* OS9LogicalSectorsBlocker.h */,
+				77ED691417375CE60024397E /* OS9LogicalSectorsBlocker.m */,
+			);
+			name = "OS-9Blockers";
 			sourceTree = "<group>";
 		};
 		77F203F913DD3A5F00FA5B1F /* HexFiend */ = {
@@ -1091,6 +1104,7 @@
 				778E46F1172F666400736D51 /* DisasemblerAnaylizer.m in Sources */,
 				778E46F8172F700C00736D51 /* DisasemblerAnaylizerViewController.m in Sources */,
 				77FE861E1736181B0015DCD8 /* DunfieldImageDisk.m in Sources */,
+				77ED691517375CE60024397E /* OS9LogicalSectorsBlocker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

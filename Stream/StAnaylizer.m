@@ -275,7 +275,7 @@
     NSString *result = nil;
     
     if( [self.currentEditorView isEqualToString:@"Blocker View" ])
-        result = [NSString stringWithFormat:@"%@ — %@", self.anaylizerKind, self.currentEditorView];
+        result = [NSString stringWithFormat:@"%@ — %@", [NSClassFromString(self.anaylizerKind) anayliserName], self.currentEditorView];
     else
         result = self.currentEditorView;
     

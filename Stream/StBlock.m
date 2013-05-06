@@ -178,6 +178,11 @@
     [self addDataRange:blockName start:start length:length name:nil verification:nil transformation:nil expectedLength:length repeat:NO];
 }
 
+- (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length expectedLength:(NSUInteger)expectedLength
+{
+    [self addDataRange:blockName start:start length:length name:nil verification:nil transformation:nil expectedLength:expectedLength repeat:NO];
+}
+
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length expectedLength:(NSUInteger)expectedLength repeat:(BOOL)repeat
 {
     [self addDataRange:blockName start:start length:length name:nil verification:nil transformation:nil expectedLength:expectedLength repeat:repeat];
@@ -236,10 +241,7 @@
     newBlock.valueTransformer = transform;
     newBlock.repeat = repeat;
     newBlock.expectedSize = expectedLength;
-    
-    assert(newBlock.repeat == repeat);
-    assert(newBlock.length == length);
-    
+
     [dataBlock addBlocksObject:newBlock];
     self.expectedSize += expectedLength;
     
@@ -445,7 +447,7 @@
         {
             /* This is a midlevel block, return it's accumulated blocks */
             
-            StStream *ourStream = [self getStream];
+//            StStream *ourStream = [self getStream];
             result = [[[NSMutableData alloc] init] autorelease];
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
             NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
