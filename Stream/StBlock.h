@@ -50,6 +50,7 @@
 @property (nonatomic, readonly) NSColor * attributeColor;
 @property (nonatomic, readonly) BOOL canChangeEditor;
 @property (nonatomic, readonly) NSMutableIndexSet *editSet;
+@property (nonatomic, retain) NSMutableData *dataCache;
 
 - (StStream *)getStream;
 - (void) resetCounters;

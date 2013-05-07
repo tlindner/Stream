@@ -19,7 +19,6 @@
 
 + (void) makeBlocks:(StStream *)stream;
 
-
 @end
 
 @interface OS9StringTransformer : NSValueTransformer

@@ -49,6 +49,7 @@
 		7768590613F0FF92006BE753 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7768590513F0FF92006BE753 /* Accelerate.framework */; };
 		776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */; };
 		776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776EB7E4142069060019329F /* BlockAttributeViewTableView.m */; };
+		77714C631738A48B00EA4EC5 /* OS9FileBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 77714C621738A48B00EA4EC5 /* OS9FileBlocker.m */; };
 		777745AC171B558300700BB7 /* MAAttachedWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 777745AB171B558300700BB7 /* MAAttachedWindow.m */; };
 		77793EB8172391E500E607F6 /* SDListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77793EB2172391E500E607F6 /* SDListView.m */; };
 		77793EB9172391E500E607F6 /* SDListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 77793EB5172391E500E607F6 /* SDListViewItem.m */; };
@@ -229,6 +230,8 @@
 		776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewAccessory.xib; path = Stream/BlockAttributeViewAccessory.xib; sourceTree = "<group>"; };
 		776EB7E3142069060019329F /* BlockAttributeViewTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeViewTableView.h; path = Stream/BlockAttributeViewTableView.h; sourceTree = "<group>"; };
 		776EB7E4142069060019329F /* BlockAttributeViewTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewTableView.m; path = Stream/BlockAttributeViewTableView.m; sourceTree = "<group>"; };
+		77714C611738A48B00EA4EC5 /* OS9FileBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OS9FileBlocker.h; path = "Stream/OS-9Blockers/OS9FileBlocker.h"; sourceTree = "<group>"; };
+		77714C621738A48B00EA4EC5 /* OS9FileBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OS9FileBlocker.m; path = "Stream/OS-9Blockers/OS9FileBlocker.m"; sourceTree = "<group>"; };
 		777745AA171B558300700BB7 /* MAAttachedWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAAttachedWindow.h; path = Stream/MAAttachedWindow.h; sourceTree = "<group>"; };
 		777745AB171B558300700BB7 /* MAAttachedWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAAttachedWindow.m; path = Stream/MAAttachedWindow.m; sourceTree = "<group>"; };
 		77793EB1172391E500E607F6 /* SDListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDListView.h; path = Stream/SDListView/SDListView.h; sourceTree = "<group>"; };
@@ -759,6 +762,8 @@
 			children = (
 				77ED691317375CE60024397E /* OS9LogicalSectorsBlocker.h */,
 				77ED691417375CE60024397E /* OS9LogicalSectorsBlocker.m */,
+				77714C611738A48B00EA4EC5 /* OS9FileBlocker.h */,
+				77714C621738A48B00EA4EC5 /* OS9FileBlocker.m */,
 			);
 			name = "OS-9Blockers";
 			sourceTree = "<group>";
@@ -1105,6 +1110,7 @@
 				778E46F8172F700C00736D51 /* DisasemblerAnaylizerViewController.m in Sources */,
 				77FE861E1736181B0015DCD8 /* DunfieldImageDisk.m in Sources */,
 				77ED691517375CE60024397E /* OS9LogicalSectorsBlocker.m in Sources */,
+				77714C631738A48B00EA4EC5 /* OS9FileBlocker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

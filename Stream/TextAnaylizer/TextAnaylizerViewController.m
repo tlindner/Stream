@@ -100,6 +100,10 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
             TextAnaylizer *modelObject = (TextAnaylizer *)[object anaylizerObject];
             result = [modelObject decodeColorComputerBASIC:bytes];
         }
+        else if ([encodingStringRep isEqualToString:@"OS-9 Directory File"]) {
+            TextAnaylizer *modelObject = (TextAnaylizer *)[object anaylizerObject];
+            result = [modelObject decodeOS9DirectoryFile:bytes];
+        }
     }
 
     if (result == nil || [result isEqualToString:@""]) {

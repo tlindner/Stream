@@ -47,11 +47,32 @@
 
 + (void) makeBlocks:(StStream *)stream
 {
+    unsigned sectorStartID;
+    
     NSString *firstSector = @"Track * 0 Side * 0 Sector * 0";
+    NSString *alternateFirstSector = @"Track * 0 Side * 0 Sector * 1";
     NSString *firstTrack = @"Track * 0 Side * 0 Sector * %d";
     NSString *genericTrack = @"Track * %d Side * %d Sector * %d";
     
-    NSData *lsn0Data = [[stream topLevelBlockNamed:firstSector] getData];
+    StBlock *lsn0Block = [stream topLevelBlockNamed:firstSector];
+    
+    if (lsn0Block == nil) {
+        lsn0Block = [stream topLevelBlockNamed:alternateFirstSector];
+        
+        if (lsn0Block == nil) {
+            NSLog( @"OS9LogicalSectorsBlocker: Could not find LSN0" );
+            return;
+        }
+        else {
+            firstSector = alternateFirstSector;
+            sectorStartID = 1;
+        }
+    }
+    else {
+        sectorStartID = 0;
+    }
+    
+    NSData *lsn0Data = [lsn0Block getData];
     const unsigned char *lsn0 = [lsn0Data bytes];
     
     if ([lsn0Data length] < 0x6d) {
@@ -114,13 +135,15 @@
     
     unsigned short logicalSectorSize = logicalSectorSizeCode == 0 ? 256 : 256 * logicalSectorSizeCode;
     
+    [newLSN addDataRange:firstSector start:0 length:0 expectedLength:logicalSectorSize];
+
     NSUInteger i, j;
     NSString *sectorName;
     
     StBlock *fat = [stream startNewBlockNamed:[NSString stringWithFormat:@"File Allocation Bitmap"] owner:[OS9LogicalSectorsBlocker anaylizerKey]];
     
     i=bitmapSize;
-    j=1;
+    j=1 + sectorStartID;
     
     while (i > logicalSectorSize) {
         sectorName = [NSString stringWithFormat:firstTrack, j];
@@ -133,14 +156,14 @@
     sectorName = [NSString stringWithFormat:firstTrack, j];
     [fat addDataRange:sectorName start:0 length:i];
     
-    /* now generate all of track zeros LSNs (track zero can be short) */
+    /* now generate all of track zeros LSNs (track zero, side zero is special, it can be short) */
     
     unsigned track, trackSizeInSectors, sector, side, lsnNumber;
     NSString *blockName;
     
     trackSizeInSectors = lsn0[0x3];
     track = 0;
-    sector = 1;
+    sector = 1 + sectorStartID;
     side = 0;
     lsnNumber = 1;
     
@@ -173,7 +196,7 @@
             track++;
         }
         
-        for (sector=0; sector<trackSizeInSectors; sector++) {
+        for (sector=sectorStartID; sector<trackSizeInSectors + sectorStartID; sector++) {
             blockName = [NSString stringWithFormat:@"LSN %d", lsnNumber];
             sectorName = [NSString stringWithFormat:genericTrack, track, side, sector];
             newLSN = [stream startNewBlockNamed:blockName owner:[OS9LogicalSectorsBlocker anaylizerKey]];

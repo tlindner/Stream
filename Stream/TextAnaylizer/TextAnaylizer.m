@@ -161,9 +161,42 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
     return result;
 }
 
+- (NSString *)decodeOS9DirectoryFile:(NSData *)bufferObject
+{
+    NSMutableString *result = [[[NSMutableString alloc] init] autorelease];
+    unsigned length = [bufferObject length], i=0;
+    const unsigned char *bytes = [bufferObject bytes];
+    NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:@"OS9String"];
+
+    if (vt != nil) {
+        while (length > 0) {
+            
+            if (bytes[i*32] != 0) {
+                [result appendString:[vt transformedValue:[bufferObject subdataWithRange:NSMakeRange(i * 32, 29)]]];
+                [result appendString:@", "];
+                
+                unsigned lsn = bytes[(i * 32) + 29] << 24;
+                lsn += bytes[(i * 32) + 30] << 8;
+                lsn += bytes[(i * 32) + 31];
+                
+                [result appendString:[NSString stringWithFormat:@"%d (0x%x)", lsn, lsn]];
+                [result appendString:@"\n"];
+            }
+            
+            i++;
+            length -= 32;
+        }
+    }
+    else {
+        [result appendString:@"Missing OS-9 string tranfsormer."];
+    }
+    
+    return result;
+}
+
 + (NSArray *)anaylizerUTIs
 {
-    return [NSArray arrayWithObjects:@"public.text", @"com.microsoft.cocobasic.binary",nil];
+    return [NSArray arrayWithObjects:@"public.text", @"com.microsoft.cocobasic.binary", @"com.microware.os9directoryfile", nil];
 }
 
 + (NSString *)anayliserName
@@ -188,7 +221,7 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"wrapLines", [NSNumber numberWithBool:YES], @"overWriteMode", [NSNumber numberWithBool:YES], @"fixedWidthFont", [NSMutableArray arrayWithObjects:@"UTF-8",@"US-ASCII",@"ISO-8859-1", @"macintosh", @"Tokenized CoCo BASIC Program", nil], @"encodingList", @"macintosh", @"encoding", [NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"wrapLines", [NSNumber numberWithBool:YES], @"overWriteMode", [NSNumber numberWithBool:YES], @"fixedWidthFont", [NSMutableArray arrayWithObjects:@"UTF-8",@"US-ASCII",@"ISO-8859-1", @"macintosh", @"Tokenized CoCo BASIC Program", @"OS-9 Directory File", nil], @"encodingList", @"macintosh", @"encoding", [NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", nil] autorelease];
 }
 
 @end

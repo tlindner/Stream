@@ -43,6 +43,8 @@
 @dynamic attributeColor;
 @dynamic editSet;
 
+@synthesize dataCache;
+
 - (void)awakeFromInsert
 {
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
@@ -90,6 +92,8 @@
     if (streamRangeObject != nil) {
         [streamRangeObject release];
     }
+    
+    dataCache = nil;
     
     [super dealloc];
 }
@@ -171,6 +175,8 @@
 
     [self checkEdited:newBlock];
     [self checkFail:newBlock];
+    
+    self.dataCache = nil;
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length
@@ -247,6 +253,8 @@
     
     [self checkEdited:newBlock];
     [self checkFail:newBlock];
+    
+    self.dataCache = nil;
 }
 
 - (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
@@ -279,6 +287,8 @@
 
     [self checkEdited:newBlock];
     [self checkFail:newBlock];
+    
+    self.dataCache = nil;
 }
 
 - (void) checkEdited:(StBlock *)newBlock
@@ -436,58 +446,65 @@
 {
     NSMutableData *result;
     
-    if( self.source == nil )
-    {
-        if( self.parentStream != nil )
+    if (self.dataCache == nil) {
+        if( self.source == nil )
         {
-            /* This is a top level block, return data from data block */
-            return [[self subBlockNamed:@"data"] getData];
-        }
-        else
-        {
-            /* This is a midlevel block, return it's accumulated blocks */
-            
-//            StStream *ourStream = [self getStream];
-            result = [[[NSMutableData alloc] init] autorelease];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-            NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-            
-            for (StBlock *theBlock in subBlocks)
+            if( self.parentStream != nil )
             {
-                NSData *subBlockData = [theBlock getData];
-                [result appendData:subBlockData];
+                /* This is a top level block, return data from data block */
+                return [[self subBlockNamed:@"data"] getData];
             }
-        }
-    }
-    else
-    {
-        /* This is a leaf block */
-        StStream *ourStream = [self getStream];
-        NSData *blockData = [ourStream dataOfTopLevelBlockNamed:self.source];
-        NSUInteger useLength;
-        
-        if( self.length == 0 )
-        {
-            /* length of zero means "to the end of the block" */
-            useLength = [blockData length] - self.offset;
+            else
+            {
+                /* This is a midlevel block, return it's accumulated blocks */
+                
+    //            StStream *ourStream = [self getStream];
+                result = [[[NSMutableData alloc] init] autorelease];
+                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+                NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                
+                for (StBlock *theBlock in subBlocks)
+                {
+                    NSData *subBlockData = [theBlock getData];
+                    [result appendData:subBlockData];
+                }
+            }
         }
         else
-            useLength = self.length;
-        
-        NSRange theRange = NSMakeRange(self.offset, useLength);
-        result = [[blockData subdataWithRange:theRange] mutableCopy];
- 
-        NSUInteger exSz = self.expectedSize;
-        
-        if (self.repeat) {
-            while ([result length] < exSz) {
-                [result appendData:result];
-            }
+        {
+            /* This is a leaf block */
+            StStream *ourStream = [self getStream];
+            NSData *blockData = [ourStream dataOfTopLevelBlockNamed:self.source];
+            NSUInteger useLength;
             
-            [result setLength:exSz];
-        }
+            if( self.length == 0 )
+            {
+                /* length of zero means "to the end of the block" */
+                useLength = [blockData length] - self.offset;
+            }
+            else
+                useLength = self.length;
+            
+            NSRange theRange = NSMakeRange(self.offset, useLength);
+            result = [[blockData subdataWithRange:theRange] mutableCopy];
+     
+            NSUInteger exSz = self.expectedSize;
+            
+            if (self.repeat) {
+                while ([result length] < exSz) {
+                    [result appendData:result];
+                }
+                
+                [result setLength:exSz];
+            }
 
-        [result autorelease];
+            [result autorelease];
+        }
+        
+        self.dataCache = result;
+    }
+    else {
+        result = self.dataCache;
     }
     
     return result;

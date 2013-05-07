@@ -220,6 +220,14 @@
 				</array>
 			</dict>
 		</dict>
+		<dict>
+			<key>UTTypeDescription</key>
+			<string>OS-9 Directory File</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microware.os9directoryfile</string>
+			<key>UTTypeTagSpecification</key>
+			<dict/>
+		</dict>
 	</array>
 </dict>
 </plist>
