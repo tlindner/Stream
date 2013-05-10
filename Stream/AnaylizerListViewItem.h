@@ -22,11 +22,11 @@
 @property (assign) IBOutlet NSView *customView;
 @property (retain) NSViewController *editorController;
 @property (assign) IBOutlet ColorGradientView *colorGradientView;
-@property (retain) NSView *savedCustomView;
+@property (assign) IBOutlet NSButton *blockSettingsButton;
 
 - (IBAction)removeAnaylizer:(id)sender;
 - (IBAction)collapse:(id)sender;
-
+- (IBAction)blockSetttings:(id)sender;
 - (void)loadStreamEditor;
 
 @end

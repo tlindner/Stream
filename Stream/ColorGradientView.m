@@ -12,6 +12,7 @@
 #import "StAnaylizer.h"
 #import "StBlock.h"
 #import "AnaylizerListViewItem.h"
+#import "DragRegionView.h"
 
 void AbleAllControlsInView( NSView *inView, BOOL able );
 
@@ -158,7 +159,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
         [utiComboBox setEnabled:YES];
         [editorPopup setEnabled:YES];
         AbleAllControlsInView([self.avc groupBox], YES);
-}
+    }
     
     self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
     [self.popupArrayController addObjects:stuff];
@@ -202,6 +203,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
         newSubViewHeight = [[self.avc view] frame].size.height;
         accessoryFrame.size = [[self.avc view] frame].size;
         [accessoryView setFrame:accessoryFrame];
+//        [drv setCustomSubView:[self.avc view] paneExpanded:anaylizer.paneExpanded];
         [accessoryView addSubview:[self.avc view]];
     }
     else
@@ -241,7 +243,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
             {
                 StBlock *theBlock = [selectedObjects objectAtIndex:0];
                 [self.avc setRepresentedObject:theBlock];
-}
+            }
             [acceptsTextField setStringValue: @""];
            
             return;
@@ -294,6 +296,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
                 newSubViewHeight = [[self.avc view] frame].size.height;
                 accessoryFrame.size = [[self.avc view] frame].size;
                 [accessoryView setFrame:accessoryFrame];
+//                [drv setCustomSubView:[self.avc view] paneExpanded:anaylizer.paneExpanded];
                 [accessoryView addSubview:[self.avc view]];
             }
             else
@@ -321,10 +324,12 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
     }
     else if( [keyPath isEqualToString:@"sourceUTI"] )
     {
+        NSArray *stuff = nil;
+        stuff = [[Analyzation sharedInstance] anaylizersforUTI:[object valueForKey:@"sourceUTI"]];
+
         [self.popupArrayController removeObjects:[self.popupArrayController arrangedObjects]];
-        NSArray *stuff = [[Analyzation sharedInstance] anaylizersforUTI:[objectValue valueForKey:@"sourceUTI"]];
         [self.popupArrayController addObjects:stuff];
-        
+
         return;
     }
     else if ([keyPath isEqualToString:@"selectedObjects"]) {

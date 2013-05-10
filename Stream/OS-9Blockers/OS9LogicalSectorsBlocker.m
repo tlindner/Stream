@@ -46,8 +46,9 @@
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
+#pragma unused (anaylizer)
     unsigned sectorStartID;
     
     NSString *firstSector = @"Track * 0 Side * 0 Sector * 0";

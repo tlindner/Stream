@@ -17,6 +17,6 @@
 + (NSString *)AnaylizerPopoverAccessoryViewNib;
 + (NSMutableDictionary *)defaultOptions;
 
-+ (void) makeBlocks:(StStream *)stream;
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
 
 @end

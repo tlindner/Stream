@@ -8,6 +8,7 @@
 
 #import "TextAnaylizer.h"
 #import "TextAnaylizerViewController.h"
+#import "StData.h"
 
 /* CoCo function tokens */
 NSString *functions[128] = {@"SGN", @"INT", @"ABS", @"USR", @"RND", @"SIN", @"PEEK",
@@ -85,6 +86,21 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
     if( [inRepresentedObject respondsToSelector:@selector(addSubOptionsDictionary:withDictionary:)] )
     {
         [inRepresentedObject addSubOptionsDictionary:[TextAnaylizer anaylizerKey] withDictionary:[TextAnaylizer defaultOptions]];
+    }
+
+    /* fill in some settings for known blocks */
+    if( [representedObject respondsToSelector:@selector(sourceUTI)] )
+    {
+        NSString *uti = [representedObject sourceUTI];
+        
+        if ([uti isEqualToString:@"com.microware.os9directoryfile"]) {
+            StData *obj = inRepresentedObject;
+            [obj setValue:@"OS-9 Directory File" forKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
+        }
+        else if ([uti isEqualToString:@"com.microsoft.cocobasic.binary"]) {
+            StData *obj = inRepresentedObject;
+            [obj setValue:@"Tokenized CoCo BASIC Program" forKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
+        }
     }
 }
 

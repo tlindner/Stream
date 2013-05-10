@@ -31,7 +31,7 @@
 - (void)awakeFromNib
 {
     [self addObserver:self forKeyPath:@"objectValue.currentEditorView" options:NSKeyValueChangeSetting | NSKeyValueObservingOptionOld context:nil];
-    [self addObserver:self forKeyPath:@"objectValue.collapse" options:NSKeyValueChangeSetting context:nil];
+    [self addObserver:self forKeyPath:@"objectValue.paneExpanded" options:NSKeyValueChangeSetting context:nil];
     [self addObserver:self forKeyPath:@"objectValue.anaylizerHeight" options:NSKeyValueChangeSetting context:nil];
 }
 
@@ -89,7 +89,7 @@
 
         }
     }
-    else if( [keyPath isEqualToString:@"objectValue.collapse"] )
+    else if( [keyPath isEqualToString:@"objectValue.paneExpanded"] )
     {
         if( ignoreEvent == NO )
         {
@@ -133,10 +133,10 @@
                 if( distance < MINIMUM_HEIGHT )
                 {
                     distance = MINIMUM_HEIGHT;
-                    ana.collapse = NO;
+                    ana.paneExpanded = NO;
                 }
                 else
-                    ana.collapse = YES;
+                    ana.paneExpanded = YES;
                 
                 ana.anaylizerHeight = distance;
                 NSTableView *tv = (NSTableView *)[[self superview] superview];
@@ -158,13 +158,13 @@
                 {
                     if( distance <= MINIMUM_HEIGHT )
                     {
-                        ana.collapse = NO;
+                        ana.paneExpanded = NO;
                         ana.anaylizerHeight = startAnaylizerHeight;
-                        [[[[self objectValue] managedObjectContext] undoManager] setActionName:@"Collapse"];
+                        [[[[self objectValue] managedObjectContext] undoManager] setActionName:@"paneExpanded"];
                     }
                     else
                     {
-                        ana.collapse = YES;
+                        ana.paneExpanded = YES;
                         [[[[self objectValue] managedObjectContext] undoManager] setActionName:@"Set Height"];
                     }
                 }
@@ -206,7 +206,7 @@
 {
     NSLog( @"self: %p, AnaylizerTableViewCellView: dealloc", self );
     
-    [self removeObserver:self forKeyPath:@"objectValue.collapse"];
+    [self removeObserver:self forKeyPath:@"objectValue.paneExpanded"];
     [self removeObserver:self forKeyPath:@"objectValue.currentEditorView"];
     [self removeObserver:self forKeyPath:@"objectValue.anaylizerHeight"];
     

@@ -98,10 +98,10 @@
     
     StAnaylizer *thePreviousAna = [(StAnaylizer *)[self representedObject] previousAnaylizer];
     [thePreviousAna willChangeValueForKey:@"viewRange"];
-    [thePreviousAna willChangeValueForKey:@"collapse"];
+    [thePreviousAna willChangeValueForKey:@"paneExpanded"];
     thePreviousAna.viewRange = [NSValue valueWithRange:unionRange];
     thePreviousAna.paneExpanded = YES;
-    [thePreviousAna didChangeValueForKey:@"collapse"];
+    [thePreviousAna didChangeValueForKey:@"paneExpanded"];
     [thePreviousAna didChangeValueForKey:@"viewRange"];
 }
 
@@ -412,7 +412,14 @@
 
 - (NSColor *)tableView:(NSOutlineView *)aTableView backgroundColorForRow:(NSInteger)rowIndex
 {
-    return [[[aTableView itemAtRow:rowIndex] representedObject] attributeColor];
+    NSColor *backgroundColor = [[[aTableView itemAtRow:rowIndex] representedObject] attributeColor];
+    
+    if ([backgroundColor isEqualTo:[NSColor clearColor]]) {
+        return nil;
+    }
+    else {
+        return backgroundColor;
+    }
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem

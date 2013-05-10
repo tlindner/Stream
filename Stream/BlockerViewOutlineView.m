@@ -8,6 +8,7 @@
 
 #import "BlockerViewOutlineView.h"
 #import "StBlock.h"
+#import "BlockerDataViewController.h"
 
 @implementation BlockerViewOutlineView
 
@@ -50,8 +51,18 @@
 
 - (IBAction)makeSubStream:(id)sender
 {
-    #pragma unused(sender)
+#pragma unused(sender)
     [[self nextResponder] tryToPerform:@selector(makeSubStream:) with:[(NSObject *)[self delegate] observingBlock]];
+}
+
+- (IBAction) exportBlocks:(id)sender
+{
+#pragma unused(sender)
+    BlockerDataViewController *bdvc = (BlockerDataViewController *)[self delegate];
+    NSTreeController *tc = [bdvc treeController];
+    NSArray *so = [tc selectedObjects];
+    
+    [[self nextResponder] tryToPerform:@selector(exportBlocks:) with:so];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
@@ -61,6 +72,12 @@
         if (observingBlock != nil) {
             return [observingBlock topLevelBlock];
         }
+        else {
+            return NO;
+        }
+    }
+    else if ([menuItem action] == @selector(exportBlocks:)) {
+        return YES;
     }
     
     return [super validateMenuItem:menuItem];

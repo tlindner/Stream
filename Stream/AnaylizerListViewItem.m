@@ -11,6 +11,7 @@
 #import "StAnaylizer.h"
 #import "MyDocument.h"
 #import "colorGradientView.h"
+#import "DragRegionView.h"
 
 #define MINIMUM_HEIGHT 26.0
 
@@ -35,7 +36,7 @@
 @synthesize customView;
 @synthesize editorController;
 @synthesize colorGradientView;
-@synthesize savedCustomView;
+@synthesize blockSettingsButton;
 
 - (void)setRepresentedObject:(id)representedObject
 {
@@ -43,7 +44,7 @@
     
     if (representedObject != nil) {
         [representedObject addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
-        [representedObject addObserver:self forKeyPath:@"collapse" options:0 context:self];
+        [representedObject addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
         
     }
 }
@@ -60,9 +61,27 @@
         if ([keyPath isEqualToString:@"currentEditorView"]) {
             [self loadStreamEditor];
         }
-        else if ([keyPath isEqualToString:@"collapse"]) {
-            [self noteViewHeightChanged];
-        }
+        else if ([keyPath isEqualToString:@"paneExpanded"]) {
+            if (!dragView.doingLiveResize) {
+                StAnaylizer *theAna = [self representedObject];
+                BOOL paneExpanded = theAna.paneExpanded;
+                
+                if (paneExpanded) {
+                    /* pane is opening */
+                    [self setLiveResize:YES];
+                    [self noteViewHeightChanged];
+                    [dragView setCustomSubView:nil paneExpanded:paneExpanded];
+                    [self setLiveResize:NO];
+                }
+                else {
+                    /* pane is closing */
+                    [self setLiveResize:YES];
+                    [dragView setCustomSubView:nil paneExpanded:paneExpanded];
+                    [self noteViewHeightChanged];
+                    [self setLiveResize:NO];
+                }
+            }
+         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -75,7 +94,7 @@
 
     if (self.representedObject != nil) {
         [self.representedObject removeObserver:self forKeyPath:@"currentEditorView" context:self];
-        [self.representedObject removeObserver:self forKeyPath:@"collapse" context:self];
+        [self.representedObject removeObserver:self forKeyPath:@"paneExpanded" context:self];
         self.representedObject = nil;
     }
     
@@ -84,8 +103,6 @@
         [self.editorController setRepresentedObject:nil];
         self.editorController = nil;
     }
-    
-    self.savedCustomView = nil;
     
     [super dealloc];
 }
@@ -109,36 +126,25 @@
     [self.editorController setRepresentedObject:self.representedObject];
     [self.editorController loadView];
     [[self.editorController view] setFrame:adjustedFrame];
-    [customView addSubview:[self.editorController view]];
+    [dragView setCustomSubView:[self.editorController view] paneExpanded:theAna.paneExpanded];
+//    [customView addSubview:[self.editorController view]];
 }
 
 - (CGFloat) heightForGivenWidth:(CGFloat)width {
     #pragma unused(width)
     StAnaylizer *ana = (StAnaylizer *)self.representedObject;
-    float result = MINIMUM_HEIGHT;
+    float result;
 
-    
-    if (ana.paneExpanded) {
-//        if (self.savedCustomView != nil) {
-//            if ([[self view] frame].size.height > MINIMUM_HEIGHT + 75 ) {
-//                [[self view] addSubview:self.savedCustomView];
-//                self.customView = self.savedCustomView;
-//                self.savedCustomView = nil;
-//                NSRect frame = [self.customView frame];
-//                frame.size.height = [[self view] frame].size.height - MINIMUM_HEIGHT;
-//                [self.customView setFrame:frame];
-//            }
-//        }
-        
+    if (dragView.doingLiveResize) {
+        result = ana.anaylizerHeight;
+    }
+    else if (ana.paneExpanded) {
         result = ana.anaylizerHeight;
     }
     else {
-//        if (self.savedCustomView == nil) {
-//            self.savedCustomView = self.customView;
-//            [[self customView] removeFromSuperviewWithoutNeedingDisplay];
-//        }
+        result = MINIMUM_HEIGHT;
     }
-    
+
     return floor(result);
 }
 
@@ -155,6 +161,11 @@
     ana.paneExpanded = !ana.paneExpanded;
 
     [self noteViewHeightChanged];
+}
+
+- (IBAction)blockSetttings:(id)sender
+{
+    NSLog( @"Show block settings: %@", sender );
 }
 
 @end

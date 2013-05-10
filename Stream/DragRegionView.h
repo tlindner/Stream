@@ -12,10 +12,16 @@
 
 @interface DragRegionView : NSView
 {
-    BOOL ignoreEvent;
-    float rowHeight;    
+//    BOOL ignoreEvent;
+    float rowHeight;
+    IBOutlet NSView *customView;
+    NSView *retainView;
+    
 }
 
 @property (assign) IBOutlet AnaylizerListViewItem *viewOwner;
+@property (assign) BOOL doingLiveResize;
+
+- (void)setCustomSubView:(NSView *)view paneExpanded:(BOOL)paneExpanded;
 
 @end

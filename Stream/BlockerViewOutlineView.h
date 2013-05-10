@@ -13,6 +13,7 @@
 @interface BlockerViewOutlineView : NSOutlineView
 
 - (IBAction)makeSubStream:(id)sender;
+- (IBAction) exportBlocks:(id)sender;
 
 @end
 

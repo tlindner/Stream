@@ -31,8 +31,9 @@
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
+#pragma unused (anaylizer)
     NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoCassetteFileBlocker: Incompatiable stream" );
     int blockNumber = 0, fileNumber = 0;
     int noteFileType, noteDataType, noteGaps;

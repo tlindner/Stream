@@ -13,6 +13,7 @@
 #import "DunfieldImageDisk.h"
 #import "OS9LogicalSectorsBlocker.h"
 #import "OS9FileBlocker.h"
+#import "GenericArbitraryGroupBlocker.h"
 
 @interface NSObject (BlockerExtension)
 + (NSString *)anayliserName;
@@ -49,7 +50,7 @@
     #pragma unused(notification)
     //NSLog( @"Im alive: %@", notification );
 
-    NSArray *blockers = [NSArray arrayWithObjects:[CoCoCassetteBlocker class], [CoCoCassetteFileBlocker class], [CoCoSegmentedObjectBlocker class], [DunfieldImageDisk class], [OS9LogicalSectorsBlocker class], [OS9FileBlocker class], nil];
+    NSArray *blockers = [NSArray arrayWithObjects:[CoCoCassetteBlocker class], [CoCoCassetteFileBlocker class], [CoCoSegmentedObjectBlocker class], [DunfieldImageDisk class], [OS9LogicalSectorsBlocker class], [OS9FileBlocker class], [GenericArbitraryGroupBlocker class], nil];
     
     for (Class blocker in blockers) {
         NSString *subMenuName = [[[blocker anayliserName] componentsSeparatedByString:@" "] objectAtIndex:0];

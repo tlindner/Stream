@@ -9,7 +9,7 @@
 #ifndef Stream_BlockerProtocol_h
 #define Stream_BlockerProtocol_h
 
-@class StStream;
+@class StStream, StAnaylizer;
 
 @protocol BlockerProtocol <NSObject>
 @optional
@@ -17,7 +17,7 @@
 + (NSString *)anaylizerKey;
 + (NSString *)AnaylizerPopoverAccessoryViewNib;
 + (NSMutableDictionary *)defaultOptions;
-+ (void) makeBlocks:(StStream *)stream;
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
 @end
 
 #endif

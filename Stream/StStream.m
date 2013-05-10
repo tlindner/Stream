@@ -69,10 +69,8 @@
     if (result == nil && [theName rangeOfString:@"*"].length != 0) {
         /* let's look for wild cards */
         NSSet *matchingKeys = [self.topLevelBlocks keysOfEntriesPassingTest:^(id key, id obj, BOOL *stop) {
-#pragma unused(obj)
-#pragma unused(stop)
+            #pragma unused(obj, stop)
             return [key isLike:theName];
-            
         }];
         
         if ([matchingKeys count] > 0) {
@@ -283,7 +281,7 @@
             
             if (blockerClass != nil )
             {
-                [blockerClass makeBlocks:self];
+                [blockerClass makeBlocks:self withAnaylizer:anAna];
             }
             else
             {

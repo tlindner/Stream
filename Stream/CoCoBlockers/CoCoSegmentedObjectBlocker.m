@@ -30,8 +30,9 @@
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
+#pragma unused (anaylizer)
     NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoSegmentedObjectBlocker: Incompatiable stream" );
     int segmentNumber, transferNumber;
     NSUInteger i;

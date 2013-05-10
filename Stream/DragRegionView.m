@@ -15,6 +15,7 @@
 @implementation DragRegionView
 
 @synthesize viewOwner;
+@synthesize doingLiveResize;
 
 //- (id)initWithFrame:(NSRect)frame
 //{
@@ -41,11 +42,12 @@
     StAnaylizer *ana = [viewOwner representedObject];
     BOOL keepOn = YES;
     float startAnaylizerHeight = ana.anaylizerHeight;
-    BOOL startCollaspe = ana.paneExpanded;
+    BOOL startPaneExpanded = ana.paneExpanded;
     start = [theEvent locationInWindow].y;
     offset = [[self superview] bounds].size.height;
     
     [viewOwner setLiveResize:YES];
+    self.doingLiveResize = YES;
     
     while (keepOn)
     {
@@ -55,17 +57,21 @@
         {
             case NSLeftMouseDragged:
                 
-                ignoreEvent = YES;
+//                ignoreEvent = YES;
                 distance = start - [theEvent locationInWindow].y;
                 distance += offset;
+                
+                if (distance <= (MINIMUM_HEIGHT + 80) && retainView == nil) {
+                    [self swapOut: [[customView subviews] objectAtIndex:0]];
+                }
+                
+                if (distance > (MINIMUM_HEIGHT + 80) && retainView != nil) {
+                    [self swapIn];
+                }
                 
                 if( distance < MINIMUM_HEIGHT )
                 {
                     distance = MINIMUM_HEIGHT;
-//                    ana.collapse = NO;
-                }
-                else {
-//                    ana.collapse = YES;
                 }
                 
                 ana.anaylizerHeight = distance;
@@ -74,26 +80,31 @@
                 
             case NSLeftMouseUp:
                 
-                ignoreEvent = YES;
+//                ignoreEvent = YES;
                 
                 if( startAnaylizerHeight == ana.anaylizerHeight )
                 {
                 }
                 else
                 {
-                    if( distance <= MINIMUM_HEIGHT )
+                    if( distance <= MINIMUM_HEIGHT+ 80 )
                     {
-                        if( startCollaspe == YES ) ana.paneExpanded = NO;
+                        if( startPaneExpanded == YES ) ana.paneExpanded = NO;
                         ana.anaylizerHeight = startAnaylizerHeight;
                     }
                     else
                     {
-                        if( startCollaspe == NO ) ana.paneExpanded = YES;
+                        if( startPaneExpanded == NO ) ana.paneExpanded = YES;
                     }
+
+                    self.doingLiveResize = NO;
+                    [viewOwner noteViewHeightChanged];
                 }
                 
                 keepOn = NO;
-                ignoreEvent = NO;
+//                ignoreEvent = NO;
+                self.doingLiveResize = NO;
+               
                 break;
                 
             default:
@@ -103,6 +114,56 @@
     }
     
     [viewOwner setLiveResize:NO];
+}
+
+- (void)swapOut:(NSView *)theView
+{
+    retainView = [theView retain];
+    NSSize mySize = retainView.bounds.size;
+    NSSize imgSize = NSMakeSize(mySize.width, mySize.height);
+    
+    NSBitmapImageRep *bmp = [retainView bitmapImageRepForCachingDisplayInRect:[retainView bounds]];
+    [bmp setSize:imgSize];
+    [retainView cacheDisplayInRect:[retainView bounds] toBitmapImageRep:bmp];
+    
+    NSArray *theSubViews = [customView subviews];
+    if (theSubViews != nil && [theSubViews count] > 0) {
+        [[theSubViews objectAtIndex:0] removeFromSuperview];
+    }
+    
+    NSImage *image = [[[NSImage alloc] initWithSize:imgSize] autorelease];
+    [image addRepresentation:bmp];
+    NSImageView *imageView = [[[NSImageView alloc] initWithFrame:[customView bounds]] autorelease];
+    [imageView setImage:image];
+    [customView addSubview:imageView];    
+}
+
+- (void)swapIn
+{
+    NSImageView *imageView = [[customView subviews] objectAtIndex:0];
+    [imageView removeFromSuperview];
+    [retainView setFrameSize:[customView frame].size];
+    [customView addSubview:retainView];
+    [retainView release];
+    retainView = nil;
+}
+
+- (void)setCustomSubView:(NSView *)theView paneExpanded:(BOOL)paneExpanded
+{
+    if (paneExpanded) {
+        if (theView == nil) {
+            [self swapIn];
+        }
+        else
+            [customView addSubview:theView];
+    }
+    else {
+        if (theView == nil) {
+            theView = [[customView subviews] objectAtIndex:0];
+        }
+
+        [self swapOut:theView];
+    }
 }
 
 @end

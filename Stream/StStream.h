@@ -76,5 +76,5 @@
 @end
 
 @interface NSObject (StreamBlockerMakerExtension)
-+ (void)makeBlocks:(StStream *)sender;
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
 @end

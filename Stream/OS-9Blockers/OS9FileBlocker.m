@@ -33,8 +33,9 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
+#pragma unused (anaylizer)
     StBlock *lsn0block = [stream topLevelBlockNamed:@"LSN 0"];
     
     if (lsn0block == nil) {

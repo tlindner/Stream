@@ -8,6 +8,7 @@
 
 #import "CoCoCassetteBlocker.h"
 #import "StBlock.h"
+#import "StAnaylizer.h"
 
 static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12, 15, 14 };
 
@@ -42,8 +43,9 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
     return self;
 }
 
-+ (void) makeBlocks:(StStream *)stream
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
+#pragma unused (anaylizer)
     NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoCassetteBlocker: Incompatiable stream" );
     
     NSData  *streamBytesObject = [stream dataOfTopLevelBlockNamed:@"stream"];

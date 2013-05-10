@@ -258,6 +258,9 @@
     else if ([menuItem action] == @selector(add:)) {
         return YES;
     }
+    else if ([menuItem action] == @selector(exportBlocks:)) {
+        return NO;
+    }
     else if ([[menuItem representedObject] respondsToSelector:@selector(anaylizerKey)]) {
         NSArray *selectedObjects = [streamTreeControler selectedObjects];
         
@@ -338,6 +341,9 @@
 
 - (IBAction)makeNewBlocker:(id)sender
 {
+    NSUInteger flags = ([NSEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask);
+    BOOL isOptionPressed = (0 != (flags & NSAlternateKeyMask));
+    
     Class <BlockerProtocol> class = [sender representedObject];
     
     NSArray *selectedObjects = [streamTreeControler selectedObjects];
@@ -352,13 +358,19 @@
         StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
         newAnaylizer.anaylizerKind = [class anaylizerKey];
         newAnaylizer.currentEditorView = @"Blocker View";
+        
+        if (isOptionPressed) {
+            newAnaylizer.paneExpanded = NO;
+        }
+        
         [theSet addObject:newAnaylizer];
 
         Class <BlockerProtocol> blockerClass = NSClassFromString([newAnaylizer valueForKey:@"anaylizerKind"]);
-        
+         
         if (blockerClass != nil )
         {
-            [blockerClass makeBlocks:selectedStream];
+            [newAnaylizer addSubOptionsDictionary:[blockerClass anaylizerKey]  withDictionary:[blockerClass defaultOptions]];
+            [blockerClass makeBlocks:selectedStream withAnaylizer:newAnaylizer];
         }
         else
             NSLog( @"Could not create class: %@", [newAnaylizer valueForKey:@"anaylizerKind"] );
@@ -367,11 +379,88 @@
     }
 }
 
-- (BOOL)selectionShouldChangeInTableView:(NSTableView *)aTableView
+- (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-    #pragma unused(aTableView)
-    return NO;
+#pragma unused (alert, returnCode, contextInfo)    
 }
+
+- (void)doExportBlocks:(NSArray *)objs
+{
+    NSURL *url = [objs objectAtIndex:0];
+    NSArray *selectedObjects = [objs objectAtIndex:1];
+    NSError *err = nil;
+    NSFileManager *fm = [NSFileManager defaultManager];
+    BOOL success = [fm createFileAtPath:[url path] contents:nil attributes:nil];
+    
+    if (success) {
+        NSFileHandle *fh = [NSFileHandle fileHandleForWritingToURL:url error:&err];
+        
+        if (fh != nil && err == nil)
+        {
+            NSAlert *myProgressAlert = [NSAlert alertWithMessageText:@"Now writing file…" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+            NSView *enclosingView = [[[NSView alloc] initWithFrame:NSMakeRect(0, 0, 240, 41)] autorelease];
+            NSTextField *filename = [[[NSTextField alloc] initWithFrame:NSMakeRect(-3, 24, 246, 17)] autorelease];
+            [filename setDrawsBackground:NO];
+            [filename setBezeled:NO];
+            [filename setBordered:NO];
+            [filename setEditable:NO];
+            [filename setSelectable:NO];
+            NSProgressIndicator *progress = [[[NSProgressIndicator alloc] initWithFrame:NSMakeRect(-2, -4, 244, 20)] autorelease];
+            [progress setMaxValue:[selectedObjects count]];
+            [progress setIndeterminate:NO];
+            [enclosingView addSubview:filename];
+            [enclosingView addSubview:progress];
+            [myProgressAlert setAccessoryView:enclosingView];
+            [myProgressAlert layout];
+            [myProgressAlert beginSheetModalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+            [[[myProgressAlert buttons] objectAtIndex:0] setEnabled:NO];
+            
+            for (StBlock *aBlock in selectedObjects)
+            {
+                [filename setStringValue:[NSString stringWithFormat:@"Block name: %@", [aBlock name]]];
+                [enclosingView display];
+                [fh writeData:[aBlock resultingData]];
+                [progress incrementBy:1.0];
+            }
+            [[[myProgressAlert buttons] objectAtIndex:0] setEnabled:YES];
+            [fh closeFile];
+        }
+        else {
+            NSAlert *myAlert = [NSAlert alertWithMessageText:@"Error writing to file" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not write to file: %@", err]; 
+            [myAlert beginSheetModalForWindow:[self windowForSheet] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+        }
+    }
+    else {
+        NSAlert *myAlert = [NSAlert alertWithMessageText:@"Could not create file" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not create file: %@", url]; 
+        [myAlert beginSheetModalForWindow:[self windowForSheet] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    }
+    
+    [objs release];
+}
+
+- (IBAction) exportBlocks:(NSArray *)selectedObjects
+{
+    NSSavePanel *mySavePanel = [NSSavePanel savePanel];
+    
+    void *sheetCompleation = ^(NSInteger result)
+    {
+        if( result == NSFileHandlingPanelOKButton )
+        {
+            NSArray *objs = [[NSArray alloc] initWithObjects:[mySavePanel URL], selectedObjects, nil];
+            [self performSelector:@selector(doExportBlocks:) withObject:objs afterDelay:1.0];
+
+        }
+    };
+    
+    [mySavePanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
+
+}
+
+//- (BOOL)selectionShouldChangeInTableView:(NSTableView *)aTableView
+//{
+//    #pragma unused(aTableView)
+//    return NO;
+//}
 
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)subview
 {

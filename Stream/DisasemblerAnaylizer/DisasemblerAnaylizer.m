@@ -35,7 +35,7 @@ unsigned char *memory = NULL;
         [inRepresentedObject addSubOptionsDictionary:[DisasemblerAnaylizer anaylizerKey] withDictionary:[DisasemblerAnaylizer defaultOptions]];
     }
     
-    /* fill in some seeting for known blocks */
+    /* fill in some settings for known blocks */
     if( [representedObject respondsToSelector:@selector(sourceUTI)] )
     {
         NSString *uti = [representedObject sourceUTI];

@@ -3,7 +3,7 @@
 
 #import "StAnaylizer.h"
 
-@class AnaylizerListViewItem;
+@class AnaylizerListViewItem, DragRegionView;
 
 @interface ColorGradientView : NSView
 {
@@ -21,6 +21,7 @@
     IBOutlet NSTextField *acceptsTextField;
     IBOutlet NSPopover *actionPopOver;
     IBOutlet NSView *accessoryView;
+    IBOutlet DragRegionView *drv;
     NSArrayController *popupArrayController;
     NSTextField *labelUTI;
     NSTextField *labelEditor;

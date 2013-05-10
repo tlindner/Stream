@@ -34,8 +34,9 @@ NSUInteger CalculateSectorSize( unsigned char value );
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
+#pragma unused (anaylizer)
     NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"DunfieldImageDisk: Incompatiable stream" );
     
     NSData  *streamBytesObject = [stream dataOfTopLevelBlockNamed:@"stream"];

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7700637617128E730037055D /* AnaylizerPencil.tiff */; };
+		770B6878173D9AB80097305E /* GenericArbitraryGroupBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B6877173D9AB80097305E /* GenericArbitraryGroupBlocker.m */; };
+		770B687C173D9B030097305E /* GenericArbitraryGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B687A173D9B030097305E /* GenericArbitraryGroupViewController.m */; };
+		770B687D173D9B030097305E /* GenericArbitraryGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 770B687B173D9B030097305E /* GenericArbitraryGroupViewController.xib */; };
 		770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */; };
 		771AD296141D06C800E0FE41 /* CoCoAudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */; };
 		771AD29A141D414B00E0FE41 /* HexFiendAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */; };
@@ -158,6 +161,11 @@
 
 /* Begin PBXFileReference section */
 		7700637617128E730037055D /* AnaylizerPencil.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerPencil.tiff; path = Stream/AudioAnaylizer/AnaylizerPencil.tiff; sourceTree = "<group>"; };
+		770B6876173D9AB80097305E /* GenericArbitraryGroupBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericArbitraryGroupBlocker.h; path = "Stream/Generic Blockers/GenericArbitraryGroupBlocker.h"; sourceTree = "<group>"; };
+		770B6877173D9AB80097305E /* GenericArbitraryGroupBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GenericArbitraryGroupBlocker.m; path = "Stream/Generic Blockers/GenericArbitraryGroupBlocker.m"; sourceTree = "<group>"; };
+		770B6879173D9B030097305E /* GenericArbitraryGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericArbitraryGroupViewController.h; path = "Stream/Generic Blockers/GenericArbitraryGroupViewController.h"; sourceTree = "<group>"; };
+		770B687A173D9B030097305E /* GenericArbitraryGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GenericArbitraryGroupViewController.m; path = "Stream/Generic Blockers/GenericArbitraryGroupViewController.m"; sourceTree = "<group>"; };
+		770B687B173D9B030097305E /* GenericArbitraryGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GenericArbitraryGroupViewController.xib; path = "Stream/Generic Blockers/GenericArbitraryGroupViewController.xib"; sourceTree = "<group>"; };
 		770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataViewController.h; path = Stream/BlockerDataViewController.h; sourceTree = "<group>"; };
 		770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataViewController.m; path = Stream/BlockerDataViewController.m; sourceTree = "<group>"; };
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
@@ -440,6 +448,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		770B6874173D9A200097305E /* Generic Blockers */ = {
+			isa = PBXGroup;
+			children = (
+				770B6876173D9AB80097305E /* GenericArbitraryGroupBlocker.h */,
+				770B6877173D9AB80097305E /* GenericArbitraryGroupBlocker.m */,
+				770B6879173D9B030097305E /* GenericArbitraryGroupViewController.h */,
+				770B687A173D9B030097305E /* GenericArbitraryGroupViewController.m */,
+				770B687B173D9B030097305E /* GenericArbitraryGroupViewController.xib */,
+			);
+			name = "Generic Blockers";
+			sourceTree = "<group>";
+		};
 		772D952814088129001A449B /* HexFiendAnaylizer */ = {
 			isa = PBXGroup;
 			children = (
@@ -469,6 +489,7 @@
 				778E46EC172F649C00736D51 /* DisasemblerAnaylizer */,
 				778A59771406EE0700B68EB4 /* CoCoBlockers */,
 				77ED691217375CA90024397E /* OS-9Blockers */,
+				770B6874173D9A200097305E /* Generic Blockers */,
 				77764F051736026F007F34D3 /* DiskImageBlockers */,
 				77614F3413DC9B6C00041279 /* Models */,
 				7788588B13EDC1B30057E042 /* AnaylizerUI */,
@@ -984,6 +1005,7 @@
 				77B61804172B8CD3008E8F1A /* TextAccessoryView.xib in Resources */,
 				778E46F4172F672100736D51 /* DisasemblerAccessoryView.xib in Resources */,
 				778E46F9172F700C00736D51 /* DisasemblerAnaylizerViewController.xib in Resources */,
+				770B687D173D9B030097305E /* GenericArbitraryGroupViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1111,6 +1133,8 @@
 				77ED691517375CE60024397E /* OS9LogicalSectorsBlocker.m in Sources */,
 				77714C631738A48B00EA4EC5 /* OS9FileBlocker.m in Sources */,
 				77C65631173AA89C0022336D /* StData.m in Sources */,
+				770B6878173D9AB80097305E /* GenericArbitraryGroupBlocker.m in Sources */,
+				770B687C173D9B030097305E /* GenericArbitraryGroupViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

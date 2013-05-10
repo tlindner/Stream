@@ -60,6 +60,7 @@ typedef struct
 //    [super setBounds:boundsRect];
 //}
 //
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
