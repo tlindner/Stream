@@ -72,7 +72,6 @@
 		77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */; };
 		77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */; };
 		77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77AE7556141568BD0052A93D /* BlockIcon.tiff */; };
-		77B014681717AFB2008CAF1A /* StreamEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B014671717AFB2008CAF1A /* StreamEdit.m */; };
 		77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */; };
 		77B617FD172B8A81008E8F1A /* TextAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B617FC172B8A81008E8F1A /* TextAnaylizer.m */; };
 		77B61801172B8BA1008E8F1A /* TextAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */; };
@@ -82,6 +81,7 @@
 		77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */; };
 		77C17FC3140F469700E23921 /* AudioAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */; };
 		77C17FC4140F469700E23921 /* AudioAnaylizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */; };
+		77C65631173AA89C0022336D /* StData.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C65630173AA89C0022336D /* StData.m */; };
 		77C8DE1613E6F2C000AD079E /* Analyzation.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C8DE1513E6F2C000AD079E /* Analyzation.m */; };
 		77CB933F1404AE7F0032F56F /* Zoom.tif in Resources */ = {isa = PBXBuildFile; fileRef = 77CB933E1404AE7F0032F56F /* Zoom.tif */; };
 		77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D94C8B13E8F704009192BA /* DragRegionView.m */; };
@@ -276,8 +276,6 @@
 		77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewController.m; path = Stream/BlockAttributeViewController.m; sourceTree = "<group>"; };
 		77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewController.xib; path = Stream/BlockAttributeViewController.xib; sourceTree = "<group>"; };
 		77AE7556141568BD0052A93D /* BlockIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = BlockIcon.tiff; sourceTree = "<group>"; };
-		77B014661717AFB2008CAF1A /* StreamEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamEdit.h; path = Stream/StreamEdit.h; sourceTree = "<group>"; };
-		77B014671717AFB2008CAF1A /* StreamEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StreamEdit.m; path = Stream/StreamEdit.m; sourceTree = "<group>"; };
 		77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerEdit.h; path = Stream/AnaylizerEdit.h; sourceTree = "<group>"; };
 		77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerEdit.m; path = Stream/AnaylizerEdit.m; sourceTree = "<group>"; };
 		77B617FB172B8A81008E8F1A /* TextAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextAnaylizer.h; path = Stream/TextAnaylizer/TextAnaylizer.h; sourceTree = "<group>"; };
@@ -292,6 +290,8 @@
 		77C17FC0140F469700E23921 /* AudioAnaylizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaylizerViewController.h; path = Stream/AudioAnaylizer/AudioAnaylizerViewController.h; sourceTree = "<group>"; };
 		77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaylizerViewController.m; path = Stream/AudioAnaylizer/AudioAnaylizerViewController.m; sourceTree = "<group>"; };
 		77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnaylizerViewController.xib; path = Stream/AudioAnaylizer/AudioAnaylizerViewController.xib; sourceTree = "<group>"; };
+		77C6562F173AA89C0022336D /* StData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StData.h; path = Stream/StData.h; sourceTree = "<group>"; };
+		77C65630173AA89C0022336D /* StData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StData.m; path = Stream/StData.m; sourceTree = "<group>"; };
 		77C8DE1413E6F2C000AD079E /* Analyzation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Analyzation.h; sourceTree = "<group>"; };
 		77C8DE1513E6F2C000AD079E /* Analyzation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Analyzation.m; sourceTree = "<group>"; };
 		77CB933E1404AE7F0032F56F /* Zoom.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Zoom.tif; sourceTree = "<group>"; };
@@ -602,16 +602,16 @@
 			isa = PBXGroup;
 			children = (
 				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
-				77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */,
-				77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */,
-				77B014661717AFB2008CAF1A /* StreamEdit.h */,
-				77B014671717AFB2008CAF1A /* StreamEdit.m */,
 				778A597C140703DB00B68EB4 /* StStream.h */,
 				778A597D140703DB00B68EB4 /* StStream.m */,
+				77C6562F173AA89C0022336D /* StData.h */,
+				77C65630173AA89C0022336D /* StData.m */,
 				77FEA6D613F57D4B0082B946 /* StAnaylizer.h */,
 				77FEA6D713F57D4B0082B946 /* StAnaylizer.m */,
 				7760145E140987A500777D60 /* StBlock.h */,
 				7760145F140987A600777D60 /* StBlock.m */,
+				77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */,
+				77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1096,7 +1096,6 @@
 				776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */,
 				77DA26CD1421BAA2007BE635 /* BlockerViewOutlineView.m in Sources */,
 				778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */,
-				77B014681717AFB2008CAF1A /* StreamEdit.m in Sources */,
 				77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */,
 				77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */,
 				777745AC171B558300700BB7 /* MAAttachedWindow.m in Sources */,
@@ -1111,6 +1110,7 @@
 				77FE861E1736181B0015DCD8 /* DunfieldImageDisk.m in Sources */,
 				77ED691517375CE60024397E /* OS9LogicalSectorsBlocker.m in Sources */,
 				77714C631738A48B00EA4EC5 /* OS9FileBlocker.m in Sources */,
+				77C65631173AA89C0022336D /* StData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

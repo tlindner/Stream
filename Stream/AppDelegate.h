@@ -19,3 +19,7 @@
 @property (assign) IBOutlet NSMenu *blocksMenu;
 
 @end
+
+@interface NSError (ExtendedErrorCategory)
+- (NSString *)debugDescription;
+@end

@@ -1,8 +1,8 @@
 //
 //  AnaylizerEdit.h
-//  Stream
+//  temp
 //
-//  Created by tim lindner on 4/11/13.
+//  Created by tim lindner on 5/7/13.
 //  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 //
 

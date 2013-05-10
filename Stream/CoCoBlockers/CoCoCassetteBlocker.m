@@ -7,6 +7,7 @@
 //
 
 #import "CoCoCassetteBlocker.h"
+#import "StBlock.h"
 
 static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12, 15, 14 };
 

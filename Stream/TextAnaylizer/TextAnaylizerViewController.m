@@ -80,11 +80,12 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
     
     if( [object isKindOfClass:[StAnaylizer class]] )
     {
-        bytes = [[object parentStream] valueForKey:@"bytesCache"];
+//        bytes = [[object parentStream] valueForKey:@"bytesCache"];
+        bytes = [object sourceData];
     }
     else if( [object isKindOfClass:[StBlock class]] )
     {
-        bytes = [object getData];
+        bytes = [object resultingData];
     }
     else if( [object isKindOfClass:[NSData class]] )
     {

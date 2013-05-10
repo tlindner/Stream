@@ -19,7 +19,6 @@
 			<string>NSTreeController</string>
 			<string>NSCustomView</string>
 			<string>NSTableColumn</string>
-			<string>NSUserDefaultsController</string>
 			<string>NSScroller</string>
 			<string>NSCustomObject</string>
 		</object>
@@ -72,6 +71,7 @@
 														<int key="NSvFlags">4352</int>
 														<string key="NSFrameSize">{167, 270}</string>
 														<reference key="NSSuperview" ref="669976941"/>
+														<reference key="NSWindow"/>
 														<reference key="NSNextKeyView" ref="45076628"/>
 														<string key="NSReuseIdentifierKey">_NS:1071</string>
 														<bool key="NSEnabled">YES</bool>
@@ -170,6 +170,7 @@
 												</object>
 												<string key="NSFrame">{{1, 1}, {167, 270}}</string>
 												<reference key="NSSuperview" ref="307100959"/>
+												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="1001255841"/>
 												<string key="NSReuseIdentifierKey">_NS:1069</string>
 												<reference key="NSDocView" ref="1001255841"/>
@@ -181,6 +182,7 @@
 												<int key="NSvFlags">-2147483392</int>
 												<string key="NSFrame">{{224, 17}, {15, 102}}</string>
 												<reference key="NSSuperview" ref="307100959"/>
+												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="777577606"/>
 												<string key="NSReuseIdentifierKey">_NS:1094</string>
 												<reference key="NSTarget" ref="307100959"/>
@@ -192,6 +194,7 @@
 												<int key="NSvFlags">-2147483392</int>
 												<string key="NSFrame">{{1, 119}, {238, 15}}</string>
 												<reference key="NSSuperview" ref="307100959"/>
+												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="788690132"/>
 												<string key="NSReuseIdentifierKey">_NS:1096</string>
 												<int key="NSsFlags">1</int>
@@ -202,6 +205,7 @@
 										</object>
 										<string key="NSFrameSize">{169, 272}</string>
 										<reference key="NSSuperview" ref="335159447"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="669976941"/>
 										<string key="NSReuseIdentifierKey">_NS:1067</string>
 										<int key="NSsFlags">133682</int>
@@ -213,6 +217,7 @@
 								</object>
 								<string key="NSFrameSize">{169, 272}</string>
 								<reference key="NSSuperview" ref="738730444"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="307100959"/>
 								<string key="NSReuseIdentifierKey">_NS:599</string>
 								<string key="NSClassName">NSView</string>
@@ -222,12 +227,15 @@
 								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{178, 0}, {404, 272}}</string>
 								<reference key="NSSuperview" ref="738730444"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:601</string>
 								<string key="NSClassName">NSView</string>
 							</object>
 						</object>
 						<string key="NSFrameSize">{582, 272}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="335159447"/>
 						<string key="NSReuseIdentifierKey">_NS:597</string>
 						<bool key="NSIsVertical">YES</bool>
@@ -235,6 +243,7 @@
 				</object>
 				<string key="NSFrameSize">{582, 272}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="738730444"/>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -248,10 +257,7 @@
 				<bool key="NSAvoidsEmptySelection">YES</bool>
 				<bool key="NSPreservesSelection">YES</bool>
 				<bool key="NSSelectsInsertedObjects">YES</bool>
-				<string key="NSTreeContentChildrenKey">blocks</string>
-			</object>
-			<object class="NSUserDefaultsController" id="953814796">
-				<bool key="NSSharedInstance">YES</bool>
+				<string key="NSTreeContentChildrenKey">blocksArray</string>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -344,6 +350,14 @@
 						</object>
 					</object>
 					<int key="connectionID">121</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">outlineView</string>
+						<reference key="source" ref="394668255"/>
+						<reference key="destination" ref="1001255841"/>
+					</object>
+					<int key="connectionID">127</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -458,11 +472,6 @@
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Tree Controller</string>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">74</int>
-						<reference key="object" ref="953814796"/>
-						<reference key="parent" ref="0"/>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -485,7 +494,6 @@
 					<string>61.IBPluginDependency</string>
 					<string>65.IBPluginDependency</string>
 					<string>65.ibExternalFetchPredicateFormat</string>
-					<string>74.IBPluginDependency</string>
 				</object>
 				<object class="NSArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -505,7 +513,6 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -520,9 +527,118 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">125</int>
+			<int key="maxID">127</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">BlockerDataViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>editorView</string>
+							<string>outlineView</string>
+							<string>treeController</string>
+						</object>
+						<object class="NSArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>NSView</string>
+							<string>NSOutlineView</string>
+							<string>NSTreeController</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>editorView</string>
+							<string>outlineView</string>
+							<string>treeController</string>
+						</object>
+						<object class="NSArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">editorView</string>
+								<string key="candidateClassName">NSView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">outlineView</string>
+								<string key="candidateClassName">NSOutlineView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">treeController</string>
+								<string key="candidateClassName">NSTreeController</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/BlockerDataViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">BlockerViewOutlineView</string>
+					<string key="superclassName">NSOutlineView</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">makeSubStream:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">makeSubStream:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">makeSubStream:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/BlockerViewOutlineView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSViewController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>ConfigurableButton1:</string>
+							<string>ConfigurableButton2:</string>
+						</object>
+						<object class="NSArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>ConfigurableButton1:</string>
+							<string>ConfigurableButton2:</string>
+						</object>
+						<object class="NSArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">ConfigurableButton1:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">ConfigurableButton2:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSViewController.h</string>
+					</object>
+				</object>
+			</object>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">

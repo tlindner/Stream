@@ -339,6 +339,11 @@ unsigned char *memory = NULL;
     return result;
 }
 
+- (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte
+{
+    NSLog( @"Dissasembler: replaceBytesInRange: %@ withByte 0x%x", NSStringFromRange(range), *byte);
+}
+
 + (NSArray *)anaylizerUTIs
 {
     return [NSArray arrayWithObjects:@"com.microsoft.cocobasic.object", @"com.microsoft.cocobasic.gapsobject",nil];

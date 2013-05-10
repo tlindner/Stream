@@ -17,7 +17,7 @@
     
     NSNib *actionPopOverNib;
     IBOutlet NSPopUpButton *editorPopup;
-    IBOutlet NSTextField *utiTextField;
+    IBOutlet NSComboBox *utiComboBox;
     IBOutlet NSTextField *acceptsTextField;
     IBOutlet NSPopover *actionPopOver;
     IBOutlet NSView *accessoryView;

@@ -1,79 +1,81 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11G63b" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11G63b" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="AnaylizerEdit" representedClassName="AnaylizerEdit" syncable="YES">
         <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="length" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StAnaylizer" inverseName="edits" inverseEntity="StAnaylizer" syncable="YES"/>
     </entity>
-    <entity name="StAnaylizer" representedClassName="StAnaylizer">
-        <attribute name="anaylizerHeight" attributeType="Float" minValueString="0" defaultValueString="207"/>
-        <attribute name="anaylizerKind" attributeType="String" indexed="YES"/>
-        <attribute name="collapse" attributeType="Boolean" defaultValueString="YES"/>
-        <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
-        <attribute name="editIndexSet" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
-        <attribute name="failIndexSet" attributeType="Transformable"/>
-        <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
-        <attribute name="resultingData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
-        <attribute name="resultingUTI" attributeType="String" defaultValueString="public.data"/>
-        <attribute name="viewRange" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
+    <entity name="StAnaylizer" representedClassName="StAnaylizer" parentEntity="StData" syncable="YES">
+        <attribute name="anaylizerHeight" optional="YES" attributeType="Float" defaultValueString="207" syncable="YES"/>
+        <attribute name="blockSettingsHidden" optional="YES" transient="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="editIndexSet" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="failIndexSet" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="paneExpanded" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="removeEnabled" optional="YES" transient="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="sourceData" optional="YES" transient="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="title" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
+        <attribute name="viewRange" optional="YES" attributeType="Transformable" syncable="YES"/>
         <relationship name="edits" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="AnaylizerEdit" inverseName="parent" inverseEntity="AnaylizerEdit" syncable="YES"/>
-        <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream"/>
+        <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="anaylizers" inverseEntity="StStream" syncable="YES"/>
     </entity>
-    <entity name="StBaseBlock" syncable="YES"/>
-    <entity name="StBlock" representedClassName="StBlock">
-        <attribute name="anaylizerKind" optional="YES" attributeType="String"/>
+    <entity name="StBlock" representedClassName="StBlock" parentEntity="StData" syncable="YES">
+        <attribute name="attributeColor" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="checkBytes" optional="YES" attributeType="Binary"/>
-        <attribute name="checkBytesForUI" optional="YES" transient="YES" attributeType="Transformable"/>
-        <attribute name="currentEditorView" attributeType="String" defaultValueString="Hex Editor"/>
-        <attribute name="dataForUI" optional="YES" transient="YES" attributeType="Transformable"/>
-        <attribute name="expectedSize" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
-        <attribute name="index" attributeType="Integer 64" defaultValueString="0"/>
-        <attribute name="isEdit" attributeType="Boolean" defaultValueString="NO"/>
-        <attribute name="isFail" attributeType="Boolean" defaultValueString="NO"/>
-        <attribute name="length" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0"/>
-        <attribute name="markForDeletion" attributeType="Boolean" defaultValueString="NO"/>
-        <attribute name="name" attributeType="String" defaultValueString="untitled"/>
-        <attribute name="offset" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
-        <attribute name="optionsDictionary" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
-        <attribute name="repeat" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="resultingUTI" optional="YES" attributeType="String"/>
+        <attribute name="editSet" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="expectedSize" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="isEdit" optional="YES" attributeType="Boolean"/>
+        <attribute name="isFail" optional="YES" attributeType="Boolean"/>
+        <attribute name="length" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="markForDeletion" optional="YES" attributeType="Boolean"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="offset" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="repeat" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String"/>
-        <attribute name="sourceUTI" attributeType="String" defaultValueString="public.data"/>
+        <attribute name="topLevelBlock" optional="YES" transient="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="uiCheckBytes" optional="YES" transient="YES" attributeType="Transformable"/>
+        <attribute name="uiData" optional="YES" transient="YES" attributeType="Transformable"/>
         <attribute name="uiName" optional="YES" attributeType="String" defaultValueString="uiDeault"/>
         <attribute name="valueTransformer" optional="YES" attributeType="String"/>
-        <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock" inverseName="parentBlock" inverseEntity="StBlock"/>
-        <relationship name="parentBlock" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StBlock" inverseName="blocks" inverseEntity="StBlock"/>
-        <relationship name="parentStream" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="blocks" inverseEntity="StStream"/>
+        <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StBlock" inverseName="parentBlock" inverseEntity="StBlock" syncable="YES"/>
+        <relationship name="parentBlock" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StBlock" inverseName="blocks" inverseEntity="StBlock" syncable="YES"/>
+        <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="blocks" inverseEntity="StStream" syncable="YES"/>
         <relationship name="sourceSubStreamParent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="sourceBlock" inverseEntity="StStream" syncable="YES"/>
     </entity>
-    <entity name="StreamEdit" representedClassName="StreamEdit" syncable="YES">
-        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="length" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="location" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="edits" inverseEntity="StStream" syncable="YES"/>
+    <entity name="StData" representedClassName="StData" isAbstract="YES" syncable="YES">
+        <attribute name="anaylizerKind" optional="YES" attributeType="String"/>
+        <attribute name="anaylizerObject" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="ancestralParent" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="canChangeEditor" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="currentEditorView" optional="YES" attributeType="String" defaultValueString="Hex Editor"/>
+        <attribute name="optionsDictionary" optional="YES" attributeType="Transformable" valueTransformerName="" syncable="YES"/>
+        <attribute name="readOnly" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="resultingData" optional="YES" transient="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="resultingUTI" optional="YES" attributeType="String"/>
+        <attribute name="sourceUTI" optional="YES" attributeType="String" defaultValueString="public.data"/>
+        <attribute name="unionRange" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="viewController" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
     </entity>
-    <entity name="StStream" representedClassName="StStream">
-        <attribute name="bytesCache" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
-        <attribute name="customeSortOrder" attributeType="Float" defaultValueString="500"/>
-        <attribute name="displayName" attributeType="String" defaultValueString="Untitled"/>
-        <attribute name="modificationDateofURL" optional="YES" attributeType="Date"/>
-        <attribute name="sourceURL" optional="YES" attributeType="Transformable" valueTransformerName="NSKeyedUnarchiveFromDataTransformerName"/>
-        <attribute name="sourceUTI" attributeType="String" defaultValueString="public.data"/>
-        <attribute name="streamTransform" attributeType="String" defaultValueString="none"/>
-        <relationship name="anaylizers" toMany="YES" minCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="StAnaylizer" inverseName="parentStream" inverseEntity="StAnaylizer"/>
-        <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock" inverseName="parentStream" inverseEntity="StBlock"/>
-        <relationship name="childStreams" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StStream" inverseName="parentStream" inverseEntity="StStream"/>
-        <relationship name="edits" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StreamEdit" inverseName="parentStream" inverseEntity="StreamEdit" syncable="YES"/>
-        <relationship name="parentStream" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream"/>
+    <entity name="StStream" representedClassName="StStream" syncable="YES">
+        <attribute name="customSortOrder" optional="YES" attributeType="Float" defaultValueString="500" syncable="YES"/>
+        <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="modificationDateofURL" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="regeneratingBlocks" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="sourceURL" optional="YES" attributeType="Transformable" valueTransformerName="" syncable="YES"/>
+        <attribute name="sourceUTI" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="streamTransform" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="topLevelBlocks" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="anaylizers" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StAnaylizer" inverseName="parentStream" inverseEntity="StAnaylizer" syncable="YES"/>
+        <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StBlock" inverseName="parentStream" inverseEntity="StBlock" syncable="YES"/>
+        <relationship name="childStreams" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StStream" inverseName="parentStream" inverseEntity="StStream" syncable="YES"/>
+        <relationship name="parentStream" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StStream" inverseName="childStreams" inverseEntity="StStream" syncable="YES"/>
         <relationship name="sourceBlock" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="StBlock" inverseName="sourceSubStreamParent" inverseEntity="StBlock" syncable="YES"/>
     </entity>
     <elements>
         <element name="AnaylizerEdit" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="StAnaylizer" positionX="0" positionY="0" width="0" height="210"/>
-        <element name="StBlock" positionX="0" positionY="0" width="0" height="405"/>
-        <element name="StreamEdit" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="StStream" positionX="0" positionY="0" width="0" height="240"/>
-        <element name="StBaseBlock" positionX="160" positionY="192" width="128" height="45"/>
+        <element name="StAnaylizer" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="StBlock" positionX="160" positionY="192" width="128" height="360"/>
+        <element name="StData" positionX="160" positionY="192" width="128" height="225"/>
+        <element name="StStream" positionX="160" positionY="192" width="128" height="270"/>
     </elements>
 </model>

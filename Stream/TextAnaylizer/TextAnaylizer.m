@@ -194,6 +194,11 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
     return result;
 }
 
+- (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte
+{
+    NSLog( @"Text Anaylizer: Unimplemented: replaceBytesInRange: %@ withByte 0x%x", NSStringFromRange(range), *byte);
+}
+
 + (NSArray *)anaylizerUTIs
 {
     return [NSArray arrayWithObjects:@"public.text", @"com.microsoft.cocobasic.binary", @"com.microware.os9directoryfile", nil];

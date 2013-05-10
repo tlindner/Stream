@@ -64,15 +64,14 @@
     {
         StAnaylizer *object = [self representedObject];
         [[hexView controller] setInOverwriteMode:NO];
-        [hexView setData:[object.parentStream valueForKey:@"bytesCache"]];
-        [object setResultingData:[[[object.parentStream valueForKey:@"bytesCache"] mutableCopy] autorelease]];
+        [hexView setData:object.sourceData];
         [self setupRepresentedObject];
     }
     else if( [[self representedObject] isKindOfClass:[StBlock class]] )
     {
         StBlock *theBlock = [self representedObject];
         lastAnaylizer = [[[theBlock getStream] lastFilterAnayliser] retain];
-        NSData *theData = [theBlock getData];
+        NSData *theData = [theBlock resultingData];
         [[hexView controller] setInOverwriteMode:NO];
         [hexView setData:theData];
         [self setupRepresentedObject];

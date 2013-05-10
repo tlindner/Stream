@@ -454,11 +454,11 @@ typedef struct
         for (NSUInteger i=1; i<[anaylizers count]; i++)
         {
             StAnaylizer *theAna = [anaylizers objectAtIndex:i];
-            NSSet *blocksSet = [stream blocksWithAnaylizerKey:[theAna anaylizerKind]];
+            NSArray *blocksSet = [stream blocksWithAnaylizerKey:[theAna anaylizerKind]];
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
             NSArray *blocksArray = [blocksSet sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
             NSArray *nameArray = [blocksArray valueForKey:@"name"];
-            NSArray *rangeArrayObject = [blocksArray valueForKey:@"unionRangeObject"];
+            NSArray *rangeArrayObject = [blocksArray valueForKey:@"unionRange"];
             NSRange *rangeArray = (NSRange *)malloc(sizeof(NSRange) * [rangeArrayObject count]);
             
             for (NSUInteger j=0; j<[rangeArrayObject count]; j++ )
@@ -1042,7 +1042,7 @@ typedef struct
 //            AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
 //            NSData *editedSamples = [NSData dataWithBytes:audioFrames + range.location length:range.length];
             NSData *editedSamples = [modelObject.frameBuffer subdataWithRange:range];
-            [[self cachedAnaylizer] poseEdit:editedSamples range:range];
+            [[self cachedAnaylizer] postEdit:editedSamples range:range];
 
             [modelObject anaylizeAudioData];
             [self setNeedsDisplay:YES];
@@ -1068,7 +1068,7 @@ typedef struct
         /* post edit to anaylizer */
         AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
         NSData *editedSamples = [NSData dataWithBytes:audioFrames + range.location length:range.length];
-        [[self cachedAnaylizer] poseEdit:editedSamples range:range];
+        [[self cachedAnaylizer] postEdit:editedSamples range:range];
 
         /* Release samples */
         free( storedSamples );

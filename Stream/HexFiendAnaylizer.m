@@ -9,6 +9,7 @@
 #import "HexFiendAnaylizer.h"
 #import "HexFiendAnaylizerController.h"
 #import "StAnaylizer.h"
+#import "HFTextView.h"
 
 @implementation HexFiendAnaylizer
 
@@ -79,6 +80,17 @@
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (NSData *)resultingData
+{
+    HFTextView *hexView = (HFTextView *)[[representedObject viewController] view];
+    return [hexView data];
+}
+
+- (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte
+{
+    NSLog( @"HexFiend Unimplemented: replaceBytesInRange: %@ withByte 0x%x", NSStringFromRange(range), *byte);
 }
 
 - (void)dealloc

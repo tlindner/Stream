@@ -10,7 +10,6 @@
 #import "Analyzation.h"
 #import "StStream.h"
 #import "StAnaylizer.h"
-#import "StreamEdit.h"
 #import "StBlock.h"
 #include "AudioToolbox/AudioToolbox.h"
 
@@ -24,10 +23,12 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
     StAnaylizer *representedObject;
     NSMutableData *frameBuffer;
     int currentAudioChannel;
+    NSMutableData *resultingData;
 }
 
 @property (assign) StAnaylizer * representedObject;
 @property (nonatomic, retain) NSMutableData *frameBuffer;
+@property (nonatomic, retain) NSMutableData *resultingData;
 
 - (void) loadAudioChannel:(NSUInteger)audioChannel;
 - (void) anaylizeAudioData;

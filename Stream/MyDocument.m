@@ -8,6 +8,7 @@
 
 #import "MyDocument.h"
 #import "StStream.h"
+#import "StBlock.h"
 #import "StAnaylizer.h"
 #import "AppDelegate.h"
 #import "AnaylizerListViewItem.h"
@@ -155,7 +156,7 @@
     [newObject setValue:[aURL lastPathComponent] forKey:@"displayName"];
     NSDate *modDate = [[[NSFileManager defaultManager] attributesOfItemAtPath:[aURL path] error:nil] fileModificationDate];
     [newObject setValue:modDate forKey:@"modificationDateofURL"];
-    [newObject setValue:[[[NSData alloc] initWithContentsOfURL:aURL] autorelease] forKey:@"bytesCache"];
+//    [newObject setValue:[[[NSData alloc] initWithContentsOfURL:aURL] autorelease] forKey:@"bytesCache"];
     
     CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)[aURL pathExtension], NULL);
     [newObject setValue:(NSString *)fileUTI forKey:@"sourceUTI"];
@@ -185,6 +186,10 @@
         
         if( ![[name class] isSubclassOfClass:[NSString class]] ) {
             name = [theBlock source];
+
+            if( ![[name class] isSubclassOfClass:[NSString class]] ) {
+                name = [theBlock description];
+            }
         }
     }
 
@@ -192,7 +197,6 @@
     [theParent addChildStreamsObject:(StStream *)newObject];
     [newObject setValue:name forKey:@"displayName"];
     [newObject setValue:[theBlock resultingUTI] forKey:@"sourceUTI"];
-    [newObject setValue:[theBlock getData] forKey:@"bytesCache"];
     [newObject setValue:theBlock forKey:@"sourceBlock"];
     
     /* Setup first anaylizer */

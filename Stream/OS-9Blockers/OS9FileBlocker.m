@@ -7,6 +7,7 @@
 //
 
 #import "OS9FileBlocker.h"
+#import "StBlock.h"
 
 NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize );
 
@@ -41,7 +42,7 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
         return;
     }
     
-    NSData *lsn0Data = [lsn0block getData];
+    NSData *lsn0Data = [lsn0block resultingData];
     
     if (lsn0Data != nil && [lsn0Data length] > 0x0a) {
         const unsigned char *lsn0 = [lsn0Data bytes];
@@ -70,7 +71,7 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
 NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize )
 {
     StBlock *fdBlock = [stream topLevelBlockNamed:fdLSN];
-    NSData *fdData = [fdBlock getData];
+    NSData *fdData = [fdBlock resultingData];
 
     if (fdData != nil) {
         NSUInteger fdLength = [fdData length];
@@ -131,7 +132,7 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
             
             if (vt != nil) {
                 StBlock *newDirBlock = newFileBlock;
-                NSData *newDirData = [newDirBlock getData];
+                NSData *newDirData = [newDirBlock resultingData];
                 NSUInteger newDirLength = [newDirData length], i=0;
                 const unsigned char *bytes = [newDirData bytes];
                 

@@ -40,3 +40,7 @@
 - (void) doubleClick:(id)nid;
 
 @end
+
+@interface NSTreeNode (OrderedExtension)
+- (NSArray *) childrenArray;
+@end

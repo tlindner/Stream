@@ -7,6 +7,7 @@
 //
 
 #import "CoCoSegmentedObjectBlocker.h"
+#import "StBlock.h"
 
 @implementation CoCoSegmentedObjectBlocker
 + (NSString *)anayliserName

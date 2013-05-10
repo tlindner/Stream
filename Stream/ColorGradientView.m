@@ -11,6 +11,7 @@
 #import "Analyzation.h"
 #import "StAnaylizer.h"
 #import "StBlock.h"
+#import "AnaylizerListViewItem.h"
 
 void AbleAllControlsInView( NSView *inView, BOOL able );
 
@@ -118,7 +119,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
             
             [blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
 
-            [utiTextField setEnabled:YES];
+            [utiComboBox setEnabled:YES];
             [editorPopup setEnabled:YES];
             AbleAllControlsInView([self.avc groupBox], YES);
 
@@ -133,7 +134,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
             [blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
             
             if (self.avc) {
-                [utiTextField setEnabled:NO];
+                [utiComboBox setEnabled:NO];
                 [editorPopup setEnabled:NO];
                 AbleAllControlsInView([self.avc groupBox], NO);
             }
@@ -154,7 +155,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
         stuff = [[Analyzation sharedInstance] anaylizersforUTI:[anaylizer valueForKey:@"sourceUTI"]];
         ro = anaylizer;
  
-        [utiTextField setEnabled:YES];
+        [utiComboBox setEnabled:YES];
         [editorPopup setEnabled:YES];
         AbleAllControlsInView([self.avc groupBox], YES);
 }
@@ -162,8 +163,8 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
     self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
     [self.popupArrayController addObjects:stuff];
     
-    [utiTextField bind:@"value" toObject:observableSourceUTI withKeyPath:@"sourceUTI" options:nil];
-    [utiTextField bind:@"enabled" toObject:observableEditorView withKeyPath:@"canChangeEditor" options:nil];
+    [utiComboBox bind:@"value" toObject:observableSourceUTI withKeyPath:@"sourceUTI" options:nil];
+    [utiComboBox bind:@"enabled" toObject:observableEditorView withKeyPath:@"canChangeEditor" options:nil];
     [editorPopup bind:@"content" toObject:self.popupArrayController withKeyPath:@"arrangedObjects" options:nil];
     [editorPopup bind:@"selectedObject" toObject:observableEditorView withKeyPath:@"currentEditorView" options:nil];
     [editorPopup bind:@"enabled" toObject:observableEditorView withKeyPath:@"canChangeEditor" options:nil];
@@ -352,8 +353,8 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
 - (void)unbindAndUnobserve
 {
     if (boundAndObserved == YES) {
-        [utiTextField unbind:@"value"];
-        [utiTextField unbind:@"enabled"];
+        [utiComboBox unbind:@"value"];
+        [utiComboBox unbind:@"enabled"];
         [editorPopup unbind:@"contentObjects"];
         [editorPopup unbind:@"selectedObject"];
         [editorPopup unbind:@"enabled"];

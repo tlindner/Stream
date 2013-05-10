@@ -35,6 +35,15 @@
     return self;
 }
 
+- (NSError *)application:(NSApplication *)theApplication willPresentError:(NSError *)error
+{
+#pragma unused (theApplication)
+    // Log the error to the console for debugging
+    NSLog(@"Application will present error:\n%@", [error description]);
+    
+    return error;
+}
+
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
     #pragma unused(notification)
@@ -62,6 +71,36 @@
         [newMenuItem setRepresentedObject:[blocker class]];
         [subMenu addItem:newMenuItem];
     }
+}
+
+@end
+
+@implementation NSError (ExtendedErrorCategory)
+
+- (NSString *)debugDescription
+{
+    //  Log the entirety of domain, code, userInfo for debugging.
+    //  Operates recursively on underlying errors
+    
+    NSMutableDictionary *dictionaryRep = [[self userInfo] mutableCopy];
+    
+    [dictionaryRep setObject:[self domain]
+                      forKey:@"domain"];
+    [dictionaryRep setObject:[NSNumber numberWithInteger:[self code]]
+                      forKey:@"code"];
+    
+    NSError *underlyingError = [[self userInfo] objectForKey:NSUnderlyingErrorKey];
+    NSString *underlyingErrorDescription = [underlyingError debugDescription];
+    if (underlyingErrorDescription)
+    {
+        [dictionaryRep setObject:underlyingErrorDescription
+                          forKey:NSUnderlyingErrorKey];
+    }
+    
+    // Finish up
+    NSString *result = [dictionaryRep description];
+    [dictionaryRep release];
+    return result;
 }
 
 @end

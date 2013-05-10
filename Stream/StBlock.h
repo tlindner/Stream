@@ -1,62 +1,47 @@
 //
 //  StBlock.h
-//  Stream
+//  temp
 //
-//  Created by tim lindner on 8/27/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//  Created by tim lindner on 5/7/13.
+//  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "StData.h"
 
 @class StBlock, StStream;
 
-@interface StBlock : NSManagedObject
+@interface StBlock : StData
 {
-@private
-    NSUInteger dataIndex, attrIndex, depIndex; 
-    NSObject * anaylizerObject;
-    NSValue *streamRangeObject;
-    BOOL markForDeletion;
+    NSUInteger dataIndex, attrIndex, depIndex;
+    StBlock *dataSubBlock, *attrSubBlock, *depSubBlock;
 }
 
-@property (nonatomic, retain) NSString * anaylizerKind;
-@property (nonatomic, retain) NSString * currentEditorView;
-@property (nonatomic, readonly) NSObject * anaylizerObject;
-@property (nonatomic) int64_t expectedSize;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic) int32_t type;
 @property (nonatomic) int64_t offset;
+@property (nonatomic, retain) NSString * name;
 @property (nonatomic) int64_t length;
-@property (nonatomic, retain) NSString * valueTransformer;
-@property (nonatomic, retain) NSString * uiName;
-@property (nonatomic, retain) NSData * checkBytes;
-@property (nonatomic, retain) NSString * source;
-@property (nonatomic, retain) NSString * sourceUTI;
-@property (nonatomic, retain) NSString * resultingUTI;
-@property (nonatomic) int64_t index;
-@property (nonatomic) BOOL markForDeletion;
 @property (nonatomic) BOOL repeat;
+@property (nonatomic) int64_t expectedSize;
+@property (nonatomic, retain) NSData * checkBytes;
+@property (nonatomic, retain) NSDictionary *uiCheckBytes;
+@property (nonatomic, retain) NSDictionary *uiData;
+@property (nonatomic) BOOL isEdit;
+@property (nonatomic) BOOL isFail;
+@property (nonatomic) BOOL markForDeletion;
+@property (nonatomic, retain) NSString * source;
+@property (nonatomic, retain) NSString * uiName;
+@property (nonatomic, retain) NSString * valueTransformer;
+@property (nonatomic, retain) NSOrderedSet *blocks;
+@property (nonatomic, retain) StBlock *parentBlock;
 @property (nonatomic, retain) StStream *parentStream;
 @property (nonatomic, retain) StStream *sourceSubStreamParent;
-@property (nonatomic, retain) StBlock *parentBlock;
-@property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
-@property (nonatomic, retain) NSSet *blocks;
-@property (nonatomic, assign) NSDictionary *dataForUI;
-@property (nonatomic, readonly) NSDictionary *checkBytesForUI;
-@property (nonatomic, readonly) NSData *data;
-@property (nonatomic, assign) BOOL isFail;
-@property (nonatomic, assign) BOOL isEdit;
-@property (nonatomic, readonly) NSColor * attributeColor;
-@property (nonatomic, readonly) BOOL canChangeEditor;
 @property (nonatomic, readonly) NSMutableIndexSet *editSet;
-@property (nonatomic, retain) NSMutableData *dataCache;
-
-- (StStream *)getStream;
-- (void) resetCounters;
+@property (nonatomic, readonly) NSArray *blocksArray;
+@property (nonatomic, retain) NSColor *attributeColor;
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name;
-- (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify;
+- (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification: (NSData *)verify;
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length;
@@ -67,32 +52,43 @@
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name transformation:(NSString *)transform;
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform expectedLength:(NSUInteger)expectedLength repeat:(BOOL)repeat;
-- (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform;
 
-- (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
-- (NSData *)getData;
-- (NSData *)getAttributeData;
-- (id)getAttributeDatawithUIName:(NSString *)name;
-- (NSArray *)getArrayOfBlocks;
+- (StStream *)getStream;
 - (StBlock *)subBlockNamed:(NSString *)inName;
-- (BOOL)writeByte:(unsigned char)byte atOffset:(NSUInteger)offset;
-- (StBlock *)subBlockAtIndex:(NSInteger)theIndex;
-- (void) smartSetEdit;
-- (void) smartSetFail;
 - (void) checkEdited:(StBlock *)newBlock;
 - (void) checkFail:(StBlock *)newBlock;
-- (NSRange)getUnionRange;
-- (NSValue *)getUnionRangeObject;
-- (Boolean) topLevelBlock;
+- (StBlock *)subBlockAtIndex:(NSUInteger)theIndex;
+- (BOOL) topLevelBlock;
+- (NSData *)getAttributeData;
+- (id)getAttributeDatawithUIName:(NSString *)name;
+- (NSOrderedSet *)getOrderedSetOfBlocks;
+- (BOOL) writeByte:(unsigned char)byte atOffset:(NSUInteger)offset;
+- (void) smartSetEdit;
+- (void) smartSetFail;
+- (void) resetCounters;
+- (NSArray *)blocksArray;
+- (void)addSubBlocksObject:(StBlock *)value;
 
 @end
 
 @interface StBlock (CoreDataGeneratedAccessors)
 
+- (void)insertObject:(StBlock *)value inBlocksAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromBlocksAtIndex:(NSUInteger)idx;
+- (void)insertBlocks:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeBlocksAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInBlocksAtIndex:(NSUInteger)idx withObject:(StBlock *)value;
+- (void)replaceBlocksAtIndexes:(NSIndexSet *)indexes withBlocks:(NSArray *)values;
 - (void)addBlocksObject:(StBlock *)value;
 - (void)removeBlocksObject:(StBlock *)value;
-- (void)addBlocks:(NSSet *)values;
-- (void)removeBlocks:(NSSet *)values;
+- (void)addBlocks:(NSOrderedSet *)values;
+- (void)removeBlocks:(NSOrderedSet *)values;
+
+- (NSMutableIndexSet *)primitiveEditSet;
+- (void)setPrimitiveEditSet:(NSMutableIndexSet *)editSet;
+
+- (NSColor *)primitiveAttributeColor;
+- (void)setPrimitiveAttributeColor:(NSColor *)color;
 
 @end
 

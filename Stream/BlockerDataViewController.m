@@ -12,6 +12,7 @@
 #import "Analyzation.h"
 #import "StStream.h"
 #import "StAnaylizer.h"
+#import "StBlock.h"
 
 @implementation BlockerDataViewController
 @synthesize treeController;
@@ -89,9 +90,9 @@
     
     for (StBlock *block in selectionObjects) {
         if (unionRange.length == 0) {
-            unionRange = [block getUnionRange];
+            unionRange = [block unionRange].rangeValue;
         } else {
-            unionRange = NSUnionRange(unionRange, [block getUnionRange]);
+            unionRange = NSUnionRange(unionRange, [block unionRange].rangeValue);
         }
     }
     
@@ -99,7 +100,7 @@
     [thePreviousAna willChangeValueForKey:@"viewRange"];
     [thePreviousAna willChangeValueForKey:@"collapse"];
     thePreviousAna.viewRange = [NSValue valueWithRange:unionRange];
-    thePreviousAna.collapse = YES;
+    thePreviousAna.paneExpanded = YES;
     [thePreviousAna didChangeValueForKey:@"collapse"];
     [thePreviousAna didChangeValueForKey:@"viewRange"];
 }
@@ -356,7 +357,7 @@
         int i=0;
         for (NSTreeNode *treeNode in topLevelNodes) {
             StBlock *theBlock = [treeNode representedObject];
-            NSRange range = [theBlock getUnionRange];
+            NSRange range = [theBlock unionRange].rangeValue;
             NSRange intersectionRange = NSIntersectionRange(bytesRange, range);
             if (intersectionRange.length > 0) {
                 [selectionIndexPaths addObject:[NSIndexPath indexPathWithIndex:i]];

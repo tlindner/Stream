@@ -7,6 +7,7 @@
 //
 
 #import "CoCoCassetteFileBlocker.h"
+#import "StBlock.h"
 
 @implementation CoCoCassetteFileBlocker
 
@@ -55,7 +56,7 @@
         {
             /* We found a start of a file! */
             StBlock *newFile = [stream startNewBlockNamed:[NSString stringWithFormat:@"File %d", fileNumber++] owner:[CoCoCassetteFileBlocker anaylizerKey]];
-            NSData *dataBlock = [theBlock getData];
+            NSData *dataBlock = [theBlock resultingData];
             unsigned char *dataBlockBytes = (unsigned char *)[dataBlock bytes];
             NSUInteger dataBlockSize = [dataBlock length];
             if( dataBlockSize > 7 ) [newFile addAttributeRange:currentBlock start:0 length:8 name:@"Filename" verification:nil transformation:@"RSDOSString"];

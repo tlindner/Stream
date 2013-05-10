@@ -56,13 +56,13 @@
     NSString *currentMode = [theBlock valueForKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay"];
     blockFormatter.mode = currentMode;
     
-    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-    [arrayController setSortDescriptors:[NSArray arrayWithObject:sd]];
+//    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+//    [arrayController setSortDescriptors:[NSArray arrayWithObject:sd]];
     
     NSAssert(observationsActive == NO, @"BlockAttributeView: double observer fault");
 
     [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
-    lastFilterAnaylizer = [[[theBlock getStream] lastFilterAnayliser] retain];
+    lastFilterAnaylizer = (StData *)[[[theBlock getStream] lastFilterAnayliser] retain];
     [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
     
     observationsActive = YES;

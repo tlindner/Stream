@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "StData.h"
 #import "StBlock.h"
 
 @interface BlockAttributeViewController : NSViewController {
@@ -14,7 +15,7 @@
     StBlockFormatter *blockFormatter;
     NSTableView *tableView;
     BOOL observationsActive;
-    NSManagedObject *lastFilterAnaylizer;
+    StData *lastFilterAnaylizer;
 }
 
 @property (assign) IBOutlet NSTableView *tableView;

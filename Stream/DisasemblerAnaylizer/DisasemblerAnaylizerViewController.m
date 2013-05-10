@@ -61,11 +61,11 @@
     NSData *bytes;
     if( [ro isKindOfClass:[StAnaylizer class]] )
     {
-        bytes = [[ro parentStream] valueForKey:@"bytesCache"];
+        bytes = [ro resultingData];
     }
     else if( [ro isKindOfClass:[StBlock class]] )
     {
-        bytes = [ro getData];
+        bytes = [ro resultingData];
     }
     else if( [ro isKindOfClass:[NSData class]] )
     {

@@ -9,6 +9,7 @@
 #import "CoCoAudioAnaylizer.h"
 #import "AudioAnaylizerViewController.h"
 #import "Accelerate/Accelerate.h"
+#import "AnaylizerEdit.h"
 
 inline UInt32 CalculateLPCMFlags (UInt32 inValidBitsPerChannel, UInt32 inTotalBitsPerChannel, bool inIsFloat, bool inIsBigEndian, bool inIsNonInterleaved );
 void FillOutASBDForLPCM(AudioStreamBasicDescription *outASBD, Float64 inSampleRate, UInt32 inChannelsPerFrame, UInt32 inValidBitsPerChannel,UInt32 inTotalBitsPerChannel, bool inIsFloat, bool inIsBigEndian, bool inIsNonInterleaved);
@@ -24,6 +25,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
 
 @dynamic representedObject;
 @synthesize frameBuffer;
+@synthesize resultingData;
 
 - (id)init
 {
@@ -491,9 +493,15 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     
     free( indexBuffer );
 
-    [theAna setResultingData:characterObject andChangedIndexSet:changedIndexSetObject];
+    self.resultingData = characterObject;
+//    [theAna setResultingData:characterObject andChangedIndexSet:changedIndexSetObject];
     
     [changedIndexSetObject release];
+}
+
+- (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte
+{
+    NSLog( @"Audio Ana: Unimplemented: replaceBytesInRange: %@ withByte 0x%x", NSStringFromRange(range), *byte);
 }
 
 - (void) applyAllEdits
@@ -832,7 +840,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     vDSP_vsmul( frames, 1, &divisor, &(frames[origin]), 1, width );
     
     NSData *zeros = [NSData dataWithBytes:&(frames[origin]) length:width * sizeof(float)]; 
-    [theAna poseEdit:zeros range:NSMakeRange(origin, width)];
+    [theAna postEdit:zeros range:NSMakeRange(origin, width)];
     [self anaylizeAudioData];
 }
 

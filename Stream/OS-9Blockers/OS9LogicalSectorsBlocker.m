@@ -7,6 +7,7 @@
 //
 
 #import "OS9LogicalSectorsBlocker.h"
+#import "StBlock.h"
 
 @implementation OS9LogicalSectorsBlocker
 
@@ -72,7 +73,7 @@
         sectorStartID = 0;
     }
     
-    NSData *lsn0Data = [lsn0Block getData];
+    NSData *lsn0Data = [lsn0Block resultingData];
     const unsigned char *lsn0 = [lsn0Data bytes];
     
     if ([lsn0Data length] < 0x6d) {
@@ -191,6 +192,8 @@
     
     while( lsnNumber < totalSectorCount )
     {
+//        NSLog(@"Doing LSN #%d", lsnNumber);
+        
         if (side > sides) {
             side = 0;
             track++;

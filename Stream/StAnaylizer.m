@@ -1,41 +1,36 @@
 //
 //  StAnaylizer.m
-//  Stream
+//  temp
 //
-//  Created by tim lindner on 8/12/11.
-//  Copyright (c) 2011 org.macmess. All rights reserved.
+//  Created by tim lindner on 5/7/13.
+//  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 //
 
 #import "StAnaylizer.h"
+#import "AnaylizerEdit.h"
 #import "StStream.h"
 #import "Analyzation.h"
 #import "HexFiendAnaylizer.h"
 #import "TextAnaylizer.h"
 
+NSURL *MakeTemporaryFile( NSString *pattern );
+
 @implementation StAnaylizer
 
 @dynamic anaylizerHeight;
-@dynamic computedAnaylizerHeight;
 @dynamic anaylizerKind;
-@dynamic currentEditorView;
-@dynamic optionsDictionary;
-@dynamic editIndexSet;
-@dynamic failIndexSet;
-@dynamic parentStream;
-@dynamic resultingData;
-@dynamic sourceUTI;
-@dynamic resultingUTI;
-@dynamic collapse;
+@dynamic paneExpanded;
 @dynamic removeEnabled;
-@dynamic editEnabled;
 @dynamic blockSettingsHidden;
-@dynamic title;
-@synthesize viewRange;
-@synthesize viewController;
-@dynamic canChangeEditor;
+@dynamic currentEditorView;
+@dynamic editIndexSet;
+@dynamic resultingData;
+@dynamic viewRange;
 @dynamic edits;
-
-@dynamic anaylizerObject;
+@dynamic parentStream;
+@dynamic title;
+@dynamic failIndexSet;
+@dynamic sourceData;
 
 + (void)initialize
 {
@@ -48,88 +43,31 @@
     }
 }
 
+- (NSData *)sourceData
+{
+    NSData *_sourceData;
+    
+    _sourceData = [self primitiveSourceData];
+    
+    if (_sourceData == nil) {
+        _sourceData = [[[NSData alloc] initWithContentsOfURL:[self urlForCachedData]] autorelease];
+        [self setPrimitiveSourceData:_sourceData];
+    }
+    
+    return _sourceData;
+}
+
 + (NSSet *)keyPathsForValuesAffectingAnaylizerObject
 {
     return [NSSet setWithObjects:@"currentEditorView", nil];
 }
 
-- (NSObject *)anaylizerObject
-{
-    Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
-    
-    if( anaObjectClass == nil )
-    {
-        if ([self.sourceUTI isEqualToString:@"public.text"]) {
-            anaObjectClass = [TextAnaylizer class];
-        }
-        else {
-            anaObjectClass = [HexFiendAnaylizer class];
-        }
-    }
-        
-    
-    if( anaylizerObject == nil )
-    {
-        anaylizerObject = [[anaObjectClass alloc] init];
-        [anaylizerObject setRepresentedObject:self];
-    }
-    else if( ![[anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView]] )
-    {
-        [anaylizerObject setRepresentedObject:nil];
-        [anaylizerObject release];
-        
-        anaylizerObject = [[anaObjectClass alloc] init];
-        [anaylizerObject setRepresentedObject:self];
-    }
-    
-    return anaylizerObject;
-}
-
-- (void)dealloc
-{
-    if( anaylizerObject != nil )
-    {
-        [anaylizerObject setRepresentedObject:nil];
-        [anaylizerObject release];
-    }
-    
-    self.viewRange = nil;
-    
-    [super dealloc];
-}
-
-+ (NSSet *)keyPathsForValuesAffectingComputedAnaylizerHeight
-{
-    return [NSSet setWithObjects:@"anaylizerHeight", nil];
-}
-
 - (float) computedAnaylizerHeight
 {
-    if( self.collapse == NO )
+    if( self.paneExpanded == NO )
         return 26.0;
     else
         return self.anaylizerHeight;
-}
-
-- (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions
-{
-    NSMutableDictionary *ourOptDict = self.optionsDictionary;
-    
-    if( [ourOptDict valueForKey:subOptionsID] == nil )
-    {
-        [ourOptDict setObject:newOptions forKey:subOptionsID];
-        return;
-    }
-    
-    NSMutableDictionary *dict = [ourOptDict objectForKey:subOptionsID];
-    
-    for (NSString *key in [newOptions allKeys])
-    {
-        id value = [dict objectForKey:key];
-        
-        if( value == nil )
-            [dict setObject:[newOptions objectForKey:key] forKey:key];
-    }
 }
 
 - (void) writebyte:(unsigned char)byte atOffset:(NSUInteger)offset
@@ -142,7 +80,8 @@
     
     /* change byte in KVO approved ay */
     [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"resultingData"];
-    [self.resultingData replaceBytesInRange:range withBytes:&byte];
+    [self.anaylizerObject replaceBytesInRange:range withBytes:&byte];
+//    [self.resultingData replaceBytesInRange:range withBytes:&byte];
     [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexSet forKey:@"resultingData"];
     
     /* add byte index to edited index set */
@@ -156,12 +95,11 @@
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
     self.editIndexSet = [[[NSMutableIndexSet alloc] init] autorelease];
     self.failIndexSet = [[[NSMutableIndexSet alloc] init] autorelease];
-    self.resultingData = [[[NSMutableData alloc] init] autorelease];
 }
 
 - (void)awakeFromFetch
 {
-    /* the xml version of the fileformat seems to baken in the concreat versions of these properties */
+    /* the xml version of the fileformat seems to brake in the concreat versions of these properties */
     NSMutableDictionary *mutableOptions = [self.optionsDictionary mutableCopy];
     self.optionsDictionary = mutableOptions;
     [mutableOptions release];
@@ -173,51 +111,22 @@
     NSMutableIndexSet *mutableFailSet = [self.failIndexSet mutableCopy];
     self.failIndexSet = mutableFailSet;
     [mutableFailSet release];
-    
-    NSMutableData *mutableData = [self.resultingData mutableCopy];
-    self.resultingData = mutableData;
-    [mutableData release];
 }
 
 - (NSString *)sourceUTI
 {
     NSString *result = nil;
     
-    NSOrderedSet *streamSet = self.parentStream.anaylizers;
-    NSUInteger theIndex = [streamSet indexOfObject:self];
+    StAnaylizer *previousAna = [self.parentStream previousAnayliser:self];
     
-    if( theIndex == 0 )
-    {
+    if (previousAna == nil) {
         result = self.parentStream.sourceUTI;
     }
-    else
-    {
-        StAnaylizer *previousAna = [streamSet objectAtIndex:theIndex-1];
-        result = previousAna.resultingUTI;
+    else {
+        result = previousAna.sourceUTI;
     }
-    
+
     return result;
-}
-
-- (void) setSourceUTI:(NSString *)parentUTI
-{
-    NSOrderedSet *streamSet = self.parentStream.anaylizers;
-    NSUInteger theIndex = [streamSet indexOfObject:self];
-    
-    if( theIndex == 0 )
-    {
-        self.parentStream.sourceUTI = parentUTI;
-    }
-    else
-    {
-        StAnaylizer *previousAna = [streamSet objectAtIndex:theIndex-1];
-        previousAna.resultingUTI = parentUTI;
-    }
-}
-
-+ (NSSet *)keyPathsForValuesAffectingRemoveEnabled
-{
-    return [NSSet setWithObjects:@"parentStream.anaylizers", nil];
 }
 
 - (BOOL) removeEnabled
@@ -235,24 +144,16 @@
     return result;
 }
 
-+ (NSSet *)keyPathsForValuesAffectingEditEnabled
+- (void) setSourceUTI:(NSString *)parentUTI
 {
-    return [NSSet setWithObjects:@"parentStream", nil];
-}
-
-- (BOOL) editEnabled
-{
-    BOOL result = NO;
+    StAnaylizer *previousAna = [self.parentStream previousAnayliser:self];
     
-    if( self == [self.parentStream lastFilterAnayliser] )  
-        result = YES;
-    
-    return result;
-}
-
-+ (NSSet *)keyPathsForValuesAffectingBlockSettingsHidden
-{
-    return [NSSet setWithObjects:@"currentEditorView", nil];
+    if (previousAna == nil) {
+        self.parentStream.sourceUTI = parentUTI;
+    }
+    else {
+        previousAna.resultingUTI = parentUTI;
+    }
 }
 
 - (BOOL) blockSettingsHidden
@@ -263,11 +164,6 @@
         result = NO;
     
     return result;
-}
-
-+ (NSSet *)keyPathsForValuesAffectingTitle
-{
-    return [NSSet setWithObjects:@"anaylizerKind", @"currentEditorView", nil];
 }
 
 - (NSString *) title
@@ -282,63 +178,56 @@
     return result;    
 }
 
+- (BOOL) editEnabled
+{
+    BOOL result = NO;
+    
+    if( self == [self.parentStream lastFilterAnayliser] )  
+        result = YES;
+    
+    return result;
+}
+
+
 - (NSURL *)urlForCachedData
 {
-    NSData *anaylizeData;
+    NSURL *result;
     StAnaylizer *previousAnaylizer = [self.parentStream previousAnayliser:self];
     
     if( previousAnaylizer == nil )
-        anaylizeData = [self.parentStream bytesCache];
-    else
-        anaylizeData = [previousAnaylizer resultingData];
-    
-    NSString *tempFileTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:@"cocoaudioanaylizer_tempfile.XXXXXX"];
-    const char *tempFileTemplateCString = [tempFileTemplate fileSystemRepresentation];
-    char *tempFileNameCString = (char *)malloc(strlen(tempFileTemplateCString) + 1);
-    strcpy(tempFileNameCString, tempFileTemplateCString);
-    int fileDescriptor = mkstemp(tempFileNameCString);
-    NSString *tempFileName = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:tempFileNameCString length:strlen(tempFileNameCString)];
-    free(tempFileNameCString);
-    
-    if (fileDescriptor == -1)
-    {
-        NSAssert(YES==NO, @"urlForCachedData: Could not create temporary file for cached data: %@", tempFileName);
-        return nil;
+    {   
+        /* we are the first anaylizer, data is in source stream */
+        if( self.parentStream.sourceURL != nil )
+        {
+            result = self.parentStream.sourceURL;
+        }
+        else {
+            NSURL *tempfile = MakeTemporaryFile( @"org.macmess.streams.tempfile.XXXXXX" );
+            [self.parentStream.sourceBlock.resultingData writeToURL:tempfile atomically:NO];
+            result = tempfile;
+        }
     }
-    
-    NSFileHandle *tempFileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fileDescriptor closeOnDealloc:YES];
-    [tempFileHandle writeData:anaylizeData];
-    [tempFileHandle release];
-    
-    return [NSURL fileURLWithPath:tempFileName];
+    else
+    {
+        NSURL *tempfile = MakeTemporaryFile( @"org.macmess.streams.tempfile.XXXXXX" );
+        [previousAnaylizer.resultingData writeToURL:tempfile atomically:NO];
+        result = tempfile;
+    }
+
+    return result;
+}
+
+- (NSData *)resultingData
+{
+    return self.anaylizerObject.resultingData;
 }
 
 - (void) setResultingData:(NSMutableData *)inData andChangedIndexSet:(NSMutableIndexSet *)inIndexSet
 {
-    BOOL reBlock = NO;
-    
-    if( ![self.resultingData isEqualToData:inData] )
-    {
-        [self willChangeValueForKey:@"resultingData"];
-        reBlock = YES;
-        [self.resultingData setData:inData];
-        [self didChangeValueForKey:@"resultingData"];
-
-    }
-    
-    if( ![self.editIndexSet isEqualToIndexSet:inIndexSet] )
-    {
-        [self willChangeValueForKey:@"editIndexSet"];
-        reBlock = YES; 
-        [self.editIndexSet removeAllIndexes];
-        [self.editIndexSet addIndexes:inIndexSet];
-        [self didChangeValueForKey:@"editIndexSet"];
-    }
-    
-    if( reBlock )
-    {
-        [self.parentStream regenerateAllBlocks];
-    }
+#pragma unused(inData)
+#pragma unused(inIndexSet)
+    NSLog( @"StAnaylizer: it is an error set set the resulting data like this" );
+    NSAssert(NO,@"StAnaylizer: it is an error set set the resulting data like this");
 }
 
 - (BOOL) streamEditedInRange:(NSRange)range
@@ -349,10 +238,8 @@
 
 - (void)willTurnIntoFault
 {
-    if( anaylizerObject != nil)
-    {
-        [anaylizerObject setRepresentedObject:nil];
-    }
+    self.anaylizerObject = nil;
+    self.viewRange = nil;
 }
 
 - (BOOL) canChangeEditor
@@ -369,23 +256,7 @@
     return [[self parentStream] previousAnayliser:self];    
 }
 
-- (IBAction)ConfigurableButton1:(id)sender
-{
-    if( [viewController respondsToSelector:@selector(ConfigurableButton1:)] )
-    {
-        [viewController ConfigurableButton1:(id)sender];
-    }
-}
-
-- (IBAction)ConfigurableButton2:(id)sender
-{
-    if( [viewController respondsToSelector:@selector(ConfigurableButton2:)] )
-    {
-        [viewController ConfigurableButton2:(id)sender];
-    }
-}
-
-- (void) poseEdit:(NSData *)data range:(NSRange)range
+- (void) postEdit:(NSData *)data range:(NSRange)range
 {
     [self postEdit:data atLocation:range.location withLength:range.length];
 }
@@ -406,13 +277,55 @@
         theEdit.length = length;
         theEdit.data = data;
         //    [self addEditsObject:theEdit];
-
+        
         NSMutableOrderedSet *theSet = [self mutableOrderedSetValueForKey:@"edits"];
         //    [self willChangeValueForKey:@"edits" withSetMutation:NSKeyValueUnionSetMutation usingObjects:[NSSet setWithObject:theEdit]];
         [theSet addObject:theEdit];
         //    [self didChangeValueForKey:@"edits" withSetMutation:NSKeyValueUnionSetMutation usingObjects:[NSSet setWithObject:theEdit]];
     }
 }
+
+- (IBAction)ConfigurableButton1:(id)sender
+{
+    if( [self.viewController respondsToSelector:@selector(ConfigurableButton1:)] )
+    {
+        [self.viewController ConfigurableButton1:(id)sender];
+    }
+}
+
+- (IBAction)ConfigurableButton2:(id)sender
+{
+    if( [self.viewController respondsToSelector:@selector(ConfigurableButton2:)] )
+    {
+        [self.viewController ConfigurableButton2:(id)sender];
+    }
+}
+
++ (NSSet *)keyPathsForValuesAffectingTitle
+{
+    return [NSSet setWithObjects:@"anaylizerKind", @"currentEditorView", nil];
+}
+
++ (NSSet *)keyPathsForValuesAffectingEditEnabled
+{
+    return [NSSet setWithObjects:@"parentStream", nil];
+}
+
++ (NSSet *)keyPathsForValuesAffectingBlockSettingsHidden
+{
+    return [NSSet setWithObjects:@"currentEditorView", nil];
+}
+
++ (NSSet *)keyPathsForValuesAffectingRemoveEnabled
+{
+    return [NSSet setWithObjects:@"parentStream.anaylizers", nil];
+}
+
++ (NSSet *)keyPathsForValuesAffectingComputedAnaylizerHeight
+{
+    return [NSSet setWithObjects:@"anaylizerHeight", nil];
+}
+
 
 @end
 
@@ -441,11 +354,11 @@
 - (NSArray *)objectsAtIndexes:(NSIndexSet *)indexes
 {
     NSMutableArray *ma = [[NSMutableArray alloc] init];
-
+    
     [indexes enumerateRangesUsingBlock:
      ^(NSRange range, BOOL *stop)
      {
-         #pragma unused(stop)
+#pragma unused(stop)
          [ma addObject:[self subdataWithRange:range]];
      }];
     
@@ -453,3 +366,18 @@
 }
 
 @end
+
+NSURL *MakeTemporaryFile( NSString *pattern )
+{
+    NSString *tempFileTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:pattern];
+    const char *tempFileTemplateCString = [tempFileTemplate fileSystemRepresentation];
+    char *tempFileNameCString = (char *)malloc(strlen(tempFileTemplateCString) + 1);
+    strcpy(tempFileNameCString, tempFileTemplateCString);
+    int fileDescriptor = mkstemp(tempFileNameCString);
+    close(fileDescriptor);
+    NSString *tempFileName = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:tempFileNameCString length:strlen(tempFileNameCString)];
+    free(tempFileNameCString);
+    
+    return [NSURL fileURLWithPath:tempFileName];
+}
+

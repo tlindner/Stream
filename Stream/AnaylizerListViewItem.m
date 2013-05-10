@@ -118,7 +118,7 @@
     float result = MINIMUM_HEIGHT;
 
     
-    if (ana.collapse) {
+    if (ana.paneExpanded) {
 //        if (self.savedCustomView != nil) {
 //            if ([[self view] frame].size.height > MINIMUM_HEIGHT + 75 ) {
 //                [[self view] addSubview:self.savedCustomView];
@@ -152,7 +152,7 @@
 - (IBAction)collapse:(id)sender {
     #pragma unused(sender)
     StAnaylizer *ana = (StAnaylizer *)self.representedObject;
-    ana.collapse = !ana.collapse;
+    ana.paneExpanded = !ana.paneExpanded;
 
     [self noteViewHeightChanged];
 }

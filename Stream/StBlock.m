@@ -1,11 +1,12 @@
 //
 //  StBlock.m
-//  Stream
+//  temp
 //
-//  Created by tim lindner on 8/27/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//  Created by tim lindner on 5/7/13.
+//  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 //
 
+#import "StBlock.h"
 #import "StBlock.h"
 #import "StStream.h"
 #import "Analyzation.h"
@@ -13,115 +14,73 @@
 #import "TextAnaylizer.h"
 
 @implementation StBlock
-@dynamic anaylizerKind;
-@dynamic expectedSize;
-@dynamic name;
-@dynamic type;
-@dynamic offset;
-@dynamic length;
-@dynamic valueTransformer;
-@dynamic uiName;
-@dynamic checkBytes;
-@dynamic source;
-@dynamic index;
-@dynamic repeat;
-@dynamic parentStream;
-@dynamic parentBlock;
-@dynamic blocks;
-@dynamic sourceUTI;
-@dynamic resultingUTI;
-@dynamic currentEditorView;
-@dynamic optionsDictionary;
-@dynamic isFail;
-@dynamic isEdit;
-@dynamic canChangeEditor;
-@dynamic markForDeletion;
-@dynamic sourceSubStreamParent;
-@dynamic data;
-@dynamic dataForUI;
-@dynamic checkBytesForUI;
-@dynamic attributeColor;
-@dynamic editSet;
 
-@synthesize dataCache;
+@dynamic offset;
+@dynamic name;
+@dynamic length;
+@dynamic repeat;
+@dynamic expectedSize;
+@dynamic checkBytes;
+@dynamic uiCheckBytes;
+@dynamic uiData;
+@dynamic isEdit;
+@dynamic isFail;
+@dynamic markForDeletion;
+@dynamic source;
+@dynamic uiName;
+@dynamic valueTransformer;
+@dynamic blocks;
+@dynamic parentBlock;
+@dynamic parentStream;
+@dynamic sourceSubStreamParent;
+@dynamic editSet;
+@dynamic attributeColor;
+@synthesize blocksArray;
+
+- (NSArray *)blocksArray
+{
+    return [self.blocks array];
+}
 
 - (void)awakeFromInsert
 {
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
+    dataIndex = attrIndex = depIndex = 0;
 }
 
-- (NSObject *)anaylizerObject
+- (void)awakeFromFetch
 {
-    Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
-    
-    if( anaObjectClass == nil )
-    {
-        if ([self.sourceUTI isEqualToString:@"public.text"]) {
-            anaObjectClass = [TextAnaylizer class];
+    if (self.parentBlock == nil) {
+        StBlock *subBlock;
+        
+        subBlock = [self subBlockNamed:@"data"];
+        if (subBlock != nil) {
+            dataIndex = [subBlock.blocks count];
         }
         else {
-            anaObjectClass = [HexFiendAnaylizer class];
+            dataSubBlock = subBlock;
+            dataIndex = 0;
         }
-    }
-    
-    if( anaylizerObject == nil )
-    {
-        anaylizerObject = [[anaObjectClass alloc] init];
-        [anaylizerObject setRepresentedObject:self];
-    }
-    else if( ![[anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView]] )
-    {
-        [anaylizerObject setRepresentedObject:nil];
-        [anaylizerObject release];
         
-        anaylizerObject = [[anaObjectClass alloc] init];
-        [anaylizerObject setRepresentedObject:self];
-    }
-    
-    return anaylizerObject;
-}
-
-- (void)dealloc
-{
-    if( anaylizerObject != nil )
-    {
-        [anaylizerObject setRepresentedObject:nil];
-        [anaylizerObject release];
-    }
-    
-    if (streamRangeObject != nil) {
-        [streamRangeObject release];
-    }
-    
-    dataCache = nil;
-    
-    [super dealloc];
-}
-
-- (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions
-{
-    NSMutableDictionary *ourOptDict = self.optionsDictionary;
-    
-    if( [ourOptDict valueForKey:subOptionsID] == nil )
-    {
-        [ourOptDict setObject:newOptions forKey:subOptionsID];
-        return;
-    }
-    
-    NSMutableDictionary *dict = [ourOptDict objectForKey:subOptionsID];
-    
-    for (NSString *key in [newOptions allKeys])
-    {
-        id value = [dict objectForKey:key];
+        subBlock = [self subBlockNamed:@"attributes"];
+        if (subBlock != nil) {
+            attrIndex = [subBlock.blocks count];
+        }
+        else {
+            attrSubBlock = subBlock;
+            attrIndex = 0;
+        }
         
-        if( value == nil )
-            [dict setObject:[newOptions objectForKey:key] forKey:key];
+        subBlock = [self subBlockNamed:@"dependencies"];
+        if (subBlock != nil) {
+            depSubBlock = subBlock;
+            depIndex = [subBlock.blocks count];
+        }
+        else {
+            depIndex = 0;
+        }
+        
     }
-}
-
-- (NSData *)data
-{
-    return [self getData];
 }
 
 - (StStream *)getStream
@@ -130,11 +89,6 @@
         return self.parentStream;
     else
         return [self.parentBlock getStream];
-}
-
-- (void) resetCounters
-{
-    dataIndex = attrIndex = depIndex = 0;
 }
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name
@@ -149,19 +103,32 @@
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
 {
-    StBlock *attributeBlock = [self subBlockNamed:@"attributes"];
-    StBlock *newBlock = [attributeBlock subBlockAtIndex:attrIndex];
+    StBlock *attrBlock = attrSubBlock; //[self subBlockNamed:@"attributes"];
     
-    if( newBlock != nil )
-    {
+    if (attrBlock == nil) {
+        attrBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        attrBlock.name = @"attributes";
+        attrBlock.sourceUTI = @"org.macmess.stream.attribute";
+        attrBlock.currentEditorView = @"Block Attribute View";
+        [self addSubBlocksObject:attrBlock];
+        attrSubBlock = attrBlock;
+    }
+
+    NSOrderedSet  *attrBlocks = attrBlock.blocks;
+    StBlock *newBlock;
+    
+    if (attrIndex < [attrBlocks count]) {
+        newBlock = [attrBlocks objectAtIndex:attrIndex];
         newBlock.markForDeletion = NO;
         newBlock.isEdit = NO;
         newBlock.isFail = NO;
+        newBlock.resultingData = nil;
     }
     else
     {
         newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-        [attributeBlock addBlocksObject:newBlock];
+        [attrBlock addSubBlocksObject:newBlock];
+//        [attrBlock addBlocksObject:newBlock];
     }
     
     newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", attrIndex, blockName, start, length];
@@ -169,14 +136,13 @@
     newBlock.uiName = name;
     newBlock.offset = start;
     newBlock.length = length;
-    newBlock.index = attrIndex++;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
-
-    [self checkEdited:newBlock];
-    [self checkFail:newBlock];
     
-    self.dataCache = nil;
+//    [self checkEdited:newBlock];
+//    [self checkFail:newBlock];
+    attrIndex++;
+    self.resultingData = nil;
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length
@@ -216,25 +182,31 @@
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform expectedLength:(NSUInteger)expectedLength repeat:(BOOL)repeat
 {
-    StBlock *dataBlock = [self subBlockNamed:@"data"];
-    StBlock *newBlock = [dataBlock subBlockAtIndex:dataIndex];
+    StBlock *dataBlock = dataSubBlock; //[self subBlockNamed:@"data"];
     
-    if( newBlock != nil )
-    {
+    if (dataBlock == nil) {
+        dataBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        dataBlock.name = @"data";
+        dataBlock.sourceUTI = @"public.data";
+        [self addSubBlocksObject:dataBlock];
+        dataSubBlock = dataBlock;
+    }
+    
+    NSOrderedSet  *dataBlocks = dataBlock.blocks;
+    StBlock *newBlock;
+    
+    if (dataIndex < [dataBlocks count]) {
+        newBlock = [dataBlocks objectAtIndex:dataIndex];
         newBlock.markForDeletion = NO;
         newBlock.isEdit = NO;
         newBlock.isFail = NO;
+        newBlock.resultingData = nil;
     }
     else
     {
         newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-        [dataBlock addBlocksObject:newBlock];
-        
-        if( name != nil || verify != nil || transform != nil )
-        {
-            dataBlock.sourceUTI = @"org.macmess.stream.attribute";
-            dataBlock.currentEditorView = @"Block Attribute View";
-        }
+        [dataBlock addSubBlocksObject:newBlock];
+//        [dataBlock addBlocksObject:newBlock];
     }
     
     newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
@@ -242,53 +214,71 @@
     newBlock.source = blockName;
     newBlock.offset = start;
     newBlock.length = length;
-    newBlock.index = dataIndex++;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
     newBlock.repeat = repeat;
     newBlock.expectedSize = expectedLength;
-
-    [dataBlock addBlocksObject:newBlock];
     self.expectedSize += expectedLength;
     
-    [self checkEdited:newBlock];
-    [self checkFail:newBlock];
-    
-    self.dataCache = nil;
+//    [self checkEdited:newBlock];
+//    [self checkFail:newBlock];
+    dataIndex++;
+    self.resultingData = nil;
 }
 
 - (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
 {
-    StBlock *depBlock = [self subBlockNamed:@"dependencies"];
-    StBlock *newBlock = [depBlock subBlockAtIndex:depIndex];
+    StBlock *depBlock = depSubBlock; //[self subBlockNamed:@"dependencies"];
     
-    if( newBlock != nil )
-    {
+    if (depBlock == nil) {
+        depBlock = [NSEntityDescription insertNewObjectForEntityForName:@"dependencies" inManagedObjectContext:self.managedObjectContext];
+        depBlock.name = @"data";
+        depBlock.sourceUTI = @"public.data";
+        [self addSubBlocksObject:depBlock];
+        depSubBlock = depBlock;
+    }
+    
+    NSOrderedSet  *depBlocks = depBlock.blocks;
+    StBlock *newBlock;
+    
+    if (depIndex < [depBlocks count]) {
+        newBlock = [depBlocks objectAtIndex:depIndex];
         newBlock.markForDeletion = NO;
         newBlock.isEdit = NO;
         newBlock.isFail = NO;
+        newBlock.resultingData = nil;
     }
     else
     {
         newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-        [depBlock addBlocksObject:newBlock];
+        [depBlock addSubBlocksObject:newBlock];
+//        [depBlock addBlocksObject:newBlock];
     }
     
-    newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
+    newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", depIndex, blockName, start, length];
     newBlock.uiName = name;
     newBlock.source = blockName;
     newBlock.offset = start;
     newBlock.length = length;
-    newBlock.index = depIndex++;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
-    [depBlock addBlocksObject:newBlock];
     self.expectedSize += length;
-
-    [self checkEdited:newBlock];
-    [self checkFail:newBlock];
     
-    self.dataCache = nil;
+//    [self checkEdited:newBlock];
+//    [self checkFail:newBlock];
+    depIndex++;
+    self.resultingData = nil;
+}
+
+- (StBlock *)subBlockNamed:(NSString *)inName
+{
+    for (StBlock *aBlock in self.blocks) {
+        if ([aBlock.name isEqualToString:inName]) {
+            return aBlock;
+        }
+    }
+    
+    return nil;
 }
 
 - (void) checkEdited:(StBlock *)newBlock
@@ -310,7 +300,7 @@
 {
     if( newBlock.checkBytes != nil )
     {
-        if( ![newBlock.checkBytes isEqualToData:[newBlock getData]] )
+        if( ![newBlock.checkBytes isEqualToData:[newBlock resultingData]] )
         {
             [newBlock smartSetFail];
         }
@@ -325,111 +315,87 @@
     }
 }
 
-- (StBlock *)subBlockNamed:(NSString *)inName
+- (StBlock *)subBlockAtIndex:(NSUInteger)theIndex
 {
-    void *predicate = ^(id obj, BOOL *stop)
-    {
-        StBlock *test = (StBlock *)obj;
-        
-        if ([test.name isEqualToString:inName])
-        {
-            *stop = YES;
-            return YES;
-        }
-        
-        return NO;
-    };
+    NSOrderedSet *blocksSet = self.blocks;
     
-    NSSet *dataBlockSet = [self.blocks objectsPassingTest:predicate];
-    NSAssert( [dataBlockSet count] == 1, @"StBlock: topLevelBlockNamed: could not find block named: %@", inName );
-    return [dataBlockSet anyObject];
-}
-
-- (StBlock *)subBlockAtIndex:(NSInteger)theIndex
-{
-    for (StBlock *aBlock in [self blocks])
+    if( theIndex < [blocksSet count] )
     {
-        if( aBlock.index == theIndex )
-            return aBlock;
+        return [blocksSet objectAtIndex:theIndex];
     }
-
+    
     return nil;
 }
 
-- (NSValue *)getUnionRangeObject
-{
-    if (streamRangeObject == nil) {
-        return streamRangeObject = [[NSValue valueWithRange:[self getUnionRange]] retain];
-    }
-    else {
-        return streamRangeObject;
-    }
-}
-
-- (NSRange)getUnionRange
+- (NSValue *)unionRange
 {
     /* This returns the largest range that encompasses all of child blocks */
     
     NSRange result = {0, 0};
+    NSValue *_unionRange = [self primitiveUnionRange];
 
-    if( self.source == nil )
-    {
-        if( self.parentStream != nil )
+    if (_unionRange == nil) {
+        if( self.source == nil )
         {
-            /* This is a top level block, try to return range from data & attributes block */
-            NSRange dataRange = [[self subBlockNamed:@"data"] getUnionRange];
-            
-            NSRange attributeRange = [[self subBlockNamed:@"attributes"] getUnionRange];
-            
-            if (dataRange.length == 0 && attributeRange.length != 0) {
-                result = attributeRange;
-            } else if (dataRange.length != 0 && attributeRange.length == 0) {
-                result = dataRange;
-            } else {
-                result = NSUnionRange(attributeRange, dataRange);
-            }
-        }
-        else
-        {
-            /* This is a midlevel block, return it's accumulated blocks */
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-            NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-            
-            for (StBlock *theBlock in subBlocks)
+            if( self.parentStream != nil )
             {
-                if( result.location == 0 && result.length == 0 )
-                    result = [theBlock getUnionRange];
-                else {
-                    result = NSUnionRange( result, [theBlock getUnionRange] );
+                /* This is a top level block, try to return range from data & attributes block */
+                NSRange dataRange = [[dataSubBlock unionRange] rangeValue];
+                
+                NSRange attributeRange = [[attrSubBlock unionRange] rangeValue];
+                
+                if (dataRange.length == 0 && attributeRange.length != 0) {
+                    result = attributeRange;
+                } else if (dataRange.length != 0 && attributeRange.length == 0) {
+                    result = dataRange;
+                } else {
+                    result = NSUnionRange(attributeRange, dataRange);
+                }
+            }
+            else
+            {
+                /* This is a midlevel block, return it's accumulated blocks */
+                for (StBlock *theBlock in self.blocks)
+                {
+                    if( result.location == 0 && result.length == 0 )
+                        result = [[theBlock unionRange] rangeValue];
+                    else {
+                        result = NSUnionRange( result, [[theBlock unionRange] rangeValue] );
+                    }
                 }
             }
         }
-    }
-    else
-    {
-        /* This is a leaf block */
-        
-        if( [[self source] isEqualToString:@"stream"] )
-        {
-            result = NSMakeRange(self.offset, self.length);
-        }
         else
         {
-            NSRange fullRange = [[[self getStream] topLevelBlockNamed:self.source] getUnionRange];
-            NSUInteger useLength = self.length;
+            /* This is a leaf block */
             
-            if (useLength == 0) {
-                useLength = (fullRange.location + fullRange.length) - (fullRange.location + self.offset);
+            if( [[self source] isEqualToString:@"stream"] )
+            {
+                result = NSMakeRange(self.offset, self.length);
             }
-            
-            result = NSMakeRange(fullRange.location + self.offset, useLength);
+            else
+            {
+                NSRange fullRange = [[[[self getStream] topLevelBlockNamed:self.source] unionRange] rangeValue];
+                NSUInteger useLength = self.length;
+                
+                if (useLength == 0) {
+                    useLength = (fullRange.location + fullRange.length) - (fullRange.location + self.offset);
+                }
+                
+                result = NSMakeRange(fullRange.location + self.offset, useLength);
+            }
         }
     }
+    else {
+        return _unionRange;
+    }
     
-    return result;
+    _unionRange = [NSValue valueWithRange:result];
+    [self setPrimitiveUnionRange:_unionRange];
+    return _unionRange;
 }
 
-- (Boolean) topLevelBlock
+- (BOOL) topLevelBlock
 {
     if( self.source == nil )
     {
@@ -442,30 +408,29 @@
     return NO;
 }
 
-- (NSData *)getData
+- (NSData *)resultingData
 {
     NSMutableData *result;
+    NSData *_resultingData = [self primitiveResultingData];// [self primitiveValueForKey:@"resultingData"];
     
-    if (self.dataCache == nil) {
+    if (_resultingData == nil)
+    {
+//        NSLog( @"resulting data miss for: %@", self );
         if( self.source == nil )
         {
             if( self.parentStream != nil )
             {
                 /* This is a top level block, return data from data block */
-                return [[self subBlockNamed:@"data"] getData];
+                result = (NSMutableData *)[dataSubBlock resultingData];
             }
             else
             {
                 /* This is a midlevel block, return it's accumulated blocks */
-                
-    //            StStream *ourStream = [self getStream];
                 result = [[[NSMutableData alloc] init] autorelease];
-                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-                NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
                 
-                for (StBlock *theBlock in subBlocks)
+                for (StBlock *theBlock in self.blocks)
                 {
-                    NSData *subBlockData = [theBlock getData];
+                    NSData *subBlockData = [theBlock resultingData];
                     [result appendData:subBlockData];
                 }
             }
@@ -487,7 +452,7 @@
             
             NSRange theRange = NSMakeRange(self.offset, useLength);
             result = [[blockData subdataWithRange:theRange] mutableCopy];
-     
+            
             NSUInteger exSz = self.expectedSize;
             
             if (self.repeat) {
@@ -497,14 +462,15 @@
                 
                 [result setLength:exSz];
             }
-
+            
             [result autorelease];
         }
-        
-        self.dataCache = result;
+
+//        [self setPrimitiveValue:result forKey:@"resultingData"];
+        [self setPrimitiveResultingData:result];
     }
     else {
-        result = self.dataCache;
+        result = (NSMutableData *)_resultingData;
     }
     
     return result;
@@ -512,14 +478,12 @@
 
 - (NSData *)getAttributeData
 {
-    return [[self subBlockNamed:@"attributes"] getData];
+    return [attrSubBlock resultingData];
 }
 
 - (id)getAttributeDatawithUIName:(NSString *)name
 {
-    StBlock *attributeBlock = [self subBlockNamed:@"attributes"];
-
-    for (StBlock *aBlock in [attributeBlock blocks])
+    for (StBlock *aBlock in [attrSubBlock blocks])
     {
         if( [aBlock.uiName isEqualToString:name] )
         {
@@ -527,50 +491,18 @@
                 NSValueTransformer *tf = [NSValueTransformer valueTransformerForName:aBlock.valueTransformer];
                 
                 if (tf != nil) {
-                    return [tf transformedValue:[aBlock getData]];
+                    return [tf transformedValue:[aBlock resultingData]];
                 }
                 else {
-                    return [aBlock getData];
+                    return [aBlock resultingData];
                 }
             }
             else {
-                return [aBlock getData];
-            }
-        }
-     }
-     return nil;
-}
-
-- (NSArray *)getArrayOfBlocks
-{
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    
-    if( self.source == nil )
-    {
-        if( self.parentStream != nil )
-        {
-            /* This is a top level block, return blocks from data block */
-            [result addObjectsFromArray:[[self subBlockNamed:@"data"] getArrayOfBlocks]];
-        }
-        else
-        {
-            /* This is a midlevel block, return it's accumulated blocks */
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-            NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-            
-            for (StBlock *aBlock in subBlocks)
-            {
-                [result addObjectsFromArray:[aBlock getArrayOfBlocks]];
+                return [aBlock resultingData];
             }
         }
     }
-    else
-    {
-        /* This is a leaf block */
-        [result addObject:self];
-    }
-    
-    return [result autorelease];
+    return nil;
 }
 
 - (NSString *)description
@@ -588,19 +520,46 @@
     }
     else
     {
-        return [NSString stringWithFormat:@"%p: Leaf block: %@, named: %@, index: %d, source: %@, start: %d, lenth: %d", self, [[[self parentBlock] parentBlock] name], [[self parentBlock] name], [self index], [self source], self.offset, self.length];
+        NSUInteger index = [self.parentBlock.blocks indexOfObject:self];
+        return [NSString stringWithFormat:@"%p: Leaf block: %@, named: %@, index: %d, source: %@, start: %d, lenth: %d", self, [[[self parentBlock] parentBlock] name], [[self parentBlock] name], index, [self source], self.offset, self.length];
     }
+}
+
+- (NSOrderedSet *)getOrderedSetOfBlocks
+{
+    NSOrderedSet *result;
+    
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* This is a top level block, return blocks from data block */
+            result = [dataSubBlock getOrderedSetOfBlocks];
+        }
+        else
+        {
+            /* This is a midlevel block, return it's accumulated blocks */
+            result = self.blocks;
+        }
+    }
+    else
+    {
+        /* This is a leaf block */
+        result = [NSOrderedSet orderedSetWithObject:self];
+    }
+    
+    return result;
 }
 
 - (BOOL) writeByte:(unsigned char)byte atOffset:(NSUInteger)offset
 {
-    NSArray *blockArray = [self getArrayOfBlocks];
+    NSOrderedSet *blockSet = [self getOrderedSetOfBlocks];
     NSUInteger place = 0;
     BOOL byteWritten = NO;
     
     [self smartSetEdit];
     
-    for (StBlock *aBlock in blockArray)
+    for (StBlock *aBlock in blockSet)
     {
         if( offset < place + aBlock.length )
         {
@@ -673,26 +632,28 @@
             NSRange range = {self.offset, self.length};
             [[[self getStream] lastFilterAnayliser].failIndexSet addIndexesInRange:range];
         }
-
+        
     }
 }
 
-+ (NSSet *)keyPathsForValuesAffectingDataForUI
-{
-    return [NSSet setWithObjects:@"data", @"valueTransformer", nil];
-}
-
-- (NSDictionary *)dataForUI
+- (NSDictionary *)uiData
 {
     NSDictionary *result = nil;
     
-    if( self.data != nil )
-        result = [NSDictionary dictionaryWithObjectsAndKeys: self.data, @"value", self.valueTransformer, @"valueTransformer", @"data", @"key", [self objectID], @"objectID", nil];
+    if( self.resultingData != nil )
+        result = [NSDictionary dictionaryWithObjectsAndKeys: self.resultingData, @"value", self.valueTransformer, @"valueTransformer", @"data", @"key", [self objectID], @"objectID", nil];
     
     return result;
 }
 
-- (void) setDataForUI:(NSDictionary *)dictionary
+- (void)addSubBlocksObject:(StBlock *)value
+{
+    NSMutableOrderedSet* tempSet = [self mutableOrderedSetValueForKey:@"blocks"];
+    [tempSet addObject:value];
+//    self.blocks = tempSet;
+}
+
+- (void) setUiData:(NSDictionary *)dictionary
 {
     /* parse string and pass change up the block chain */
     NSString *mode = [dictionary objectForKey:@"mode"];
@@ -728,12 +689,7 @@
     [[self getStream] setBlock:self withData:theData];
 }
 
-+ (NSSet *)keyPathsForValuesAffectingCheckBytesForUI
-{
-    return [NSSet setWithObjects:@"checkBytes", @"valueTransformer", nil];
-}
-
-- (NSDictionary *)checkBytesForUI
+- (NSDictionary *)uiCheckBytes
 {
     NSDictionary *result = nil;
     
@@ -743,114 +699,147 @@
     return result;
 }
 
-+ (NSSet *)keyPathsForValuesAffectingAttributeColor
-{
-    return [NSSet setWithObjects:@"isEdit", @"isFail", nil];
-}
-
 - (NSColor *)attributeColor
 {
-    if( self.isEdit && self.isFail )
-        return [NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.0 alpha:0.5];
-    else if( self.isEdit )
-        return [NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:0.5];
-    else if( self.isFail )
-        return [NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5];
+    NSColor *_attributeColor = [self primitiveAttributeColor];
     
-    return nil;
+    if (_attributeColor == nil) {
+        [self checkEdited:self];
+        [self checkFail:self];
+
+        if( self.isEdit && self.isFail )
+            return [NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.0 alpha:0.5];
+        else if( self.isEdit )
+            return [NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:0.5];
+        else if( self.isFail )
+            return [NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5];
+        else {
+            _attributeColor = [NSColor clearColor];
+        }
+        
+        [self setPrimitiveAttributeColor:_attributeColor];
+    }
+    
+    return _attributeColor;
 }
 
 - (NSMutableIndexSet *)editSet
 {
-    NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
+    NSMutableIndexSet *indexSet;
     
-    if( self.source == nil )
-    {
-        if( self.parentStream != nil )
+    indexSet = [self primitiveEditSet];
+    
+    if (indexSet == nil) {
+        NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
+        
+        if( self.source == nil )
         {
-            /* top level block */
-            [indexSet addIndexes:[[self subBlockNamed:@"data"] editSet]];
-        }
-        else
-        {
-            /* mid level block */
-            NSInteger shiftAmount = 0;
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-            NSArray *subBlocks = [self.blocks sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-            
-            for (StBlock *aBlock in subBlocks)
+            if( self.parentStream != nil )
             {
-                NSMutableIndexSet *set = [aBlock editSet];
-                [set shiftIndexesStartingAtIndex:0 by:shiftAmount];
-                [indexSet addIndexes:set];
-                shiftAmount += aBlock.length;
-            }
-        }
-    }
-    else
-    {
-        /* leaf block */
-        if( [self.source isEqualToString:@"stream"] )
-        {
-            NSRange range = {self.offset, self.length};
-            StAnaylizer *lastFilterAnaylizer = [[self getStream] lastFilterAnayliser];
-            NSIndexSet *set = lastFilterAnaylizer.editIndexSet;
-            NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:
-                                              ^(NSUInteger idx, BOOL *stop){
-                                                #pragma unused(idx)
-                                                #pragma unused(stop)
-                                                return YES; }] mutableCopy];
-            [setInRange shiftIndexesStartingAtIndex:0 by:-self.offset];
-            [indexSet addIndexes:setInRange];
-            [setInRange release];
-        }
-        else
-        {
-            NSRange range;
-            
-            if( self.length == 0 )
-            {
-                StStream *ourStream = [self getStream];
-                NSData *blockData = [ourStream dataOfTopLevelBlockNamed:self.source];
-                range = NSMakeRange( self.offset, [blockData length] - self.offset );
+                /* top level block */
+                [indexSet addIndexes:[dataSubBlock editSet]];
             }
             else
-                range = NSMakeRange( self.offset, self.length );
-
-            NSMutableIndexSet *set = [[[self getStream] topLevelBlockNamed:self.source] editSet];
-            NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:
-                                              ^(NSUInteger idx, BOOL *stop){
-                                                  #pragma unused(idx)
-                                                  #pragma unused(stop)
-                                                  return YES; }] mutableCopy];
-            [setInRange shiftIndexesStartingAtIndex:0 by:-self.offset];
-            [indexSet addIndexes:setInRange];
-            [setInRange release];
+            {
+                /* mid level block */
+                NSInteger shiftAmount = 0;
+                
+                for (StBlock *aBlock in self.blocks)
+                {
+                    NSMutableIndexSet *set = [aBlock editSet];
+                    [set shiftIndexesStartingAtIndex:0 by:shiftAmount];
+                    [indexSet addIndexes:set];
+                    shiftAmount += aBlock.length;
+                }
+            }
         }
+        else
+        {
+            /* leaf block */
+            if( [self.source isEqualToString:@"stream"] )
+            {
+                NSRange range = {self.offset, self.length};
+                StAnaylizer *lastFilterAnaylizer = [[self getStream] lastFilterAnayliser];
+                NSIndexSet *set = lastFilterAnaylizer.editIndexSet;
+                NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:
+                                                  ^(NSUInteger idx, BOOL *stop){
+    #pragma unused(idx)
+    #pragma unused(stop)
+                                                      return YES; }] mutableCopy];
+                [setInRange shiftIndexesStartingAtIndex:0 by:-self.offset];
+                [indexSet addIndexes:setInRange];
+                [setInRange release];
+            }
+            else
+            {
+                NSRange range;
+                
+                if( self.length == 0 )
+                {
+                    StStream *ourStream = [self getStream];
+                    NSData *blockData = [ourStream dataOfTopLevelBlockNamed:self.source];
+                    range = NSMakeRange( self.offset, [blockData length] - self.offset );
+                }
+                else
+                    range = NSMakeRange( self.offset, self.length );
+                
+                NSMutableIndexSet *set = [[[self getStream] topLevelBlockNamed:self.source] editSet];
+                NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:
+                                                  ^(NSUInteger idx, BOOL *stop){
+    #pragma unused(idx)
+    #pragma unused(stop)
+                                                      return YES; }] mutableCopy];
+                [setInRange shiftIndexesStartingAtIndex:0 by:-self.offset];
+                [indexSet addIndexes:setInRange];
+                [setInRange release];
+            }
+        }
+        [self setPrimitiveEditSet:[indexSet autorelease]];
+        return indexSet;
     }
-    
-    return [indexSet autorelease];
+    else {
+        return indexSet;
+    }
 }
 
 - (void)setMarkForDeletion:(BOOL)del
 {
-    markForDeletion = del;
-    [streamRangeObject release];
-    streamRangeObject = nil;
-    
+    NSValue *mfd = [NSNumber numberWithBool:del];
+    [self setPrimitiveValue:mfd forKey:@"markForDeletion"];
+    self.attributeColor = nil;
+    self.resultingData = nil;
 }
 
 - (void)willTurnIntoFault
 {
-    if( anaylizerObject != nil)
-    {
-        [anaylizerObject setRepresentedObject:nil];
-    }
+    self.anaylizerObject = nil;
+    self.resultingData = nil;
+    self.attributeColor = nil;
 }
 
 - (BOOL) canChangeEditor
 {
     return YES;
+}
+
+- (void) resetCounters
+{
+    dataIndex = attrIndex = depIndex = 0;
+}
+
++ (NSSet *)keyPathsForValuesAffectingAttributeColor
+{
+    return [NSSet setWithObjects:@"isEdit", @"isFail", nil];
+}
+
++ (NSSet *)keyPathsForValuesAffectingUiCheckBytes
+{
+    return [NSSet setWithObjects:@"checkBytes", @"valueTransformer", nil];
+}
+
++ (NSSet *)keyPathsForValuesAffectingUiData
+{
+    return [NSSet setWithObjects:@"data", @"valueTransformer", nil];
 }
 
 @end
@@ -902,7 +891,7 @@
 
 - (BOOL)getObjectValue:(id *)anObject forString:(NSString *)string errorDescription:(NSString **)error
 {
-    #pragma unused(error)
+#pragma unused(error)
     if( [[string class] isSubclassOfClass:[NSString class]] )
     {
         /* just send the string back, we'll parse in the StBlock */
@@ -917,3 +906,4 @@
 }
 
 @end
+

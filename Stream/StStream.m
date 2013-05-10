@@ -1,49 +1,48 @@
 //
-//  Stream.m
-//  Stream
+//  StStream.m
+//  temp
 //
-//  Created by tim lindner on 8/25/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//  Created by tim lindner on 5/8/13.
+//  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 //
 
 #import "StStream.h"
-#import "BlockerProtocol.h"
-#import "Analyzation.h"
+#import "StAnaylizer.h"
+#import "StBlock.h"
+#import "StStream.h"
 
-//@interface NSObject (NSComparisonMethods)
-//- (BOOL)isLike:(NSString *)object;
-//- (BOOL)isCaseInsensitiveLike:(NSString *)object;
-//@end
 
 @implementation StStream
 
-@dynamic bytesCache;
-@dynamic customeSortOrder;
+@dynamic customSortOrder;
 @dynamic displayName;
 @dynamic modificationDateofURL;
+@dynamic regeneratingBlocks;
 @dynamic sourceURL;
 @dynamic sourceUTI;
 @dynamic streamTransform;
+@dynamic topLevelBlocks;
 @dynamic anaylizers;
-@dynamic edits;
 @dynamic blocks;
 @dynamic childStreams;
 @dynamic parentStream;
 @dynamic sourceBlock;
 
-@synthesize topLevelBlocks;
-
 - (NSMutableDictionary *)topLevelBlocks
 {
-    if (topLevelBlocks == nil) {
-        topLevelBlocks = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *_topLevelBlocks = [self primitiveTopLevelBlocks];
     
+    if (_topLevelBlocks == nil) {
+        _topLevelBlocks = [[[NSMutableDictionary alloc] init] autorelease];
+        
         for (StBlock *tlb in self.blocks) {
-            [topLevelBlocks setObject:tlb forKey:tlb.name];
+            [_topLevelBlocks setObject:tlb forKey:tlb.name];
         }
+        
+        [self setPrimitiveTopLevelBlocks:_topLevelBlocks];
     }
-
-    return topLevelBlocks;
+    
+    return _topLevelBlocks;
 }
 
 - (NSData *)dataOfTopLevelBlockNamed:(NSString *)name
@@ -57,7 +56,7 @@
     else
     {
         /* find block and returned it's data */
-        result = [[self topLevelBlockNamed:name] getData];
+        result = [[self topLevelBlockNamed:name] resultingData];
     }
     
     return result;
@@ -70,10 +69,10 @@
     if (result == nil && [theName rangeOfString:@"*"].length != 0) {
         /* let's look for wild cards */
         NSSet *matchingKeys = [self.topLevelBlocks keysOfEntriesPassingTest:^(id key, id obj, BOOL *stop) {
-            #pragma unused(obj)
-            #pragma unused(stop)
+#pragma unused(obj)
+#pragma unused(stop)
             return [key isLike:theName];
-                       
+            
         }];
         
         if ([matchingKeys count] > 0) {
@@ -104,30 +103,34 @@
             newBlock.markForDeletion = NO;
             newBlock.isEdit = NO;
             newBlock.isFail = NO;
-
-            [newBlock subBlockNamed:@"data"].markForDeletion = NO;
-            [newBlock subBlockNamed:@"data"].isEdit = NO;
-            [newBlock subBlockNamed:@"data"].isFail = NO;
-//            [newBlock subBlockNamed:@"data"].currentEditorView = @"Hex Editor";
-//            [newBlock subBlockNamed:@"data"].sourceUTI = @"public.data";
             
-            [newBlock subBlockNamed:@"attributes"].markForDeletion = NO;
-            [newBlock subBlockNamed:@"attributes"].isEdit = NO;
-            [newBlock subBlockNamed:@"attributes"].isFail = NO;
-//            [newBlock subBlockNamed:@"attributes"].currentEditorView = @"Block Attribute View";
-//            [newBlock subBlockNamed:@"attributes"].sourceUTI = @"org.macmess.stream.attribute";
+            StBlock *dataSubBlock = [newBlock subBlockNamed:@"data"];
+            dataSubBlock.markForDeletion = NO;
+            dataSubBlock.isEdit = NO;
+            dataSubBlock.isFail = NO;
+            //            dataSubBlock.currentEditorView = @"Hex Editor";
+            //            dataSubBlock.sourceUTI = @"public.data";
             
-            [newBlock subBlockNamed:@"dependencies"].markForDeletion = NO;
-            [newBlock subBlockNamed:@"dependencies"].isEdit = NO;
-            [newBlock subBlockNamed:@"dependencies"].isFail = NO;
-//            [newBlock subBlockNamed:@"dependencies"].currentEditorView = @"Hex Editor";
-//            [newBlock subBlockNamed:@"dependencies"].sourceUTI = @"public.data";
+            StBlock *attributSubBlock = [newBlock subBlockNamed:@"attributes"];
+            attributSubBlock.markForDeletion = NO;
+            attributSubBlock.isEdit = NO;
+            attributSubBlock.isFail = NO;
+            //            attributSubBlock.currentEditorView = @"Block Attribute View";
+            //            attributSubBlock.sourceUTI = @"org.macmess.stream.attribute";
             
-            [newBlock subBlockNamed:@"intrinsic"].markForDeletion = NO;
-            [newBlock subBlockNamed:@"intrinsic"].isEdit = NO;
-            [newBlock subBlockNamed:@"intrinsic"].isFail = NO;
-//            [newBlock subBlockNamed:@"intrinsic"].currentEditorView = @"Hex Editor";
-//            [newBlock subBlockNamed:@"intrinsic"].sourceUTI = @"public.data";
+            StBlock *depSubBlock = [newBlock subBlockNamed:@"dependencies"];
+            depSubBlock.markForDeletion = NO;
+            depSubBlock.isEdit = NO;
+            depSubBlock.isFail = NO;
+            //            depSubBlock.currentEditorView = @"Hex Editor";
+            //            depSubBlock.sourceUTI = @"public.data";
+            
+            StBlock *intrinsicSubBlock = [newBlock subBlockNamed:@"intrinsic"];
+            intrinsicSubBlock.markForDeletion = NO;
+            intrinsicSubBlock.isEdit = NO;
+            intrinsicSubBlock.isFail = NO;
+            //            intrinsicSubBlock.currentEditorView = @"Hex Editor";
+            //            intrinsicSubBlock.sourceUTI = @"public.data";
             
         }
         else
@@ -157,36 +160,36 @@
 {
     /* See if named block already exists */
     StBlock *result = [self.topLevelBlocks objectForKey:name];
-
+    
     if ( result == nil) {
         /* ok, create new block */
         StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
         newBlock.name = name;
         newBlock.anaylizerKind = owner;
-        [self addBlocksObject:newBlock];
-        
-        StBlock *newDataBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-        newDataBlock.name = @"data";
-        newDataBlock.sourceUTI = @"public.data";
-        [newBlock addBlocksObject:newDataBlock];
-        
-        StBlock *newAttributeBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-        newAttributeBlock.name = @"attributes";
-        newAttributeBlock.sourceUTI = @"org.macmess.stream.attribute";
-        newAttributeBlock.currentEditorView = @"Block Attribute View";
-        [newBlock addBlocksObject:newAttributeBlock];
-        
-        StBlock *newdependenciesBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-        newdependenciesBlock.name = @"dependencies";
-        newdependenciesBlock.sourceUTI = @"public.data";
-        [newBlock addBlocksObject:newdependenciesBlock];
-        
-        StBlock *newIntrinsicsBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
-        newIntrinsicsBlock.name = @"intrinsic";
-        newIntrinsicsBlock.sourceUTI = @"public.data";
-        [newBlock addBlocksObject:newIntrinsicsBlock];
-        
+       
+//        StBlock *newDataBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+//        newDataBlock.name = @"data";
+//        newDataBlock.sourceUTI = @"public.data";
+//        [newBlock addSubBlocksObject:newDataBlock];
+//        
+//        StBlock *newAttributeBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+//        newAttributeBlock.name = @"attributes";
+//        newAttributeBlock.sourceUTI = @"org.macmess.stream.attribute";
+//        newAttributeBlock.currentEditorView = @"Block Attribute View";
+//        [newBlock addSubBlocksObject:newAttributeBlock];
+//        
+//        StBlock *newdependenciesBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+//        newdependenciesBlock.name = @"dependencies";
+//        newdependenciesBlock.sourceUTI = @"public.data";
+//        [newBlock addSubBlocksObject:newdependenciesBlock];
+//        
+//        StBlock *newIntrinsicsBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+//        newIntrinsicsBlock.name = @"intrinsic";
+//        newIntrinsicsBlock.sourceUTI = @"public.data";
+//        [newBlock addSubBlocksObject:newIntrinsicsBlock];
+
         [self.topLevelBlocks setObject:newBlock forKey:name];
+        [self addBlocksObject:newBlock];
         result = newBlock;
     }
     else
@@ -243,11 +246,11 @@
 {
     NSUInteger index, end = NSMaxRange(range);
     unsigned char *bytes = (unsigned char *)[theData bytes];
-    const unsigned char *orginalBytes = [[theBlock getData] bytes];
+    const unsigned char *orginalBytes = [[theBlock resultingData] bytes];
     StAnaylizer *lastAaylizer = [self lastFilterAnayliser];
-
+    
     [lastAaylizer willChangeValueForKey:@"resultingData"];
-
+    
     for( index = range.location; index < end; index++ )
     {
         if( orginalBytes[index] != bytes[index] )
@@ -255,7 +258,7 @@
             [theBlock writeByte:bytes[index] atOffset:index];
         }
     }
-
+    
     [self regenerateAllBlocks];
     
     [lastAaylizer didChangeValueForKey:@"resultingData"];
@@ -270,7 +273,7 @@
     [[[self lastFilterAnayliser] failIndexSet] removeAllIndexes];
     
     [self willChangeValueForKey:@"blocks"];
-
+    
     /* Regenerate blocks using blockers */
     for( StAnaylizer *anAna in [self anaylizers] )
     {
@@ -288,7 +291,7 @@
             }
         }
     }
-
+    
     /* delete any blocks still marked for deletion */
     [self deleteBlocksMarkedForDeletion];
     
@@ -303,21 +306,21 @@
     NSMutableSet *allBlocks = [self mutableSetValueForKey:@"blocks"];
     [allBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
      {
-         #pragma unused(stop)
+#pragma unused(stop)
          StBlock *theBlock = obj;
          [theBlock setMarkForDeletion:YES];
          
          NSMutableSet *subBlocks = [theBlock mutableSetValueForKey:@"blocks"];
          [subBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
           {
-              #pragma unused(stop)
+#pragma unused(stop)
               StBlock *theSubBlock = obj;
               [theSubBlock setMarkForDeletion:YES];
               
               NSMutableSet *subSubBlocks = [theSubBlock mutableSetValueForKey:@"blocks"];
               [subSubBlocks enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
                {
-                   #pragma unused(stop)
+#pragma unused(stop)
                    StBlock *theSubSubBlock = obj;
                    [theSubSubBlock setMarkForDeletion:YES];
                }];
@@ -393,10 +396,9 @@
     return [aBlock isFail];
 }
 
-- (void)dealloc
+- (void)willTurnIntoFault
 {
-    [topLevelBlocks release];
-    [super dealloc];
+    self.topLevelBlocks = nil;
 }
 
 @end

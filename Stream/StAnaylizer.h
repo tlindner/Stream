@@ -1,57 +1,62 @@
 //
 //  StAnaylizer.h
-//  Stream
+//  temp
 //
-//  Created by tim lindner on 8/12/11.
-//  Copyright (c) 2011 org.macmess. All rights reserved.
+//  Created by tim lindner on 5/7/13.
+//  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "AnaylizerEdit.h"
-#import "AnaylizerListViewItem.h"
+#import "StData.h"
 
-@class StStream;
+@class AnaylizerEdit, StStream;
 
-@interface StAnaylizer : NSManagedObject
-{
-@private
-    NSObject * anaylizerObject;
-}
+@interface StAnaylizer : StData
 
 @property (nonatomic) float anaylizerHeight;
-@property (nonatomic) BOOL collapse;
-@property (nonatomic, retain) NSString * anaylizerKind;
-@property (nonatomic, readonly) NSObject * anaylizerObject;
-@property (nonatomic, readonly) float computedAnaylizerHeight;
-@property (nonatomic, retain) NSString * currentEditorView;
-@property (nonatomic, retain) NSMutableDictionary * optionsDictionary;
-@property (nonatomic, retain) NSMutableIndexSet * editIndexSet;
-@property (nonatomic, retain) NSMutableIndexSet * failIndexSet;
-@property (nonatomic, retain) StStream *parentStream;
-@property (nonatomic, retain) NSMutableData *resultingData;
-@property (nonatomic, assign) NSString * sourceUTI;
-@property (nonatomic, retain) NSString * resultingUTI;
-@property (nonatomic, readonly) BOOL removeEnabled;
-@property (nonatomic, readonly) BOOL editEnabled;
-@property (nonatomic, readonly) BOOL blockSettingsHidden;
-@property (nonatomic, readonly) NSString * title;
-@property (nonatomic, assign ) NSViewController * viewController;
-@property (nonatomic, readonly) BOOL canChangeEditor;
-@property (nonatomic, retain) NSOrderedSet * edits;
+@property (nonatomic, retain) NSString *anaylizerKind;
+@property (nonatomic) BOOL paneExpanded;
+@property (nonatomic) BOOL removeEnabled;
+@property (nonatomic) BOOL blockSettingsHidden;
+@property (nonatomic, retain) NSString *currentEditorView;
+@property (nonatomic, retain) NSMutableIndexSet *editIndexSet;
+@property (nonatomic, retain) NSMutableIndexSet *failIndexSet;
+@property (nonatomic, retain) NSData *resultingData;
 @property (nonatomic, retain) NSValue *viewRange;
+@property (nonatomic, readonly) NSString *title;
+@property (nonatomic, retain) NSOrderedSet *edits;
+@property (nonatomic, retain) NSData *sourceData;
+@property (nonatomic, retain) StStream *parentStream;
 
-- (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
-- (void) writebyte:(unsigned char) byte atOffset:(NSUInteger)offset;
+- (float) computedAnaylizerHeight;
+- (void) writebyte:(unsigned char)byte atOffset:(NSUInteger)offset;
 - (NSURL *)urlForCachedData;
 - (void) setResultingData:(NSMutableData *)inData andChangedIndexSet:(NSMutableIndexSet *)inIndexSet;
 - (BOOL) streamEditedInRange:(NSRange)range;
-- (void) poseEdit:(NSData *)data range:(NSRange)range;
-- (void) postEdit: (NSData *)data atLocation: (int64_t)location withLength: (int64_t)length;
 - (StAnaylizer *)previousAnaylizer;
+- (void) postEdit:(NSData *)data range:(NSRange)range;
+- (void) postEdit: (NSData *)data atLocation: (int64_t)location withLength: (int64_t)length;
 
 - (IBAction)ConfigurableButton1:(id)sender;
 - (IBAction)ConfigurableButton2:(id)sender;
+@end
+
+@interface StAnaylizer (CoreDataGeneratedAccessors)
+
+- (void)insertObject:(AnaylizerEdit *)value inEditsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromEditsAtIndex:(NSUInteger)idx;
+- (void)insertEdits:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeEditsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInEditsAtIndex:(NSUInteger)idx withObject:(AnaylizerEdit *)value;
+- (void)replaceEditsAtIndexes:(NSIndexSet *)indexes withEdits:(NSArray *)values;
+- (void)addEditsObject:(AnaylizerEdit *)value;
+- (void)removeEditsObject:(AnaylizerEdit *)value;
+- (void)addEdits:(NSOrderedSet *)values;
+- (void)removeEdits:(NSOrderedSet *)values;
+
+- (NSData *)primitiveSourceData;
+- (void)setPrimitiveSourceData:(NSData *)data;
 
 @end
 
@@ -68,26 +73,16 @@
 - (NSArray *)objectsAtIndexes:(NSIndexSet *)indexes;
 @end
 
-@interface StAnaylizer (CoreDataGeneratedAccessors)
-
-- (void)insertObject:(AnaylizerEdit *)value inEditsAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromEditsAtIndex:(NSUInteger)idx;
-- (void)insertEdits:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeEditsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInEditsAtIndex:(NSUInteger)idx withObject:(AnaylizerEdit *)value;
-- (void)replaceEditsAtIndexes:(NSIndexSet *)indexes withEdits:(NSArray *)values;
-- (void)addEditsObject:(AnaylizerEdit *)value;
-- (void)removeEditsObject:(AnaylizerEdit *)value;
-- (void)addEdits:(NSOrderedSet *)values;
-- (void)removeEdits:(NSOrderedSet *)values;
-
-@end
-
 @interface NSViewController (StreamViewControllerExtras)
+- (void)reloadView;
 - (IBAction)ConfigurableButton1:(id)sender;
 - (IBAction)ConfigurableButton2:(id)sender;
 @end
 
 @interface NSObject (StAnaylizerExtensions)
 - (Class)viewControllerClass;
+- (NSData *)resultingData;
+- (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte;
 @end
+
+
