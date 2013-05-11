@@ -29,8 +29,10 @@ static BOOL initialized = NO;
             [sharedSingleton addBlocker:@"CoCoSegmentedObjectBlocker"];
             [sharedSingleton addBlocker:@"OS9LogicalSectorsBlocker"];
             [sharedSingleton addBlocker:@"OS9FileBlocker"];
-            [sharedSingleton addBlocker:@"GenericArbitraryGroupBlocker"];
+            [sharedSingleton addBlocker:@"ArbitraryGroupBlocker"];
             [sharedSingleton addBlocker:@"DunfieldImageDisk"];
+            [sharedSingleton addBlocker:@"BasicDiskImage"];
+            
         }
     }
 }

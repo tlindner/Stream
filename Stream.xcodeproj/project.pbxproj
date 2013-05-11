@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7700637617128E730037055D /* AnaylizerPencil.tiff */; };
-		770B6878173D9AB80097305E /* GenericArbitraryGroupBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B6877173D9AB80097305E /* GenericArbitraryGroupBlocker.m */; };
-		770B687C173D9B030097305E /* GenericArbitraryGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B687A173D9B030097305E /* GenericArbitraryGroupViewController.m */; };
-		770B687D173D9B030097305E /* GenericArbitraryGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 770B687B173D9B030097305E /* GenericArbitraryGroupViewController.xib */; };
+		770B6878173D9AB80097305E /* ArbitraryGroupBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B6877173D9AB80097305E /* ArbitraryGroupBlocker.m */; };
+		770B687C173D9B030097305E /* ArbitraryGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B687A173D9B030097305E /* ArbitraryGroupViewController.m */; };
+		770B687D173D9B030097305E /* ArbitraryGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 770B687B173D9B030097305E /* ArbitraryGroupViewController.xib */; };
 		770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */; };
 		771AD296141D06C800E0FE41 /* CoCoAudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */; };
 		771AD29A141D414B00E0FE41 /* HexFiendAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */; };
@@ -71,6 +71,7 @@
 		779434C4173E8CD00090FD5F /* Blockers.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434C3173E8CD00090FD5F /* Blockers.m */; };
 		779434C9173EA5E90090FD5F /* AlertIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 779434C7173EA5E90090FD5F /* AlertIcon.tiff */; };
 		779434CC173EAD120090FD5F /* TLImageWithPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434CB173EAD120090FD5F /* TLImageWithPopover.m */; };
+		779434CF173EC88A0090FD5F /* BasicDiskImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434CE173EC88A0090FD5F /* BasicDiskImage.m */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
 		779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F74C91724779F00EC509B /* AnaylizerListViewItem.m */; };
@@ -164,11 +165,11 @@
 
 /* Begin PBXFileReference section */
 		7700637617128E730037055D /* AnaylizerPencil.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerPencil.tiff; path = Stream/AudioAnaylizer/AnaylizerPencil.tiff; sourceTree = "<group>"; };
-		770B6876173D9AB80097305E /* GenericArbitraryGroupBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericArbitraryGroupBlocker.h; path = "Stream/Generic Blockers/GenericArbitraryGroupBlocker.h"; sourceTree = "<group>"; };
-		770B6877173D9AB80097305E /* GenericArbitraryGroupBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GenericArbitraryGroupBlocker.m; path = "Stream/Generic Blockers/GenericArbitraryGroupBlocker.m"; sourceTree = "<group>"; };
-		770B6879173D9B030097305E /* GenericArbitraryGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericArbitraryGroupViewController.h; path = "Stream/Generic Blockers/GenericArbitraryGroupViewController.h"; sourceTree = "<group>"; };
-		770B687A173D9B030097305E /* GenericArbitraryGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GenericArbitraryGroupViewController.m; path = "Stream/Generic Blockers/GenericArbitraryGroupViewController.m"; sourceTree = "<group>"; };
-		770B687B173D9B030097305E /* GenericArbitraryGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GenericArbitraryGroupViewController.xib; path = "Stream/Generic Blockers/GenericArbitraryGroupViewController.xib"; sourceTree = "<group>"; };
+		770B6876173D9AB80097305E /* ArbitraryGroupBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArbitraryGroupBlocker.h; path = "Stream/Generic Blockers/ArbitraryGroupBlocker.h"; sourceTree = "<group>"; };
+		770B6877173D9AB80097305E /* ArbitraryGroupBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ArbitraryGroupBlocker.m; path = "Stream/Generic Blockers/ArbitraryGroupBlocker.m"; sourceTree = "<group>"; };
+		770B6879173D9B030097305E /* ArbitraryGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArbitraryGroupViewController.h; path = "Stream/Generic Blockers/ArbitraryGroupViewController.h"; sourceTree = "<group>"; };
+		770B687A173D9B030097305E /* ArbitraryGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ArbitraryGroupViewController.m; path = "Stream/Generic Blockers/ArbitraryGroupViewController.m"; sourceTree = "<group>"; };
+		770B687B173D9B030097305E /* ArbitraryGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ArbitraryGroupViewController.xib; path = "Stream/Generic Blockers/ArbitraryGroupViewController.xib"; sourceTree = "<group>"; };
 		770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataViewController.h; path = Stream/BlockerDataViewController.h; sourceTree = "<group>"; };
 		770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataViewController.m; path = Stream/BlockerDataViewController.m; sourceTree = "<group>"; };
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
@@ -278,6 +279,8 @@
 		779434C7173EA5E90090FD5F /* AlertIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AlertIcon.tiff; sourceTree = "<group>"; };
 		779434CA173EAD120090FD5F /* TLImageWithPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLImageWithPopover.h; sourceTree = "<group>"; };
 		779434CB173EAD120090FD5F /* TLImageWithPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLImageWithPopover.m; sourceTree = "<group>"; };
+		779434CD173EC88A0090FD5F /* BasicDiskImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasicDiskImage.h; path = Stream/DiskImageBlockers/BasicDiskImage.h; sourceTree = "<group>"; };
+		779434CE173EC88A0090FD5F /* BasicDiskImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicDiskImage.m; path = Stream/DiskImageBlockers/BasicDiskImage.m; sourceTree = "<group>"; };
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7799CD2913E63C1F007D5B8E /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnaylizer/WaveFormView.h; sourceTree = "<group>"; };
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
@@ -459,11 +462,11 @@
 		770B6874173D9A200097305E /* Generic Blockers */ = {
 			isa = PBXGroup;
 			children = (
-				770B6876173D9AB80097305E /* GenericArbitraryGroupBlocker.h */,
-				770B6877173D9AB80097305E /* GenericArbitraryGroupBlocker.m */,
-				770B6879173D9B030097305E /* GenericArbitraryGroupViewController.h */,
-				770B687A173D9B030097305E /* GenericArbitraryGroupViewController.m */,
-				770B687B173D9B030097305E /* GenericArbitraryGroupViewController.xib */,
+				770B6876173D9AB80097305E /* ArbitraryGroupBlocker.h */,
+				770B6877173D9AB80097305E /* ArbitraryGroupBlocker.m */,
+				770B6879173D9B030097305E /* ArbitraryGroupViewController.h */,
+				770B687A173D9B030097305E /* ArbitraryGroupViewController.m */,
+				770B687B173D9B030097305E /* ArbitraryGroupViewController.xib */,
 			);
 			name = "Generic Blockers";
 			sourceTree = "<group>";
@@ -653,6 +656,8 @@
 			children = (
 				77FE861C1736181B0015DCD8 /* DunfieldImageDisk.h */,
 				77FE861D1736181B0015DCD8 /* DunfieldImageDisk.m */,
+				779434CD173EC88A0090FD5F /* BasicDiskImage.h */,
+				779434CE173EC88A0090FD5F /* BasicDiskImage.m */,
 			);
 			name = DiskImageBlockers;
 			sourceTree = "<group>";
@@ -1018,7 +1023,7 @@
 				77B61804172B8CD3008E8F1A /* TextAccessoryView.xib in Resources */,
 				778E46F4172F672100736D51 /* DisasemblerAccessoryView.xib in Resources */,
 				778E46F9172F700C00736D51 /* DisasemblerAnaylizerViewController.xib in Resources */,
-				770B687D173D9B030097305E /* GenericArbitraryGroupViewController.xib in Resources */,
+				770B687D173D9B030097305E /* ArbitraryGroupViewController.xib in Resources */,
 				779434C9173EA5E90090FD5F /* AlertIcon.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1147,10 +1152,11 @@
 				77ED691517375CE60024397E /* OS9LogicalSectorsBlocker.m in Sources */,
 				77714C631738A48B00EA4EC5 /* OS9FileBlocker.m in Sources */,
 				77C65631173AA89C0022336D /* StData.m in Sources */,
-				770B6878173D9AB80097305E /* GenericArbitraryGroupBlocker.m in Sources */,
-				770B687C173D9B030097305E /* GenericArbitraryGroupViewController.m in Sources */,
+				770B6878173D9AB80097305E /* ArbitraryGroupBlocker.m in Sources */,
+				770B687C173D9B030097305E /* ArbitraryGroupViewController.m in Sources */,
 				779434C4173E8CD00090FD5F /* Blockers.m in Sources */,
 				779434CC173EAD120090FD5F /* TLImageWithPopover.m in Sources */,
+				779434CF173EC88A0090FD5F /* BasicDiskImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

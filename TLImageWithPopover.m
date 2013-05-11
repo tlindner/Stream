@@ -25,11 +25,6 @@ float heightForStringDrawing(NSString *myString, NSFont *myFont, float myWidth);
     return self;
 }
 
-//- (void)drawRect:(NSRect)dirtyRect
-//{
-//    // Drawing code here.
-//}
-
 - (void)mouseDown:(NSEvent *)theEvent
 {
     NSString *message = nil;
@@ -52,7 +47,6 @@ float heightForStringDrawing(NSString *myString, NSFont *myFont, float myWidth);
     
     NSPoint attachPoint = NSMakePoint(NSMidX([self bounds]), NSMaxY([self bounds]));
     attachPoint = [self convertPoint:attachPoint toView:nil];
-    NSLog(@"Error popup at: %@: %@", NSStringFromPoint(attachPoint), message);
     
     MAAttachedWindow *attachedWindow = [[MAAttachedWindow alloc] initWithView:errorView attachedToPoint:attachPoint inWindow:[self window] onSide:MAPositionTop atDistance:-15.0];
     [[self window] addChildWindow:attachedWindow ordered:NSWindowAbove];
