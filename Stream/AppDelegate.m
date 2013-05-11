@@ -60,7 +60,7 @@
         subMenu = [subMenuItem submenu];
     }
     
-    NSMenuItem *newMenuItem = [[NSMenuItem alloc] initWithTitle:[blockerClass blockerName] action:@selector(makeNewBlocker:) keyEquivalent:@""];
+    NSMenuItem *newMenuItem = [[[NSMenuItem alloc] initWithTitle:[blockerClass blockerName] action:@selector(makeNewBlocker:) keyEquivalent:@""] autorelease];
     [newMenuItem setRepresentedObject:blockerClass];
     [subMenu addItem:newMenuItem];
 

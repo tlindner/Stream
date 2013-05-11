@@ -352,6 +352,9 @@ NSString *OS9Date_Months[] = {@"Jan", @"Feb", @"Mar", @"Apr", @"May", @"Jun", @"
             result = @"Unknown";
         }
 	}
+    else {
+        result = @"Unknown";
+    }
 	
 	return result;
 }

@@ -46,7 +46,7 @@ float heightForStringDrawing(NSString *myString, NSFont *myFont, float myWidth);
     [errorView setFont:font];
     
     NSMutableParagraphStyle *mutParaStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
-    NSAttributedString *whiteMessage = [[NSAttributedString alloc] initWithString:message attributes:[NSDictionary dictionaryWithObjectsAndKeys:mutParaStyle, NSParagraphStyleAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil] ];
+    NSAttributedString *whiteMessage = [[[NSAttributedString alloc] initWithString:message attributes:[NSDictionary dictionaryWithObjectsAndKeys:mutParaStyle, NSParagraphStyleAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil]] autorelease];
 
     [errorView insertText:whiteMessage];
     

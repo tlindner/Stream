@@ -27,7 +27,7 @@
 
 - (NSObject *)anaylizerObject
 {
-    NSObject *_anaylizerObject = [self primitiveValueForKey:@"anaylizerObject"];
+    NSObject *_anaylizerObject = [self primitiveAnaylizerObject];
     
     Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
     
@@ -43,18 +43,18 @@
     
     if( _anaylizerObject == nil )
     {
-        _anaylizerObject = [[anaObjectClass alloc] init];
+        _anaylizerObject = [[[anaObjectClass alloc] init] autorelease];
         [_anaylizerObject setRepresentedObject:self];
-        [self setPrimitiveValue:_anaylizerObject forKey:@"anaylizerObject"];
+        [self setPrimitiveAnaylizerObject:_anaylizerObject];
     }
     else if( ![[_anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView]] )
     {
         [_anaylizerObject setRepresentedObject:nil];
-        [_anaylizerObject release];
+        [self setPrimitiveAnaylizerObject:nil];
         
-        _anaylizerObject = [[anaObjectClass alloc] init];
+        _anaylizerObject = [[[anaObjectClass alloc] init] autorelease];
         [_anaylizerObject setRepresentedObject:self];
-        [self setPrimitiveValue:_anaylizerObject forKey:@"anaylizerObject"];
+        [self setPrimitiveAnaylizerObject:_anaylizerObject];
     }
     
     return _anaylizerObject;

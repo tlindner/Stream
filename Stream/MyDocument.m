@@ -82,7 +82,7 @@
                 [observingStream addObserver:self forKeyPath:@"anaylizers" options:0 context:self];
                 
                 if (self.pictureURLs == nil) {
-                    self.pictureURLs = [[NSMutableArray alloc] init];
+                    self.pictureURLs = [[[NSMutableArray alloc] init] autorelease];
                 }
                 
                 [self.pictureURLs removeAllObjects];
@@ -454,7 +454,7 @@
     {
         if( result == NSFileHandlingPanelOKButton )
         {
-            NSArray *objs = [[NSArray alloc] initWithObjects:[mySavePanel URL], selectedObjects, nil];
+            NSArray *objs = [[[NSArray alloc] initWithObjects:[mySavePanel URL], selectedObjects, nil] autorelease];
             [self performSelector:@selector(doExportBlocks:) withObject:objs afterDelay:1.0];
 
         }

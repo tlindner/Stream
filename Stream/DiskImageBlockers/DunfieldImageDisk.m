@@ -86,13 +86,13 @@ NSUInteger CalculateSectorSize( unsigned char value );
             unsigned int sectorSizeMap[256];
             unsigned char sectorCylinderMap[256];
             unsigned char sectorHeadMap[256];
-            unsigned char mode;
+//            unsigned char mode;
             unsigned char cylinder;
             unsigned char head;
             unsigned char sectorCount;
             unsigned char sectorSizeCode;
             
-            mode = streamBytes[i++];
+            i++; /* skip mode value */
             if (i==length) return @"Abnormal end: short header";
             cylinder = streamBytes[i++];
             if (i==length) return  @"Abnormal end: short header";
@@ -195,7 +195,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
                         if (sectorType == 8) sectorIdealType = 4;
                         newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk blockerKey]];
                         actualLength = MIN(sectorSizeMap[j], length - i);
-                        [newBlock addDataRange:@"stream" start:i length:1 expectedLength:sectorSizeMap[j] repeat:YES];
+                        [newBlock addDataRange:@"stream" start:i length:1 expectedLength:actualLength repeat:YES];
                         [newBlock addAttributeRange:@"stream" start:i-1 length:1 name:@"Sector Type" verification:[NSData dataWithBytes:&sectorIdealType length:1] transformation:@"BlocksUnsignedBigEndian"];
                         newBlock.sourceUTI = newBlock.resultingUTI = @"public.data";
                         i++;

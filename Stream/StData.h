@@ -34,4 +34,7 @@
 - (NSValue *)primitiveUnionRange;
 - (void)setPrimitiveUnionRange:(NSValue *)value;
 
+- (NSObject *)primitiveAnaylizerObject;
+- (void)setPrimitiveAnaylizerObject:(NSObject *)ao;
+
 @end

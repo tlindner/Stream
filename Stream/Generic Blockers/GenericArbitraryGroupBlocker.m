@@ -30,7 +30,7 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSMutableArray array], @"blockList", nil];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSMutableArray array], @"blockList", nil] autorelease];
 }
 
 +(NSString *)blockerGroup
