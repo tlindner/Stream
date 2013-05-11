@@ -72,6 +72,8 @@
 		779434C9173EA5E90090FD5F /* AlertIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 779434C7173EA5E90090FD5F /* AlertIcon.tiff */; };
 		779434CC173EAD120090FD5F /* TLImageWithPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434CB173EAD120090FD5F /* TLImageWithPopover.m */; };
 		779434CF173EC88A0090FD5F /* BasicDiskImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434CE173EC88A0090FD5F /* BasicDiskImage.m */; };
+		779434D3173EDBFD0090FD5F /* BasicDiskImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434D1173EDBFD0090FD5F /* BasicDiskImageViewController.m */; };
+		779434D4173EDBFD0090FD5F /* BasicDiskImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 779434D2173EDBFD0090FD5F /* BasicDiskImageViewController.xib */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
 		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
 		779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F74C91724779F00EC509B /* AnaylizerListViewItem.m */; };
@@ -281,6 +283,9 @@
 		779434CB173EAD120090FD5F /* TLImageWithPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLImageWithPopover.m; sourceTree = "<group>"; };
 		779434CD173EC88A0090FD5F /* BasicDiskImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasicDiskImage.h; path = Stream/DiskImageBlockers/BasicDiskImage.h; sourceTree = "<group>"; };
 		779434CE173EC88A0090FD5F /* BasicDiskImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicDiskImage.m; path = Stream/DiskImageBlockers/BasicDiskImage.m; sourceTree = "<group>"; };
+		779434D0173EDBFD0090FD5F /* BasicDiskImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasicDiskImageViewController.h; path = Stream/DiskImageBlockers/BasicDiskImageViewController.h; sourceTree = "<group>"; };
+		779434D1173EDBFD0090FD5F /* BasicDiskImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicDiskImageViewController.m; path = Stream/DiskImageBlockers/BasicDiskImageViewController.m; sourceTree = "<group>"; };
+		779434D2173EDBFD0090FD5F /* BasicDiskImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BasicDiskImageViewController.xib; path = Stream/DiskImageBlockers/BasicDiskImageViewController.xib; sourceTree = "<group>"; };
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7799CD2913E63C1F007D5B8E /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnaylizer/WaveFormView.h; sourceTree = "<group>"; };
 		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
@@ -658,6 +663,9 @@
 				77FE861D1736181B0015DCD8 /* DunfieldImageDisk.m */,
 				779434CD173EC88A0090FD5F /* BasicDiskImage.h */,
 				779434CE173EC88A0090FD5F /* BasicDiskImage.m */,
+				779434D0173EDBFD0090FD5F /* BasicDiskImageViewController.h */,
+				779434D1173EDBFD0090FD5F /* BasicDiskImageViewController.m */,
+				779434D2173EDBFD0090FD5F /* BasicDiskImageViewController.xib */,
 			);
 			name = DiskImageBlockers;
 			sourceTree = "<group>";
@@ -1025,6 +1033,7 @@
 				778E46F9172F700C00736D51 /* DisasemblerAnaylizerViewController.xib in Resources */,
 				770B687D173D9B030097305E /* ArbitraryGroupViewController.xib in Resources */,
 				779434C9173EA5E90090FD5F /* AlertIcon.tiff in Resources */,
+				779434D4173EDBFD0090FD5F /* BasicDiskImageViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1157,6 +1166,7 @@
 				779434C4173E8CD00090FD5F /* Blockers.m in Sources */,
 				779434CC173EAD120090FD5F /* TLImageWithPopover.m in Sources */,
 				779434CF173EC88A0090FD5F /* BasicDiskImage.m in Sources */,
+				779434D3173EDBFD0090FD5F /* BasicDiskImageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

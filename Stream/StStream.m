@@ -265,7 +265,7 @@
 - (void)regenerateAllBlocks
 {   
     /* set all block to be marked for deletion */
-    [self markBlocksForDeletion];
+    [self markTopLevelBlocksForDeletion];
     
     /* reset fail index set */
     [[[self lastFilterAnayliser] failIndexSet] removeAllIndexes];
@@ -299,12 +299,12 @@
     }
     
     /* delete any blocks still marked for deletion */
-    [self deleteBlocksMarkedForDeletion];
+    [self deleteTopLevelBlocksMarkedForDeletion];
     
     [self didChangeValueForKey:@"blocks"];
 }
 
-- (void) markBlocksForDeletion
+- (void) markTopLevelBlocksForDeletion
 {
     regeneratingBlocks = YES;
     
@@ -312,12 +312,12 @@
     [[self.blocks allObjects] makeObjectsPerformSelector:@selector(makeMarkForDeletion)];
 }
 
-- (void) deleteBlocksMarkedForDeletion
+- (void) deleteTopLevelBlocksMarkedForDeletion
 {
     NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
     [request setEntity:entity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"markForDeletion == YES", self ];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"markForDeletion == YES" ];
     [request setPredicate:predicate];
     NSError *error = nil;
     NSArray *resultBlockArray = [self.managedObjectContext executeFetchRequest:request error:&error];
@@ -343,21 +343,28 @@
                     if( aBlock.parentStream != nil )
                     {
                         /* This is a top level block */
-                        NSMutableSet *parentStreamBlocks = [aBlock.parentStream mutableSetValueForKey:@"blocks"];
-                        [parentStreamBlocks removeObject:aBlock];
+                        [self removeBlocksObject:aBlock];
+//                        NSMutableSet *parentStreamBlocks = [aBlock.parentStream mutableSetValueForKey:@"blocks"];
+//                        [parentStreamBlocks removeObject:aBlock];
                     }
-                    else
-                    {
-                        /* This is a midlevel block */
-                        NSMutableSet *parentBlockSet = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
-                        [parentBlockSet removeObject:aBlock];
-                    }
-                }
-                else
-                {
-                    /* This is a leaf block */
-                    NSMutableSet *parentBlockSet = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
-                    [parentBlockSet removeObject:aBlock];
+//                    else
+//                    {
+//                        /* This is a midlevel block */
+//                        if ([aBlock.parentBlock.blocks containsObject:aBlock]) {
+//                            [[aBlock parentBlock] removeBlocksObject:aBlock];
+//                        }
+////                        NSMutableSet *parentBlockSet = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
+////                        [parentBlockSet removeObject:aBlock];
+//                    }
+//                }
+//                else
+//                {
+//                    /* This is a leaf block */
+//                    if ([aBlock.parentBlock.blocks containsObject:aBlock]) {
+//                        [[aBlock parentBlock] removeBlocksObject:aBlock];
+//                    }
+////                    NSMutableSet *parentBlockSet = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
+////                    [parentBlockSet removeObject:aBlock];
                 }
             }
         }

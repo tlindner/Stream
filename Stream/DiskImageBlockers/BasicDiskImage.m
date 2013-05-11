@@ -25,7 +25,7 @@
 
 + (NSString *)blockerPopoverAccessoryViewNib
 {
-    return nil;
+    return @"BasicDiskImageViewController";
 }
 
 +(NSString *)blockerGroup
@@ -52,11 +52,11 @@
         
     NSUInteger streamLength = [streamBytesObject length], bytesConsumed;
     NSDictionary *option = [[anaylizer optionsDictionary] objectForKey:[BasicDiskImage blockerKey]];
-    NSUInteger skipHeaderLength = [[option objectForKey:@"skipHeaderLength"] unsignedIntegerValue];
-    NSUInteger sectorLength = [[option objectForKey:@"sectorLength"] unsignedIntegerValue];
-    NSUInteger sideCount = [[option objectForKey:@"sideCount"] unsignedIntegerValue];
-    NSUInteger trackLength = [[option objectForKey:@"trackLength"] unsignedIntegerValue];
-    NSUInteger firstSectorID = [[option objectForKey:@"firstSectorID"] unsignedIntegerValue];
+    NSUInteger skipHeaderLength = [[option objectForKey:@"skipHeaderLength"] intValue];
+    NSUInteger sectorLength = [[option objectForKey:@"sectorLength"] intValue];
+    NSUInteger sideCount = [[option objectForKey:@"sideCount"] intValue];
+    NSUInteger trackLength = [[option objectForKey:@"trackLength"] intValue];
+    NSUInteger firstSectorID = [[option objectForKey:@"firstSectorID"] intValue];
     NSUInteger track = 0;
     
     bytesConsumed = skipHeaderLength;
@@ -71,10 +71,10 @@
                 [newsector addDataRange:@"stream" start:bytesConsumed length:actualLength expectedLength:sectorLength];
                 bytesConsumed += actualLength;
                 
-                if (bytesConsumed > streamLength) break;
+                if (bytesConsumed >= streamLength) break;
             }
             
-            if (bytesConsumed > streamLength) break;
+            if (bytesConsumed >= streamLength) break;
         }
         
         track++;

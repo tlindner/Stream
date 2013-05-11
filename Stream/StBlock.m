@@ -809,7 +809,8 @@
     self.resultingData = nil;
     self.unionRange = nil;
     
-    [[self.blocks array] makeObjectsPerformSelector:@selector(makeMarkForDeletion)];
+    /* No longer doing this recusevely */
+//    [[self.blocks array] makeObjectsPerformSelector:@selector(makeMarkForDeletion)];
 }
 
 - (void)willTurnIntoFault

@@ -41,8 +41,8 @@
 - (void)setBlock:(StBlock *)theBlock withData:(NSData *)theData;
 - (void) setBlock:(StBlock *)theBlock withData:(NSData *)theData inRange:(NSRange)range;
 - (void)regenerateAllBlocks;
-- (void) markBlocksForDeletion;
-- (void) deleteBlocksMarkedForDeletion;
+- (void) markTopLevelBlocksForDeletion;
+- (void) deleteTopLevelBlocksMarkedForDeletion;
 - (BOOL)isBlockEdited:(NSString *)blockName;
 - (BOOL)isBlockFailed:(NSString *)blockName;
 @end
