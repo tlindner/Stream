@@ -282,14 +282,8 @@
             if (blockerClass != nil )
             {
                 Blockers *blocker = [[blockerClass alloc] init];
-                NSString *result = [blocker makeBlocks:self withAnaylizer:anAna];
+                anAna.errorString = [blocker makeBlocks:self withAnaylizer:anAna];
                 [blocker release];
-                
-                if (result != nil) {
-                    if (! [result isEqualToString:@""]) {
-                        anAna.errorString = result;
-                    }
-                }
             }
             else
             {

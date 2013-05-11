@@ -372,13 +372,8 @@
         {
             [newAnaylizer addSubOptionsDictionary:[blockerClass blockerKey] withDictionary:[blockerClass defaultOptions]];
             Blockers *blocker = [[blockerClass alloc] init];
-            NSString *result = [blocker makeBlocks:selectedStream withAnaylizer:newAnaylizer];
+            newAnaylizer.errorString = [blocker makeBlocks:selectedStream withAnaylizer:newAnaylizer];
             [blocker release];
-            if (result != nil) {
-                if (! [result isEqualToString:@""]) {
-                    newAnaylizer.errorString = result;
-                }
-            }
         }
         else
             NSLog( @"Could not create class: %@", [newAnaylizer valueForKey:@"anaylizerKind"] );

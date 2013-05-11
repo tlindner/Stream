@@ -35,8 +35,28 @@ float heightForStringDrawing(NSString *myString, NSFont *myFont, float myWidth);
     }
 
     NSFont *font = [NSFont controlContentFontOfSize:0];
-    float height = heightForStringDrawing(message, font, 300);
-    InsetTextView *errorView = [[InsetTextView alloc] initWithFrame:NSMakeRect(0, 0, 300+20, height+20)];
+    float width, height, ratio;
+    
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+    NSAttributedString *attributedMessage = [[[NSAttributedString alloc] initWithString:message attributes:attributes] autorelease];
+    width = [attributedMessage size].width + 20.0;
+    
+    if (width > 300) {
+        for (width = 10; width < 800; width += 10) {
+            height = heightForStringDrawing(message, font, width);
+            
+            ratio = width/height;
+            
+            if (ratio > 1.61803398875) {
+                break;
+            }
+        }
+    }
+    else {
+        height = heightForStringDrawing(message, font, width);
+    }
+    
+    InsetTextView *errorView = [[InsetTextView alloc] initWithFrame:NSMakeRect(0, 0, width+20, height+20)];
     [errorView setDrawsBackground:NO];
     [errorView setFont:font];
     
