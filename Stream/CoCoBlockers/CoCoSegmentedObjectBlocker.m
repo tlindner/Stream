@@ -10,17 +10,17 @@
 #import "StBlock.h"
 
 @implementation CoCoSegmentedObjectBlocker
-+ (NSString *)anayliserName
++ (NSString *)blockerName
 {
     return @"CoCo Segmented Object Blocker";
 }
 
-+ (NSString *)anaylizerKey
++ (NSString *)blockerKey
 {
     return @"CoCoSegmentedObjectBlocker";
 }
 
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
++ (NSString *)blockerPopoverAccessoryViewNib
 {
     return nil;
 }
@@ -30,19 +30,33 @@
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
++ (NSString *)blockerGroup
+{
+    return @"CoCo";
+}
+
+- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
-    NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoSegmentedObjectBlocker: Incompatiable stream" );
+    if ([stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == NO) {
+        return @"Incompatiable stream";
+    }
+    
     int segmentNumber, transferNumber;
     NSUInteger i;
     
     NSData  *streamBytesObject = [stream dataOfTopLevelBlockNamed:@"stream"];
-    NSAssert( streamBytesObject != nil, @"CoCoSegmentedObjectBlocker: no stream object" );
     
+    if (streamBytesObject == nil) {
+        return @"No stream object";
+    }
+
     unsigned char *streamBytes = (unsigned char *)[streamBytesObject bytes];
-    NSAssert( streamBytes != nil, @"CoCoSegmentedObjectBlocker: no stream bytes");
     
+    if (streamBytes == nil) {
+        return @"No stream bytes";
+    }
+
     NSUInteger length = [streamBytesObject length];
     segmentNumber = 0;
     transferNumber = 0;
@@ -65,7 +79,7 @@
         
         if (segAmble == 0x00) {
             /* preamble */
-            StBlock *newSegement = [stream startNewBlockNamed:[NSString stringWithFormat:@"Segment %d", segmentNumber++] owner:[CoCoSegmentedObjectBlocker anaylizerKey]];
+            StBlock *newSegement = [stream startNewBlockNamed:[NSString stringWithFormat:@"Segment %d", segmentNumber++] owner:[CoCoSegmentedObjectBlocker blockerKey]];
             newSegement.sourceUTI = newSegement.resultingUTI = @"com.microsoft.cocobasic.object";
             
             [newSegement addAttributeRange:@"stream" start:i+0 length:1 name:@"Amble" verification:nil transformation:@"BlocksUnsignedBigEndian"];
@@ -80,7 +94,7 @@
             
         } else if (segAmble == 0xff) {
             /* postamble */
-            StBlock *newSegement = [stream startNewBlockNamed:[NSString stringWithFormat:@"Transfer %d", transferNumber++] owner:[CoCoSegmentedObjectBlocker anaylizerKey]];
+            StBlock *newSegement = [stream startNewBlockNamed:[NSString stringWithFormat:@"Transfer %d", transferNumber++] owner:[CoCoSegmentedObjectBlocker blockerKey]];
             newSegement.sourceUTI = newSegement.resultingUTI = @"public.data";
             [newSegement addAttributeRange:@"stream" start:i+0 length:1 name:@"Amble" verification:nil transformation:@"BlocksUnsignedBigEndian"];
             [newSegement addAttributeRange:@"stream" start:i+1 length:2 name:@"Length" verification:[NSData dataWithBytes:&actualLength length:2] transformation:@"BlocksUnsignedBigEndian"];
@@ -94,6 +108,8 @@
             break;
         }
     }
+    
+    return @"";
 }
 
 @end

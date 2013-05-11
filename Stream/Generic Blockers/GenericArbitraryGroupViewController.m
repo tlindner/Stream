@@ -26,12 +26,11 @@
 @synthesize partialLengthTextField;
 @synthesize partialMoveButton;
 @synthesize AssembledBlocksArrayController;
-@synthesize showView;
 @synthesize popover;
 
-- (void)showPopover
+- (void)showPopover:(NSView *)aView
 {
-    [popover showRelativeToRect:[self.showView bounds] ofView:self.showView preferredEdge:NSMaxYEdge];
+    [popover showRelativeToRect:[aView bounds] ofView:aView preferredEdge:NSMaxYEdge];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -54,7 +53,7 @@
     [super loadView];
     
     StAnaylizer *theAna = self.representedObject;
-    NSPredicate *pr = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (anaylizerKind != %@)", theAna.parentStream, [GenericArbitraryGroupBlocker anaylizerKey]];
+    NSPredicate *pr = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (anaylizerKind != %@)", theAna.parentStream, [GenericArbitraryGroupBlocker blockerKey]];
     [allBlockArrayController setFetchPredicate:pr];
     
     [allBlockArrayController addObserver:self forKeyPath:@"selectionIndexes" options:(NSKeyValueObservingOptionNew) context:self];

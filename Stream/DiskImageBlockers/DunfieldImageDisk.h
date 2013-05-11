@@ -7,16 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Blockers.h"
 
 @class StStream, StAnaylizer;
 
-@interface DunfieldImageDisk : NSObject
-
-+ (NSString *)anayliserName;
-+ (NSString *)anaylizerKey;
-+ (NSString *)AnaylizerPopoverAccessoryViewNib;
-+ (NSMutableDictionary *)defaultOptions;
-
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
+@interface DunfieldImageDisk : Blockers
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "Blockers.h"
 
 @interface GenericArbitraryGroupViewController : NSViewController
 {
@@ -21,8 +22,6 @@
 @property (assign) IBOutlet NSButton *partialMoveButton;
 @property (assign) IBOutlet NSArrayController *AssembledBlocksArrayController;
 @property (assign) IBOutlet NSPopover *popover;
-
-@property (assign) NSView *showView;
 
 - (IBAction)wholeMove:(id)sender;
 - (IBAction)deleteValue:(id)sender;

@@ -10,7 +10,7 @@
 #import "StAnaylizer.h"
 #import "StBlock.h"
 #import "StStream.h"
-
+#import "Blockers.h"
 
 @implementation StStream
 
@@ -281,7 +281,15 @@
             
             if (blockerClass != nil )
             {
-                [blockerClass makeBlocks:self withAnaylizer:anAna];
+                Blockers *blocker = [[blockerClass alloc] init];
+                NSString *result = [blocker makeBlocks:self withAnaylizer:anAna];
+                [blocker release];
+                
+                if (result != nil) {
+                    if (! [result isEqualToString:@""]) {
+                        anAna.errorString = result;
+                    }
+                }
             }
             else
             {

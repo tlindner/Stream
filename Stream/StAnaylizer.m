@@ -12,7 +12,7 @@
 #import "Analyzation.h"
 #import "HexFiendAnaylizer.h"
 #import "TextAnaylizer.h"
-#import "BlockerProtocol.h"
+#import "Blockers.h"
 
 NSURL *MakeTemporaryFile( NSString *pattern );
 
@@ -33,6 +33,8 @@ NSURL *MakeTemporaryFile( NSString *pattern );
 @dynamic title;
 @dynamic failIndexSet;
 @dynamic sourceData;
+@dynamic errorString;
+@dynamic blockAlertHidden;
 
 + (void)initialize
 {
@@ -170,9 +172,9 @@ NSURL *MakeTemporaryFile( NSString *pattern );
 
 - (BOOL) blockSettingsEnabled
 {
-    Class <BlockerProtocol> blockerClass = NSClassFromString([self valueForKey:@"anaylizerKind"]);
+    Class blockerClass = NSClassFromString([self valueForKey:@"anaylizerKind"]);
     
-    return [blockerClass AnaylizerPopoverAccessoryViewNib] != nil;
+    return [blockerClass blockerPopoverAccessoryViewNib] != nil;
  }
 
 - (NSString *) title
@@ -180,7 +182,7 @@ NSURL *MakeTemporaryFile( NSString *pattern );
     NSString *result = nil;
     
     if( [self.currentEditorView isEqualToString:@"Blocker View" ])
-        result = [NSString stringWithFormat:@"%@ — %@", [NSClassFromString(self.anaylizerKind) anayliserName], self.currentEditorView];
+        result = [NSString stringWithFormat:@"%@ — %@", [NSClassFromString(self.anaylizerKind) blockerName], self.currentEditorView];
     else
         result = self.currentEditorView;
     
@@ -308,6 +310,22 @@ NSURL *MakeTemporaryFile( NSString *pattern );
     {
         [self.viewController ConfigurableButton2:(id)sender];
     }
+}
+
+- (BOOL) blockAlertHidden
+{
+    if (self.errorString == nil) {
+        if (![self.errorString isEqualToString:@""]) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
++ (NSSet *)keyPathsForValuesAffectingBlockAlertHidden
+{
+    return [NSSet setWithObjects:@"errorString", nil];
 }
 
 + (NSSet *)keyPathsForValuesAffectingTitle

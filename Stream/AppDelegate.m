@@ -7,20 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "CoCoCassetteBlocker.h"
-#import "CoCoCassetteFileBlocker.h"
-#import "CoCoSegmentedObjectBlocker.h"
-#import "DunfieldImageDisk.h"
-#import "OS9LogicalSectorsBlocker.h"
-#import "OS9FileBlocker.h"
-#import "GenericArbitraryGroupBlocker.h"
-
-@interface NSObject (BlockerExtension)
-+ (NSString *)anayliserName;
-+ (NSString *)anaylizerKey;
-+ (NSString *)AnaylizerPopoverAccessoryViewNib;
-+ (NSMutableDictionary *)defaultOptions;
-@end
+#import "Blockers.h"
 
 @implementation AppDelegate
 
@@ -48,30 +35,35 @@
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
     #pragma unused(notification)
-    //NSLog( @"Im alive: %@", notification );
 
-    NSArray *blockers = [NSArray arrayWithObjects:[CoCoCassetteBlocker class], [CoCoCassetteFileBlocker class], [CoCoSegmentedObjectBlocker class], [DunfieldImageDisk class], [OS9LogicalSectorsBlocker class], [OS9FileBlocker class], [GenericArbitraryGroupBlocker class], nil];
-    
-    for (Class blocker in blockers) {
-        NSString *subMenuName = [[[blocker anayliserName] componentsSeparatedByString:@" "] objectAtIndex:0];
-        NSMenuItem *subMenuItem = [blocksMenu itemWithTitle:subMenuName];
-        NSMenu *subMenu;
-        
-        if (subMenuItem == nil) {
-            NSMenuItem *mainItem = [[[NSMenuItem alloc] init] autorelease];
-            [mainItem setTitle:subMenuName];
-            subMenu = [[[NSMenu alloc] initWithTitle:subMenuName] autorelease];
-            [blocksMenu addItem:mainItem];
-            [blocksMenu setSubmenu:subMenu forItem:mainItem];
-        }
-        else {
-            subMenu = [subMenuItem submenu];
-        }
-        
-        NSMenuItem *newMenuItem = [[NSMenuItem alloc] initWithTitle:[blocker anayliserName] action:@selector(makeNewBlocker:) keyEquivalent:@""];
-        [newMenuItem setRepresentedObject:[blocker class]];
-        [subMenu addItem:newMenuItem];
+    for (NSString *blockerClassString in [Blockers sharedInstance].classList) {
+        [self addBlockerMenu:blockerClassString];
     }
+}
+ 
+- (void) addBlockerMenu:(NSString *)classNameString
+{
+    Class blockerClass = NSClassFromString(classNameString);
+
+    NSString *subMenuName = [blockerClass blockerGroup];
+    NSMenuItem *subMenuItem = [blocksMenu itemWithTitle:subMenuName];
+    NSMenu *subMenu;
+    
+    if (subMenuItem == nil) {
+        NSMenuItem *mainItem = [[[NSMenuItem alloc] init] autorelease];
+        [mainItem setTitle:subMenuName];
+        subMenu = [[[NSMenu alloc] initWithTitle:subMenuName] autorelease];
+        [blocksMenu addItem:mainItem];
+        [blocksMenu setSubmenu:subMenu forItem:mainItem];
+    }
+    else {
+        subMenu = [subMenuItem submenu];
+    }
+    
+    NSMenuItem *newMenuItem = [[NSMenuItem alloc] initWithTitle:[blockerClass blockerName] action:@selector(makeNewBlocker:) keyEquivalent:@""];
+    [newMenuItem setRepresentedObject:blockerClass];
+    [subMenu addItem:newMenuItem];
+
 }
 
 @end

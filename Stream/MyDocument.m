@@ -12,6 +12,7 @@
 #import "StAnaylizer.h"
 #import "AppDelegate.h"
 #import "AnaylizerListViewItem.h"
+#import "Blockers.h"
 
 @implementation MyDocument
 
@@ -267,9 +268,9 @@
         if ([selectedObjects count] > 0) {
             StStream *selectedStream = [selectedObjects objectAtIndex:0];
             NSOrderedSet *anaylizers = [selectedStream anaylizers];
-            Class <BlockerProtocol>menuAnaylizerClass = menuItem.representedObject;
+            Class menuAnaylizerClass = menuItem.representedObject;
             for (StAnaylizer *theAna in anaylizers) {
-                if ([theAna.anaylizerKind isEqualToString:[menuAnaylizerClass anaylizerKey]]) {
+                if ([theAna.anaylizerKind isEqualToString:[menuAnaylizerClass blockerKey]]) {
                     return NO;
                 }
             }
@@ -344,7 +345,7 @@
     NSUInteger flags = ([NSEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask);
     BOOL isOptionPressed = (0 != (flags & NSAlternateKeyMask));
     
-    Class <BlockerProtocol> class = [sender representedObject];
+    Class class = [sender representedObject];
     
     NSArray *selectedObjects = [streamTreeControler selectedObjects];
     
@@ -356,7 +357,7 @@
         NSMutableOrderedSet *theSet = [selectedStream mutableOrderedSetValueForKey:@"anaylizers"];
         
         StAnaylizer *newAnaylizer = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:[self managedObjectContext]];
-        newAnaylizer.anaylizerKind = [class anaylizerKey];
+        newAnaylizer.anaylizerKind = [class blockerKey];
         newAnaylizer.currentEditorView = @"Blocker View";
         
         if (isOptionPressed) {
@@ -365,12 +366,19 @@
         
         [theSet addObject:newAnaylizer];
 
-        Class <BlockerProtocol> blockerClass = NSClassFromString([newAnaylizer valueForKey:@"anaylizerKind"]);
+        Class blockerClass = NSClassFromString([newAnaylizer valueForKey:@"anaylizerKind"]);
          
         if (blockerClass != nil )
         {
-            [newAnaylizer addSubOptionsDictionary:[blockerClass anaylizerKey] withDictionary:[blockerClass defaultOptions]];
-            [blockerClass makeBlocks:selectedStream withAnaylizer:newAnaylizer];
+            [newAnaylizer addSubOptionsDictionary:[blockerClass blockerKey] withDictionary:[blockerClass defaultOptions]];
+            Blockers *blocker = [[blockerClass alloc] init];
+            NSString *result = [blocker makeBlocks:selectedStream withAnaylizer:newAnaylizer];
+            [blocker release];
+            if (result != nil) {
+                if (! [result isEqualToString:@""]) {
+                    newAnaylizer.errorString = result;
+                }
+            }
         }
         else
             NSLog( @"Could not create class: %@", [newAnaylizer valueForKey:@"anaylizerKind"] );

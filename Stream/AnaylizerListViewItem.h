@@ -22,6 +22,7 @@
 @property (retain) NSViewController *editorController;
 @property (assign) IBOutlet ColorGradientView *colorGradientView;
 @property (assign) IBOutlet NSButton *blockSettingsButton;
+@property (assign) IBOutlet NSButton *anaylizerErrorButton;
 @property (assign) IBOutlet NSViewController *blockSettingsViewController;
 
 - (IBAction)removeAnaylizer:(id)sender;

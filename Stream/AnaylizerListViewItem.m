@@ -12,7 +12,7 @@
 #import "MyDocument.h"
 #import "colorGradientView.h"
 #import "DragRegionView.h"
-#import "BlockerProtocol.h"
+#import "Blockers.h"
 
 #define MINIMUM_HEIGHT 26.0
 
@@ -39,6 +39,7 @@
 @synthesize colorGradientView;
 @synthesize blockSettingsButton;
 @synthesize blockSettingsViewController;
+@synthesize anaylizerErrorButton;
 
 - (void)setRepresentedObject:(id)representedObject
 {
@@ -47,7 +48,6 @@
     if (representedObject != nil) {
         [representedObject addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
         [representedObject addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
-        
     }
 }
 
@@ -105,6 +105,8 @@
         [self.editorController setRepresentedObject:nil];
         self.editorController = nil;
     }
+    
+    blockSettingsViewController = nil;
     
     [super dealloc];
 }
@@ -171,19 +173,18 @@
     if (blockSettingsViewController == nil) {
         StAnaylizer *theAna = [self representedObject];
 
-        Class <BlockerProtocol> blockerClass = NSClassFromString([theAna valueForKey:@"anaylizerKind"]);
-        Class <BlockerViewControllerProtocol> viewControllerClass = NSClassFromString([blockerClass AnaylizerPopoverAccessoryViewNib]);
+        Class blockerClass = NSClassFromString([theAna valueForKey:@"anaylizerKind"]);
+        Class viewControllerClass = NSClassFromString([blockerClass blockerPopoverAccessoryViewNib]);
         
         if (viewControllerClass != nil) {
-             blockSettingsViewController = [[viewControllerClass alloc] initWithNibName:[blockerClass AnaylizerPopoverAccessoryViewNib] bundle:nil];
+             blockSettingsViewController = [(NSViewController *)[viewControllerClass alloc] initWithNibName:[blockerClass blockerPopoverAccessoryViewNib] bundle:nil];
 
             [blockSettingsViewController setRepresentedObject:theAna];
-            [blockSettingsViewController setShowView:blockSettingsButton];
             [blockSettingsViewController loadView];
         }
    }
     
-    [blockSettingsViewController showPopover];
+    [blockSettingsViewController showPopover:blockSettingsButton];
 }
 
 @end

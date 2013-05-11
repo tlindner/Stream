@@ -13,35 +13,40 @@
 
 @implementation GenericArbitraryGroupBlocker
 
-+ (NSString *)anayliserName
++ (NSString *)blockerName
 {
     return @"Generic Arbitrary Group Blocker";
 }
 
-+ (NSString *)anaylizerKey
++ (NSString *)blockerKey
 {
     return @"GenericArbitraryGroupBlocker";
 }
 
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
++ (NSString *)blockerPopoverAccessoryViewNib
 {
     return @"GenericArbitraryGroupViewController";
 }
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSMutableArray arrayWithObject:[namedRange namedRange:[NSValue valueWithRange:NSMakeRange(10, 20)] withName:@"Note"]], @"blockList", nil];
+    return [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSMutableArray array], @"blockList", nil];
 }
 
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
++(NSString *)blockerGroup
+{
+    return @"Utility";
+}
+
+- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
     StBlock *newFileBlock;
 
-    newFileBlock = [stream startNewBlockNamed:@"Generic Block" owner:[GenericArbitraryGroupBlocker anaylizerKey]];
+    newFileBlock = [stream startNewBlockNamed:@"Arbitrary Block" owner:[GenericArbitraryGroupBlocker blockerKey]];
     
     if (newFileBlock != nil) {
         NSMutableDictionary *optionsDictionary = anaylizer.optionsDictionary;
-        NSMutableDictionary *myOptions = [optionsDictionary objectForKey:[GenericArbitraryGroupBlocker anaylizerKey]];
+        NSMutableDictionary *myOptions = [optionsDictionary objectForKey:[GenericArbitraryGroupBlocker blockerKey]];
         NSMutableArray *myArray = [myOptions valueForKey:@"blockList"];
         
         for (namedRange *nr in myArray) {
@@ -49,6 +54,8 @@
             [newFileBlock addDataRange:nr.name start:range.location length:range.length];
         }
     }
+    
+    return @"";
 }
 
 @end

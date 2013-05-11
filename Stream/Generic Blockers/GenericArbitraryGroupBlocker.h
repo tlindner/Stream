@@ -7,17 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Blockers.h"
 
 @class StAnaylizer, StStream;
 
-@interface GenericArbitraryGroupBlocker : NSObject
-
-+ (NSString *)anayliserName;
-+ (NSString *)anaylizerKey;
-+ (NSString *)AnaylizerPopoverAccessoryViewNib;
-+ (NSMutableDictionary *)defaultOptions;
-
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
+@interface GenericArbitraryGroupBlocker : Blockers
 
 @end
 

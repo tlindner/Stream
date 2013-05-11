@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BlockerProtocol.h"
 
 @class StStream;
 
@@ -17,6 +16,8 @@
 }
 
 @property (assign) IBOutlet NSMenu *blocksMenu;
+
+- (void) addBlockerMenu:(NSString *)classNameString;
 
 @end
 

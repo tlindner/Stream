@@ -14,19 +14,24 @@ NSUInteger CalculateSectorSize( unsigned char value );
 
 @implementation DunfieldImageDisk
 
-+ (NSString *)anayliserName
++ (NSString *)blockerName
 {
     return @"Dunfield Image Disk Blocker";
 }
 
-+ (NSString *)anaylizerKey
++ (NSString *)blockerKey
 {
     return @"DunfieldImageDisk";
 }
 
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
++ (NSString *)blockerPopoverAccessoryViewNib
 {
     return nil;
+}
+
++(NSString *)blockerGroup
+{
+    return @"Disk Image";
 }
 
 + (NSMutableDictionary *)defaultOptions
@@ -34,22 +39,30 @@ NSUInteger CalculateSectorSize( unsigned char value );
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
-    NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"DunfieldImageDisk: Incompatiable stream" );
     
-    NSData  *streamBytesObject = [stream dataOfTopLevelBlockNamed:@"stream"];
-    NSAssert( streamBytesObject != nil, @"DunfieldImageDisk: no stream object" );
-    
-    unsigned char *streamBytes = (unsigned char *)[streamBytesObject bytes];
-    NSAssert( streamBytes != nil, @"DunfieldImageDisk: no stream bytes");
+    if ([stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == NO) {
+        return @"Incompatiable stream";
+    }
 
+    NSData  *streamBytesObject = [stream dataOfTopLevelBlockNamed:@"stream"];
+    
+    if (streamBytesObject == nil) {
+        return @"No stream object";
+    }
+
+    unsigned char *streamBytes = (unsigned char *)[streamBytesObject bytes];
+    
+    if (streamBytes == nil) {
+        return @"No stream bytes";
+    }
+    
     NSUInteger length = [streamBytesObject length];
 
     if (length < 4) {
-        NSLog( @"DunfieldImageDisk: buffer too short to anaylize" );
-        return;
+        return @"Buffer too short to anaylize";
     }
 
     if (streamBytes[0] == 'I' && streamBytes[1] == 'M' && streamBytes[2] == 'D') {
@@ -61,11 +74,10 @@ NSUInteger CalculateSectorSize( unsigned char value );
         }
  
         if (streamBytes[i-1] != 0x1a) {
-            NSLog( @"DunfieldImageDisk: did not find note field" );
-            return;
+            return @"Did not find note field";
         }
         
-        StBlock *newBlock = [stream startNewBlockNamed:@"Note" owner:[DunfieldImageDisk anaylizerKey]];
+        StBlock *newBlock = [stream startNewBlockNamed:@"Note" owner:[DunfieldImageDisk blockerKey]];
         [newBlock addDataRange:@"stream" start:0 length:i-1];
         newBlock.sourceUTI = newBlock.resultingUTI = @"public.text";
 
@@ -81,21 +93,21 @@ NSUInteger CalculateSectorSize( unsigned char value );
             unsigned char sectorSizeCode;
             
             mode = streamBytes[i++];
-            if (i==length) return;
+            if (i==length) return @"Abnormal end: short header";
             cylinder = streamBytes[i++];
-            if (i==length) return;
+            if (i==length) return  @"Abnormal end: short header";
             head = streamBytes[i++];
-            if (i==length) return;
+            if (i==length) return @"Abnormal end: short header";
             sectorCount = streamBytes[i++];
-            if (i==length) return;
+            if (i==length) return @"Abnormal end: short header";
             sectorSizeCode = streamBytes[i++];
-            if (i==length) return;
+            if (i==length) return @"Abnormal end: short header";
             
 //            NSLog(@"mode: %d, cylinder: %d, head: %d, sector count: %d, sector size code: %d", mode, cylinder, head, sectorCount, sectorSizeCode);
 
             [newBlock addAttributeRange:@"stream" start:i-5 length:1 name:@"Mode" verification:nil transformation:@"BlocksUnsignedBigEndian"];
             
-            if ((i+sectorCount) >= length) return;
+            if ((i+sectorCount) >= length) return @"Abnormal end: short header";
                 
             for (NSUInteger j=0; j < sectorCount ; j++ ) {
                 sectorTable[j] = streamBytes[i++];
@@ -103,7 +115,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
             
             if ((head & 0x80) == 0x80) {
                 /* sector cylinder map */
-                if ((i+sectorCount) >= length) return;
+                if ((i+sectorCount) >= length) return @"Abnormal end: short header";
                 for (NSUInteger j=0; j<sectorCount; j++) {
                     sectorCylinderMap[j] = streamBytes[i++];
                 }
@@ -116,7 +128,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
             
             if ((head & 0x40) == 0x40) {
                 /* sector head map */
-                if ((i+sectorCount) >= length) return;
+                if ((i+sectorCount) >= length) return @"Abnormal end: short header";
                 for (NSUInteger j=0; j<sectorCount; j++) {
                     sectorHeadMap[j] = streamBytes[i++];
                 }
@@ -129,7 +141,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
             
             if (sectorSizeCode == 0xff) {
                 /* sector size map */
-                if ((i+sectorCount) >= length) return;
+                if ((i+sectorCount) >= length) return @"Abnormal end: short header";
                 for (NSUInteger j=0; j<sectorCount; j++) {
                     sectorSizeMap[j] = CalculateSectorSize( streamBytes[i++] );
                 }
@@ -143,7 +155,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
             
             for (NSUInteger j=0; j < sectorCount; j++) {
                 unsigned char sectorType = streamBytes[i++], sectorIdealType;
-                if (i == length) return;
+                if (i == length) return @"Abnormal End: short block";
                 NSString *blockName;
                 NSUInteger actualLength;
                 
@@ -153,7 +165,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
                     case 0:
                         /* sector data unavaiable */
                         sectorIdealType = 1;
-                        newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk anaylizerKey]];
+                        newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk blockerKey]];
                         [newBlock addAttributeRange:@"stream" start:i-1 length:1 name:@"Sector Type" verification:[NSData dataWithBytes:&sectorIdealType length:1] transformation:@"BlocksUnsignedBigEndian"];
                         newBlock.sourceUTI = newBlock.resultingUTI = @"public.data";
                         break;
@@ -165,7 +177,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
                         if (sectorType == 3) sectorIdealType = 3;
                         if (sectorType == 5) sectorIdealType = 1;
                         if (sectorType == 7) sectorIdealType = 3;
-                        newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk anaylizerKey]];
+                        newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk blockerKey]];
                         actualLength = MIN(sectorSizeMap[j], length - i);
                         [newBlock addDataRange:@"stream" start:i length:actualLength name:nil verification:nil transformation:nil expectedLength:sectorSizeMap[j] repeat:NO];
                         [newBlock addAttributeRange:@"stream" start:i-1 length:1 name:@"Sector Type" verification:[NSData dataWithBytes:&sectorIdealType length:1] transformation:@"BlocksUnsignedBigEndian"];
@@ -181,7 +193,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
                         if (sectorType == 4) sectorIdealType = 4;
                         if (sectorType == 6) sectorIdealType = 2;
                         if (sectorType == 8) sectorIdealType = 4;
-                        newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk anaylizerKey]];
+                        newBlock = [stream startNewBlockNamed:blockName owner:[DunfieldImageDisk blockerKey]];
                         actualLength = MIN(sectorSizeMap[j], length - i);
                         [newBlock addDataRange:@"stream" start:i length:1 expectedLength:sectorSizeMap[j] repeat:YES];
                         [newBlock addAttributeRange:@"stream" start:i-1 length:1 name:@"Sector Type" verification:[NSData dataWithBytes:&sectorIdealType length:1] transformation:@"BlocksUnsignedBigEndian"];
@@ -190,16 +202,17 @@ NSUInteger CalculateSectorSize( unsigned char value );
                         break;
                         
                     default:
-                        NSLog(@"DunfieldImageDisk: Unexpected sector type: %d, byte: 0x%lx", sectorType, i-1);
-                        return;
+                        return [NSString stringWithFormat:@"Abnormal end: Unexpected sector type: %d, byte: 0x%lx", sectorType, i-1];
                         break;
                 }
             }
         }
     }
     else {
-        NSLog( @"DunfieldImageDisk: stream does not start with the magic bytes." );
+        return @"Stream does not start with the magic bytes.";
     }
+    
+    return @"";
 }
 
 @end

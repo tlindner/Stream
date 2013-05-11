@@ -43,7 +43,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
     return self;
 }
 
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
     NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoCassetteBlocker: Incompatiable stream" );
@@ -58,8 +58,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
     
     if( length < 3 )
     {
-        NSLog( @"CoCoCassetteBlocker: buffer too short to anaylize" );
-        return;
+        return @"CoCoCassetteBlocker: buffer too short to anaylize";
     }
     
     int blockName = 0;
@@ -83,7 +82,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
                 NSUInteger blockLength = streamBytes[i+2];
                 unsigned char actualLength = MIN(blockLength, length - (i+3));
            
-                StBlock *newBlock = [stream startNewBlockNamed:[NSString stringWithFormat:@"Block %d", blockName++] owner:[CoCoCassetteBlocker anaylizerKey]];
+                StBlock *newBlock = [stream startNewBlockNamed:[NSString stringWithFormat:@"Block %d", blockName++] owner:[CoCoCassetteBlocker blockerKey]];
                 
                 newBlock.sourceUTI = newBlock.resultingUTI = @"public.data";
                 NSUInteger calculatedEnd = MIN(i+3+blockLength, length);
@@ -110,19 +109,21 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
             }
         }
     }
+    
+    return @"";
 }
 
-+ (NSString *)anayliserName
++ (NSString *)blockerName
 {
     return @"CoCo Cassette Blocker";
 }
 
-+ (NSString *)anaylizerKey
++ (NSString *)blockerKey
 {
     return @"CoCoCassetteBlocker";
 }
 
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
++ (NSString *)blockerPopoverAccessoryViewNib
 {
     return nil;
 }
@@ -130,6 +131,11 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
 + (NSMutableDictionary *)defaultOptions
 {
     return [[[NSMutableDictionary alloc] init] autorelease];
+}
+
++ (NSString *)blockerGroup
+{
+    return @"CoCo";
 }
 
 @end

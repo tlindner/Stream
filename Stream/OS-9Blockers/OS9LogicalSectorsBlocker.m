@@ -26,17 +26,17 @@
     }
 }
 
-+ (NSString *)anayliserName
++ (NSString *)blockerName
 {
     return @"OS-9 Logical Sectors Blocker";
 }
 
-+ (NSString *)anaylizerKey
++ (NSString *)blockerKey
 {
     return @"OS9LogicalSectorsBlocker";
 }
 
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
++ (NSString *)blockerPopoverAccessoryViewNib
 {
     return nil;
 }
@@ -46,7 +46,12 @@
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
++ (NSString *)blockerGroup
+{
+    return @"OS-9";
+}
+
+- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
     unsigned sectorStartID;
@@ -62,8 +67,7 @@
         lsn0Block = [stream topLevelBlockNamed:alternateFirstSector];
         
         if (lsn0Block == nil) {
-            NSLog( @"OS9LogicalSectorsBlocker: Could not find LSN0" );
-            return;
+            return @"Could not find LSN0";
         }
         else {
             firstSector = alternateFirstSector;
@@ -78,11 +82,10 @@
     const unsigned char *lsn0 = [lsn0Data bytes];
     
     if ([lsn0Data length] < 0x6d) {
-        NSLog( @"OS9LogicalSectorsBlocker: LSN 0 too short.");
-        return;
+        return @"LSN 0 too short.";
     }
 
-    StBlock *newLSN = [stream startNewBlockNamed:[NSString stringWithFormat:@"LSN 0"] owner:[OS9LogicalSectorsBlocker anaylizerKey]];
+    StBlock *newLSN = [stream startNewBlockNamed:[NSString stringWithFormat:@"LSN 0"] owner:[OS9LogicalSectorsBlocker blockerKey]];
   
     [newLSN addAttributeRange:firstSector start:0x0 length:3 name:@"dd.tot" verification:nil transformation:@"BlocksUnsignedBigEndian"];
     [newLSN addAttributeRange:firstSector start:0x3 length:1 name:@"dd.tks" verification:nil transformation:@"BlocksUnsignedBigEndian"];
@@ -142,7 +145,7 @@
     NSUInteger i, j;
     NSString *sectorName;
     
-    StBlock *fat = [stream startNewBlockNamed:[NSString stringWithFormat:@"File Allocation Bitmap"] owner:[OS9LogicalSectorsBlocker anaylizerKey]];
+    StBlock *fat = [stream startNewBlockNamed:[NSString stringWithFormat:@"File Allocation Bitmap"] owner:[OS9LogicalSectorsBlocker blockerKey]];
     
     i=bitmapSize;
     j=1 + sectorStartID;
@@ -174,7 +177,7 @@
     for (i=1; i<trackZeroSize; i++) {
         blockName = [NSString stringWithFormat:@"LSN %d", lsnNumber];
         sectorName = [NSString stringWithFormat:firstTrack, sector];
-        newLSN = [stream startNewBlockNamed:blockName owner:[OS9LogicalSectorsBlocker anaylizerKey]];
+        newLSN = [stream startNewBlockNamed:blockName owner:[OS9LogicalSectorsBlocker blockerKey]];
         [newLSN addDataRange:sectorName start:0 length:0 expectedLength:logicalSectorSize];
         
         lsnNumber++;
@@ -203,7 +206,7 @@
         for (sector=sectorStartID; sector<trackSizeInSectors + sectorStartID; sector++) {
             blockName = [NSString stringWithFormat:@"LSN %d", lsnNumber];
             sectorName = [NSString stringWithFormat:genericTrack, track, side, sector];
-            newLSN = [stream startNewBlockNamed:blockName owner:[OS9LogicalSectorsBlocker anaylizerKey]];
+            newLSN = [stream startNewBlockNamed:blockName owner:[OS9LogicalSectorsBlocker blockerKey]];
             [newLSN addDataRange:sectorName start:0 length:0 expectedLength:logicalSectorSize];
             
             lsnNumber++;
@@ -215,6 +218,8 @@
         
         side++;
     }
+    
+    return @"";
 }
 
 @end

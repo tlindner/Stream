@@ -13,17 +13,17 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
 
 @implementation OS9FileBlocker
 
-+ (NSString *)anayliserName
++ (NSString *)blockerName
 {
     return @"OS-9 File Blocker";
 }
 
-+ (NSString *)anaylizerKey
++ (NSString *)blockerKey
 {
     return @"OS9FileBlocker";
 }
 
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
++ (NSString *)blockerPopoverAccessoryViewNib
 {
     return nil;
 }
@@ -33,14 +33,18 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
++ (NSString *)blockerGroup
+{
+    return @"OS-9";
+}
+
+- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
     StBlock *lsn0block = [stream topLevelBlockNamed:@"LSN 0"];
     
     if (lsn0block == nil) {
-        NSLog(@"OS-9 File Blocker: LSN 0 not found");
-        return;
+        return @"LSN 0 not found.";
     }
     
     NSData *lsn0Data = [lsn0block resultingData];
@@ -55,16 +59,13 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
         dd_dir += lsn0[0x09] << 8;
         dd_dir += lsn0[0x0a];
         
-        NSString *result = DoFileFD( stream, [NSString stringWithFormat:@"LSN %d", dd_dir], @"", logicalSectorSize );
-        
-        if (![result isEqualToString:@""]) {
-            NSLog(@"%@", result);
-        }
-        
+        return DoFileFD( stream, [NSString stringWithFormat:@"LSN %d", dd_dir], @"", logicalSectorSize );
     }
     else {
-        NSLog(@"OS-9 File Blocker: LSN 0 too short");
+        return @"LSN 0 too short";
     }
+    
+    return @"";
 }
 
 @end
@@ -80,7 +81,7 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
     
         if (fdLength > 0x01 && (fd[0x00] & 0x80) == 0x80) blockName = [blockName stringByAppendingString:@"/"];
 
-        StBlock *newFileBlock = [stream startNewBlockNamed:[NSString stringWithFormat:blockName] owner:[OS9FileBlocker anaylizerKey]];
+        StBlock *newFileBlock = [stream startNewBlockNamed:[NSString stringWithFormat:blockName] owner:[OS9FileBlocker blockerKey]];
         newFileBlock.sourceUTI = newFileBlock.resultingUTI = @"public.data";
         
         if (fdLength > 0x01) [newFileBlock addAttributeRange:fdLSN start:0x00 length:1 name:@"fd.att" verification:nil transformation:@"BlocksUnsignedBigEndian"];
@@ -158,12 +159,12 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
                 }
             }
             else {
-                return [NSString stringWithFormat:@"OS-9 File Blocker: could not create OS-9 String value transformer"];
+                return [NSString stringWithFormat:@"Could not create OS-9 String value transformer"];
             }
          }
     }
     else {
-        return [NSString stringWithFormat:@"OS-9 File Blocker: Could not find block %@ while building block: %@", fdLSN, blockName];
+        return [NSString stringWithFormat:@"Could not find block %@ while building block: %@", fdLSN, blockName];
     }
     
     return @"";

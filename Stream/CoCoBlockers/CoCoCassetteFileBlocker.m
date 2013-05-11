@@ -11,17 +11,17 @@
 
 @implementation CoCoCassetteFileBlocker
 
-+ (NSString *)anayliserName
++ (NSString *)blockerName
 {
     return @"CoCo Cassette File Blocker";
 }
 
-+ (NSString *)anaylizerKey
++ (NSString *)blockerKey
 {
     return @"CoCoCassetteFileBlocker";
 }
 
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
++ (NSString *)blockerPopoverAccessoryViewNib
 {
     return nil;
 }
@@ -31,7 +31,12 @@
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
++ (NSString *)blockerGroup
+{
+    return @"CoCo";
+}
+
+- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
     NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoCassetteFileBlocker: Incompatiable stream" );
@@ -46,7 +51,7 @@
     NSString *currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
     StBlock *theBlock = [stream topLevelBlockNamed:currentBlock];
 
-    if( theBlock == nil ) return;
+    if( theBlock == nil ) return @"Could not find any \"Block\" blockes";
     
     NSData  *attributeDataObject = [theBlock getAttributeData];
     unsigned char *data = (unsigned char *)[attributeDataObject bytes];
@@ -56,7 +61,7 @@
         if( [attributeDataObject length] > 0 && data[0] == 0x00 )
         {
             /* We found a start of a file! */
-            StBlock *newFile = [stream startNewBlockNamed:[NSString stringWithFormat:@"File %d", fileNumber++] owner:[CoCoCassetteFileBlocker anaylizerKey]];
+            StBlock *newFile = [stream startNewBlockNamed:[NSString stringWithFormat:@"File %d", fileNumber++] owner:[CoCoCassetteFileBlocker blockerKey]];
             NSData *dataBlock = [theBlock resultingData];
             unsigned char *dataBlockBytes = (unsigned char *)[dataBlock bytes];
             NSUInteger dataBlockSize = [dataBlock length];
@@ -122,7 +127,6 @@
             /* All is well, files successfully processed. Now onto the next file */
         }
         
-        
         noteFileType = -1;
         noteDataType = -1;
         noteGaps = -1;
@@ -135,6 +139,8 @@
         attributeDataObject = [theBlock getAttributeData];
         data = (unsigned char *)[attributeDataObject bytes];
     }
+    
+    return @"";
  }
 
 @end

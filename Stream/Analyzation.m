@@ -10,6 +10,7 @@
 #import "HexFiendAnaylizer.h"
 
 static Analyzation *sharedSingleton;
+static BOOL initialized = NO;
 
 @implementation Analyzation
 
@@ -18,23 +19,32 @@ static Analyzation *sharedSingleton;
 
 + (void)initialize
 {
-    static BOOL initialized = NO;
-    if(!initialized)
+    if ( self == [Analyzation class] )
     {
-        initialized = YES;
-        sharedSingleton = [[Analyzation alloc] init];
-        [sharedSingleton addAnalyzer:@"CoCoAudioAnaylizer"];
-        [sharedSingleton addAnalyzer:@"BlockerDataAnaylizer"];
-        [sharedSingleton addAnalyzer:@"BlockAttributeAnaylizer"];
-        [sharedSingleton addAnalyzer:@"HexFiendAnaylizer"];
-        [sharedSingleton addAnalyzer:@"TextAnaylizer"];
-        [sharedSingleton addAnalyzer:@"DisasemblerAnaylizer"];
+        if(!initialized)
+        {
+            sharedSingleton = [[Analyzation alloc] init];
+            initialized = YES;
+            [sharedSingleton addAnalyzer:@"CoCoAudioAnaylizer"];
+            [sharedSingleton addAnalyzer:@"BlockerDataAnaylizer"];
+            [sharedSingleton addAnalyzer:@"BlockAttributeAnaylizer"];
+            [sharedSingleton addAnalyzer:@"HexFiendAnaylizer"];
+            [sharedSingleton addAnalyzer:@"TextAnaylizer"];
+            [sharedSingleton addAnalyzer:@"DisasemblerAnaylizer"];
+        }
     }
 }
 
 + (Analyzation *)sharedInstance
 {
-    return sharedSingleton;
+    if (initialized) {
+        if (sharedSingleton != nil) {
+            return sharedSingleton;
+        }
+    }
+
+    NSLog( @"Anaylization singleton does not exist" );
+    return nil;
 }
 
 - (id)init

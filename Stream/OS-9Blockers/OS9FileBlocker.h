@@ -7,16 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Blockers.h"
 #import "StStream.h"
 #import "AppDelegate.h"
 
-@interface OS9FileBlocker : NSObject <BlockerProtocol>
-
-+ (NSString *)anayliserName;
-+ (NSString *)anaylizerKey;
-+ (NSString *)AnaylizerPopoverAccessoryViewNib;
-+ (NSMutableDictionary *)defaultOptions;
-
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
+@interface OS9FileBlocker : Blockers
 
 @end

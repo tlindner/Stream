@@ -7,17 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Blockers.h"
 #import "StStream.h"
 #import "AppDelegate.h"
 
-@interface CoCoCassetteBlocker : NSObject <BlockerProtocol>
-
-+ (NSString *)anayliserName;
-+ (NSString *)anaylizerKey;
-+ (NSString *)AnaylizerPopoverAccessoryViewNib;
-+ (NSMutableDictionary *)defaultOptions;
-
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
+@interface CoCoCassetteBlocker : Blockers
 
 @end
 
