@@ -802,12 +802,14 @@
     }
 }
 
-- (void)setMarkForDeletion:(BOOL)del
+- (void)makeMarkForDeletion
 {
-    NSValue *mfd = [NSNumber numberWithBool:del];
-    [self setPrimitiveValue:mfd forKey:@"markForDeletion"];
+    self.markForDeletion = YES;
     self.attributeColor = nil;
     self.resultingData = nil;
+    self.unionRange = nil;
+    
+    [[self.blocks array] makeObjectsPerformSelector:@selector(makeMarkForDeletion)];
 }
 
 - (void)willTurnIntoFault

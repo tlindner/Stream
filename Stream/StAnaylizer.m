@@ -12,6 +12,7 @@
 #import "Analyzation.h"
 #import "HexFiendAnaylizer.h"
 #import "TextAnaylizer.h"
+#import "BlockerProtocol.h"
 
 NSURL *MakeTemporaryFile( NSString *pattern );
 
@@ -21,6 +22,7 @@ NSURL *MakeTemporaryFile( NSString *pattern );
 @dynamic anaylizerKind;
 @dynamic paneExpanded;
 @dynamic removeEnabled;
+@dynamic blockSettingsEnabled;
 @dynamic blockSettingsHidden;
 @dynamic currentEditorView;
 @dynamic editIndexSet;
@@ -165,6 +167,13 @@ NSURL *MakeTemporaryFile( NSString *pattern );
     
     return result;
 }
+
+- (BOOL) blockSettingsEnabled
+{
+    Class <BlockerProtocol> blockerClass = NSClassFromString([self valueForKey:@"anaylizerKind"]);
+    
+    return [blockerClass AnaylizerPopoverAccessoryViewNib] != nil;
+ }
 
 - (NSString *) title
 {

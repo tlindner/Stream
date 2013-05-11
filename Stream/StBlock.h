@@ -68,6 +68,7 @@
 - (void) resetCounters;
 - (NSArray *)blocksArray;
 - (void)addSubBlocksObject:(StBlock *)value;
+- (void)makeMarkForDeletion;
 
 @end
 

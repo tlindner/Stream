@@ -43,6 +43,7 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrame">{{0, 6}, {515, 90}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="970074791"/>
 						<string key="NSReuseIdentifierKey">_NS:499</string>
 						<string key="NSClassName">NSView</string>
@@ -56,6 +57,7 @@
 								<int key="NSvFlags">265</int>
 								<string key="NSFrame">{{441, 0}, {22, 19}}</string>
 								<reference key="NSSuperview" ref="573644896"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="460450635"/>
 								<string key="NSReuseIdentifierKey">_NS:1737</string>
 								<bool key="NSEnabled">YES</bool>
@@ -87,6 +89,7 @@
 								<int key="NSvFlags">265</int>
 								<string key="NSFrame">{{492, 1}, {20, 19}}</string>
 								<reference key="NSSuperview" ref="573644896"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="518046182"/>
 								<string key="NSReuseIdentifierKey">_NS:1737</string>
 								<bool key="NSEnabled">YES</bool>
@@ -114,6 +117,7 @@
 								<int key="NSvFlags">265</int>
 								<string key="NSFrame">{{467, 0}, {22, 19}}</string>
 								<reference key="NSSuperview" ref="573644896"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="846260169"/>
 								<string key="NSReuseIdentifierKey">_NS:1737</string>
 								<bool key="NSEnabled">YES</bool>
@@ -141,6 +145,7 @@
 								<int key="NSvFlags">270</int>
 								<string key="NSFrame">{{25, 1}, {420, 19}}</string>
 								<reference key="NSSuperview" ref="573644896"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="367091776"/>
 								<string key="NSReuseIdentifierKey">_NS:161</string>
 								<bool key="NSEnabled">YES</bool>
@@ -164,6 +169,7 @@
 								<int key="NSvFlags">268</int>
 								<string key="NSFrame">{{7, 2}, {13, 17}}</string>
 								<reference key="NSSuperview" ref="573644896"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="406549683"/>
 								<string key="NSReuseIdentifierKey">_NS:4024</string>
 								<bool key="NSEnabled">YES</bool>
@@ -185,6 +191,7 @@
 						</array>
 						<string key="NSFrame">{{0, 96}, {515, 20}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="768113408"/>
 						<string key="NSReuseIdentifierKey">_NS:499</string>
 						<string key="NSClassName">ColorGradientView</string>
@@ -194,12 +201,15 @@
 						<int key="NSvFlags">294</int>
 						<string key="NSFrameSize">{515, 6}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:499</string>
 						<string key="NSClassName">DragRegionView</string>
 					</object>
 				</array>
 				<string key="NSFrameSize">{515, 116}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="573644896"/>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -407,6 +417,22 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: self.representedObject.blockSettingsEnabled</string>
+						<reference key="source" ref="367091776"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector" id="946135402">
+							<reference key="NSSource" ref="367091776"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: self.representedObject.blockSettingsEnabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">self.representedObject.blockSettingsEnabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">117</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
 						<string key="label">hidden: self.representedObject.blockSettingsHidden</string>
 						<reference key="source" ref="367091776"/>
 						<reference key="destination" ref="1001"/>
@@ -416,10 +442,11 @@
 							<string key="NSLabel">hidden: self.representedObject.blockSettingsHidden</string>
 							<string key="NSBinding">hidden</string>
 							<string key="NSKeyPath">self.representedObject.blockSettingsHidden</string>
+							<reference key="NSPreviousConnector" ref="946135402"/>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">98</int>
+					<int key="connectionID">118</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -583,9 +610,215 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">114</int>
+			<int key="maxID">118</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">AnaylizerListViewItem</string>
+					<string key="superclassName">SDListViewItem</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="blockSetttings:">id</string>
+						<string key="collapse:">id</string>
+						<string key="removeAnaylizer:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="blockSetttings:">
+							<string key="name">blockSetttings:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="collapse:">
+							<string key="name">collapse:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="removeAnaylizer:">
+							<string key="name">removeAnaylizer:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="blockSettingsButton">NSButton</string>
+						<string key="blockSettingsViewController">NSViewController</string>
+						<string key="colorGradientView">ColorGradientView</string>
+						<string key="customView">NSView</string>
+						<string key="disclosureTriangle">NSButton</string>
+						<string key="dragView">DragRegionView</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="blockSettingsButton">
+							<string key="name">blockSettingsButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="blockSettingsViewController">
+							<string key="name">blockSettingsViewController</string>
+							<string key="candidateClassName">NSViewController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="colorGradientView">
+							<string key="name">colorGradientView</string>
+							<string key="candidateClassName">ColorGradientView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="customView">
+							<string key="name">customView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="disclosureTriangle">
+							<string key="name">disclosureTriangle</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="dragView">
+							<string key="name">dragView</string>
+							<string key="candidateClassName">DragRegionView</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/AnaylizerListViewItem.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">ColorGradientView</string>
+					<string key="superclassName">NSView</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="doPopOver:">id</string>
+						<string key="popOverCancel:">id</string>
+						<string key="popOverOK:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="doPopOver:">
+							<string key="name">doPopOver:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="popOverCancel:">
+							<string key="name">popOverCancel:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="popOverOK:">
+							<string key="name">popOverOK:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="acceptsTextField">NSTextField</string>
+						<string key="accessoryView">NSView</string>
+						<string key="actionPopOver">NSPopover</string>
+						<string key="drv">DragRegionView</string>
+						<string key="editorPopup">NSPopUpButton</string>
+						<string key="labelEditor">NSTextField</string>
+						<string key="labelUTI">NSTextField</string>
+						<string key="tlAction">NSButton</string>
+						<string key="tlDisclosure">NSButton</string>
+						<string key="tlTitle">NSButton</string>
+						<string key="utiComboBox">NSComboBox</string>
+						<string key="viewOwner">AnaylizerListViewItem</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="acceptsTextField">
+							<string key="name">acceptsTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="accessoryView">
+							<string key="name">accessoryView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="actionPopOver">
+							<string key="name">actionPopOver</string>
+							<string key="candidateClassName">NSPopover</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="drv">
+							<string key="name">drv</string>
+							<string key="candidateClassName">DragRegionView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="editorPopup">
+							<string key="name">editorPopup</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="labelEditor">
+							<string key="name">labelEditor</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="labelUTI">
+							<string key="name">labelUTI</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="tlAction">
+							<string key="name">tlAction</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="tlDisclosure">
+							<string key="name">tlDisclosure</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="tlTitle">
+							<string key="name">tlTitle</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="utiComboBox">
+							<string key="name">utiComboBox</string>
+							<string key="candidateClassName">NSComboBox</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="viewOwner">
+							<string key="name">viewOwner</string>
+							<string key="candidateClassName">AnaylizerListViewItem</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/ColorGradientView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">DragRegionView</string>
+					<string key="superclassName">NSView</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="customView">NSView</string>
+						<string key="viewOwner">AnaylizerListViewItem</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="customView">
+							<string key="name">customView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="viewOwner">
+							<string key="name">viewOwner</string>
+							<string key="candidateClassName">AnaylizerListViewItem</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/DragRegionView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSViewController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="ConfigurableButton1:">id</string>
+						<string key="ConfigurableButton2:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="ConfigurableButton1:">
+							<string key="name">ConfigurableButton1:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="ConfigurableButton2:">
+							<string key="name">ConfigurableButton2:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">SDListViewItem</string>
+					<string key="superclassName">NSViewController</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/SDListViewItem.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>

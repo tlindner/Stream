@@ -8,7 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class StAnaylizer, StStream;
+
 @interface GenericArbitraryGroupBlocker : NSObject
+
++ (NSString *)anayliserName;
++ (NSString *)anaylizerKey;
++ (NSString *)AnaylizerPopoverAccessoryViewNib;
++ (NSMutableDictionary *)defaultOptions;
+
++ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
 
 @end
 

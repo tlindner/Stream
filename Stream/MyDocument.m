@@ -369,7 +369,7 @@
          
         if (blockerClass != nil )
         {
-            [newAnaylizer addSubOptionsDictionary:[blockerClass anaylizerKey]  withDictionary:[blockerClass defaultOptions]];
+            [newAnaylizer addSubOptionsDictionary:[blockerClass anaylizerKey] withDictionary:[blockerClass defaultOptions]];
             [blockerClass makeBlocks:selectedStream withAnaylizer:newAnaylizer];
         }
         else

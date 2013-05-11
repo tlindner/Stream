@@ -19,6 +19,7 @@
 @property (nonatomic) BOOL paneExpanded;
 @property (nonatomic) BOOL removeEnabled;
 @property (nonatomic) BOOL blockSettingsHidden;
+@property (nonatomic) BOOL blockSettingsEnabled;
 @property (nonatomic, retain) NSString *currentEditorView;
 @property (nonatomic, retain) NSMutableIndexSet *editIndexSet;
 @property (nonatomic, retain) NSMutableIndexSet *failIndexSet;

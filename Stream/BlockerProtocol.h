@@ -20,4 +20,10 @@
 + (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
 @end
 
+@protocol BlockerViewControllerProtocol <NSObject>
+
+- (void)setShowView:(NSView *)showView;
+- (void)showPopover;
+
+@end
 #endif

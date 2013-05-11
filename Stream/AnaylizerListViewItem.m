@@ -12,6 +12,7 @@
 #import "MyDocument.h"
 #import "colorGradientView.h"
 #import "DragRegionView.h"
+#import "BlockerProtocol.h"
 
 #define MINIMUM_HEIGHT 26.0
 
@@ -37,6 +38,7 @@
 @synthesize editorController;
 @synthesize colorGradientView;
 @synthesize blockSettingsButton;
+@synthesize blockSettingsViewController;
 
 - (void)setRepresentedObject:(id)representedObject
 {
@@ -165,7 +167,23 @@
 
 - (IBAction)blockSetttings:(id)sender
 {
-    NSLog( @"Show block settings: %@", sender );
+#pragma unused (sender)
+    if (blockSettingsViewController == nil) {
+        StAnaylizer *theAna = [self representedObject];
+
+        Class <BlockerProtocol> blockerClass = NSClassFromString([theAna valueForKey:@"anaylizerKind"]);
+        Class <BlockerViewControllerProtocol> viewControllerClass = NSClassFromString([blockerClass AnaylizerPopoverAccessoryViewNib]);
+        
+        if (viewControllerClass != nil) {
+             blockSettingsViewController = [[viewControllerClass alloc] initWithNibName:[blockerClass AnaylizerPopoverAccessoryViewNib] bundle:nil];
+
+            [blockSettingsViewController setRepresentedObject:theAna];
+            [blockSettingsViewController setShowView:blockSettingsButton];
+            [blockSettingsViewController loadView];
+        }
+   }
+    
+    [blockSettingsViewController showPopover];
 }
 
 @end

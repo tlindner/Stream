@@ -13,8 +13,7 @@
 
 @interface AnaylizerListViewItem : SDListViewItem
 {
-    NSViewController *editorController;
-    BOOL ignoreEvent;
+    NSViewController  *editorController;
 }
 
 @property (assign) IBOutlet DragRegionView *dragView;
@@ -23,6 +22,7 @@
 @property (retain) NSViewController *editorController;
 @property (assign) IBOutlet ColorGradientView *colorGradientView;
 @property (assign) IBOutlet NSButton *blockSettingsButton;
+@property (assign) IBOutlet NSViewController *blockSettingsViewController;
 
 - (IBAction)removeAnaylizer:(id)sender;
 - (IBAction)collapse:(id)sender;

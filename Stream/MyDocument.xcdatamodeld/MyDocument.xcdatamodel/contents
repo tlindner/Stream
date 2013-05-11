@@ -8,6 +8,7 @@
     </entity>
     <entity name="StAnaylizer" representedClassName="StAnaylizer" parentEntity="StData" syncable="YES">
         <attribute name="anaylizerHeight" optional="YES" attributeType="Float" defaultValueString="207" syncable="YES"/>
+        <attribute name="blockSettingsEnabled" optional="YES" transient="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="blockSettingsHidden" optional="YES" transient="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="editIndexSet" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="failIndexSet" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -73,7 +74,7 @@
     </entity>
     <elements>
         <element name="AnaylizerEdit" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="StAnaylizer" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="StAnaylizer" positionX="160" positionY="192" width="128" height="225"/>
         <element name="StBlock" positionX="160" positionY="192" width="128" height="360"/>
         <element name="StData" positionX="160" positionY="192" width="128" height="225"/>
         <element name="StStream" positionX="160" positionY="192" width="128" height="270"/>

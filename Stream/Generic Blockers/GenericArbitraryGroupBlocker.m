@@ -30,29 +30,24 @@
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSMutableArray array], @"blockList", nil];
+    return [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSMutableArray arrayWithObject:[namedRange namedRange:[NSValue valueWithRange:NSMakeRange(10, 20)] withName:@"Note"]], @"blockList", nil];
 }
 
 + (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
-    NSUInteger blockNumber;
     StBlock *newFileBlock;
-    
-    blockNumber = 0;
-    newFileBlock = nil;
-    
-    while (newFileBlock == nil) {
-        newFileBlock = [stream startNewBlockNamed:[NSString stringWithFormat:@"Block %d", blockNumber] owner:[GenericArbitraryGroupBlocker anaylizerKey]];
-        blockNumber++;
-    }
 
-    NSMutableDictionary *optionsDictionary = anaylizer.optionsDictionary;
-    NSMutableDictionary *myOptions = [optionsDictionary objectForKey:[GenericArbitraryGroupBlocker anaylizerKey]];
-    NSMutableArray *myArray = [myOptions valueForKey:@"blockList"];
+    newFileBlock = [stream startNewBlockNamed:@"Generic Block" owner:[GenericArbitraryGroupBlocker anaylizerKey]];
     
-    for (namedRange *nr in myArray) {
-        NSRange range = [nr.range rangeValue];
-        [newFileBlock addDataRange:nr.name start:range.location length:range.length];
+    if (newFileBlock != nil) {
+        NSMutableDictionary *optionsDictionary = anaylizer.optionsDictionary;
+        NSMutableDictionary *myOptions = [optionsDictionary objectForKey:[GenericArbitraryGroupBlocker anaylizerKey]];
+        NSMutableArray *myArray = [myOptions valueForKey:@"blockList"];
+        
+        for (namedRange *nr in myArray) {
+            NSRange range = [nr.range rangeValue];
+            [newFileBlock addDataRange:nr.name start:range.location length:range.length];
+        }
     }
 }
 
@@ -89,7 +84,8 @@
 
 -(NSString *)description
 {
-    return [NSString stringWithFormat:@"%@: %@", self.name, self.range];
+    NSRange aRange = [self.range rangeValue];
+    return [NSString stringWithFormat:@"%@: %d, %d", self.name, aRange.location, aRange.length];
 }
 
 - (void)dealloc
