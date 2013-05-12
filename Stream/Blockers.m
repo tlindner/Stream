@@ -34,7 +34,7 @@ static BOOL initialized = NO;
             [sharedSingleton addBlocker:@"BasicDiskImage"];
             [sharedSingleton addBlocker:@"CoCoGranuleBlocker"];
             [sharedSingleton addBlocker:@"CoCoDiskFileBlocker"];
-//            [sharedSingleton addBlocker:@"XXX"];
+            [sharedSingleton addBlocker:@"DavidKeilDiskImage"];
 //            [sharedSingleton addBlocker:@"XXX"];
 //            [sharedSingleton addBlocker:@"XXX"];
 //            [sharedSingleton addBlocker:@"XXX"];

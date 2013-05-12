@@ -24,6 +24,7 @@
 		772C658F13FEC0960060AB7F /* AnaylizerArrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */; };
 		772C659013FEC0960060AB7F /* AnaylizerHand.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */; };
 		772C659113FEC0960060AB7F /* AnaylizerLupe.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */; };
+		774C74B7173F4FF600FD43ED /* DavidKeilDiskImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C74B6173F4FF600FD43ED /* DavidKeilDiskImage.m */; };
 		7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
 		7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */; };
 		7759CF4313DBA1A300789DB3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF4213DBA1A300789DB3 /* main.m */; };
@@ -200,6 +201,8 @@
 		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerTableViewCellView.h; path = Stream/AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
 		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerTableViewCellView.m; path = Stream/AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
 		774A181613FAB01500510032 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		774C74B5173F4FF600FD43ED /* DavidKeilDiskImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DavidKeilDiskImage.h; path = Stream/DiskImageBlockers/DavidKeilDiskImage.h; sourceTree = "<group>"; };
+		774C74B6173F4FF600FD43ED /* DavidKeilDiskImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DavidKeilDiskImage.m; path = Stream/DiskImageBlockers/DavidKeilDiskImage.m; sourceTree = "<group>"; };
 		7759CF3213DBA1A300789DB3 /* Stream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7759CF3613DBA1A300789DB3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		7759CF3913DBA1A300789DB3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -672,6 +675,8 @@
 				779434D0173EDBFD0090FD5F /* BasicDiskImageViewController.h */,
 				779434D1173EDBFD0090FD5F /* BasicDiskImageViewController.m */,
 				779434D2173EDBFD0090FD5F /* BasicDiskImageViewController.xib */,
+				774C74B5173F4FF600FD43ED /* DavidKeilDiskImage.h */,
+				774C74B6173F4FF600FD43ED /* DavidKeilDiskImage.m */,
 			);
 			name = DiskImageBlockers;
 			sourceTree = "<group>";
@@ -1179,6 +1184,7 @@
 				779434D3173EDBFD0090FD5F /* BasicDiskImageViewController.m in Sources */,
 				779434D7173EF2670090FD5F /* CoCoGranuleBlocker.m in Sources */,
 				779434DA173EFDA10090FD5F /* CoCoDiskFileBlocker.m in Sources */,
+				774C74B7173F4FF600FD43ED /* DavidKeilDiskImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
