@@ -50,8 +50,11 @@
 - (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
-    unsigned char shadowFat[256];
-    memset(shadowFat, 0, 256);
+    NSMutableString *shadowFat[68];
+    
+    for (int i=0; i<68; i++) {
+        shadowFat[i] = [[[NSMutableString alloc] init] autorelease];
+    }
     
     NSMutableString *result = [[NSMutableString alloc] init];
     
@@ -111,18 +114,23 @@
         /* Set up UTIs */
         if (noteFileType == 0 && noteDataType == 0) {
             newfile.sourceUTI = newfile.resultingUTI = @"com.microsoft.cocobasic.binary";
+            newfile.currentEditorView = @"Text Editor";
         }
         else if (noteFileType == 0 && noteDataType == 0xff) {
             newfile.sourceUTI = newfile.resultingUTI = @"com.microsoft.cocobasic.ascii";
+            newfile.currentEditorView = @"Text Editor";
         }
         else if (noteFileType == 0x01 && noteDataType == 0xff) {
             newfile.sourceUTI = newfile.resultingUTI = @"public.text";
+            newfile.currentEditorView = @"Text Editor";
         }
         else if (noteFileType == 0x02 && noteDataType == 0) {
             newfile.sourceUTI = newfile.resultingUTI = @"com.microsoft.cocobasic.gapsobject";
+            newfile.currentEditorView = @"Text Editor";
         }
         else if (noteFileType == 3) {
             newfile.sourceUTI = newfile.resultingUTI = @"public.text";
+            newfile.currentEditorView = @"Text Editor";
         }
         else {
             newfile.sourceUTI = newfile.resultingUTI = @"public.data";
@@ -140,12 +148,12 @@
                 break;
             }
             
-            if (shadowFat[nextGranule] != 0) {
-                [result appendFormat:@"\nDouble allocation file building file:%@", fileName];
+            if ( ! [shadowFat[nextGranule] isEqualToString:@""]) {
+                [result appendFormat:@"\nDouble allocation file building file:%@ (with other files: %@)", fileName, shadowFat[nextGranule]];
                 break;
             }
             else {
-                shadowFat[nextGranule] = 0xff;
+                [shadowFat[nextGranule] appendFormat:@"%@, ", fileName];
             }
             
             NSString *name = [NSString stringWithFormat:@"Granule %d", nextGranule];

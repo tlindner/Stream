@@ -9,6 +9,8 @@
 #import "OS9FileBlocker.h"
 #import "StBlock.h"
 
+BOOL IsTextFileBasedOnName( NSString *filename );
+
 NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize );
 
 @implementation OS9FileBlocker
@@ -79,14 +81,37 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
     if (fdData != nil) {
         NSUInteger fdLength = [fdData length];
         const unsigned char *fd = [fdData bytes];
-    
-        if (fdLength > 0x01 && (fd[0x00] & 0x80) == 0x80) blockName = [blockName stringByAppendingString:@"/"];
+        NSString *testNewBlockName = blockName;
+        NSString *useEditorView, *useUTI;
+        
+        if (fdLength > 0x01 && (fd[0x00] & 0x80) == 0x80) testNewBlockName = [testNewBlockName stringByAppendingString:@"/"];
 
-        StBlock *newFileBlock = [stream startNewBlockNamed:[NSString stringWithFormat:blockName] owner:[OS9FileBlocker blockerKey]];
-        newFileBlock.sourceUTI = newFileBlock.resultingUTI = @"public.data";
+        if (IsTextFileBasedOnName( testNewBlockName )) {
+            useEditorView = @"Text Editor";
+            useUTI = @"public.text";
+        }
+        else {
+            useEditorView = @"Hex Editor";
+            useUTI = @"public.data";
+        }
+            
+        StBlock *newFileBlock = [stream startNewBlockNamed:testNewBlockName owner:[OS9FileBlocker blockerKey]];
+        
+        int dupeFileIndex = 1;
+        blockName = testNewBlockName;
+        while (newFileBlock == nil) {
+            blockName = [testNewBlockName stringByAppendingFormat:@" [%d]", dupeFileIndex++];
+            newFileBlock = [stream startNewBlockNamed:blockName owner:[OS9FileBlocker blockerKey]];
+        }
+        
+        newFileBlock.currentEditorView = useEditorView;
+        newFileBlock.sourceUTI = newFileBlock.resultingUTI = useUTI;
         
         if (fdLength > 0x01) [newFileBlock addAttributeRange:fdLSN start:0x00 length:1 name:@"fd.att" verification:nil transformation:@"BlocksUnsignedBigEndian"];
-        if (fdLength > 0x01 && (fd[0x00] & 0x80) == 0x80) newFileBlock.sourceUTI = newFileBlock.resultingUTI = @"com.microware.os9directoryfile";
+        if (fdLength > 0x01 && (fd[0x00] & 0x80) == 0x80) {
+            newFileBlock.sourceUTI = newFileBlock.resultingUTI = @"com.microware.os9directoryfile";
+            newFileBlock.currentEditorView = @"Text Editor";
+        }
         if (fdLength > 0x03) [newFileBlock addAttributeRange:fdLSN start:0x01 length:2 name:@"fd.own" verification:nil transformation:@"BlocksUnsignedBigEndian"];
         if (fdLength > 0x08) [newFileBlock addAttributeRange:fdLSN start:0x03 length:5 name:@"fd.dat" verification:nil transformation:@"OS9Date"];
         if (fdLength > 0x09) [newFileBlock addAttributeRange:fdLSN start:0x08 length:1 name:@"fd.lnk" verification:nil transformation:@"BlocksUnsignedBigEndian"];
@@ -170,3 +195,44 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
     
     return @"";
 }
+
+BOOL IsTextFileBasedOnName( NSString *filename )
+{
+    if ([filename hasSuffix:@".asm"]) {
+        return YES;
+    }
+    else if ([filename hasSuffix:@".a"]) {
+        return YES;
+    }
+    else if ([filename hasSuffix:@".txt"]) {
+        return YES;
+    }
+    else if ([filename hasSuffix:@"defs"]) {
+        return YES;
+    }
+    else if ([filename hasSuffix:@".c"]) {
+        return YES;
+    }
+    else if ([filename hasSuffix:@".lp"]) {
+        return YES;
+    }
+    else if ([filename hasSuffix:@".notes"]) {
+        return YES;
+    }
+    else if ([filename hasSuffix:@".doc"]) {
+        return YES;
+    }
+    else if ([filename hasSuffix:@".hlp"]) {
+        return YES;
+    }
+    else if ([filename hasSuffix:@".me"]) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+
+
+
+
