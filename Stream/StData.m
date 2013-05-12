@@ -24,6 +24,7 @@
 @dynamic viewController;
 @dynamic resultingData;
 @dynamic unionRange;
+@dynamic errorString;
 
 - (NSObject *)anaylizerObject
 {

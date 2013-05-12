@@ -19,7 +19,6 @@
 
 @property (nonatomic, assign) StAnaylizer *representedObject;
 
-- (NSString *)decodeColorComputerBASIC:(NSData *)bufferObject;
-- (NSString *)decodeOS9DirectoryFile:(NSData *)bufferObject;
+- (NSString *)anaylizeData:(NSData *)bufferObject;
 
 @end

@@ -148,6 +148,8 @@
 		77F2048513DD3AEF00FA5B1F /* HFCancelOff.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048213DD3AEF00FA5B1F /* HFCancelOff.tiff */; };
 		77F2048613DD3AEF00FA5B1F /* HFCancelOn.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048313DD3AEF00FA5B1F /* HFCancelOn.tiff */; };
 		77F2048713DD3AEF00FA5B1F /* HFModalProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048413DD3AEF00FA5B1F /* HFModalProgress.xib */; };
+		77F6044217400AAB00932477 /* CoCoDeTokenBinaryBASIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F6044117400AAB00932477 /* CoCoDeTokenBinaryBASIC.m */; };
+		77F6044617400E5900932477 /* OS9DirectoryFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F6044517400E5900932477 /* OS9DirectoryFile.m */; };
 		77FE861E1736181B0015DCD8 /* DunfieldImageDisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 77FE861D1736181B0015DCD8 /* DunfieldImageDisk.m */; };
 		77FEA6D813F57D4B0082B946 /* StAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77FEA6D713F57D4B0082B946 /* StAnaylizer.m */; };
 /* End PBXBuildFile section */
@@ -434,6 +436,10 @@
 		77F2048213DD3AEF00FA5B1F /* HFCancelOff.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = HFCancelOff.tiff; path = Stream/HexFiend/resources/HFCancelOff.tiff; sourceTree = "<group>"; };
 		77F2048313DD3AEF00FA5B1F /* HFCancelOn.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = HFCancelOn.tiff; path = Stream/HexFiend/resources/HFCancelOn.tiff; sourceTree = "<group>"; };
 		77F2048413DD3AEF00FA5B1F /* HFModalProgress.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HFModalProgress.xib; path = Stream/HexFiend/resources/HFModalProgress.xib; sourceTree = "<group>"; };
+		77F6044017400AAB00932477 /* CoCoDeTokenBinaryBASIC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoDeTokenBinaryBASIC.h; path = Stream/TextAnaylizer/CoCoDeTokenBinaryBASIC.h; sourceTree = "<group>"; };
+		77F6044117400AAB00932477 /* CoCoDeTokenBinaryBASIC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoDeTokenBinaryBASIC.m; path = Stream/TextAnaylizer/CoCoDeTokenBinaryBASIC.m; sourceTree = "<group>"; };
+		77F6044417400E5900932477 /* OS9DirectoryFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OS9DirectoryFile.h; path = Stream/TextAnaylizer/OS9DirectoryFile.h; sourceTree = "<group>"; };
+		77F6044517400E5900932477 /* OS9DirectoryFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OS9DirectoryFile.m; path = Stream/TextAnaylizer/OS9DirectoryFile.m; sourceTree = "<group>"; };
 		77FE861C1736181B0015DCD8 /* DunfieldImageDisk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DunfieldImageDisk.h; path = Stream/DiskImageBlockers/DunfieldImageDisk.h; sourceTree = "<group>"; };
 		77FE861D1736181B0015DCD8 /* DunfieldImageDisk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = DunfieldImageDisk.m; path = Stream/DiskImageBlockers/DunfieldImageDisk.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		77FEA6D613F57D4B0082B946 /* StAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StAnaylizer.h; path = Stream/StAnaylizer.h; sourceTree = "<group>"; };
@@ -820,6 +826,10 @@
 				77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */,
 				77B61800172B8BA1008E8F1A /* TextAnaylizerViewController.xib */,
 				77B61803172B8CD3008E8F1A /* TextAccessoryView.xib */,
+				77F6044017400AAB00932477 /* CoCoDeTokenBinaryBASIC.h */,
+				77F6044117400AAB00932477 /* CoCoDeTokenBinaryBASIC.m */,
+				77F6044417400E5900932477 /* OS9DirectoryFile.h */,
+				77F6044517400E5900932477 /* OS9DirectoryFile.m */,
 			);
 			name = TextAnaylizer;
 			sourceTree = "<group>";
@@ -1191,6 +1201,8 @@
 				779434DA173EFDA10090FD5F /* CoCoDiskFileBlocker.m in Sources */,
 				774C74B7173F4FF600FD43ED /* DavidKeilDiskImage.m in Sources */,
 				77E24066173FEB7100234F5A /* DMKProcessSingleDensity.m in Sources */,
+				77F6044217400AAB00932477 /* CoCoDeTokenBinaryBASIC.m in Sources */,
+				77F6044617400E5900932477 /* OS9DirectoryFile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

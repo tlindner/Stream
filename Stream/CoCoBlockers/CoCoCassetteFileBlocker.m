@@ -84,7 +84,7 @@
             /* Set up UTIs */
             if (noteFileType == 0 && noteDataType == 0) {
                 newFile.sourceUTI = newFile.resultingUTI = @"com.microsoft.cocobasic.binary";
-                newFile.currentEditorView = @"Text Editor";
+                newFile.currentEditorView = @"DeToken Binary CoCo BASIC";
             }
             else if (noteFileType == 0 && noteDataType == 0xff) {
                 newFile.sourceUTI = newFile.resultingUTI = @"com.microsoft.cocobasic.ascii";
@@ -96,11 +96,11 @@
             }
             else if (noteFileType == 0x02 && noteDataType == 0 && noteGaps == 0) {
                 newFile.sourceUTI = newFile.resultingUTI = @"com.microsoft.cocobasic.object";
-                newFile.currentEditorView = @"Text Editor";
+                newFile.currentEditorView = @"6809 Dissasembler";
             }
             else if (noteFileType == 0x02 && noteDataType == 0 && noteGaps == 0xff) {
                 newFile.sourceUTI = newFile.resultingUTI = @"com.microsoft.cocobasic.gapsobject";
-                newFile.currentEditorView = @"Text Editor";
+                newFile.currentEditorView = @"6809 Dissasembler";
             }
             else {
                 newFile.sourceUTI = newFile.resultingUTI = @"public.data";

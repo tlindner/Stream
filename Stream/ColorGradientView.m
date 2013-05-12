@@ -113,6 +113,9 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
         
         if( [selectedObjects count] == 1 )
         {
+            
+            /* self.representedObject.blockAlertHidden */
+            
             StBlock *theBlock = [selectedObjects objectAtIndex:0];
             observableSourceUTI = observableEditorView = theBlock;
             stuff = [[Analyzation sharedInstance] anaylizersforUTI:[theBlock valueForKey:@"sourceUTI"]];
@@ -126,6 +129,8 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
 
             /* Trigger creating this now, before the view is loaded */
             [theBlock anaylizerObject];
+            
+
         }
         else
         {
@@ -133,7 +138,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
             observableSourceUTI = nil;
             
             [blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
-            
+             
             if (self.avc) {
                 [utiComboBox setEnabled:NO];
                 [editorPopup setEnabled:NO];
@@ -159,6 +164,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
         [utiComboBox setEnabled:YES];
         [editorPopup setEnabled:YES];
         AbleAllControlsInView([self.avc groupBox], YES);
+
     }
     
     self.popupArrayController = [[[NSArrayController alloc] init] autorelease];
@@ -251,7 +257,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
         else
         {
             StAnaylizer *anaylizer = objectValue;
-            
+                        
             /* Editview changed, update UI */
             [[accessoryView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             

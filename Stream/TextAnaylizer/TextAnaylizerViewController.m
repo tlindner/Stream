@@ -11,8 +11,7 @@
 #import "StAnaylizer.h"
 #import "StBlock.h"
 #import "StStream.h"
-
-NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
+#import "StData.h"
 
 @interface TextAnaylizerViewController ()
 
@@ -40,17 +39,17 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
 
 - (void)reloadView
 {
-    id ro = [self representedObject];
+//    id ro = [self representedObject];
 
     [self stopObserving];
     
-    if( [ro respondsToSelector:@selector(sourceUTI)] )
-    {
-        NSString *uti = [ro sourceUTI];
-        if ([uti isEqualToString:@"com.microsoft.cocobasic.binary"]) {
-            [ro setValue:@"Tokenized CoCo BASIC Program" forKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
-        }
-    }
+//    if( [ro respondsToSelector:@selector(sourceUTI)] )
+//    {
+//        NSString *uti = [ro sourceUTI];
+//        if ([uti isEqualToString:@"com.microsoft.cocobasic.binary"]) {
+//            [ro setValue:@"Tokenized CoCo BASIC Program" forKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
+//        }
+//    }
     
     [textView setUsesFontPanel:YES];
     [textView setRichText:NO];
@@ -73,39 +72,10 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
 - (NSString *)transformInput
 {
     NSString *result = nil;
-    id object = [self representedObject];
-    NSData *bytes = nil;
-    NSString *encodingStringRep = [object valueForKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
-    NSStringEncoding encoding = Convert_String_To_Encoding(encodingStringRep);
+    StData *object = [self representedObject];
+    TextAnaylizer *modelObject = (TextAnaylizer *)[object anaylizerObject];
     
-    if( [object isKindOfClass:[StAnaylizer class]] )
-    {
-//        bytes = [[object parentStream] valueForKey:@"bytesCache"];
-        bytes = [object sourceData];
-    }
-    else if( [object isKindOfClass:[StBlock class]] )
-    {
-        bytes = [object resultingData];
-    }
-    else if( [object isKindOfClass:[NSData class]] )
-    {
-        bytes = object;
-    }
-
-    if (bytes != nil) {
-        if (encoding != 0xFFFFFFFF) {
-            /* The system can decode this */
-            result = [[[NSString alloc] initWithData:bytes encoding:encoding] autorelease];
-        }
-        else if ([encodingStringRep isEqualToString:@"Tokenized CoCo BASIC Program"]) {
-            TextAnaylizer *modelObject = (TextAnaylizer *)[object anaylizerObject];
-            result = [modelObject decodeColorComputerBASIC:bytes];
-        }
-        else if ([encodingStringRep isEqualToString:@"OS-9 Directory File"]) {
-            TextAnaylizer *modelObject = (TextAnaylizer *)[object anaylizerObject];
-            result = [modelObject decodeOS9DirectoryFile:bytes];
-        }
-    }
+    result = [modelObject anaylizeData:object.resultingData];
 
     if (result == nil || [result isEqualToString:@""]) {
         result = @"Unable to decode stream.";
@@ -190,9 +160,3 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
     [super dealloc];
 }
 @end
-
-NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding )
-{
-    CFStringEncoding aEncoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)inEncoding);
-    return CFStringConvertEncodingToNSStringEncoding(aEncoding);
-}

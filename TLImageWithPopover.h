@@ -9,8 +9,12 @@
 #import <Cocoa/Cocoa.h>
 
 @interface TLImageWithPopover : NSImageView
+{
+    NSString *_errorMessage, *_errorMessage2;
+}
 
-@property (assign) IBOutlet id delegate;
+@property (assign) NSString *errorMessage;
+@property (assign) NSString *errorMessage2;
 
 @end
 

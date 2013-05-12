@@ -110,7 +110,7 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
         if (fdLength > 0x01) [newFileBlock addAttributeRange:fdLSN start:0x00 length:1 name:@"fd.att" verification:nil transformation:@"BlocksUnsignedBigEndian"];
         if (fdLength > 0x01 && (fd[0x00] & 0x80) == 0x80) {
             newFileBlock.sourceUTI = newFileBlock.resultingUTI = @"com.microware.os9directoryfile";
-            newFileBlock.currentEditorView = @"Text Editor";
+            newFileBlock.currentEditorView = @"OS9 Directory File";
         }
         if (fdLength > 0x03) [newFileBlock addAttributeRange:fdLSN start:0x01 length:2 name:@"fd.own" verification:nil transformation:@"BlocksUnsignedBigEndian"];
         if (fdLength > 0x08) [newFileBlock addAttributeRange:fdLSN start:0x03 length:5 name:@"fd.dat" verification:nil transformation:@"OS9Date"];

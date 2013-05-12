@@ -22,6 +22,7 @@
 @property (nonatomic, assign, readwrite) NSViewController *viewController;
 @property (nonatomic, retain) NSData *resultingData;
 @property (nonatomic, retain) NSValue *unionRange;
+@property (nonatomic, retain) NSString *errorString;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
 

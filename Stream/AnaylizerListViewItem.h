@@ -8,8 +8,7 @@
 
 #import "SDListViewItem.h"
 
-@class DragRegionView;
-@class ColorGradientView;
+@class DragRegionView, ColorGradientView, TLImageWithPopover, StBlock;
 
 @interface AnaylizerListViewItem : SDListViewItem
 {
@@ -24,6 +23,9 @@
 @property (assign) IBOutlet NSButton *blockSettingsButton;
 @property (assign) IBOutlet NSButton *anaylizerErrorButton;
 @property (assign) IBOutlet NSViewController *blockSettingsViewController;
+@property (assign) IBOutlet TLImageWithPopover *imageWithPopover;
+@property (assign) NSTreeController *blockTreeController;
+@property (assign) StBlock *previousBoundBlock;
 
 - (IBAction)removeAnaylizer:(id)sender;
 - (IBAction)collapse:(id)sender;

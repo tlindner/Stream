@@ -33,8 +33,6 @@ NSURL *MakeTemporaryFile( NSString *pattern );
 @dynamic title;
 @dynamic failIndexSet;
 @dynamic sourceData;
-@dynamic errorString;
-@dynamic blockAlertHidden;
 
 + (void)initialize
 {
@@ -310,22 +308,6 @@ NSURL *MakeTemporaryFile( NSString *pattern );
     {
         [self.viewController ConfigurableButton2:(id)sender];
     }
-}
-
-- (BOOL) blockAlertHidden
-{
-    if (self.errorString != nil) {
-        if (![self.errorString isEqualToString:@""]) {
-            return NO;
-        }
-    }
-    
-    return YES;
-}
-
-+ (NSSet *)keyPathsForValuesAffectingBlockAlertHidden
-{
-    return [NSSet setWithObjects:@"errorString", nil];
 }
 
 + (NSSet *)keyPathsForValuesAffectingTitle

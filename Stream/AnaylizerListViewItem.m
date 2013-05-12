@@ -13,6 +13,7 @@
 #import "colorGradientView.h"
 #import "DragRegionView.h"
 #import "Blockers.h"
+#import "BlockerDataViewController.h"
 
 #define MINIMUM_HEIGHT 26.0
 
@@ -40,6 +41,9 @@
 @synthesize blockSettingsButton;
 @synthesize blockSettingsViewController;
 @synthesize anaylizerErrorButton;
+@synthesize imageWithPopover;
+@synthesize blockTreeController;
+@synthesize previousBoundBlock;
 
 - (void)setRepresentedObject:(id)representedObject
 {
@@ -48,7 +52,7 @@
     if (representedObject != nil) {
         [representedObject addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
         [representedObject addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
-    }
+    }    
 }
 
 - (void)loadView
@@ -83,7 +87,18 @@
                     [self setLiveResize:NO];
                 }
             }
-         }
+        } else if ([keyPath isEqualToString:@"selectedObjects"]) {
+            BlockerDataViewController *blockerController = (BlockerDataViewController *)self.editorController;
+            blockTreeController = blockerController.treeController;
+            NSArray *selectedObjects = [blockTreeController selectedObjects];
+            
+            [imageWithPopover unbind:@"errorMessage2"];
+            
+            if ([selectedObjects count] == 1 ) {
+                StBlock *selectObject = [selectedObjects objectAtIndex:0];
+                [imageWithPopover bind:@"errorMessage2" toObject:selectObject withKeyPath:@"errorString" options:nil];
+            }
+        }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -108,6 +123,13 @@
     
     blockSettingsViewController = nil;
     
+    if (self.blockTreeController != nil) {
+        [self.blockTreeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
+        self.blockTreeController = nil;
+    }
+
+    [imageWithPopover unbind:@"errorMessage"];
+
     [super dealloc];
 }
 
@@ -131,7 +153,16 @@
     [self.editorController loadView];
     [[self.editorController view] setFrame:adjustedFrame];
     [dragView setCustomSubView:[self.editorController view] paneExpanded:theAna.paneExpanded];
-//    [customView addSubview:[self.editorController view]];
+    
+    
+    [imageWithPopover unbind:@"errorMessage"];
+    [imageWithPopover bind:@"errorMessage" toObject:theAna withKeyPath:@"errorString" options:nil];
+    
+    if ([[theAna valueForKey:@"currentEditorView"] isEqualToString:@"Blocker View"]) {
+        BlockerDataViewController *blockerController = (BlockerDataViewController *)self.editorController;
+        blockTreeController = blockerController.treeController;
+        [blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
+    }
 }
 
 - (CGFloat) heightForGivenWidth:(CGFloat)width {

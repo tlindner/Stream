@@ -20,7 +20,6 @@
 @property (nonatomic) BOOL removeEnabled;
 @property (nonatomic) BOOL blockSettingsHidden;
 @property (nonatomic) BOOL blockSettingsEnabled;
-@property (nonatomic) BOOL blockAlertHidden;
 @property (nonatomic, retain) NSString *currentEditorView;
 @property (nonatomic, retain) NSMutableIndexSet *editIndexSet;
 @property (nonatomic, retain) NSMutableIndexSet *failIndexSet;
@@ -30,7 +29,6 @@
 @property (nonatomic, retain) NSOrderedSet *edits;
 @property (nonatomic, retain) NSData *sourceData;
 @property (nonatomic, retain) StStream *parentStream;
-@property (nonatomic, retain) NSString *errorString;
 
 - (float) computedAnaylizerHeight;
 - (void) writebyte:(unsigned char)byte atOffset:(NSUInteger)offset;

@@ -10,33 +10,88 @@
 #import "MAAttachedWindow.h"
 
 float heightForStringDrawing(NSString *myString, NSFont *myFont, float myWidth);
+BOOL NilOrEmptyString( NSString *string );
 
 @implementation TLImageWithPopover
 
-@synthesize delegate;
+@synthesize errorMessage = _errorMessage;
+@synthesize errorMessage2 = _errorMessage2;
+
++ (void)initialize
+{
+    if ( self == [TLImageWithPopover class] )
+    {
+        [self exposeBinding:@"errorMessage"];
+        [self exposeBinding:@"errorMessage2"];
+    }
+}
 
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
+        [self updateHidden];
     }
     
     return self;
 }
 
+- (void)awakeFromNib
+{
+    [self updateHidden];
+}
+
+- (NSString *)errorMessage
+{
+    return _errorMessage;
+}
+
+- (NSString *)errorMessage2
+{
+    return _errorMessage2;
+}
+
+- (void)setErrorMessage:(NSString *)aString
+{
+    _errorMessage = aString;
+    [self updateHidden];
+}
+
+- (void)setErrorMessage2:(NSString *)aString
+{
+    _errorMessage2 = aString;
+    [self updateHidden];
+}
+   
+- (void)updateHidden
+{
+    if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
+        [self setHidden:YES];
+    } else if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
+        [self setHidden:NO];
+    } else if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
+        [self setHidden:NO];
+    } else {
+        [self setHidden:NO];
+    }
+}
+
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    NSString *message = nil;
-    
-    if ([delegate respondsToSelector:@selector(representedObject)]) {
-        NSObject *ro = [delegate representedObject];
-        message = [ro valueForKey:@"errorString"];
-    }
-
     NSFont *font = [NSFont controlContentFontOfSize:0];
     float width, height, ratio;
+    NSString *message;
     
+    if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
+        message = @"No Message";
+    } else if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
+        message = self.errorMessage;
+    } else if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
+        message = self.errorMessage2;
+    } else {
+        message = [NSString stringWithFormat:@"%@\n\n%@", self.errorMessage, self.errorMessage2];
+    }
+
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
     NSAttributedString *attributedMessage = [[[NSAttributedString alloc] initWithString:message attributes:attributes] autorelease];
     width = [attributedMessage size].width + 20.0;
@@ -135,4 +190,12 @@ float heightForStringDrawing(NSString *myString, NSFont *myFont, float myWidth)
     
     (void) [layoutManager glyphRangeForTextContainer:textContainer];
     return [layoutManager usedRectForTextContainer:textContainer].size.height;
+}
+
+BOOL NilOrEmptyString( NSString *string )
+{
+    if (string == nil) return YES;
+    if ([string isEqualToString:@""]) return YES;
+    
+    return NO;
 }
