@@ -266,6 +266,7 @@
 {   
     /* set all block to be marked for deletion */
     [self markTopLevelBlocksForDeletion];
+    self.topLevelBlocks = nil;
     
     /* reset fail index set */
     [[[self lastFilterAnayliser] failIndexSet] removeAllIndexes];

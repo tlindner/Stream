@@ -32,6 +32,12 @@ static BOOL initialized = NO;
             [sharedSingleton addBlocker:@"ArbitraryGroupBlocker"];
             [sharedSingleton addBlocker:@"DunfieldImageDisk"];
             [sharedSingleton addBlocker:@"BasicDiskImage"];
+            [sharedSingleton addBlocker:@"CoCoGranuleBlocker"];
+            [sharedSingleton addBlocker:@"CoCoDiskFileBlocker"];
+//            [sharedSingleton addBlocker:@"XXX"];
+//            [sharedSingleton addBlocker:@"XXX"];
+//            [sharedSingleton addBlocker:@"XXX"];
+//            [sharedSingleton addBlocker:@"XXX"];
             
         }
     }

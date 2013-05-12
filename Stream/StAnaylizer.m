@@ -314,13 +314,13 @@ NSURL *MakeTemporaryFile( NSString *pattern );
 
 - (BOOL) blockAlertHidden
 {
-    if (self.errorString == nil) {
+    if (self.errorString != nil) {
         if (![self.errorString isEqualToString:@""]) {
-            return YES;
+            return NO;
         }
     }
     
-    return NO;
+    return YES;
 }
 
 + (NSSet *)keyPathsForValuesAffectingBlockAlertHidden

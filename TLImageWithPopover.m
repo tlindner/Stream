@@ -40,6 +40,7 @@ float heightForStringDrawing(NSString *myString, NSFont *myFont, float myWidth);
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
     NSAttributedString *attributedMessage = [[[NSAttributedString alloc] initWithString:message attributes:attributes] autorelease];
     width = [attributedMessage size].width + 20.0;
+    height = heightForStringDrawing(message, font, width);
     
     if (width > 300) {
         for (width = 10; width < 800; width += 10) {
@@ -51,9 +52,6 @@ float heightForStringDrawing(NSString *myString, NSFont *myFont, float myWidth);
                 break;
             }
         }
-    }
-    else {
-        height = heightForStringDrawing(message, font, width);
     }
     
     InsetTextView *errorView = [[InsetTextView alloc] initWithFrame:NSMakeRect(0, 0, width+20, height+20)];
