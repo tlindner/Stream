@@ -14,6 +14,7 @@
 @implementation HexFiendAnaylizer
 
 @dynamic representedObject;
+@synthesize resultingData;
 
 - (id)init
 {
@@ -82,15 +83,15 @@
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-- (NSData *)resultingData
-{
-    HFTextView *hexView = (HFTextView *)[[representedObject viewController] view];
-    return [hexView data];
-}
-
 - (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte
 {
     NSLog( @"HexFiend Unimplemented: replaceBytesInRange: %@ withByte 0x%x", NSStringFromRange(range), *byte);
+}
+
+- (NSData *)anaylizeData:(NSData *)data
+{
+    self.resultingData = data;
+    return data;
 }
 
 - (void)dealloc
@@ -102,7 +103,8 @@
 //        [theAna removeObserver:self forKeyPath:@"resultingData"];
         observationsActive = NO;
     }
-
+    self.resultingData = nil;
+    
     [super dealloc];
 }
 

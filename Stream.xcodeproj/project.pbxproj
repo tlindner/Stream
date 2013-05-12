@@ -100,6 +100,7 @@
 		77DA26CD1421BAA2007BE635 /* BlockerViewOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */; };
 		77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */; };
 		77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */; };
+		77E24066173FEB7100234F5A /* DMKProcessSingleDensity.m in Sources */ = {isa = PBXBuildFile; fileRef = 77E24065173FEB7100234F5A /* DMKProcessSingleDensity.m */; };
 		77ED69111737092C0024397E /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77ED69101737092C0024397E /* Quartz.framework */; };
 		77ED691517375CE60024397E /* OS9LogicalSectorsBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ED691417375CE60024397E /* OS9LogicalSectorsBlocker.m */; };
 		77F2045613DD3AD000FA5B1F /* HFBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F203FC13DD3ACF00FA5B1F /* HFBTree.m */; settings = {COMPILER_FLAGS = "-Wno-all -Wno-extra"; }; };
@@ -335,6 +336,8 @@
 		77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerSettingPopover.xib; path = Stream/AnaylizerSettingPopover.xib; sourceTree = "<group>"; };
 		77DFCB75171A159100C4A876 /* CoCoCassetteFileBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoCassetteFileBlocker.h; path = Stream/CoCoBlockers/CoCoCassetteFileBlocker.h; sourceTree = "<group>"; };
 		77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CoCoCassetteFileBlocker.m; path = Stream/CoCoBlockers/CoCoCassetteFileBlocker.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		77E24064173FEB7100234F5A /* DMKProcessSingleDensity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DMKProcessSingleDensity.h; path = Stream/DMKProcessSingleDensity.h; sourceTree = "<group>"; };
+		77E24065173FEB7100234F5A /* DMKProcessSingleDensity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DMKProcessSingleDensity.m; path = Stream/DMKProcessSingleDensity.m; sourceTree = "<group>"; };
 		77E9E6EA173379110027C7E9 /* BlockIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = BlockIcon.psd; sourceTree = "<group>"; };
 		77E9E6EF17337F6B0027C7E9 /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		77ED69101737092C0024397E /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -495,6 +498,8 @@
 				77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */,
 				771AD298141D414B00E0FE41 /* HexFiendAnaylizer.h */,
 				771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */,
+				77E24064173FEB7100234F5A /* DMKProcessSingleDensity.h */,
+				77E24065173FEB7100234F5A /* DMKProcessSingleDensity.m */,
 			);
 			name = HexFiendAnaylizer;
 			sourceTree = "<group>";
@@ -1185,6 +1190,7 @@
 				779434D7173EF2670090FD5F /* CoCoGranuleBlocker.m in Sources */,
 				779434DA173EFDA10090FD5F /* CoCoDiskFileBlocker.m in Sources */,
 				774C74B7173F4FF600FD43ED /* DavidKeilDiskImage.m in Sources */,
+				77E24066173FEB7100234F5A /* DMKProcessSingleDensity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

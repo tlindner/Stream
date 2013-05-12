@@ -339,6 +339,7 @@
                     {
                         /* This is a top level block */
                         [self removeBlocksObject:aBlock];
+                        [[self managedObjectContext] deleteObject:aBlock];
 //                        NSMutableSet *parentStreamBlocks = [aBlock.parentStream mutableSetValueForKey:@"blocks"];
 //                        [parentStreamBlocks removeObject:aBlock];
                     }
@@ -363,6 +364,8 @@
                 }
             }
         }
+        
+        self.topLevelBlocks = nil;
     }
     else
         NSAssert(YES==NO, @"deleteBlocksMarkedForDeletion: Error fetching marked for deletion block", error);

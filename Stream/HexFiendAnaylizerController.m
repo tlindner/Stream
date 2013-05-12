@@ -7,6 +7,7 @@
 //
 
 #import "HexFiendAnaylizerController.h"
+#import "HexFiendAnaylizer.h"
 #import "Analyzation.h"
 #import "HFTextView.h"
 #import "StStream.h"
@@ -59,12 +60,13 @@
 - (void) reloadView
 {
     HFTextView *hexView = (HFTextView *)[self view];
-    
+    HexFiendAnaylizer *modelObject = (HexFiendAnaylizer *)[[self representedObject] anaylizerObject];
+   
     if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
     {
         StAnaylizer *object = [self representedObject];
         [[hexView controller] setInOverwriteMode:NO];
-        [hexView setData:object.sourceData];
+        [hexView setData:[modelObject anaylizeData:object.sourceData]];
         [self setupRepresentedObject];
     }
     else if( [[self representedObject] isKindOfClass:[StBlock class]] )
@@ -73,7 +75,7 @@
         lastAnaylizer = [[[theBlock getStream] lastFilterAnayliser] retain];
         NSData *theData = [theBlock resultingData];
         [[hexView controller] setInOverwriteMode:NO];
-        [hexView setData:theData];
+        [hexView setData:[modelObject anaylizeData:theData]];
         [self setupRepresentedObject];
     }
     else if( [[self representedObject] isKindOfClass:[NSData class]] )

@@ -206,7 +206,7 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.data</string>
+				<string>org.macmess.imagedisk</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Dave Dunfield Disk Image Format</string>
@@ -227,6 +227,40 @@
 			<string>com.microware.os9directoryfile</string>
 			<key>UTTypeTagSpecification</key>
 			<dict/>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.macmess.image.disk</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>David Keil Disk Image</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.macmess.dmk</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dmk</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Disk Image</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.macmess.imagedisk</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dsk</string>
+				</array>
+			</dict>
 		</dict>
 	</array>
 </dict>

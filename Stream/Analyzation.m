@@ -31,6 +31,13 @@ static BOOL initialized = NO;
             [sharedSingleton addAnalyzer:@"HexFiendAnaylizer"];
             [sharedSingleton addAnalyzer:@"TextAnaylizer"];
             [sharedSingleton addAnalyzer:@"DisasemblerAnaylizer"];
+            [sharedSingleton addAnalyzer:@"DMKProcessSingleDensity"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+            
         }
     }
 }

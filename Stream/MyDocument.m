@@ -333,6 +333,12 @@
     {
         NSMutableSet *ms = [parentStream mutableSetValueForKey:@"blocks"];
         [ms minusSet:[NSSet setWithArray:resultBlockArray]];
+        
+        for (StBlock *aBlock in resultBlockArray) {
+            [self.managedObjectContext deleteObject:aBlock];
+        }
+        
+        parentStream.topLevelBlocks = nil;
     }
     else
         NSLog( @"Deleting blocks in a stream: fetch returned error: %@", error );
