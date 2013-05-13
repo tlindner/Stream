@@ -119,7 +119,7 @@ UInt16 ccitt_crc16_one( UInt16 crc, const UInt8 data );
                     idamCRC = ccitt_crc16(0xcdb4, &(bytes[bc+idamPosition]), 5);
                 
                 idamCRC_BE[0] = idamCRC >> 8;
-                idamCRC_BE[1] = idamCRC & 0x0f;
+                idamCRC_BE[1] = idamCRC & 0xff;
                 NSData *crcVerify = [NSData dataWithBytes:idamCRC_BE length:2];
                 
                 unsigned trackCode = bytes[bc+idamPosition+1];

@@ -7,11 +7,12 @@
 //
 
 #import "StBlock.h"
-#import "StBlock.h"
 #import "StStream.h"
 #import "Analyzation.h"
 #import "HexFiendAnaylizer.h"
 #import "TextAnaylizer.h"
+
+static NSColor *failColor;
 
 @implementation StBlock
 
@@ -46,6 +47,8 @@
 {
     self.optionsDictionary = [[[NSMutableDictionary alloc] init] autorelease];
     dataIndex = attrIndex = depIndex = 0;
+    
+    if (failColor == nil) failColor = [[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5] retain];
 }
 
 - (void)awakeFromFetch
@@ -81,6 +84,8 @@
         }
         
     }
+
+    if (failColor == nil) failColor = [[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5] retain];
 }
 
 - (StStream *)getStream
@@ -325,6 +330,17 @@
     }
     
     return nil;
+}
+
+- (BOOL) isFail
+{
+    if (self.checkBytes) {
+        if( ![self.checkBytes isEqualToData:[self resultingData]] ) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (NSValue *)unionRange
@@ -704,17 +720,30 @@
     NSColor *_attributeColor = [self primitiveAttributeColor];
     
     if (_attributeColor == nil) {
-        [self checkEdited:self];
-        [self checkFail:self];
 
-        if( self.isEdit && self.isFail )
-            return [NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.0 alpha:0.5];
-        else if( self.isEdit )
-            return [NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:0.5];
-        else if( self.isFail )
-            return [NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5];
-        else {
-            _attributeColor = [NSColor clearColor];
+        if( self.source == nil )
+        {
+            /* top level block */  /* mid level block */
+            NSArray *childBlocks = [self recursiveChildBlocks];
+            
+            for (StBlock *aBlock in childBlocks) {
+                if ([[aBlock attributeColor] isEqualTo:failColor]) {
+                    _attributeColor = failColor;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            /* leaf block */
+            if ([self isFail]) {
+                _attributeColor = failColor;
+            }
+            else {
+                _attributeColor = [NSColor clearColor];
+            }
+            
+            [self setPrimitiveAttributeColor:_attributeColor];
         }
         
         [self setPrimitiveAttributeColor:_attributeColor];
@@ -828,6 +857,40 @@
 - (void) resetCounters
 {
     dataIndex = attrIndex = depIndex = 0;
+}
+
+- (NSArray *)recursiveChildBlocks
+{
+    NSArray *result;
+    
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* top level block */
+            result = [[[NSArray alloc] init] autorelease];
+            
+            NSArray *theBlocks;
+            theBlocks = [dataSubBlock.blocks array];
+            if (theBlocks != nil) result = [result arrayByAddingObjectsFromArray:theBlocks];
+            theBlocks = [attrSubBlock.blocks array];
+            if (theBlocks != nil) result = [result arrayByAddingObjectsFromArray:theBlocks];
+            theBlocks = [depSubBlock.blocks array];
+            if (theBlocks != nil) result = [result arrayByAddingObjectsFromArray:theBlocks];
+        }
+        else
+        {
+            /* mid level block */
+            return [self.blocks array];
+        }
+    }
+    else
+    {
+        /* leaf block */
+        result = [NSArray arrayWithObject:self];
+    }
+    
+    return result;
 }
 
 + (NSSet *)keyPathsForValuesAffectingAttributeColor

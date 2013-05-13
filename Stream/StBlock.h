@@ -69,6 +69,7 @@
 - (NSArray *)blocksArray;
 - (void)addSubBlocksObject:(StBlock *)value;
 - (void)makeMarkForDeletion;
+- (NSArray *)recursiveChildBlocks;
 
 @end
 
