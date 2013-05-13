@@ -11,7 +11,7 @@
 
 BOOL IsTextFileBasedOnName( NSString *filename );
 
-NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize );
+NSString *DoFileFD( NSUInteger dd_tot,  StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize );
 
 @implementation OS9FileBlocker
 
@@ -58,11 +58,13 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
         logicalSectorSizeCode += lsn0[0x6a];
         unsigned short logicalSectorSize = logicalSectorSizeCode == 0 ? 256 : 256 * logicalSectorSizeCode;
         
-        unsigned dd_dir = lsn0[0x08] << 24;
+        unsigned dd_dir = lsn0[0x08] << 16;
         dd_dir += lsn0[0x09] << 8;
         dd_dir += lsn0[0x0a];
         
-        return DoFileFD( stream, [NSString stringWithFormat:@"LSN %d", dd_dir], @"", logicalSectorSize );
+        NSUInteger dd_tot = (lsn0[0] << 16) + (lsn0[1] << 8) + lsn0[2];
+        
+        return DoFileFD( dd_tot, stream, [NSString stringWithFormat:@"LSN %d", dd_dir], @"", logicalSectorSize );
     }
     else {
         return @"LSN 0 too short";
@@ -73,11 +75,12 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
 
 @end
 
-NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize )
+NSString *DoFileFD( NSUInteger dd_tot, StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize )
 {
     StBlock *fdBlock = [stream topLevelBlockNamed:fdLSN];
     NSData *fdData = [fdBlock resultingData];
-
+    NSMutableString *result = [[[NSMutableString alloc] init] autorelease];
+    
     if (fdData != nil) {
         NSUInteger fdLength = [fdData length];
         const unsigned char *fd = [fdData bytes];
@@ -120,35 +123,41 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
         
         unsigned long fileSize = fd[0x09];
         fileSize <<= 32;
-        fileSize += fd[0x0a] << 24;
+        fileSize += fd[0x0a] << 16;
         fileSize += fd[0x0b] << 8;
         fileSize += fd[0x0c];
         
         if (fdLength > 0xff)
         {
             for (unsigned i=0; i < 48; i++) {
-                NSString *fdSegLSNString = [NSString stringWithFormat:@"fd.seg[%d].lsn", i];
-                [newFileBlock addAttributeRange:fdLSN start:0x10 + (i*5) + 0 length:3 name:fdSegLSNString verification:nil transformation:@"BlocksUnsignedBigEndian"];
-                NSString *fdSegSizeString = [NSString stringWithFormat:@"fd.seg[%d].size", i];
-                [newFileBlock addAttributeRange:fdLSN start:0x10 + (i*5) + 3 length:2 name:fdSegSizeString verification:nil transformation:@"BlocksUnsignedBigEndian"];
                 
-                unsigned lsn = fd[0x10 + (i*5) + 0] << 24;
+                unsigned lsn = fd[0x10 + (i*5) + 0] << 16;
                 lsn += fd[0x10 + (i*5) + 1] << 8;
                 lsn += fd[0x10 + (i*5) + 2];
                 
                 unsigned size = fd[0x10 + (i*5) + 3] << 8;
                 size += fd[0x10 + (i*5) + 4];
                 
-                if (lsn > 0 && fileSize > 0) {
-                    for (unsigned j=0; j<size; j++) {
-                        NSString *segLSN = [NSString stringWithFormat:@"LSN %d", lsn + j];
-                        unsigned actualSize = MIN(logicalSectorSize, fileSize);
-                        [newFileBlock addDataRange:segLSN start:0 length:(actualSize == logicalSectorSize) ? 0 : fileSize expectedLength:actualSize];
-                        fileSize -= actualSize;
-                        
-                        if (fileSize == 0) {
-                            break;
-                        }
+                if (lsn == 0) break;
+                
+                if (lsn+size > dd_tot) {
+                    [result appendFormat:@"\nFile: %@ had bad segment %d, length last end of logical sectors: %d", blockName, i, lsn+size];
+                    break;
+                }
+                
+                NSString *fdSegLSNString = [NSString stringWithFormat:@"fd.seg[%d].lsn", i];
+                [newFileBlock addAttributeRange:fdLSN start:0x10 + (i*5) + 0 length:3 name:fdSegLSNString verification:nil transformation:@"BlocksUnsignedBigEndian"];
+                NSString *fdSegSizeString = [NSString stringWithFormat:@"fd.seg[%d].size", i];
+                [newFileBlock addAttributeRange:fdLSN start:0x10 + (i*5) + 3 length:2 name:fdSegSizeString verification:nil transformation:@"BlocksUnsignedBigEndian"];
+           
+                for (unsigned j=0; j<size; j++) {
+                    NSString *segLSN = [NSString stringWithFormat:@"LSN %d", lsn + j];
+                    unsigned actualSize = MIN(logicalSectorSize, fileSize);
+                    [newFileBlock addDataRange:segLSN start:0 length:(actualSize == logicalSectorSize) ? 0 : fileSize expectedLength:actualSize];
+                    fileSize -= actualSize;
+                    
+                    if (fileSize == 0) {
+                        break;
                     }
                 }
             }
@@ -167,7 +176,7 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
                 while (newDirLength > 0) {
                     if (bytes[i*32] != 0) {
                         NSString *filename = [vt transformedValue:[newDirData subdataWithRange:NSMakeRange(i * 32, 29)]];
-                        unsigned lsn = bytes[(i * 32) + 29] << 24;
+                        unsigned lsn = bytes[(i * 32) + 29] << 16;
                         lsn += bytes[(i * 32) + 30] << 8;
                         lsn += bytes[(i * 32) + 31];
                         
@@ -176,7 +185,7 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
                         }
                         else {
                             NSString *fdLSN = [NSString stringWithFormat:@"LSN %d", lsn];
-                            DoFileFD( stream, fdLSN, [blockName stringByAppendingString:filename], logicalSectorSize );
+                            [result appendString:DoFileFD( dd_tot, stream, fdLSN, [blockName stringByAppendingString:filename], logicalSectorSize )];
                         }
                     }
                     
@@ -185,15 +194,15 @@ NSString *DoFileFD( StStream *stream, NSString *fdLSN, NSString *blockName, unsi
                 }
             }
             else {
-                return [NSString stringWithFormat:@"Could not create OS-9 String value transformer"];
+                [result appendString:@"\nCould not create OS-9 String value transformer"];
             }
          }
     }
     else {
-        return [NSString stringWithFormat:@"Could not find block %@ while building block: %@", fdLSN, blockName];
+        [result appendFormat:@"\nCould not find block %@ while building block: %@", fdLSN, blockName];
     }
     
-    return @"";
+    return result;
 }
 
 BOOL IsTextFileBasedOnName( NSString *filename )

@@ -38,7 +38,7 @@
                 [result appendString:[vt transformedValue:[bufferObject subdataWithRange:NSMakeRange(i * 32, 29)]]];
                 [result appendString:@", "];
                 
-                unsigned lsn = bytes[(i * 32) + 29] << 24;
+                unsigned lsn = bytes[(i * 32) + 29] << 16;
                 lsn += bytes[(i * 32) + 30] << 8;
                 lsn += bytes[(i * 32) + 31];
                 

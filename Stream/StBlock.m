@@ -731,7 +731,17 @@ static NSColor *failColor;
                     _attributeColor = failColor;
                     break;
                 }
+                
+                NSString *sourceString = [aBlock source];
+                if (![sourceString isEqualTo:@"stream"]) {
+                    if ([[[self.parentStream topLevelBlockNamed:sourceString] attributeColor] isEqualTo:failColor]) {
+                        _attributeColor = failColor;
+                        break;
+                    }
+                }
             }
+            
+            if (_attributeColor == nil) _attributeColor = [NSColor clearColor];
         }
         else
         {
@@ -742,8 +752,6 @@ static NSColor *failColor;
             else {
                 _attributeColor = [NSColor clearColor];
             }
-            
-            [self setPrimitiveAttributeColor:_attributeColor];
         }
         
         [self setPrimitiveAttributeColor:_attributeColor];

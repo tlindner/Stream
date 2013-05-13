@@ -150,6 +150,8 @@
 		77F2048713DD3AEF00FA5B1F /* HFModalProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048413DD3AEF00FA5B1F /* HFModalProgress.xib */; };
 		77F6044217400AAB00932477 /* CoCoDeTokenBinaryBASIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F6044117400AAB00932477 /* CoCoDeTokenBinaryBASIC.m */; };
 		77F6044617400E5900932477 /* OS9DirectoryFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F6044517400E5900932477 /* OS9DirectoryFile.m */; };
+		77F6044A1740ABCB00932477 /* OS9LogicalSectorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F604481740ABCB00932477 /* OS9LogicalSectorsViewController.m */; };
+		77F6044B1740ABCB00932477 /* OS9LogicalSectorsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77F604491740ABCB00932477 /* OS9LogicalSectorsViewController.xib */; };
 		77FE861E1736181B0015DCD8 /* DunfieldImageDisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 77FE861D1736181B0015DCD8 /* DunfieldImageDisk.m */; };
 		77FEA6D813F57D4B0082B946 /* StAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77FEA6D713F57D4B0082B946 /* StAnaylizer.m */; };
 /* End PBXBuildFile section */
@@ -440,6 +442,9 @@
 		77F6044117400AAB00932477 /* CoCoDeTokenBinaryBASIC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoDeTokenBinaryBASIC.m; path = Stream/TextAnaylizer/CoCoDeTokenBinaryBASIC.m; sourceTree = "<group>"; };
 		77F6044417400E5900932477 /* OS9DirectoryFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OS9DirectoryFile.h; path = Stream/TextAnaylizer/OS9DirectoryFile.h; sourceTree = "<group>"; };
 		77F6044517400E5900932477 /* OS9DirectoryFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OS9DirectoryFile.m; path = Stream/TextAnaylizer/OS9DirectoryFile.m; sourceTree = "<group>"; };
+		77F604471740ABCB00932477 /* OS9LogicalSectorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OS9LogicalSectorsViewController.h; path = "Stream/OS-9Blockers/OS9LogicalSectorsViewController.h"; sourceTree = "<group>"; };
+		77F604481740ABCB00932477 /* OS9LogicalSectorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OS9LogicalSectorsViewController.m; path = "Stream/OS-9Blockers/OS9LogicalSectorsViewController.m"; sourceTree = "<group>"; };
+		77F604491740ABCB00932477 /* OS9LogicalSectorsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OS9LogicalSectorsViewController.xib; path = "Stream/OS-9Blockers/OS9LogicalSectorsViewController.xib"; sourceTree = "<group>"; };
 		77FE861C1736181B0015DCD8 /* DunfieldImageDisk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DunfieldImageDisk.h; path = Stream/DiskImageBlockers/DunfieldImageDisk.h; sourceTree = "<group>"; };
 		77FE861D1736181B0015DCD8 /* DunfieldImageDisk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = DunfieldImageDisk.m; path = Stream/DiskImageBlockers/DunfieldImageDisk.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		77FEA6D613F57D4B0082B946 /* StAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StAnaylizer.h; path = Stream/StAnaylizer.h; sourceTree = "<group>"; };
@@ -839,6 +844,9 @@
 			children = (
 				77ED691317375CE60024397E /* OS9LogicalSectorsBlocker.h */,
 				77ED691417375CE60024397E /* OS9LogicalSectorsBlocker.m */,
+				77F604471740ABCB00932477 /* OS9LogicalSectorsViewController.h */,
+				77F604481740ABCB00932477 /* OS9LogicalSectorsViewController.m */,
+				77F604491740ABCB00932477 /* OS9LogicalSectorsViewController.xib */,
 				77714C611738A48B00EA4EC5 /* OS9FileBlocker.h */,
 				77714C621738A48B00EA4EC5 /* OS9FileBlocker.m */,
 			);
@@ -1064,6 +1072,7 @@
 				770B687D173D9B030097305E /* ArbitraryGroupViewController.xib in Resources */,
 				779434C9173EA5E90090FD5F /* AlertIcon.tiff in Resources */,
 				779434D4173EDBFD0090FD5F /* BasicDiskImageViewController.xib in Resources */,
+				77F6044B1740ABCB00932477 /* OS9LogicalSectorsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1203,6 +1212,7 @@
 				77E24066173FEB7100234F5A /* DMKProcessSingleDensity.m in Sources */,
 				77F6044217400AAB00932477 /* CoCoDeTokenBinaryBASIC.m in Sources */,
 				77F6044617400E5900932477 /* OS9DirectoryFile.m in Sources */,
+				77F6044A1740ABCB00932477 /* OS9LogicalSectorsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

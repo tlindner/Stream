@@ -8,6 +8,7 @@
 
 #import "OS9LogicalSectorsBlocker.h"
 #import "StBlock.h"
+#import "StAnaylizer.h"
 
 @implementation OS9LogicalSectorsBlocker
 
@@ -38,12 +39,12 @@
 
 + (NSString *)blockerPopoverAccessoryViewNib
 {
-    return nil;
+    return @"OS9LogicalSectorsViewController";
 }
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] init] autorelease];
+    return [NSMutableDictionary dictionaryWithObjectsAndKeys:@"5000", @"maxLSNCount", nil];
 }
 
 + (NSString *)blockerGroup
@@ -55,6 +56,7 @@
 {
 #pragma unused (anaylizer)
     unsigned sectorStartID;
+    NSString *result = nil;
     
     NSString *firstSector = @"Track * 0 Side * 0 Sector * 0";
     NSString *alternateFirstSector = @"Track * 0 Side * 0 Sector * 1";
@@ -85,6 +87,8 @@
         return @"LSN 0 too short.";
     }
 
+    NSUInteger maxLSNCount = [[anaylizer.optionsDictionary valueForKeyPath:@"OS9LogicalSectorsBlocker.maxLSNCount"] intValue];
+    
     StBlock *newLSN = [stream startNewBlockNamed:[NSString stringWithFormat:@"LSN 0"] owner:[OS9LogicalSectorsBlocker blockerKey]];
   
     [newLSN addAttributeRange:firstSector start:0x0 length:3 name:@"dd.tot" verification:nil transformation:@"BlocksUnsignedBigEndian"];
@@ -192,6 +196,11 @@
     totalSectorCount += lsn0[1] << 8;
     totalSectorCount += lsn0[2];
     
+    if (totalSectorCount > maxLSNCount) {
+        result = [NSString stringWithFormat:@"Stopped short at LSN %d. Maximum specified in stream: LSN %d", maxLSNCount, totalSectorCount];
+    }
+    totalSectorCount = MIN(maxLSNCount, totalSectorCount);
+    
     unsigned sides = lsn0[0x10] & 1;
     
     while( lsnNumber < totalSectorCount )
@@ -219,7 +228,7 @@
         side++;
     }
     
-    return @"";
+    return result;
 }
 
 @end
