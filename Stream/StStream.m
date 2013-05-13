@@ -272,7 +272,6 @@
     [[[self lastFilterAnayliser] failIndexSet] removeAllIndexes];
     
     [self willChangeValueForKey:@"blocks"];
-    
     /* Regenerate blocks using blockers */
     for( StAnaylizer *anAna in [self anaylizers] )
     {
@@ -331,37 +330,10 @@
             }
             
             /* delete marked blocks */
-            for (StBlock *aBlock in resultBlockArray)
-            {
-                if( aBlock.source == nil )
-                {
-                    if( aBlock.parentStream != nil )
-                    {
-                        /* This is a top level block */
-                        [self removeBlocksObject:aBlock];
-                        [[self managedObjectContext] deleteObject:aBlock];
-//                        NSMutableSet *parentStreamBlocks = [aBlock.parentStream mutableSetValueForKey:@"blocks"];
-//                        [parentStreamBlocks removeObject:aBlock];
-                    }
-//                    else
-//                    {
-//                        /* This is a midlevel block */
-//                        if ([aBlock.parentBlock.blocks containsObject:aBlock]) {
-//                            [[aBlock parentBlock] removeBlocksObject:aBlock];
-//                        }
-////                        NSMutableSet *parentBlockSet = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
-////                        [parentBlockSet removeObject:aBlock];
-//                    }
-//                }
-//                else
-//                {
-//                    /* This is a leaf block */
-//                    if ([aBlock.parentBlock.blocks containsObject:aBlock]) {
-//                        [[aBlock parentBlock] removeBlocksObject:aBlock];
-//                    }
-////                    NSMutableSet *parentBlockSet = [aBlock.parentBlock mutableSetValueForKey:@"blocks"];
-////                    [parentBlockSet removeObject:aBlock];
-                }
+            [self removeBlocks:[NSSet setWithArray:resultBlockArray]];
+            
+            for (StBlock *aBlock in resultBlockArray) {
+                [[self managedObjectContext] deleteObject:aBlock];
             }
         }
         

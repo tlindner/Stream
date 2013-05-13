@@ -204,7 +204,9 @@
         [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:self];
         lastFilterAnaylizer = [[[[self representedObject] parentStream] lastFilterAnayliser] retain];
         [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
-        [[self representedObject] addObserver:self forKeyPath:@"viewRange" options:NSKeyValueChangeSetting context:self];
+        StAnaylizer *theAna = [self representedObject];
+        [theAna addObserver:self forKeyPath:@"viewRange" options:NSKeyValueChangeSetting context:self];
+        [theAna.parentStream addObserver:self forKeyPath:@"blocks" options:NSKeyValueChangeSetting context:self];
         
     }
 
@@ -217,7 +219,9 @@
     {
         [treeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
         [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
-        [[self representedObject] removeObserver:self forKeyPath:@"viewRange" context:self];
+        StAnaylizer *theAna = [self representedObject];
+        [theAna removeObserver:self forKeyPath:@"viewRange" context:self];
+        [theAna.parentStream removeObserver:self forKeyPath:@"blocks" context:self];
         [lastFilterAnaylizer release];
     }
     
@@ -369,6 +373,9 @@
         if ([selectionIndexPaths count] > 0) {
             [[self treeController] setSelectionIndexPaths:selectionIndexPaths];
         }
+    }
+    else if ([keyPath isEqualToString:@"blocks"]) {
+        [self.editorViewController reloadView];
     }
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

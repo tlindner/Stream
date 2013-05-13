@@ -59,6 +59,26 @@
 
 - (void) reloadView
 {
+    if( observationsActive )
+    {
+        StAnaylizer *theAna = [self representedObject];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.readOnly"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
+        [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
+        if( lastAnaylizer != nil )
+        {
+            [lastAnaylizer removeObserver:self forKeyPath:@"editIndexSet"];
+            [lastAnaylizer release];
+            lastAnaylizer = nil;
+        }
+        
+        HFTextView *hexView = (HFTextView *)[self view];
+        [hexView removeObserver:self forKeyPath:@"data"];
+        
+        observationsActive = NO;
+    }
+
     HFTextView *hexView = (HFTextView *)[self view];
     HexFiendAnaylizer *modelObject = (HexFiendAnaylizer *)[[self representedObject] anaylizerObject];
    

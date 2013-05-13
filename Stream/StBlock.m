@@ -427,11 +427,10 @@ static NSColor *failColor;
 - (NSData *)resultingData
 {
     NSMutableData *result;
-    NSData *_resultingData = [self primitiveResultingData];// [self primitiveValueForKey:@"resultingData"];
+    NSData *_resultingData = [self primitiveResultingData];
     
     if (_resultingData == nil)
     {
-//        NSLog( @"resulting data miss for: %@", self );
         if( self.source == nil )
         {
             if( self.parentStream != nil )
@@ -482,7 +481,6 @@ static NSColor *failColor;
             [result autorelease];
         }
 
-//        [self setPrimitiveValue:result forKey:@"resultingData"];
         [self setPrimitiveResultingData:result];
     }
     else {
@@ -845,9 +843,32 @@ static NSColor *failColor;
     self.attributeColor = nil;
     self.resultingData = nil;
     self.unionRange = nil;
+    self.expectedSize = 0;
     
-    /* No longer doing this recusevely */
-//    [[self.blocks array] makeObjectsPerformSelector:@selector(makeMarkForDeletion)];
+    if (dataSubBlock)
+    {
+        dataSubBlock.markForDeletion = YES;
+        dataSubBlock.attributeColor = nil;
+        dataSubBlock.resultingData = nil;
+        dataSubBlock.unionRange = nil;
+        dataSubBlock.expectedSize = 0;
+    }
+    
+    if (attrSubBlock)
+    {
+        attrSubBlock.attributeColor = nil;
+        attrSubBlock.resultingData = nil;
+        attrSubBlock.unionRange = nil;
+        attrSubBlock.expectedSize = 0;
+    }
+    
+    if (depSubBlock)
+    {
+        depSubBlock.attributeColor = nil;
+        depSubBlock.resultingData = nil;
+        depSubBlock.unionRange = nil;
+        depSubBlock.expectedSize = 0;
+    }
 }
 
 - (void)willTurnIntoFault
