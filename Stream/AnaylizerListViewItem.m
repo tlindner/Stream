@@ -137,7 +137,6 @@
 {
     if (self.editorController != nil) {
         [self.editorController.view removeFromSuperview];
-        [self.editorController setRepresentedObject:nil];
         self.editorController = nil;
     }
     

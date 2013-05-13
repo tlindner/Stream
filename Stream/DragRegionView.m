@@ -140,12 +140,14 @@
 
 - (void)swapIn
 {
-    NSImageView *imageView = [[customView subviews] objectAtIndex:0];
-    [imageView removeFromSuperview];
-    [retainView setFrameSize:[customView frame].size];
-    [customView addSubview:retainView];
-    [retainView release];
-    retainView = nil;
+    if ([[customView subviews] count] > 0) {
+        NSImageView *imageView = [[customView subviews] objectAtIndex:0];
+        [imageView removeFromSuperview];
+        [retainView setFrameSize:[customView frame].size];
+        [customView addSubview:retainView];
+        [retainView release];
+        retainView = nil;
+    }
 }
 
 - (void)setCustomSubView:(NSView *)theView paneExpanded:(BOOL)paneExpanded

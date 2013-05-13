@@ -69,4 +69,9 @@
     return [BlockerDataViewController class];
 }
 
+- (NSData *)resultingData
+{
+    return nil;
+}
+
 @end

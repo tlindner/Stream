@@ -192,7 +192,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (parentBlock == nil) AND (anaylizerKind == %@)", theAna.parentStream, theAna.anaylizerKind ];
     [treeController setFetchPredicate:predicate];
 
-    NSAssert(self.observing == NO, @"BlockAttributeView: double observer fault");
+//    NSAssert(self.observing == NO, @"BlockAttributeView: double observer fault");
     
     [self startObserving];
 }

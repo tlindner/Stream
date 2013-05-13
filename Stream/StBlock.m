@@ -852,6 +852,7 @@ static NSColor *failColor;
         dataSubBlock.resultingData = nil;
         dataSubBlock.unionRange = nil;
         dataSubBlock.expectedSize = 0;
+        if ([dataSubBlock.blocks count] > 0) [[dataSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
     }
     
     if (attrSubBlock)
@@ -860,6 +861,7 @@ static NSColor *failColor;
         attrSubBlock.resultingData = nil;
         attrSubBlock.unionRange = nil;
         attrSubBlock.expectedSize = 0;
+        if ([attrSubBlock.blocks count] > 0) [[attrSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
     }
     
     if (depSubBlock)
@@ -868,6 +870,7 @@ static NSColor *failColor;
         depSubBlock.resultingData = nil;
         depSubBlock.unionRange = nil;
         depSubBlock.expectedSize = 0;
+        if ([depSubBlock.blocks count] > 0) [[depSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
     }
 }
 

@@ -370,8 +370,6 @@
             newAnaylizer.paneExpanded = NO;
         }
         
-        [theSet addObject:newAnaylizer];
-
         Class blockerClass = NSClassFromString([newAnaylizer valueForKey:@"anaylizerKind"]);
          
         if (blockerClass != nil )
@@ -384,6 +382,8 @@
         else
             NSLog( @"Could not create class: %@", [newAnaylizer valueForKey:@"anaylizerKind"] );
 
+        [theSet addObject:newAnaylizer];
+        
         [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Blocker “%@”", newAnaylizer.anaylizerKind]];
     }
 }
