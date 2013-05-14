@@ -43,6 +43,7 @@ NSString *DoFileFD( NSUInteger dd_tot,  StStream *stream, NSString *fdLSN, NSStr
 - (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
+    NSString *result = nil;
     StBlock *lsn0block = [stream topLevelBlockNamed:@"LSN 0"];
     
     if (lsn0block == nil) {
@@ -64,13 +65,13 @@ NSString *DoFileFD( NSUInteger dd_tot,  StStream *stream, NSString *fdLSN, NSStr
         
         NSUInteger dd_tot = (lsn0[0] << 16) + (lsn0[1] << 8) + lsn0[2];
         
-        return DoFileFD( dd_tot, stream, [NSString stringWithFormat:@"LSN %d", dd_dir], @"", logicalSectorSize );
+        result = DoFileFD( dd_tot, stream, [NSString stringWithFormat:@"LSN %d", dd_dir], @"", logicalSectorSize );
     }
     else {
-        return @"LSN 0 too short";
+        result =  @"LSN 0 too short";
     }
     
-    return @"";
+    return result;
 }
 
 @end
@@ -131,24 +132,24 @@ NSString *DoFileFD( NSUInteger dd_tot, StStream *stream, NSString *fdLSN, NSStri
         {
             for (unsigned i=0; i < 48; i++) {
                 
-                unsigned lsn = fd[0x10 + (i*5) + 0] << 16;
-                lsn += fd[0x10 + (i*5) + 1] << 8;
+                unsigned lsn = (fd[0x10 + (i*5) + 0]) << 16;
+                lsn += (fd[0x10 + (i*5) + 1]) << 8;
                 lsn += fd[0x10 + (i*5) + 2];
                 
-                unsigned size = fd[0x10 + (i*5) + 3] << 8;
+                unsigned size = (fd[0x10 + (i*5) + 3]) << 8;
                 size += fd[0x10 + (i*5) + 4];
                 
                 if (lsn == 0) break;
-                
-                if (lsn+size > dd_tot) {
-                    [result appendFormat:@"\nFile: %@ had bad segment %d, length last end of logical sectors: %d", blockName, i, lsn+size];
-                    break;
-                }
                 
                 NSString *fdSegLSNString = [NSString stringWithFormat:@"fd.seg[%d].lsn", i];
                 [newFileBlock addAttributeRange:fdLSN start:0x10 + (i*5) + 0 length:3 name:fdSegLSNString verification:nil transformation:@"BlocksUnsignedBigEndian"];
                 NSString *fdSegSizeString = [NSString stringWithFormat:@"fd.seg[%d].size", i];
                 [newFileBlock addAttributeRange:fdLSN start:0x10 + (i*5) + 3 length:2 name:fdSegSizeString verification:nil transformation:@"BlocksUnsignedBigEndian"];
+
+                if (lsn+size > dd_tot) {
+                    [result appendFormat:@"\nFile: %@ had bad segment %d, length last end of logical sectors: %d", blockName, i, lsn+size];
+                    break;
+                }
            
                 for (unsigned j=0; j<size; j++) {
                     NSString *segLSN = [NSString stringWithFormat:@"LSN %d", lsn + j];
@@ -182,11 +183,20 @@ NSString *DoFileFD( NSUInteger dd_tot, StStream *stream, NSString *fdLSN, NSStri
                         
                         if ([filename isEqualToString:@"."] || [filename isEqualToString:@".."]) {
                             /* Skip dot and souble dot files */
+                            i++;
+                            newDirLength -= 32;
+                            continue;
                         }
-                        else {
-                            NSString *fdLSN = [NSString stringWithFormat:@"LSN %d", lsn];
-                            [result appendString:DoFileFD( dd_tot, stream, fdLSN, [blockName stringByAppendingString:filename], logicalSectorSize )];
+                        
+                        if (lsn > dd_tot) {
+                            [result appendFormat:@"\nFile: %@, file descriptor sector (%d) past end of image (%d)", filename, lsn, dd_tot];
+                            i++;
+                            newDirLength -= 32;
+                            continue;
                         }
+                        
+                        NSString *fdLSN = [NSString stringWithFormat:@"LSN %d", lsn];
+                        [result appendString:DoFileFD( dd_tot, stream, fdLSN, [blockName stringByAppendingString:filename], logicalSectorSize )];
                     }
                     
                     i++;

@@ -37,6 +37,7 @@ static NSColor *failColor;
 @dynamic editSet;
 @dynamic attributeColor;
 @synthesize blocksArray;
+@synthesize actualBlockSizeCache;
 
 - (NSArray *)blocksArray
 {
@@ -59,25 +60,24 @@ static NSColor *failColor;
         subBlock = [self subBlockNamed:@"data"];
         if (subBlock != nil) {
             dataIndex = [subBlock.blocks count];
+            dataSubBlock = subBlock;
         }
         else {
-            dataSubBlock = subBlock;
             dataIndex = 0;
         }
         
         subBlock = [self subBlockNamed:@"attributes"];
         if (subBlock != nil) {
             attrIndex = [subBlock.blocks count];
+            attrSubBlock = subBlock;
         }
         else {
-            attrSubBlock = subBlock;
             attrIndex = 0;
         }
         
         subBlock = [self subBlockNamed:@"dependencies"];
         if (subBlock != nil) {
             depSubBlock = subBlock;
-            depIndex = [subBlock.blocks count];
         }
         else {
             depIndex = 0;
@@ -143,11 +143,13 @@ static NSColor *failColor;
     newBlock.length = length;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
+    newBlock.expectedSize = length;
+    attrSubBlock.expectedSize += length;
     
 //    [self checkEdited:newBlock];
 //    [self checkFail:newBlock];
     attrIndex++;
-    self.resultingData = nil;
+    attrSubBlock.resultingData = nil;
 }
 
 - (void) addDataRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length
@@ -223,12 +225,13 @@ static NSColor *failColor;
     newBlock.valueTransformer = transform;
     newBlock.repeat = repeat;
     newBlock.expectedSize = expectedLength;
-    self.expectedSize += expectedLength;
+    dataBlock.expectedSize = dataBlock.expectedSize + expectedLength;
     
 //    [self checkEdited:newBlock];
 //    [self checkFail:newBlock];
     dataIndex++;
     self.resultingData = nil;
+    dataBlock.resultingData = nil;
 }
 
 - (void) addDependenciesRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification:(NSData *)verify transformation:(NSString *)transform
@@ -267,12 +270,84 @@ static NSColor *failColor;
     newBlock.length = length;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
-    self.expectedSize += length;
+    depBlock.expectedSize += length;
     
 //    [self checkEdited:newBlock];
 //    [self checkFail:newBlock];
     depIndex++;
-    self.resultingData = nil;
+    depBlock.resultingData = nil;
+}
+
+- (NSUInteger)expectedBlockSize
+{
+    NSUInteger result;
+    
+    if( self.source == nil )
+    {
+        if( self.parentStream != nil )
+        {
+            /* top level */
+            result = dataSubBlock.expectedSize;
+            
+        } else {
+            /* mid level */
+            result = self.expectedSize;
+        }
+    }
+    else {
+        /* leaf */
+        return self.expectedSize;
+    }
+    
+    return result;
+}
+
+- (NSUInteger)actualBlockSize
+{
+    
+    NSUInteger result = actualBlockSizeCache;
+    
+    if (result == 0 ) {
+        if( self.source == nil ) {
+            if( self.parentStream != nil ) {
+                /* top level */
+                result = [dataSubBlock actualBlockSize];
+            } else {
+                /* mid level */
+                for (StBlock *aBlock in self.blocks) {
+                    result += [aBlock actualBlockSize];
+                }
+            }
+        } else {
+            /* leaf */
+            NSUInteger sourceLength;
+            if ([self.source isEqualToString:@"stream"]) {
+                sourceLength = [[[self.parentBlock.parentBlock.parentStream lastFilterAnayliser] resultingData] length];
+             } else {
+                sourceLength = [[self.parentBlock.parentBlock.parentStream topLevelBlockNamed:self.source] actualBlockSize];
+             }
+            
+            if (self.length > 0) {
+                if ((NSUInteger)self.offset + (NSUInteger)self.length < sourceLength) {
+                    result = self.length;
+                } else if ((NSUInteger)self.offset > sourceLength) {
+                    result = 0;
+                } else {
+                    result = sourceLength - self.offset;
+                }
+            } else {
+                if ((NSUInteger)self.offset < sourceLength) {
+                    result = sourceLength - self.offset;
+                } else {
+                    result = 0;
+                }
+            }
+        }
+        
+        actualBlockSizeCache = result;
+    }
+    
+    return result;
 }
 
 - (StBlock *)subBlockNamed:(NSString *)inName
@@ -519,25 +594,25 @@ static NSColor *failColor;
     return nil;
 }
 
-- (NSString *)description
-{
-    if( self.source == nil )
-    {
-        if( self.parentStream != nil )
-        {
-            return [NSString stringWithFormat:@"%p: Top level block named: %@", self, [self name]];
-        }
-        else
-        {
-            return [NSString stringWithFormat:@"%p: Mid level block:%@, named: %@", self, [[self parentBlock] name], [self name]];
-        }
-    }
-    else
-    {
-        NSUInteger index = [self.parentBlock.blocks indexOfObject:self];
-        return [NSString stringWithFormat:@"%p: Leaf block: %@, named: %@, index: %d, source: %@, start: %d, lenth: %d", self, [[[self parentBlock] parentBlock] name], [[self parentBlock] name], index, [self source], self.offset, self.length];
-    }
-}
+//- (NSString *)description
+//{
+//    if( self.source == nil )
+//    {
+//        if( self.parentStream != nil )
+//        {
+//            return [NSString stringWithFormat:@"%p: Top level block named: %@", self, [self name]];
+//        }
+//        else
+//        {
+//            return [NSString stringWithFormat:@"%p: Mid level block:%@, named: %@", self, [[self parentBlock] name], [self name]];
+//        }
+//    }
+//    else
+//    {
+//        NSUInteger index = [self.parentBlock.blocks indexOfObject:self];
+//        return [NSString stringWithFormat:@"%p: Leaf block: %@, named: %@, index: %d, source: %@, start: %d, lenth: %d", self, [[[self parentBlock] parentBlock] name], [[self parentBlock] name], index, [self source], self.offset, self.length];
+//    }
+//}
 
 - (NSOrderedSet *)getOrderedSetOfBlocks
 {
@@ -738,6 +813,10 @@ static NSColor *failColor;
                     }
                 }
             }
+
+            if ([self expectedBlockSize] != [self actualBlockSize]) {
+                _attributeColor = failColor;
+            }
             
             if (_attributeColor == nil) _attributeColor = [NSColor clearColor];
         }
@@ -844,7 +923,7 @@ static NSColor *failColor;
     self.resultingData = nil;
     self.unionRange = nil;
     self.expectedSize = 0;
-    
+    actualBlockSizeCache = 0;
     if (dataSubBlock)
     {
         dataSubBlock.markForDeletion = YES;
@@ -852,6 +931,7 @@ static NSColor *failColor;
         dataSubBlock.resultingData = nil;
         dataSubBlock.unionRange = nil;
         dataSubBlock.expectedSize = 0;
+        dataSubBlock.actualBlockSizeCache = 0;
         if ([dataSubBlock.blocks count] > 0) [[dataSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
     }
     
@@ -861,6 +941,7 @@ static NSColor *failColor;
         attrSubBlock.resultingData = nil;
         attrSubBlock.unionRange = nil;
         attrSubBlock.expectedSize = 0;
+        attrSubBlock.actualBlockSizeCache = 0;
         if ([attrSubBlock.blocks count] > 0) [[attrSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
     }
     
@@ -870,6 +951,7 @@ static NSColor *failColor;
         depSubBlock.resultingData = nil;
         depSubBlock.unionRange = nil;
         depSubBlock.expectedSize = 0;
+        depSubBlock.actualBlockSizeCache = 0;
         if ([depSubBlock.blocks count] > 0) [[depSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
     }
 }

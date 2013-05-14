@@ -98,10 +98,12 @@
     
     StAnaylizer *thePreviousAna = [(StAnaylizer *)[self representedObject] previousAnaylizer];
     [thePreviousAna willChangeValueForKey:@"viewRange"];
-    [thePreviousAna willChangeValueForKey:@"paneExpanded"];
+    if (thePreviousAna.paneExpanded == NO) {
+        [thePreviousAna willChangeValueForKey:@"paneExpanded"];
+        thePreviousAna.paneExpanded = YES;
+        [thePreviousAna didChangeValueForKey:@"paneExpanded"];
+    }
     thePreviousAna.viewRange = [NSValue valueWithRange:unionRange];
-    thePreviousAna.paneExpanded = YES;
-    [thePreviousAna didChangeValueForKey:@"paneExpanded"];
     [thePreviousAna didChangeValueForKey:@"viewRange"];
 }
 

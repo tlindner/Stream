@@ -192,10 +192,8 @@
     
     /* now generate the rest of the logical sectors */
 
-    unsigned totalSectorCount = lsn0[0] << 16;
-    totalSectorCount += lsn0[1] << 8;
-    totalSectorCount += lsn0[2];
-    
+    NSUInteger totalSectorCount = (lsn0[0] << 16) + (lsn0[1] << 8) + lsn0[2];
+
     if (totalSectorCount > maxLSNCount) {
         result = [NSString stringWithFormat:@"Stopped short at LSN %d. Maximum specified in stream: LSN %d", maxLSNCount, totalSectorCount];
     }

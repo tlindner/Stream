@@ -14,7 +14,7 @@
 
 @interface StBlock : StData
 {
-    NSUInteger dataIndex, attrIndex, depIndex;
+    NSUInteger dataIndex, attrIndex, depIndex, actualBlockSizeCache;
     StBlock *dataSubBlock, *attrSubBlock, *depSubBlock;
 }
 
@@ -39,6 +39,7 @@
 @property (nonatomic, readonly) NSMutableIndexSet *editSet;
 @property (nonatomic, readonly) NSArray *blocksArray;
 @property (nonatomic, retain) NSColor *attributeColor;
+@property (nonatomic) NSUInteger actualBlockSizeCache;
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name;
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification: (NSData *)verify;
