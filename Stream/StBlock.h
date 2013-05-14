@@ -16,6 +16,7 @@
 {
     NSUInteger dataIndex, attrIndex, depIndex, actualBlockSizeCache;
     StBlock *dataSubBlock, *attrSubBlock, *depSubBlock;
+    
 }
 
 @property (nonatomic) int64_t offset;
@@ -40,6 +41,7 @@
 @property (nonatomic, readonly) NSArray *blocksArray;
 @property (nonatomic, retain) NSColor *attributeColor;
 @property (nonatomic) NSUInteger actualBlockSizeCache;
+@property (nonatomic, retain) NSImage *icon;
 
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name;
 - (void) addAttributeRange:(NSString *)blockName start:(NSUInteger)start length:(NSUInteger)length name:(NSString *)name verification: (NSData *)verify;
@@ -71,6 +73,7 @@
 - (void)addSubBlocksObject:(StBlock *)value;
 - (void)makeMarkForDeletion;
 - (NSArray *)recursiveChildBlocks;
+- (NSImage *)icon;
 
 @end
 
@@ -92,6 +95,9 @@
 
 - (NSColor *)primitiveAttributeColor;
 - (void)setPrimitiveAttributeColor:(NSColor *)color;
+
+- (NSImage *)primitiveIcon;
+- (void)setPrimitiveIcon:(NSImage *)color;
 
 @end
 

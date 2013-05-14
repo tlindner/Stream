@@ -38,6 +38,7 @@ static NSColor *failColor;
 @dynamic attributeColor;
 @synthesize blocksArray;
 @synthesize actualBlockSizeCache;
+@dynamic icon;
 
 - (NSArray *)blocksArray
 {
@@ -836,6 +837,56 @@ static NSColor *failColor;
     
     return _attributeColor;
 }
+
+- (NSImage *)icon
+{
+    NSImage *_icon = [self primitiveIcon];
+    
+    if (_icon == nil) {
+        
+        if( self.source == nil )
+        {
+            /* top level block */  /* mid level block */
+            NSArray *childBlocks = [self recursiveChildBlocks];
+            
+            for (StBlock *aBlock in childBlocks) {
+                if ([[aBlock attributeColor] isEqualTo:failColor]) {
+                    _icon = [NSImage imageNamed:@"RedCrossIcon"];
+                    break;
+                }
+                
+                NSString *sourceString = [aBlock source];
+                if (![sourceString isEqualTo:@"stream"]) {
+                    if ([[[self.parentStream topLevelBlockNamed:sourceString] attributeColor] isEqualTo:failColor]) {
+                        _icon = [NSImage imageNamed:@"RedCrossIcon"];
+                        break;
+                    }
+                }
+            }
+            
+            if ([self expectedBlockSize] != [self actualBlockSize]) {
+                _icon = [NSImage imageNamed:@"RedCrossIcon"];
+            }
+            
+            if (_icon == nil) _icon = [NSImage imageNamed:@"BlockIconBlock"];
+        }
+        else
+        {
+            /* leaf block */
+            if ([self isFail]) {
+                _icon = [NSImage imageNamed:@"RedCrossIcon"];;
+            }
+            else {
+                _icon = [NSImage imageNamed:@"BlockIconBlock"];
+            }
+        }
+        
+        [self setPrimitiveIcon:_icon];
+    }
+
+    return _icon;
+}
+
 
 - (NSMutableIndexSet *)editSet
 {

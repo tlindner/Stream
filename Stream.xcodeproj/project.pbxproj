@@ -25,6 +25,11 @@
 		772C659013FEC0960060AB7F /* AnaylizerHand.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */; };
 		772C659113FEC0960060AB7F /* AnaylizerLupe.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */; };
 		774C74B7173F4FF600FD43ED /* DavidKeilDiskImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C74B6173F4FF600FD43ED /* DavidKeilDiskImage.m */; };
+		7751C81C17420100001A8A5F /* RedCrossGreenCheckIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C81617420100001A8A5F /* RedCrossGreenCheckIcon.tiff */; };
+		7751C81D17420100001A8A5F /* GreenCheckIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C81717420100001A8A5F /* GreenCheckIcon.tiff */; };
+		7751C81E17420100001A8A5F /* RedCrossIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C81817420100001A8A5F /* RedCrossIcon.tiff */; };
+		7751C82517420332001A8A5F /* NoIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C82317420331001A8A5F /* NoIcon.tiff */; };
+		7751C82D17420C54001A8A5F /* BlockIconBlock.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C82B17420C54001A8A5F /* BlockIconBlock.tiff */; };
 		7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
 		7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */; };
 		7759CF4313DBA1A300789DB3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF4213DBA1A300789DB3 /* main.m */; };
@@ -208,6 +213,16 @@
 		774A181613FAB01500510032 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		774C74B5173F4FF600FD43ED /* DavidKeilDiskImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DavidKeilDiskImage.h; path = Stream/DiskImageBlockers/DavidKeilDiskImage.h; sourceTree = "<group>"; };
 		774C74B6173F4FF600FD43ED /* DavidKeilDiskImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DavidKeilDiskImage.m; path = Stream/DiskImageBlockers/DavidKeilDiskImage.m; sourceTree = "<group>"; };
+		7751C81617420100001A8A5F /* RedCrossGreenCheckIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = RedCrossGreenCheckIcon.tiff; sourceTree = "<group>"; };
+		7751C81717420100001A8A5F /* GreenCheckIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = GreenCheckIcon.tiff; sourceTree = "<group>"; };
+		7751C81817420100001A8A5F /* RedCrossIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = RedCrossIcon.tiff; sourceTree = "<group>"; };
+		7751C81917420100001A8A5F /* RedCrossGreenCheckIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = RedCrossGreenCheckIcon.psd; sourceTree = "<group>"; };
+		7751C81A17420100001A8A5F /* GreenCheckIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = GreenCheckIcon.psd; sourceTree = "<group>"; };
+		7751C81B17420100001A8A5F /* RedCrossIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = RedCrossIcon.psd; sourceTree = "<group>"; };
+		7751C82317420331001A8A5F /* NoIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = NoIcon.tiff; sourceTree = "<group>"; };
+		7751C82417420331001A8A5F /* NoIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = NoIcon.psd; sourceTree = "<group>"; };
+		7751C82B17420C54001A8A5F /* BlockIconBlock.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = BlockIconBlock.tiff; sourceTree = "<group>"; };
+		7751C82C17420C54001A8A5F /* BlockIconBlock.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = BlockIconBlock.psd; sourceTree = "<group>"; };
 		7759CF3213DBA1A300789DB3 /* Stream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7759CF3613DBA1A300789DB3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		7759CF3913DBA1A300789DB3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -605,6 +620,16 @@
 		7759CF3D13DBA1A300789DB3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7751C82B17420C54001A8A5F /* BlockIconBlock.tiff */,
+				7751C82C17420C54001A8A5F /* BlockIconBlock.psd */,
+				7751C82317420331001A8A5F /* NoIcon.tiff */,
+				7751C82417420331001A8A5F /* NoIcon.psd */,
+				7751C81617420100001A8A5F /* RedCrossGreenCheckIcon.tiff */,
+				7751C81717420100001A8A5F /* GreenCheckIcon.tiff */,
+				7751C81817420100001A8A5F /* RedCrossIcon.tiff */,
+				7751C81917420100001A8A5F /* RedCrossGreenCheckIcon.psd */,
+				7751C81A17420100001A8A5F /* GreenCheckIcon.psd */,
+				7751C81B17420100001A8A5F /* RedCrossIcon.psd */,
 				779434C6173EA5E90090FD5F /* AlertIcon.psd */,
 				779434C7173EA5E90090FD5F /* AlertIcon.tiff */,
 				778A6DFC1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.h */,
@@ -1073,6 +1098,11 @@
 				779434C9173EA5E90090FD5F /* AlertIcon.tiff in Resources */,
 				779434D4173EDBFD0090FD5F /* BasicDiskImageViewController.xib in Resources */,
 				77F6044B1740ABCB00932477 /* OS9LogicalSectorsViewController.xib in Resources */,
+				7751C81C17420100001A8A5F /* RedCrossGreenCheckIcon.tiff in Resources */,
+				7751C81D17420100001A8A5F /* GreenCheckIcon.tiff in Resources */,
+				7751C81E17420100001A8A5F /* RedCrossIcon.tiff in Resources */,
+				7751C82517420332001A8A5F /* NoIcon.tiff in Resources */,
+				7751C82D17420C54001A8A5F /* BlockIconBlock.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
