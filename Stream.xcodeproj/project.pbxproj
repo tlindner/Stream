@@ -18,6 +18,7 @@
 		771AD2A0141D43AE00E0FE41 /* BlockAttributeAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */; };
 		771C998513F624DC00C3A263 /* AudioAnaylizer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 771C998413F624DC00C3A263 /* AudioAnaylizer.xib */; };
 		771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 771DC21A13F0374800579077 /* AudioAnaScrollView.m */; };
+		7720B79017448E1A00C85C98 /* MakeBlockOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7720B78F17448E1A00C85C98 /* MakeBlockOperation.m */; };
 		77263A8413F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77263A8213F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m */; };
 		77263A8713F721E400EBD507 /* HFAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77263A8613F721E400EBD507 /* HFAccessoryView.xib */; };
 		77263A8B13F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77263A8913F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m */; };
@@ -200,6 +201,8 @@
 		771C998413F624DC00C3A263 /* AudioAnaylizer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnaylizer.xib; path = Stream/AudioAnaylizer/AudioAnaylizer.xib; sourceTree = "<group>"; };
 		771DC21913F0374800579077 /* AudioAnaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaScrollView.h; path = Stream/AudioAnaScrollView.h; sourceTree = "<group>"; };
 		771DC21A13F0374800579077 /* AudioAnaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaScrollView.m; path = Stream/AudioAnaScrollView.m; sourceTree = "<group>"; };
+		7720B78E17448E1A00C85C98 /* MakeBlockOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MakeBlockOperation.h; sourceTree = "<group>"; };
+		7720B78F17448E1A00C85C98 /* MakeBlockOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MakeBlockOperation.m; sourceTree = "<group>"; };
 		77263A8113F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerSettingPopOverAccessoryViewController.h; path = Stream/AnaylizerSettingPopOverAccessoryViewController.h; sourceTree = "<group>"; };
 		77263A8213F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerSettingPopOverAccessoryViewController.m; path = Stream/AnaylizerSettingPopOverAccessoryViewController.m; sourceTree = "<group>"; };
 		77263A8613F721E400EBD507 /* HFAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HFAccessoryView.xib; path = Stream/HexFiend/HFAccessoryView.xib; sourceTree = "<group>"; };
@@ -613,6 +616,8 @@
 				778A598A14072E6A00B68EB4 /* AppDelegate.m */,
 				779434C2173E8CD00090FD5F /* Blockers.h */,
 				779434C3173E8CD00090FD5F /* Blockers.m */,
+				7720B78E17448E1A00C85C98 /* MakeBlockOperation.h */,
+				7720B78F17448E1A00C85C98 /* MakeBlockOperation.m */,
 			);
 			path = Stream;
 			sourceTree = "<group>";
@@ -1243,6 +1248,7 @@
 				77F6044217400AAB00932477 /* CoCoDeTokenBinaryBASIC.m in Sources */,
 				77F6044617400E5900932477 /* OS9DirectoryFile.m in Sources */,
 				77F6044A1740ABCB00932477 /* OS9LogicalSectorsViewController.m in Sources */,
+				7720B79017448E1A00C85C98 /* MakeBlockOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

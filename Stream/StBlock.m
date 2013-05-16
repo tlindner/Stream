@@ -297,6 +297,7 @@ static NSColor *failColor;
     }
     else {
         /* leaf */
+        
         return self.expectedSize;
     }
     
@@ -342,6 +343,10 @@ static NSColor *failColor;
                 } else {
                     result = 0;
                 }
+            }
+
+            if (self.repeat && result > 0) {
+                result = self.expectedSize;
             }
         }
         
@@ -517,7 +522,7 @@ static NSColor *failColor;
             else
             {
                 /* This is a midlevel block, return it's accumulated blocks */
-                result = [[[NSMutableData alloc] init] autorelease];
+                result = [NSMutableData data];
                 
                 for (StBlock *theBlock in self.blocks)
                 {
@@ -532,21 +537,21 @@ static NSColor *failColor;
             StStream *ourStream = [self getStream];
             NSData *blockData = [ourStream dataOfTopLevelBlockNamed:self.source];
             NSUInteger useLength;
-            
-            if( self.length == 0 )
-            {
-                /* length of zero means "to the end of the block" */
-                useLength = [blockData length] - self.offset;
+
+            if (self.offset < (int64_t)[blockData length]) {
+                if( self.length == 0 ) {
+                    useLength = [blockData length] - self.offset;
+                }
+                else {
+                    useLength = MIN((int64_t)[blockData length] - self.offset, self.length);
+                }
             }
-            else
-                useLength = self.length;
             
             NSRange theRange = NSMakeRange(self.offset, useLength);
             result = [[blockData subdataWithRange:theRange] mutableCopy];
             
-            NSUInteger exSz = self.expectedSize;
-            
-            if (self.repeat) {
+            if (self.repeat && useLength > 0) {
+                NSUInteger exSz = self.expectedSize;
                 while ([result length] < exSz) {
                     [result appendData:result];
                 }

@@ -49,10 +49,10 @@
     [super windowControllerDidLoadNib:aController];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
     
-    //    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
-    //    NSManagedObjectContext *newMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
-    //    [newMOC setPersistentStoreCoordinator:psc];
-    //    [self setManagedObjectContext:newMOC];
+//    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
+//    NSManagedObjectContext *newMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
+//    [newMOC setPersistentStoreCoordinator:psc];
+//    [self setManagedObjectContext:newMOC];
 
     [streamTreeControler addObserver:self forKeyPath:@"selectionIndexPaths" options:0 context:self];
     listView.prototypeItem = [[[AnaylizerListViewItem alloc] initWithNibName:@"AnaylizerListViewItem" bundle:nil] autorelease];
@@ -374,10 +374,12 @@
          
         if (blockerClass != nil )
         {
+            [selectedStream willChangeValueForKey:@"blocks"];
             [newAnaylizer addSubOptionsDictionary:[blockerClass blockerKey] withDictionary:[blockerClass defaultOptions]];
             Blockers *blocker = [[blockerClass alloc] init];
             newAnaylizer.errorString = [blocker makeBlocks:selectedStream withAnaylizer:newAnaylizer];
             [blocker release];
+            [selectedStream didChangeValueForKey:@"blocks"];
         }
         else
             NSLog( @"Could not create class: %@", [newAnaylizer valueForKey:@"anaylizerKind"] );
@@ -387,7 +389,7 @@
         [[[self managedObjectContext] undoManager] setActionName:[NSString stringWithFormat:@"Add Blocker “%@”", newAnaylizer.anaylizerKind]];
     }
 }
-
+    
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
 #pragma unused (alert, returnCode, contextInfo)    
