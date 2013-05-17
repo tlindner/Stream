@@ -135,7 +135,7 @@
     BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"] boolValue];
     [[hexView controller] setInOverwriteMode:overWriteMode];
     [[hexView controller] setEditable:!readOnly];
-    [self setEditContentRanges];
+//    [self setEditContentRanges];
     
     NSAssert(observationsActive == NO, @"HexFieldAnaylizerController: double observer fault");
     

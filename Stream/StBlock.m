@@ -313,7 +313,12 @@ static NSColor *failColor;
         if( self.source == nil ) {
             if( self.parentStream != nil ) {
                 /* top level */
-                result = [dataSubBlock actualBlockSize];
+                if (dataSubBlock != nil) {
+                    result = [dataSubBlock actualBlockSize];
+                } else {
+                    result = 0;
+                }
+                
             } else {
                 /* mid level */
                 for (StBlock *aBlock in self.blocks) {
@@ -517,7 +522,11 @@ static NSColor *failColor;
             if( self.parentStream != nil )
             {
                 /* This is a top level block, return data from data block */
-                result = (NSMutableData *)[dataSubBlock resultingData];
+                if( dataSubBlock != nil ) {
+                    result = (NSMutableData *)[dataSubBlock resultingData];
+                } else {
+                    result = [NSData data];
+                }
             }
             else
             {
@@ -537,7 +546,8 @@ static NSColor *failColor;
             StStream *ourStream = [self getStream];
             NSData *blockData = [ourStream dataOfTopLevelBlockNamed:self.source];
             NSUInteger useLength;
-
+            NSRange theRange;
+            
             if (self.offset < (int64_t)[blockData length]) {
                 if( self.length == 0 ) {
                     useLength = [blockData length] - self.offset;
@@ -545,12 +555,16 @@ static NSColor *failColor;
                 else {
                     useLength = MIN((int64_t)[blockData length] - self.offset, self.length);
                 }
+                
+                theRange = NSMakeRange(self.offset, useLength);
             }
-            
-            NSRange theRange = NSMakeRange(self.offset, useLength);
+            else {
+                theRange = NSMakeRange(0, 0);
+            }
+             
             result = [[blockData subdataWithRange:theRange] mutableCopy];
             
-            if (self.repeat && useLength > 0) {
+            if (self.repeat && [result length] > 0) {
                 NSUInteger exSz = self.expectedSize;
                 while ([result length] < exSz) {
                     [result appendData:result];
@@ -573,7 +587,12 @@ static NSColor *failColor;
 
 - (NSData *)getAttributeData
 {
-    return [attrSubBlock resultingData];
+    if (attrSubBlock != nil) {
+        return [attrSubBlock resultingData];
+
+    } else {
+        return [NSData data];
+    }
 }
 
 - (id)getAttributeDatawithUIName:(NSString *)name

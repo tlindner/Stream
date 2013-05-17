@@ -12,5 +12,8 @@
 #import "AppDelegate.h"
 
 @interface OS9FileBlocker : Blockers
+{
+    NSMutableIndexSet   *processedLSNs;
+}
 
 @end

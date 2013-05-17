@@ -75,13 +75,8 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
     
     sectorLastID = FindLastSector(stream, track, sectorStartID);
     unsigned trackZeroSize = sectorLastID - sectorStartID + 1;
-    
-    NSLog( @"First Track %lu, start: %lu, last: %lu", track, sectorStartID, sectorLastID );
-    
-    NSString *firstTrack = @"Track * %d Side * 0 Sector * %d";
-    NSString *genericTrack = @"Track * %d Side * %d Sector * %d";
-    
-    NSString *firstSectorName = [NSString stringWithFormat:firstTrack, track, sectorStartID];
+
+    NSString *firstSectorName = [NSString stringWithFormat:@"Track * %d Side * 0 Sector * %d", track, sectorStartID];
     StBlock *lsn0Block = [stream topLevelBlockNamed:firstSectorName];
     
     NSData *lsn0Data = [lsn0Block resultingData];
@@ -146,7 +141,7 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
     NSUInteger i;
     NSString *sectorName;
     
-    /* create bipmap block */
+    /* create bitmap block */
 //    unsigned short bitmapSize = lsn0[4] << 8;
 //    bitmapSize += lsn0[5];
 //    NSUInteger j;
@@ -156,17 +151,25 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
 //    j=1 + sectorStartID;
 //    
 //    while (i > logicalSectorSize) {
-//        sectorName = [NSString stringWithFormat:firstTrack, j];
+//        sectorName = [NSString stringWithFormat:@"Track * %d Side * 0 Sector * %d", track, j];
 //        [fat addDataRange:sectorName start:0 length:0 expectedLength:logicalSectorSize];
 //        
 //        i -= logicalSectorSize;
 //        j++;
 //    }
 //    
-//    sectorName = [NSString stringWithFormat:firstTrack, j];
+//    sectorName = [NSString stringWithFormat:@"Track * %d Side * 0 Sector * %d", track, j];
 //    [fat addDataRange:sectorName start:0 length:i];
     
     /* now generate all of track zeros LSNs (track zero, side zero is special, it can be short) */
+    
+    NSUInteger totalSectorCount = (lsn0[0] << 16) + (lsn0[1] << 8) + lsn0[2];
+    
+    if (totalSectorCount > maxLSNCount) {
+        result = [NSString stringWithFormat:@"Stopped short at LSN %d. Maximum specified in stream: LSN %d", maxLSNCount, totalSectorCount];
+    }
+    
+    totalSectorCount = MIN(maxLSNCount, totalSectorCount);
     
     unsigned sector, side, lsnNumber;
     NSString *blockName;
@@ -175,35 +178,28 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
     side = 0;
     lsnNumber = 1;
     
-    NSLog( @"Track zero size: %d", trackZeroSize );
-    
     for (i=1; i<trackZeroSize; i++) {
         blockName = [NSString stringWithFormat:@"LSN %d", lsnNumber];
-        sectorName = [NSString stringWithFormat:firstTrack, track, sector];
+        sectorName = [NSString stringWithFormat:@"Track * %d Side * 0 Sector * %d", track, sector];
         newLSN = [stream startNewBlockNamed:blockName owner:[OS9LogicalSectorsBlocker blockerKey]];
         [newLSN addDataRange:sectorName start:0 length:0 expectedLength:logicalSectorSize];
         
         lsnNumber++;
         sector++;
+
+        if (lsnNumber >= totalSectorCount) {
+            break;
+        }
     }
     
     unsigned trackSizeInSectors = lsn0[0x3];
     side++;
-    
-    NSUInteger totalSectorCount = (lsn0[0] << 16) + (lsn0[1] << 8) + lsn0[2];
-
-    if (totalSectorCount > maxLSNCount) {
-        result = [NSString stringWithFormat:@"Stopped short at LSN %d. Maximum specified in stream: LSN %d", maxLSNCount, totalSectorCount];
-    }
-    totalSectorCount = MIN(maxLSNCount, totalSectorCount);
     
     unsigned sides = lsn0[0x10] & 1;
     
     /* now generate the rest of the logical sectors */
     while( lsnNumber < totalSectorCount )
     {
-//        NSLog(@"Doing LSN #%d", lsnNumber);
-        
         if (side > sides) {
             side = 0;
             track++;
@@ -211,7 +207,7 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
         
         for (sector=sectorStartID; sector<trackSizeInSectors + sectorStartID; sector++) {
             blockName = [NSString stringWithFormat:@"LSN %d", lsnNumber];
-            sectorName = [NSString stringWithFormat:genericTrack, track, side, sector];
+            sectorName = [NSString stringWithFormat:@"Track * %d Side * %d Sector * %d", track, side, sector];
             newLSN = [stream startNewBlockNamed:blockName owner:[OS9LogicalSectorsBlocker blockerKey]];
             [newLSN addDataRange:sectorName start:0 length:0 expectedLength:logicalSectorSize];
             

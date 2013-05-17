@@ -11,7 +11,7 @@
 
 BOOL IsTextFileBasedOnName( NSString *filename );
 
-NSString *DoFileFD( NSUInteger dd_tot,  StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize );
+NSString *DoFileFD( NSMutableIndexSet *processedLSNs, NSUInteger dd_tot,  StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize );
 
 @implementation OS9FileBlocker
 
@@ -40,6 +40,15 @@ NSString *DoFileFD( NSUInteger dd_tot,  StStream *stream, NSString *fdLSN, NSStr
     return @"OS-9";
 }
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        processedLSNs = [[NSMutableIndexSet alloc] init];
+    }
+    return self;
+}
+
 - (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
@@ -65,7 +74,13 @@ NSString *DoFileFD( NSUInteger dd_tot,  StStream *stream, NSString *fdLSN, NSStr
         
         NSUInteger dd_tot = (lsn0[0] << 16) + (lsn0[1] << 8) + lsn0[2];
         
-        result = DoFileFD( dd_tot, stream, [NSString stringWithFormat:@"LSN %d", dd_dir], @"", logicalSectorSize );
+        if (![processedLSNs containsIndex:dd_dir]) {
+            [processedLSNs addIndex:dd_dir];
+            result = DoFileFD( processedLSNs, dd_tot, stream, [NSString stringWithFormat:@"LSN %d", dd_dir], @"", logicalSectorSize );
+        }
+        else {
+            result = @"\nFile descriptor LSN %d seen more than once.";
+        }
     }
     else {
         result =  @"LSN 0 too short";
@@ -74,9 +89,16 @@ NSString *DoFileFD( NSUInteger dd_tot,  StStream *stream, NSString *fdLSN, NSStr
     return result;
 }
 
+- (void)dealloc
+{
+    [processedLSNs release];
+    
+    [super dealloc];
+}
+
 @end
 
-NSString *DoFileFD( NSUInteger dd_tot, StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize )
+NSString *DoFileFD( NSMutableIndexSet *processedLSNs, NSUInteger dd_tot, StStream *stream, NSString *fdLSN, NSString *blockName, unsigned short logicalSectorSize )
 {
     StBlock *fdBlock = [stream topLevelBlockNamed:fdLSN];
     NSData *fdData = [fdBlock resultingData];
@@ -123,7 +145,7 @@ NSString *DoFileFD( NSUInteger dd_tot, StStream *stream, NSString *fdLSN, NSStri
         if (fdLength > 0x10) [newFileBlock addAttributeRange:fdLSN start:0x0d length:3 name:@"fd.creat" verification:nil transformation:@"OS9Date"];
         
         unsigned long fileSize = fd[0x09];
-        fileSize <<= 32;
+        fileSize <<= 24;
         fileSize += fd[0x0a] << 16;
         fileSize += fd[0x0b] << 8;
         fileSize += fd[0x0c];
@@ -196,7 +218,14 @@ NSString *DoFileFD( NSUInteger dd_tot, StStream *stream, NSString *fdLSN, NSStri
                         }
                         
                         NSString *fdLSN = [NSString stringWithFormat:@"LSN %d", lsn];
-                        [result appendString:DoFileFD( dd_tot, stream, fdLSN, [blockName stringByAppendingString:filename], logicalSectorSize )];
+
+                        if (![processedLSNs containsIndex:lsn]) {
+                            [processedLSNs addIndex:lsn];
+                            [result appendString:DoFileFD( processedLSNs, dd_tot, stream, fdLSN, [blockName stringByAppendingString:filename], logicalSectorSize )];
+                        }
+                        else {
+                            [result appendString:@"\nFile descriptor LSN %d seen more than once."];
+                        }
                     }
                     
                     i++;
