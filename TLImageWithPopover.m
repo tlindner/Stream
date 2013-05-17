@@ -67,10 +67,6 @@ BOOL NilOrEmptyString( NSString *string );
 {
     if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
         [self setHidden:YES];
-    } else if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
-        [self setHidden:NO];
-    } else if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
-        [self setHidden:NO];
     } else {
         [self setHidden:NO];
     }
@@ -84,9 +80,9 @@ BOOL NilOrEmptyString( NSString *string );
     
     if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
         message = @"No Message";
-    } else if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
+    } else if (!NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
         message = self.errorMessage;
-    } else if (NilOrEmptyString(self.errorMessage) && NilOrEmptyString(self.errorMessage2)) {
+    } else if (NilOrEmptyString(self.errorMessage) && !NilOrEmptyString(self.errorMessage2)) {
         message = self.errorMessage2;
     } else {
         message = [NSString stringWithFormat:@"%@\n\n%@", self.errorMessage, self.errorMessage2];
@@ -118,10 +114,10 @@ BOOL NilOrEmptyString( NSString *string );
 
     [errorView insertText:whiteMessage];
     
-    NSPoint attachPoint = NSMakePoint(NSMidX([self bounds]), NSMaxY([self bounds]));
+    NSPoint attachPoint = NSMakePoint(NSMidX([self bounds]), NSMinY([self bounds]));
     attachPoint = [self convertPoint:attachPoint toView:nil];
     
-    MAAttachedWindow *attachedWindow = [[MAAttachedWindow alloc] initWithView:errorView attachedToPoint:attachPoint inWindow:[self window] onSide:MAPositionTop atDistance:-15.0];
+    MAAttachedWindow *attachedWindow = [[MAAttachedWindow alloc] initWithView:errorView attachedToPoint:attachPoint inWindow:[self window] onSide:MAPositionBottom atDistance:-15.0];
     [[self window] addChildWindow:attachedWindow ordered:NSWindowAbove];
     
     BOOL keepOn = YES;
@@ -133,12 +129,10 @@ BOOL NilOrEmptyString( NSString *string );
         switch ([theEvent type])
         {
             case NSLeftMouseDragged:
-                
                 break;
             case NSLeftMouseUp:
                 keepOn = NO;
                 break;
-                
             default:
                 break;
         }

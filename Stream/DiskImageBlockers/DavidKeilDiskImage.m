@@ -154,7 +154,7 @@ UInt16 ccitt_crc16_one( UInt16 crc, const UInt8 data );
                                     if (idamPosition+5+7+damPosition+2+(128<<sizeCode)+1 < trackLength ) {
                                         damCRC = ccitt_crc16(0xffff, &(bytes[bc+idamPosition+5+7+damPosition+2]), (128<<sizeCode)+1);
                                         damCRC_BE[0] = damCRC >> 8;
-                                        damCRC_BE[1] = damCRC & 0x0f;
+                                        damCRC_BE[1] = damCRC & 0xff;
                                         crcVerify = [NSData dataWithBytes:damCRC_BE length:2];
                                         [newSector addAttributeRange:@"stream" start:bc+idamPosition+5+7+damPosition+2 length:1 name:@"DAM" verification:nil transformation:@"BlocksUnsignedBigEndian"];
                                         [newSector addAttributeRange:@"stream" start:bc+idamPosition+5+7+damPosition+2+(128<<sizeCode)+1 length:2 name:@"Data CRC" verification:crcVerify transformation:@"BlocksUnsignedBigEndian"];

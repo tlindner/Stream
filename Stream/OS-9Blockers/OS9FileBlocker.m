@@ -169,7 +169,7 @@ NSString *DoFileFD( NSMutableIndexSet *processedLSNs, NSUInteger dd_tot, StStrea
                 [newFileBlock addAttributeRange:fdLSN start:0x10 + (i*5) + 3 length:2 name:fdSegSizeString verification:nil transformation:@"BlocksUnsignedBigEndian"];
 
                 if (lsn+size > dd_tot) {
-                    [result appendFormat:@"\nFile: %@ had bad segment %d, length last end of logical sectors: %d", blockName, i, lsn+size];
+                    [result appendFormat:@"\nFile: %@ had bad segment %d, length past end of logical sectors: %d", blockName, i, lsn+size];
                     break;
                 }
            
