@@ -217,4 +217,39 @@
     [blockSettingsViewController showPopover:blockSettingsButton];
 }
 
+- (void) suspendObservations
+{
+    [blockSettingsViewController suspendObservations];
+    [editorController suspendObservations];
+    
+    if ([self representedObject] != nil) {
+        [[self representedObject] removeObserver:self forKeyPath:@"currentEditorView" context:self];
+        [[self representedObject] removeObserver:self forKeyPath:@"paneExpanded" context:self];
+    }
+
+    if ([[[self representedObject] valueForKey:@"currentEditorView"] isEqualToString:@"Blocker View"]) {
+        BlockerDataViewController *blockerController = (BlockerDataViewController *)self.editorController;
+        blockTreeController = blockerController.treeController;
+        [blockTreeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
+    }
+}
+
+- (void) resumeObservations
+{
+    [blockSettingsViewController resumeObservations];
+    [editorController resumeObservations];
+    
+    if ([self representedObject] != nil) {
+        [[self representedObject] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+        [[self representedObject] addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
+    }
+    
+    if ([[[self representedObject] valueForKey:@"currentEditorView"] isEqualToString:@"Blocker View"]) {
+        BlockerDataViewController *blockerController = (BlockerDataViewController *)self.editorController;
+        blockTreeController = blockerController.treeController;
+        [blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
+    }
+}
+
+
 @end

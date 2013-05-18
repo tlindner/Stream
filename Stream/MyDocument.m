@@ -375,10 +375,12 @@
         if (blockerClass != nil )
         {
             [selectedStream willChangeValueForKey:@"blocks"];
+            [[[selectedStream anaylizers] array] makeObjectsPerformSelector:@selector(suspendObservations)];
             [newAnaylizer addSubOptionsDictionary:[blockerClass blockerKey] withDictionary:[blockerClass defaultOptions]];
             Blockers *blocker = [[blockerClass alloc] init];
             newAnaylizer.errorString = [blocker makeBlocks:selectedStream withAnaylizer:newAnaylizer];
             [blocker release];
+            [[[selectedStream anaylizers] array] makeObjectsPerformSelector:@selector(resumeObservations)];
             [selectedStream didChangeValueForKey:@"blocks"];
         }
         else

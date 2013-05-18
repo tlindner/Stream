@@ -224,6 +224,26 @@
     [modelObject zeroSamplesOrigin:origin width:width];
 }
 
+- (void) suspendObservations
+{
+    WaveFormView *wfv = [self.scroller documentView];
+    [wfv deactivateObservations];
+
+    StAnaylizer *theAna = [self representedObject];
+    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[theAna anaylizerObject];
+    [modelObject suspendObservations];
+}
+
+- (void) resumeObservations
+{
+    WaveFormView *wfv = [self.scroller documentView];
+    [wfv activateObservations];
+
+    StAnaylizer *theAna = [self representedObject];
+    CoCoAudioAnaylizer *modelObject = (CoCoAudioAnaylizer *)[theAna anaylizerObject];
+    [modelObject resumeObservations];
+}
+
 -(NSString *)nibName
 {
     return @"AudioAnaylizerViewController";

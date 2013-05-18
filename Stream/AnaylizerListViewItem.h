@@ -32,4 +32,7 @@
 - (IBAction)blockSetttings:(id)sender;
 - (void)loadStreamEditor;
 
+- (void) suspendObservations;
+- (void) resumeObservations;
+
 @end

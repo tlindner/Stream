@@ -38,6 +38,8 @@
 - (StAnaylizer *)previousAnaylizer;
 - (void) postEdit:(NSData *)data range:(NSRange)range;
 - (void) postEdit: (NSData *)data atLocation: (int64_t)location withLength: (int64_t)length;
+- (void) suspendObservations;
+- (void) resumeObservations;
 
 - (IBAction)ConfigurableButton1:(id)sender;
 - (IBAction)ConfigurableButton2:(id)sender;
@@ -76,6 +78,8 @@
 
 @interface NSViewController (StreamViewControllerExtras)
 - (void)reloadView;
+- (void) suspendObservations;
+- (void) resumeObservations;
 - (IBAction)ConfigurableButton1:(id)sender;
 - (IBAction)ConfigurableButton2:(id)sender;
 @end

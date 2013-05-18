@@ -59,13 +59,14 @@
 //    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
 //    [arrayController setSortDescriptors:[NSArray arrayWithObject:sd]];
     
-    NSAssert(observationsActive == NO, @"BlockAttributeView: double observer fault");
+//    NSAssert(observationsActive == NO, @"BlockAttributeView: double observer fault");
 
-    [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
-    lastFilterAnaylizer = (StData *)[[[theBlock getStream] lastFilterAnayliser] retain];
-    [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+//    [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
+//    lastFilterAnaylizer = (StData *)[[[theBlock getStream] lastFilterAnayliser] retain];
+//    [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
     
-    observationsActive = YES;
+//    observationsActive = YES;
+    [self resumeObservations];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -90,14 +91,7 @@
 {
 //    StAnaylizer *theAna = [self representedObject];
 //    theAna.viewController = nil;
-
-    if( observationsActive == YES )
-    {
-        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
-        [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
-        [lastFilterAnaylizer release];
-        observationsActive = NO;
-    }
+    [self suspendObservations];
     
     [super dealloc];
 }
@@ -107,6 +101,30 @@
     #pragma unused(aTableView)
     StBlock *theBlock = [self representedObject];
     return [[theBlock subBlockAtIndex:rowIndex] attributeColor];
+}
+
+- (void) suspendObservations
+{
+    if( observationsActive == YES )
+    {
+        [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
+        [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        [lastFilterAnaylizer release];
+        observationsActive = NO;
+    }
+}
+
+- (void) resumeObservations
+{
+    if( observationsActive == NO )
+    {
+        observationsActive = YES;
+        StBlock *theBlock = [self representedObject];
+        [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
+
+        lastFilterAnaylizer = (StData *)[[[theBlock getStream] lastFilterAnayliser] retain];
+        [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+    }
 }
 
 -(NSString *)nibName

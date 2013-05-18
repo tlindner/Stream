@@ -39,6 +39,9 @@
 - (void) reloadView;
 - (void) doubleClick:(id)nid;
 
+- (void) suspendObservations;
+- (void) resumeObservations;
+
 @end
 
 @interface NSTreeNode (OrderedExtension)

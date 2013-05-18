@@ -147,6 +147,16 @@
     }
 }
 
+- (void) suspendObservations
+{
+    [self stopObserving];
+}
+
+- (void) resumeObservations
+{
+    [self startObserving];
+}
+
 - (NSString *)nibName
 {
     return @"TextAnaylizerViewController";

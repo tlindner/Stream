@@ -294,6 +294,17 @@ NSURL *MakeTemporaryFile( NSString *pattern );
     }
 }
 
+- (void) suspendObservations
+{
+    [[self viewController] suspendObservations];
+}
+
+- (void) resumeObservations
+{
+    [[self viewController] resumeObservations];
+    
+}
+
 - (IBAction)ConfigurableButton1:(id)sender
 {
     if( [self.viewController respondsToSelector:@selector(ConfigurableButton1:)] )

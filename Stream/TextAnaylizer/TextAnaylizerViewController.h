@@ -20,4 +20,7 @@
 - (void)reloadView;
 - (NSString *) transformInput;
 
+- (void) suspendObservations;
+- (void) resumeObservations;
+
 @end

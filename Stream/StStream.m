@@ -272,6 +272,8 @@
     [[[self lastFilterAnayliser] failIndexSet] removeAllIndexes];
     
     [self willChangeValueForKey:@"blocks"];
+    [[[self anaylizers] array] makeObjectsPerformSelector:@selector(suspendObservations)];
+
     /* Regenerate blocks using blockers */
     for( StAnaylizer *anAna in [self anaylizers] )
     {
@@ -295,6 +297,7 @@
     /* delete any blocks still marked for deletion */
     [self deleteTopLevelBlocksMarkedForDeletion];
     
+    [[[self anaylizers] array] makeObjectsPerformSelector:@selector(resumeObservations)];
     [self didChangeValueForKey:@"blocks"];
 }
 

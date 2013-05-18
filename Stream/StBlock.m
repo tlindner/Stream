@@ -576,6 +576,7 @@ static NSColor *failColor;
             [result autorelease];
         }
 
+        actualBlockSizeCache = [result length];
         [self setPrimitiveResultingData:result];
     }
     else {

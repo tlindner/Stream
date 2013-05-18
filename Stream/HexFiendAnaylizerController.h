@@ -22,4 +22,7 @@
 - (void) reloadView;
 - (void) setEditContentRanges;
 
+- (void) suspendObservations;
+- (void) resumeObservations;
+
 @end

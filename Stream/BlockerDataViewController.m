@@ -445,4 +445,16 @@
     return @"BlockerDataViewController";
 }
 
+- (void) suspendObservations
+{
+    [editorViewController suspendObservations];
+    [self stopObserving];
+}
+
+- (void) resumeObservations
+{
+    [self startObserving];
+    [editorViewController resumeObservations];
+}
+
 @end

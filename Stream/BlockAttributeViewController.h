@@ -23,5 +23,7 @@
 @property (assign) IBOutlet StBlockFormatter *blockFormatter;
 
 - (void) reloadView;
+- (void) suspendObservations;
+- (void) resumeObservations;
 
 @end

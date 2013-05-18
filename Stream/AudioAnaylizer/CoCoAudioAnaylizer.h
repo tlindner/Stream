@@ -43,4 +43,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 - (void) determineFrequencyOrigin:(NSUInteger)origin width:(NSUInteger)width;
 - (void) zeroSamplesOrigin:(NSUInteger)origin width:(NSUInteger)width;
 
+- (void) suspendObservations;
+- (void) resumeObservations;
+
 @end

@@ -27,4 +27,7 @@
 - (IBAction)ConfigurableButton1:(id)sender;
 - (void)anaylizerIsDeallocating;
 
+- (void) suspendObservations;
+- (void) resumeObservations;
+
 @end
