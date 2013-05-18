@@ -14,7 +14,7 @@
 }
 
 @property (retain) NSURL *textFileURL;
-@property (assign) NSTextView *textView;
+@property (assign) NSScrollView *textScrollView;
 
 @property (assign) IBOutlet NSPopover *popover;
 @property (assign) IBOutlet NSPopUpButton *popupButton;

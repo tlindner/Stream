@@ -113,7 +113,7 @@
                     }
                     
                     if (foundTxt == NO) {
-                        /* Create URL pointing to a text file the doesn't exist. */
+                        /* Create URL pointing to a text file that doesn't exist. */
                         [self.pictureURLs addObject:[baseFolder URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.txt", baseFilenameString]]];
                     }
                     
@@ -513,8 +513,7 @@
 
 - (IBAction)imagePopoverClick:(id)sender
 {
-    NSLog( @"imagePopoverlick: %@", sender );
-    
+#pragma unused (sender)
     if (self.imagePopoverNib == nil) {
         imagePopoverViewController = nil;
         self.imagePopoverNib = [[NSNib alloc] initWithNibNamed:@"StreamsPicturesPopover" bundle:nil];

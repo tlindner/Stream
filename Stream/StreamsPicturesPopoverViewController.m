@@ -20,7 +20,7 @@
 @synthesize imageView;
 @synthesize stepper;
 @synthesize textFileURL;
-@synthesize textView;
+@synthesize textScrollView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -95,7 +95,7 @@
     /* Save existing text */
     if (self.textFileURL != nil) {
         NSError *err = nil;
-        NSString *string = [[self.textView textStorage] string];
+        NSString *string = [[[self.textScrollView documentView] textStorage] string];
         [string writeToURL:self.textFileURL atomically:NO encoding:myEncoding error:&err];
         
         if (err != nil) {
@@ -104,10 +104,10 @@
     }
     
     /* tear down existing text view */
-    if (self.textView != nil)
+    if (self.textScrollView != nil)
     {
-        [self.textView removeFromSuperview];
-        self.textView = nil;
+        [self.textScrollView removeFromSuperview];
+        self.textScrollView = nil;
         self.textFileURL = nil;
         [self.imageView setHidden:NO];
     }
@@ -134,11 +134,17 @@
         [imageView setHidden:YES];
         NSRect textViewFrame = [imageView frame];
         textViewFrame = NSInsetRect(textViewFrame, 16, 16);
+        self.textScrollView = [[[NSScrollView alloc] initWithFrame:textViewFrame] autorelease];
+        [self.textScrollView setHasVerticalScroller:YES];
+        [self.textScrollView setHasHorizontalScroller:YES];
+        NSTextView *textView = [[[NSTextView alloc] initWithFrame:textViewFrame] autorelease];
         
-        self.textView = [[NSTextView alloc] initWithFrame:textViewFrame];
-        [self.textView setString:string];
-        [[self.textView textStorage] setFont:[NSFont userFixedPitchFontOfSize:14.0]];
-        [[self view] addSubview:self.textView];
+        textView = [[NSTextView alloc] initWithFrame:textViewFrame];
+        [self.textScrollView setDocumentView:textView];
+        [textView setString:string];
+        [[textView textStorage] setFont:[NSFont userFixedPitchFontOfSize:14.0]];
+        
+        [[self view] addSubview:self.textScrollView];
     }
 }
 
