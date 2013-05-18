@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "AnaylizerListViewItem.h"
 #import "Blockers.h"
+#import "StreamsPicturesPopoverViewController.h"
 
 @implementation MyDocument
 
@@ -23,9 +24,11 @@
 @synthesize zoomCursor;
 @synthesize listView;
 @synthesize leftSplitView;
-@synthesize imageView;
+@synthesize imageButton;
 @synthesize pictureURLs;
 @synthesize outlineView;
+@synthesize imagePopoverViewController;
+@synthesize imagePopoverNib;
 
 - (id)init
 {
@@ -89,6 +92,7 @@
                 id url = [observingStream sourceURL];
 
                 if (url != nil) {
+                    BOOL foundTxt = NO;
                     NSFileManager *fm = [NSFileManager defaultManager];
                     NSString *baseFilenameString = [[url URLByDeletingPathExtension] lastPathComponent];
                     NSURL *baseFolder = [url URLByDeletingLastPathComponent];
@@ -96,17 +100,26 @@
                     
                     if (folderContents != nil && [folderContents count] > 0) {
                         for (NSURL *aFile in folderContents) {
-                            if ([[[aFile URLByDeletingPathExtension] lastPathComponent] isEqualToString:baseFilenameString]) {
+                            if ([[[aFile URLByDeletingPathExtension] lastPathComponent] hasPrefix:baseFilenameString]) {
                                 if (![[aFile lastPathComponent] isEqualToString:[url lastPathComponent]]) {
                                     [self.pictureURLs addObject:aFile];
+                                    
+                                    if ([[[aFile pathExtension] lowercaseString] isEqualToString:@"txt"]) {
+                                        foundTxt = YES;
+                                    }
                                 }
                             }
                         }
                     }
                     
+                    if (foundTxt == NO) {
+                        /* Create URL pointing to a text file the doesn't exist. */
+                        [self.pictureURLs addObject:[baseFolder URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.txt", baseFilenameString]]];
+                    }
+                    
                     if ([self.pictureURLs count] > 0) {
                         NSImage *image = [[[NSImage alloc] initByReferencingURL:[self.pictureURLs objectAtIndex:0]] autorelease];
-                        [imageView setImage:image];
+                        [imageButton setImage:image];
                     }
                 }
             }
@@ -478,7 +491,7 @@
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)subview
 {
     #pragma unused(splitView)
-    if( subview == leftSplitView || subview == imageView)
+    if( subview == leftSplitView || subview == imageButton)
         return NO;
     else
         return YES;
@@ -496,6 +509,24 @@
     }
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowWillCloseNotification object:documentWindow];
+}
+
+- (IBAction)imagePopoverClick:(id)sender
+{
+    NSLog( @"imagePopoverlick: %@", sender );
+    
+    if (self.imagePopoverNib == nil) {
+        imagePopoverViewController = nil;
+        self.imagePopoverNib = [[NSNib alloc] initWithNibNamed:@"StreamsPicturesPopover" bundle:nil];
+        
+        if (![self.imagePopoverNib instantiateNibWithOwner:self topLevelObjects:nil]) {
+            NSLog(@"Warning! Could not load image popover nib file.\n");
+            return;
+        }
+    }
+    
+    imagePopoverViewController.representedObject = pictureURLs;
+    [imagePopoverViewController showPopover:self];
 }
 
 - (void)dealloc

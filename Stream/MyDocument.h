@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "SDListView.h"
 
-@class StBlock, StStream;
+@class StBlock, StStream, StreamsPicturesPopoverViewController;
 
 @interface MyDocument : NSPersistentDocument {
 
@@ -23,10 +23,12 @@
 @property (assign) IBOutlet NSSplitView *leftSplitView;
 @property (nonatomic, retain) NSCursor *zoomCursor;
 @property (assign) IBOutlet SDListView *listView;
-@property (assign) IBOutlet NSImageView *imageView;
+@property (assign) IBOutlet NSButton *imageButton;
 @property (assign) IBOutlet NSOutlineView *outlineView;
 @property (retain) StStream *observingStream;
 @property (nonatomic, retain) NSMutableArray *pictureURLs;
+@property (assign) IBOutlet StreamsPicturesPopoverViewController *imagePopoverViewController;
+@property (retain) NSNib *imagePopoverNib;
 
 
 - (IBAction)add:(id)sender;
@@ -36,5 +38,6 @@
 - (IBAction)removeAnaylizer:(id)sender;
 - (void) flushAnaylizer:(NSDictionary *)parameter;
 - (IBAction)makeSubStream:(id)sender;
+- (IBAction)imagePopoverClick:(id)sender;
 
 @end

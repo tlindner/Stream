@@ -31,6 +31,8 @@
 		7751C81E17420100001A8A5F /* RedCrossIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C81817420100001A8A5F /* RedCrossIcon.tiff */; };
 		7751C82517420332001A8A5F /* NoIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C82317420331001A8A5F /* NoIcon.tiff */; };
 		7751C82D17420C54001A8A5F /* BlockIconBlock.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C82B17420C54001A8A5F /* BlockIconBlock.tiff */; };
+		7754DD7E1747C14D00E090F0 /* StreamsPicturesPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7754DD7D1747C14D00E090F0 /* StreamsPicturesPopover.xib */; };
+		7754DD821747C2CE00E090F0 /* StreamsPicturesPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7754DD811747C2CE00E090F0 /* StreamsPicturesPopoverViewController.m */; };
 		7759CF3713DBA1A300789DB3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7759CF3613DBA1A300789DB3 /* Cocoa.framework */; };
 		7759CF4113DBA1A300789DB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7759CF3F13DBA1A300789DB3 /* InfoPlist.strings */; };
 		7759CF4313DBA1A300789DB3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7759CF4213DBA1A300789DB3 /* main.m */; };
@@ -226,6 +228,9 @@
 		7751C82417420331001A8A5F /* NoIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = NoIcon.psd; sourceTree = "<group>"; };
 		7751C82B17420C54001A8A5F /* BlockIconBlock.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = BlockIconBlock.tiff; sourceTree = "<group>"; };
 		7751C82C17420C54001A8A5F /* BlockIconBlock.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = BlockIconBlock.psd; sourceTree = "<group>"; };
+		7754DD7D1747C14D00E090F0 /* StreamsPicturesPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamsPicturesPopover.xib; sourceTree = "<group>"; };
+		7754DD801747C2CE00E090F0 /* StreamsPicturesPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamsPicturesPopoverViewController.h; sourceTree = "<group>"; };
+		7754DD811747C2CE00E090F0 /* StreamsPicturesPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamsPicturesPopoverViewController.m; sourceTree = "<group>"; };
 		7759CF3213DBA1A300789DB3 /* Stream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7759CF3613DBA1A300789DB3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		7759CF3913DBA1A300789DB3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -618,6 +623,9 @@
 				779434C3173E8CD00090FD5F /* Blockers.m */,
 				7720B78E17448E1A00C85C98 /* MakeBlockOperation.h */,
 				7720B78F17448E1A00C85C98 /* MakeBlockOperation.m */,
+				7754DD7D1747C14D00E090F0 /* StreamsPicturesPopover.xib */,
+				7754DD801747C2CE00E090F0 /* StreamsPicturesPopoverViewController.h */,
+				7754DD811747C2CE00E090F0 /* StreamsPicturesPopoverViewController.m */,
 			);
 			path = Stream;
 			sourceTree = "<group>";
@@ -1108,6 +1116,7 @@
 				7751C81E17420100001A8A5F /* RedCrossIcon.tiff in Resources */,
 				7751C82517420332001A8A5F /* NoIcon.tiff in Resources */,
 				7751C82D17420C54001A8A5F /* BlockIconBlock.tiff in Resources */,
+				7754DD7E1747C14D00E090F0 /* StreamsPicturesPopover.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1249,6 +1258,7 @@
 				77F6044617400E5900932477 /* OS9DirectoryFile.m in Sources */,
 				77F6044A1740ABCB00932477 /* OS9LogicalSectorsViewController.m in Sources */,
 				7720B79017448E1A00C85C98 /* MakeBlockOperation.m in Sources */,
+				7754DD821747C2CE00E090F0 /* StreamsPicturesPopoverViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
