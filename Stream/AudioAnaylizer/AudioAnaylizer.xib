@@ -492,7 +492,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="771725395">
 											<int key="NSCellFlags">68288064</int>
 											<int key="NSCellFlags2">272761856</int>
-											<string key="NSContents">DC Blocking</string>
+											<string key="NSContents">DC Blocking:</string>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:3936</string>
 											<reference key="NSControlView" ref="463130156"/>
@@ -536,7 +536,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="516491086">
 											<int key="NSCellFlags">68288064</int>
 											<int key="NSCellFlags2">272761856</int>
-											<string key="NSContents">Invert</string>
+											<string key="NSContents">Invert:</string>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:3936</string>
 											<reference key="NSControlView" ref="986562988"/>

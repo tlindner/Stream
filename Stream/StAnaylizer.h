@@ -40,6 +40,7 @@
 - (void) postEdit: (NSData *)data atLocation: (int64_t)location withLength: (int64_t)length;
 - (void) suspendObservations;
 - (void) resumeObservations;
+- (NSString *) descriptiveText;
 
 - (IBAction)ConfigurableButton1:(id)sender;
 - (IBAction)ConfigurableButton2:(id)sender;

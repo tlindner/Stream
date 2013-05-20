@@ -1,25 +1,23 @@
 //
-//  TextAnaylizer.h
+//  RawBitmapAnaylizer.h
 //  Stream
 //
-//  Created by tim lindner on 4/26/13.
+//  Created by tim lindner on 5/19/13.
 //  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "Analyzation.h"
-#import "StStream.h"
-#import "StAnaylizer.h"
-#import "StBlock.h"
 
-@interface TextAnaylizer : NSObject
+@class StAnaylizer;
+
+@interface RawBitmapAnaylizer : NSObject
 {
-    StAnaylizer *representedObject;
+    StAnaylizer *_representedObject;
 }
 
 @property (nonatomic, assign) StAnaylizer *representedObject;
 @property (nonatomic, retain) NSData *resultingData;
 
-- (NSString *)convertToString;
 - (void)anaylizeData;
+
 @end

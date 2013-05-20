@@ -34,7 +34,7 @@ static BOOL initialized = NO;
             [sharedSingleton addAnalyzer:@"DMKProcessSingleDensity"];
             [sharedSingleton addAnalyzer:@"CoCoDeTokenBinaryBASIC"];
             [sharedSingleton addAnalyzer:@"OS9DirectoryFile"];
-//            [sharedSingleton addAnalyzer:@"XXX"];
+            [sharedSingleton addAnalyzer:@"RawBitmapAnaylizer"];
 //            [sharedSingleton addAnalyzer:@"XXX"];
 //            [sharedSingleton addAnalyzer:@"XXX"];
             

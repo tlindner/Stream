@@ -74,4 +74,9 @@
     return nil;
 }
 
+- (void) anaylizeData
+{
+    /* Nothing to do */
+}
+
 @end

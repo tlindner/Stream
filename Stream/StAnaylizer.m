@@ -321,6 +321,11 @@ NSURL *MakeTemporaryFile( NSString *pattern );
     }
 }
 
+- (NSString *) descriptiveText
+{
+    return [NSString stringWithFormat:@"Anaylizer Kind: %@, Current Editor View: %@, Pane Expanded: %@, Pane Height: %f, Source UTI: %@, Resulting UTI: %@, Options Dictionary: %@", self.anaylizerKind, self.currentEditorView, self.paneExpanded ? @"Yes" : @"No", self.anaylizerHeight, self.sourceUTI, self.resultingUTI, self.optionsDictionary];
+}
+
 + (NSSet *)keyPathsForValuesAffectingTitle
 {
     return [NSSet setWithObjects:@"anaylizerKind", @"currentEditorView", nil];
@@ -345,7 +350,6 @@ NSURL *MakeTemporaryFile( NSString *pattern );
 {
     return [NSSet setWithObjects:@"anaylizerHeight", nil];
 }
-
 
 @end
 

@@ -38,6 +38,9 @@ static BOOL initialized = NO;
 //            [sharedSingleton addBlocker:@"XXX"];
 //            [sharedSingleton addBlocker:@"XXX"];
 //            [sharedSingleton addBlocker:@"XXX"];
+//            [sharedSingleton addBlocker:@"XXX"];
+//            [sharedSingleton addBlocker:@"XXX"];
+//            [sharedSingleton addBlocker:@"XXX"];
             
         }
     }

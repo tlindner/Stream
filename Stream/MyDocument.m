@@ -136,10 +136,10 @@
     }
 }
 
-+ (BOOL)autosavesInPlace
-{
-    return YES;
-}
+//+ (BOOL)autosavesInPlace
+//{
+//    return YES;
+//}
 
 - (IBAction)add:(id)sender
 {
@@ -526,6 +526,53 @@
     
     imagePopoverViewController.representedObject = pictureURLs;
     [imagePopoverViewController showPopover:self];
+}
+
+- (IBAction)makeAnaylizerSet:(id)sender
+{
+    NSLog( @"Make Anaylizer set: %@", sender );
+    NSArray *selectedObjects = [streamTreeControler selectedObjects];
+    
+    if( [selectedObjects count] > 0 )
+    {
+        [[NSApp delegate] makeAnaylizerSet:[selectedObjects objectAtIndex:0]];
+    }
+}
+
+- (IBAction)applyAnaylizerSet:(id)sender
+{
+    NSLog(@"MyDocument applyAnaylizerSet: %@", sender);
+    NSMenuItem *menuItem = sender;
+    NSManagedObject *anaSet = [menuItem representedObject];
+    NSMutableOrderedSet *anaSetAnaylizers = [anaSet mutableOrderedSetValueForKey:@"Anaylizers"];
+    
+    NSArray *selectedObjects = [streamTreeControler selectedObjects];
+    if( [selectedObjects count] > 0 )
+    {
+        StStream *selectedStream = [selectedObjects objectAtIndex:0];
+        NSMutableOrderedSet *anaylizers = [selectedStream mutableOrderedSetValueForKey:@"Anaylizers"];
+        [anaylizers removeAllObjects];
+        
+        for (StAnaylizer *sourceAna in anaSetAnaylizers) {
+            StAnaylizer *destAna = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:self.managedObjectContext];
+            destAna.anaylizerHeight = sourceAna.anaylizerHeight;
+            destAna.paneExpanded = sourceAna.paneExpanded;
+            destAna.anaylizerKind = sourceAna.anaylizerKind;
+            destAna.currentEditorView = sourceAna.currentEditorView;
+            destAna.readOnly = sourceAna.readOnly;
+            destAna.resultingUTI = sourceAna.resultingUTI;
+            destAna.sourceUTI = sourceAna.sourceUTI;
+
+            NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:sourceAna.optionsDictionary];
+            [destAna setValue:[NSKeyedUnarchiver unarchiveObjectWithData:archivedData] forKey:@"optionsDictionary"];
+            
+            [anaylizers addObject:destAna];
+            [destAna anaylizeData];
+        }
+        
+        [selectedStream regenerateAllBlocks];
+    }
+
 }
 
 - (void)dealloc

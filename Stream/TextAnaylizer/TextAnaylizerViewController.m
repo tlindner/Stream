@@ -75,7 +75,8 @@
     StData *object = [self representedObject];
     TextAnaylizer *modelObject = (TextAnaylizer *)[object anaylizerObject];
     
-    result = [modelObject anaylizeData:object.resultingData];
+    [modelObject anaylizeData];
+    result = [modelObject convertToString];
 
     if (result == nil || [result isEqualToString:@""]) {
         result = @"Unable to decode stream.";

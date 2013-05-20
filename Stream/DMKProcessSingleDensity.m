@@ -36,8 +36,11 @@
     return @"DMKProcessSingleDensity";
 }
 
-- (NSData *)anaylizeData:(NSData *)data
+- (void)anaylizeData
 {
+    [super anaylizeData];
+    NSData *data = self.resultingData;
+    
     unsigned const char *bytes = [data bytes];
     NSUInteger inputLength = [data length];
     
@@ -45,7 +48,7 @@
         StAnaylizer *theAna = self.representedObject;
         theAna.errorString = @"Stream less that DMK header in length. No Processing done.";
         self.resultingData = data;
-        return data;
+        return;
     }
     
     unsigned trackCount = bytes[1];
@@ -56,7 +59,7 @@
         StAnaylizer *theAna = self.representedObject;
         theAna.errorString = @"Calculated length of stream does not match actual stream length. No Processing done.";
         self.resultingData = data;
-        return data;
+        return;
     }
         
     NSMutableData *result = [[[NSMutableData alloc] init] autorelease];
@@ -85,7 +88,7 @@
                     theAna.errorString = [NSString stringWithFormat:@"IDAM offset %d on track index %d overflows track length. No Processing done.", idamIndex, trackIndex];
                     free(workBuffer);
                     self.resultingData = data;
-                    return data;
+                    return;
                 }
                 
                /* calculate end of sector data */
@@ -100,7 +103,7 @@
                         theAna.errorString = [NSString stringWithFormat:@"IDAM offset %d on track index %d overflows track length. No Processing done.", nextOffset, trackIndex];
                         free(workBuffer);
                         self.resultingData = data;
-                        return data;
+                        return;
                     }
                 }
 
@@ -120,7 +123,6 @@
     }
 
     self.resultingData = result;
-    return result;
 }
 
 @end

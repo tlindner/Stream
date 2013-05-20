@@ -25,6 +25,7 @@
 @property (nonatomic, retain) NSString *errorString;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
+- (void) anaylizeData;
 
 @end
 
@@ -38,4 +39,8 @@
 - (NSObject *)primitiveAnaylizerObject;
 - (void)setPrimitiveAnaylizerObject:(NSObject *)ao;
 
+@end
+
+@interface NSObject (AnaylizerObjectAdditions)
+- (void) anaylizeData;
 @end

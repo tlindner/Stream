@@ -43,31 +43,9 @@
     [self suspendObservations];
     HFTextView *hexView = (HFTextView *)[self view];
     HexFiendAnaylizer *modelObject = (HexFiendAnaylizer *)[[self representedObject] anaylizerObject];
-   
-    if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
-    {
-        StAnaylizer *object = [self representedObject];
-        [[hexView controller] setInOverwriteMode:NO];
-        [hexView setData:[modelObject anaylizeData:object.sourceData]];
-        [self setupRepresentedObject];
-    }
-    else if( [[self representedObject] isKindOfClass:[StBlock class]] )
-    {
-        StBlock *theBlock = [self representedObject];
-        lastAnaylizer = [[[theBlock getStream] lastFilterAnayliser] retain];
-        NSData *theData = [theBlock resultingData];
-        [[hexView controller] setInOverwriteMode:NO];
-        [hexView setData:[modelObject anaylizeData:theData]];
-        [self setupRepresentedObject];
-    }
-    else if( [[self representedObject] isKindOfClass:[NSData class]] )
-    {
-        NSData *theData = [self representedObject];
-        [[hexView controller] setInOverwriteMode:NO];
-        [hexView setData:theData];
-    }
-    else
-        NSLog( @"HexFiendAnaylizerController: Unknown type of represented object" );
+    [modelObject anaylizeData];
+    [hexView setData:[modelObject resultingData]];
+    [self setupRepresentedObject];
 }
 
 - (void) setupRepresentedObject

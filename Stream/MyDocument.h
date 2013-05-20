@@ -39,5 +39,7 @@
 - (void) flushAnaylizer:(NSDictionary *)parameter;
 - (IBAction)makeSubStream:(id)sender;
 - (IBAction)imagePopoverClick:(id)sender;
+- (IBAction)makeAnaylizerSet:(id)sender;
+- (IBAction)applyAnaylizerSet:(id)sender;
 
 @end

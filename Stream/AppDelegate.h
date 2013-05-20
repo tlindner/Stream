@@ -8,16 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
-@class StStream;
+@class StStream, NewAnaylizerSetWindowController, AnaylizerSetWindowController;
 
 @interface AppDelegate : NSObject
 {
-    NSMenu *blocksMenu;
+//    NSMenu *blocksMenu;
 }
 
 @property (assign) IBOutlet NSMenu *blocksMenu;
+@property (assign) IBOutlet NSMenu *setsMenu;
+@property (retain) NSManagedObjectContext *anaSetsContext;
+@property (retain) NewAnaylizerSetWindowController *anaylizerSetGetInformation;
+@property (retain) AnaylizerSetWindowController *manageAnaylizerWindowController;
 
 - (void) addBlockerMenu:(NSString *)classNameString;
+- (IBAction)makeAnaylizerSet:(id)sender;
+- (IBAction)manageAnaylizerSets:(id)sender;
+- (void) addAnaylizerSetMenu:(NSString *)name withGroup:(NSString *)group withKey:(NSString *)commandKey representedBy:(NSManagedObject *)representedObject;
+- (NSManagedObject *)anaylizerSetNamed:(NSString *)name;
 
 @end
 

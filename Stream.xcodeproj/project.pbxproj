@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7700637617128E730037055D /* AnaylizerPencil.tiff */; };
+		77086FA5174874E100C0BD48 /* AnaylizerSetWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FA3174874E100C0BD48 /* AnaylizerSetWindowController.m */; };
+		77086FA6174874E100C0BD48 /* AnaylizerSetWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77086FA4174874E100C0BD48 /* AnaylizerSetWindowController.xib */; };
+		77086FA91748810400C0BD48 /* NSFileManager+DirectoryLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FA81748810400C0BD48 /* NSFileManager+DirectoryLocations.m */; };
+		77086FAB17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77086FAA17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib */; };
+		77086FAE1748915900C0BD48 /* NewAnaylizerSetWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FAD1748915900C0BD48 /* NewAnaylizerSetWindowController.m */; };
+		77086FB117494B6F00C0BD48 /* StAnaSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FB017494B6F00C0BD48 /* StAnaSet.m */; };
 		770B6878173D9AB80097305E /* ArbitraryGroupBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B6877173D9AB80097305E /* ArbitraryGroupBlocker.m */; };
 		770B687C173D9B030097305E /* ArbitraryGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B687A173D9B030097305E /* ArbitraryGroupViewController.m */; };
 		770B687D173D9B030097305E /* ArbitraryGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 770B687B173D9B030097305E /* ArbitraryGroupViewController.xib */; };
@@ -91,6 +97,11 @@
 		779F74CC172478F500EC509B /* AnaylizerListViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 779F74CB172478F500EC509B /* AnaylizerListViewItem.xib */; };
 		77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */; };
 		77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */; };
+		77ABAF431749913000CE3C6F /* RawBitmapAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAF421749913000CE3C6F /* RawBitmapAnaylizer.m */; };
+		77ABAF47174991AC00CE3C6F /* RawBitmapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAF45174991AC00CE3C6F /* RawBitmapViewController.m */; };
+		77ABAF48174991AC00CE3C6F /* RawBitmapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAF46174991AC00CE3C6F /* RawBitmapViewController.xib */; };
+		77ABAF4A17499C8300CE3C6F /* RawBitmapAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAF4917499C8300CE3C6F /* RawBitmapAccessoryView.xib */; };
+		77ABAF4E1749C3F900CE3C6F /* ImageNotWorking.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAF4C1749C3F900CE3C6F /* ImageNotWorking.tiff */; };
 		77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77AE7556141568BD0052A93D /* BlockIcon.tiff */; };
 		77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */; };
 		77B617FD172B8A81008E8F1A /* TextAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B617FC172B8A81008E8F1A /* TextAnaylizer.m */; };
@@ -183,6 +194,16 @@
 
 /* Begin PBXFileReference section */
 		7700637617128E730037055D /* AnaylizerPencil.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerPencil.tiff; path = Stream/AudioAnaylizer/AnaylizerPencil.tiff; sourceTree = "<group>"; };
+		77086FA2174874E100C0BD48 /* AnaylizerSetWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerSetWindowController.h; path = Stream/AnaylizerSetWindowController.h; sourceTree = "<group>"; };
+		77086FA3174874E100C0BD48 /* AnaylizerSetWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerSetWindowController.m; path = Stream/AnaylizerSetWindowController.m; sourceTree = "<group>"; };
+		77086FA4174874E100C0BD48 /* AnaylizerSetWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerSetWindowController.xib; path = Stream/AnaylizerSetWindowController.xib; sourceTree = "<group>"; };
+		77086FA71748810400C0BD48 /* NSFileManager+DirectoryLocations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+DirectoryLocations.h"; sourceTree = "<group>"; };
+		77086FA81748810400C0BD48 /* NSFileManager+DirectoryLocations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+DirectoryLocations.m"; sourceTree = "<group>"; };
+		77086FAA17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NewAnaylizerSetDialog.xib; path = Stream/NewAnaylizerSetDialog.xib; sourceTree = "<group>"; };
+		77086FAC1748915900C0BD48 /* NewAnaylizerSetWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewAnaylizerSetWindowController.h; path = Stream/NewAnaylizerSetWindowController.h; sourceTree = "<group>"; };
+		77086FAD1748915900C0BD48 /* NewAnaylizerSetWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewAnaylizerSetWindowController.m; path = Stream/NewAnaylizerSetWindowController.m; sourceTree = "<group>"; };
+		77086FAF17494B6F00C0BD48 /* StAnaSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StAnaSet.h; path = Stream/StAnaSet.h; sourceTree = "<group>"; };
+		77086FB017494B6F00C0BD48 /* StAnaSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StAnaSet.m; path = Stream/StAnaSet.m; sourceTree = "<group>"; };
 		770B6876173D9AB80097305E /* ArbitraryGroupBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArbitraryGroupBlocker.h; path = "Stream/Generic Blockers/ArbitraryGroupBlocker.h"; sourceTree = "<group>"; };
 		770B6877173D9AB80097305E /* ArbitraryGroupBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ArbitraryGroupBlocker.m; path = "Stream/Generic Blockers/ArbitraryGroupBlocker.m"; sourceTree = "<group>"; };
 		770B6879173D9B030097305E /* ArbitraryGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArbitraryGroupViewController.h; path = "Stream/Generic Blockers/ArbitraryGroupViewController.h"; sourceTree = "<group>"; };
@@ -336,6 +357,14 @@
 		77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeViewController.h; path = Stream/BlockAttributeViewController.h; sourceTree = "<group>"; };
 		77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewController.m; path = Stream/BlockAttributeViewController.m; sourceTree = "<group>"; };
 		77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewController.xib; path = Stream/BlockAttributeViewController.xib; sourceTree = "<group>"; };
+		77ABAF411749913000CE3C6F /* RawBitmapAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RawBitmapAnaylizer.h; path = Stream/RawBitmapAnaylizer.h; sourceTree = "<group>"; };
+		77ABAF421749913000CE3C6F /* RawBitmapAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawBitmapAnaylizer.m; path = Stream/RawBitmapAnaylizer.m; sourceTree = "<group>"; };
+		77ABAF44174991AC00CE3C6F /* RawBitmapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RawBitmapViewController.h; path = Stream/RawBitmapViewController.h; sourceTree = "<group>"; };
+		77ABAF45174991AC00CE3C6F /* RawBitmapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawBitmapViewController.m; path = Stream/RawBitmapViewController.m; sourceTree = "<group>"; };
+		77ABAF46174991AC00CE3C6F /* RawBitmapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RawBitmapViewController.xib; path = Stream/RawBitmapViewController.xib; sourceTree = "<group>"; };
+		77ABAF4917499C8300CE3C6F /* RawBitmapAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RawBitmapAccessoryView.xib; path = Stream/RawBitmapAccessoryView.xib; sourceTree = "<group>"; };
+		77ABAF4B1749C3F900CE3C6F /* ImageNotWorking.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = ImageNotWorking.psd; path = Stream/ImageNotWorking.psd; sourceTree = "<group>"; };
+		77ABAF4C1749C3F900CE3C6F /* ImageNotWorking.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ImageNotWorking.tiff; path = Stream/ImageNotWorking.tiff; sourceTree = "<group>"; };
 		77AE7556141568BD0052A93D /* BlockIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = BlockIcon.tiff; sourceTree = "<group>"; };
 		77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerEdit.h; path = Stream/AnaylizerEdit.h; sourceTree = "<group>"; };
 		77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerEdit.m; path = Stream/AnaylizerEdit.m; sourceTree = "<group>"; };
@@ -510,6 +539,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		77086FA0174874A900C0BD48 /* AnaylizerSets */ = {
+			isa = PBXGroup;
+			children = (
+				77086FA2174874E100C0BD48 /* AnaylizerSetWindowController.h */,
+				77086FA3174874E100C0BD48 /* AnaylizerSetWindowController.m */,
+				77086FA4174874E100C0BD48 /* AnaylizerSetWindowController.xib */,
+				77086FAC1748915900C0BD48 /* NewAnaylizerSetWindowController.h */,
+				77086FAD1748915900C0BD48 /* NewAnaylizerSetWindowController.m */,
+				77086FAA17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib */,
+			);
+			name = AnaylizerSets;
+			sourceTree = "<group>";
+		};
 		770B6874173D9A200097305E /* Generic Blockers */ = {
 			isa = PBXGroup;
 			children = (
@@ -551,6 +593,7 @@
 				772D952814088129001A449B /* HexFiendAnaylizer */,
 				77B617F9172B8A4E008E8F1A /* TextAnaylizer */,
 				778E46EC172F649C00736D51 /* DisasemblerAnaylizer */,
+				77ABAF40174990AB00CE3C6F /* Raw Bitmap Anaylizer */,
 				778A59771406EE0700B68EB4 /* CoCoBlockers */,
 				77ED691217375CA90024397E /* OS-9Blockers */,
 				770B6874173D9A200097305E /* Generic Blockers */,
@@ -558,6 +601,7 @@
 				77614F3413DC9B6C00041279 /* Models */,
 				7788588B13EDC1B30057E042 /* AnaylizerUI */,
 				7759CF3C13DBA1A300789DB3 /* Stream */,
+				77086FA0174874A900C0BD48 /* AnaylizerSets */,
 				7759CF5F13DBA1A300789DB3 /* StreamTests */,
 				7759CF7913DBA1A300789DB3 /* StreamImporter */,
 				7759CF3513DBA1A300789DB3 /* Frameworks */,
@@ -633,6 +677,8 @@
 		7759CF3D13DBA1A300789DB3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				77086FA71748810400C0BD48 /* NSFileManager+DirectoryLocations.h */,
+				77086FA81748810400C0BD48 /* NSFileManager+DirectoryLocations.m */,
 				7751C82B17420C54001A8A5F /* BlockIconBlock.tiff */,
 				7751C82C17420C54001A8A5F /* BlockIconBlock.psd */,
 				7751C82317420331001A8A5F /* NoIcon.tiff */,
@@ -705,6 +751,8 @@
 			isa = PBXGroup;
 			children = (
 				7759CF5113DBA1A300789DB3 /* MyDocument.xcdatamodeld */,
+				77086FAF17494B6F00C0BD48 /* StAnaSet.h */,
+				77086FB017494B6F00C0BD48 /* StAnaSet.m */,
 				778A597C140703DB00B68EB4 /* StStream.h */,
 				778A597D140703DB00B68EB4 /* StStream.m */,
 				77C6562F173AA89C0022336D /* StData.h */,
@@ -858,6 +906,21 @@
 				771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */,
 			);
 			name = BlockAttributeView;
+			sourceTree = "<group>";
+		};
+		77ABAF40174990AB00CE3C6F /* Raw Bitmap Anaylizer */ = {
+			isa = PBXGroup;
+			children = (
+				77ABAF4B1749C3F900CE3C6F /* ImageNotWorking.psd */,
+				77ABAF4C1749C3F900CE3C6F /* ImageNotWorking.tiff */,
+				77ABAF411749913000CE3C6F /* RawBitmapAnaylizer.h */,
+				77ABAF421749913000CE3C6F /* RawBitmapAnaylizer.m */,
+				77ABAF4917499C8300CE3C6F /* RawBitmapAccessoryView.xib */,
+				77ABAF44174991AC00CE3C6F /* RawBitmapViewController.h */,
+				77ABAF45174991AC00CE3C6F /* RawBitmapViewController.m */,
+				77ABAF46174991AC00CE3C6F /* RawBitmapViewController.xib */,
+			);
+			name = "Raw Bitmap Anaylizer";
 			sourceTree = "<group>";
 		};
 		77B617F9172B8A4E008E8F1A /* TextAnaylizer */ = {
@@ -1117,6 +1180,11 @@
 				7751C82517420332001A8A5F /* NoIcon.tiff in Resources */,
 				7751C82D17420C54001A8A5F /* BlockIconBlock.tiff in Resources */,
 				7754DD7E1747C14D00E090F0 /* StreamsPicturesPopover.xib in Resources */,
+				77086FA6174874E100C0BD48 /* AnaylizerSetWindowController.xib in Resources */,
+				77086FAB17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib in Resources */,
+				77ABAF48174991AC00CE3C6F /* RawBitmapViewController.xib in Resources */,
+				77ABAF4A17499C8300CE3C6F /* RawBitmapAccessoryView.xib in Resources */,
+				77ABAF4E1749C3F900CE3C6F /* ImageNotWorking.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1259,6 +1327,12 @@
 				77F6044A1740ABCB00932477 /* OS9LogicalSectorsViewController.m in Sources */,
 				7720B79017448E1A00C85C98 /* MakeBlockOperation.m in Sources */,
 				7754DD821747C2CE00E090F0 /* StreamsPicturesPopoverViewController.m in Sources */,
+				77086FA5174874E100C0BD48 /* AnaylizerSetWindowController.m in Sources */,
+				77086FA91748810400C0BD48 /* NSFileManager+DirectoryLocations.m in Sources */,
+				77086FAE1748915900C0BD48 /* NewAnaylizerSetWindowController.m in Sources */,
+				77086FB117494B6F00C0BD48 /* StAnaSet.m in Sources */,
+				77ABAF431749913000CE3C6F /* RawBitmapAnaylizer.m in Sources */,
+				77ABAF47174991AC00CE3C6F /* RawBitmapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

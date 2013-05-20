@@ -61,6 +61,11 @@
     return _anaylizerObject;
 }
 
+- (void) anaylizeData
+{
+    [[self anaylizerObject] anaylizeData];
+}
+
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions
 {
     NSMutableDictionary *ourOptDict = self.optionsDictionary;

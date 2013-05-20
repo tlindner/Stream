@@ -29,6 +29,13 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 @property (assign) StAnaylizer * representedObject;
 @property (nonatomic, retain) NSMutableData *frameBuffer;
 @property (nonatomic, retain) NSMutableData *resultingData;
+@property (nonatomic, retain) NSData *cachedframeBuffer;
+
+@property (nonatomic, retain) NSData *zeroCrossingArray;
+@property (nonatomic, retain) NSMutableIndexSet *changedIndexes;
+@property (nonatomic, retain) NSMutableData *coalescedObject;
+@property (nonatomic, retain) NSMutableData *charactersObject;
+@property (nonatomic, retain) NSMutableData *characterObject;
 
 - (void) loadAudioChannel:(NSUInteger)audioChannel;
 - (void) anaylizeAudioData;
@@ -45,5 +52,6 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
 
 - (void) suspendObservations;
 - (void) resumeObservations;
+- (void) anaylizeData;
 
 @end

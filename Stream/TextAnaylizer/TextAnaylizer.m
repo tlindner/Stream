@@ -15,6 +15,7 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
 @implementation TextAnaylizer
 
 @synthesize representedObject;
+@synthesize resultingData;
 
 - (void) setRepresentedObject:(id)inRepresentedObject
 {
@@ -26,14 +27,27 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
     }
 }
 
-- (NSString *)anaylizeData:(NSData *)bufferObject
+- (NSString *)convertToString
 {
     StData *object = [self representedObject];
     NSString *encodingStringRep = [object valueForKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
     NSStringEncoding encoding = Convert_String_To_Encoding(encodingStringRep);
-    NSString *result = [[[NSString alloc] initWithData:bufferObject encoding:encoding] autorelease];
+    NSString *result = [[[NSString alloc] initWithData:self.resultingData encoding:encoding] autorelease];
 
     return result;
+}
+
+- (void)anaylizeData
+{
+    StData *object = [self representedObject];
+    self.resultingData = [object resultingData];
+}
+
+- (void)dealloc
+{
+    self.resultingData = nil;
+    
+    [super dealloc];
 }
 
 - (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte

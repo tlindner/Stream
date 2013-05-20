@@ -20,6 +20,6 @@
 @property (assign) StAnaylizer * representedObject;
 @property (nonatomic, retain) NSData *resultingData;
 
-- (NSData *)anaylizeData:(NSData *)data;
+- (void)anaylizeData;
 
 @end

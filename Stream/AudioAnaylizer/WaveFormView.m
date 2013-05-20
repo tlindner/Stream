@@ -123,10 +123,10 @@ typedef struct
     NSAssert(self.cachedAnaylizer != nil, @"Anaylize Audio Data: anaylizer can not be nil");
     NSDictionary *optionsDict = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
     
-    NSMutableData *coalescedObject = [optionsDict objectForKey:@"coalescedObject"];
-    NSMutableData *characterObject = [self.cachedAnaylizer valueForKey:@"resultingData"];
+    NSMutableData *coalescedObject =  modelObject.coalescedObject;
+    NSMutableData *characterObject = modelObject.resultingData;
     AudioSampleType *audioFrames = [modelObject.frameBuffer mutableBytes];
-    NSRange *characters = [[optionsDict objectForKey:@"charactersObject"] mutableBytes];
+    NSRange *characters = [modelObject.charactersObject mutableBytes];
     NSUInteger currentChannel = [[optionsDict objectForKey:@"audioChannel"] intValue];
     NSUInteger frameCount = [modelObject.frameBuffer length] / sizeof(AudioSampleType);
     double sampleRate = [[optionsDict objectForKey:@"sampleRate"] doubleValue];
@@ -337,7 +337,7 @@ typedef struct
                 
                 /* Draw zero crossing lines */
                 [[NSColor darkGrayColor] set];
-                NSData *zerocrossingObject = [optionsDict objectForKey:@"zeroCrossingArray"];
+                NSData *zerocrossingObject = modelObject.zeroCrossingArray;
                 NSUInteger zc_size = [zerocrossingObject length] / sizeof(float);
                 float *zeroCrossings = (float *)[zerocrossingObject bytes];
                 i=0;
@@ -401,7 +401,7 @@ typedef struct
         
         /* draw green modification tints */
         [[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:0.5] set];
-        NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+        NSMutableIndexSet *changedSet = modelObject.changedIndexes;
         NSRange range = NSMakeRange(dirtyRect.origin.x, dirtyRect.size.width);
         [changedSet enumerateRangesInRange:range options:0 usingBlock:
          ^(NSRange range, BOOL *stop)
@@ -722,7 +722,7 @@ typedef struct
             }
             
             /* Add selection to changed set */
-            NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+            NSMutableIndexSet *changedSet = modelObject.changedIndexes;
             if( previousIndexSet != nil ) [previousIndexSet release];
             previousIndexSet = [changedSet mutableCopy];
             NSRange range = NSMakeRange(selectedSample, selectedSampleLength);
@@ -759,7 +759,7 @@ typedef struct
         AudioSampleType *frameStart = audioFrames + selectedSample;
         
         /* Cache previous changed set */
-        NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+        NSMutableIndexSet *changedSet = modelObject.changedIndexes;
         if( previousIndexSet != nil ) [previousIndexSet release];
         previousIndexSet = [changedSet mutableCopy];
         
@@ -924,7 +924,7 @@ typedef struct
         AudioSampleType new_value = (locationNowSelf.y / viewWaveHalfHeight) - 1.0;
         frameStart[0] = new_value;
         
-        NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+        NSMutableIndexSet *changedSet = modelObject.changedIndexes;
         [changedSet addIndex:sampleUnderMouse];
         
         resample = YES;
@@ -1052,7 +1052,7 @@ typedef struct
     else if( toolMode == WFVPencil )
     {   
         /* calculate contigious range of modified samples */
-        NSMutableIndexSet *changedSet = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
+        NSMutableIndexSet *changedSet = modelObject.changedIndexes;
         NSIndexSet *modifiedSet = [changedSet gsSubtractWithIndexSet:previousIndexSet];
         NSRange modifiedRange = NSMakeRange([modifiedSet firstIndex], [modifiedSet lastIndex] - [modifiedSet firstIndex] + 1);
         
@@ -1098,7 +1098,7 @@ typedef struct
 - (void)zoomToCharacter:(NSRange)range
 {
     toolMode = WFVLupe;
-    NSMutableData *charactersObject = [self.cachedAnaylizer valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
+    NSMutableData *charactersObject = modelObject.charactersObject;
     NSRange *characters = (NSRange *)[charactersObject mutableBytes];
     
     NSRect currentBounds = [[self superview] bounds];

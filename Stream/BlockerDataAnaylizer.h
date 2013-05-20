@@ -18,4 +18,6 @@
 }
 @property (assign) StAnaylizer * representedObject;
 
+- (void) anaylizeData;
+
 @end
