@@ -13,5 +13,9 @@
 @property (assign) NSManagedObjectContext *managedObjectContext;
 @property (assign) IBOutlet NSTableView *anaylizerTableView;
 @property (assign) IBOutlet NSArrayController *anaylizerArrayController;
+@property (assign) IBOutlet NSArrayController *anaylizetSetsController;
+
+- (IBAction)deleteAnaylizerSet:(id)sender;
+- (IBAction)nameFieldAction:(id)sender;
 
 @end

@@ -34,6 +34,11 @@
 - (void) setRepresentedObject:(StAnaylizer *)inRepresentedObject
 {
     representedObject = inRepresentedObject;
+
+    if( [inRepresentedObject respondsToSelector:@selector(addSubOptionsDictionary:withDictionary:)] )
+    {
+        [inRepresentedObject addSubOptionsDictionary:[HexFiendAnaylizer anaylizerKey] withDictionary:[HexFiendAnaylizer defaultOptions]];
+    }
 }
 
 - (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte

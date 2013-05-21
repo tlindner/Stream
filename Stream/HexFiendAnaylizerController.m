@@ -28,7 +28,10 @@
 
 - (void)setRepresentedObject:(id)inRepresentedObject
 {
-    [self suspendObservations];
+    if (self.representedObject != inRepresentedObject) {
+        [self suspendObservations];
+    }
+
     [super setRepresentedObject:inRepresentedObject];
 }
 
@@ -40,11 +43,17 @@
 
 - (void) reloadView
 {
-    [self suspendObservations];
     HFTextView *hexView = (HFTextView *)[self view];
     HexFiendAnaylizer *modelObject = (HexFiendAnaylizer *)[[self representedObject] anaylizerObject];
     [modelObject anaylizeData];
+
+    [[hexView controller] setInOverwriteMode:NO];
+    
     [hexView setData:[modelObject resultingData]];
+    
+    BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"] boolValue];
+    [[hexView controller] setInOverwriteMode:overWriteMode];
+    
     [self setupRepresentedObject];
 }
 
@@ -52,6 +61,7 @@
 {
     HFTextView *hexView = (HFTextView *)[self view];
 
+    [self resumeObservations];
     BOOL showOffset = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"] boolValue];
     BOOL readOnly = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.readOnly"] boolValue];
     NSString *offsetBase = [[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
@@ -77,7 +87,6 @@
     [[hexView controller] setEditable:!readOnly];
 //    [self setEditContentRanges];
 
-    [self resumeObservations];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -250,18 +259,13 @@
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase"];
         [theAna removeObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode"];
-        
-        if( lastAnaylizer != nil )
-        {
-            [lastAnaylizer removeObserver:self forKeyPath:@"editIndexSet"];
-            [lastAnaylizer release];
-            lastAnaylizer = nil;
-        }
-        
+
         HFTextView *hexView = (HFTextView *)[self view];
         [hexView removeObserver:self forKeyPath:@"data"];
         
         observationsActive = NO;
+    } else {
+        NSLog(@"Hex field: already suspended");
     }
 }
 
@@ -273,14 +277,13 @@
         [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.showOffset" options:NSKeyValueChangeSetting context:nil];
         [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.offsetBase" options:NSKeyValueChangeSetting context:nil];
         [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnaylizerController.overWriteMode" options:NSKeyValueChangeSetting context:nil];
-        
-        if( lastAnaylizer != nil )
-            [lastAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
-        
+
         HFTextView *hexView = (HFTextView *)[self view];
         [hexView addObserver:self forKeyPath:@"data" options:NSKeyValueChangeReplacement context:nil];
         
         observationsActive = YES;
+    } else {
+        NSLog(@"Hex field: already resumed");
     }
 }
 

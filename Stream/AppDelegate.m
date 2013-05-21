@@ -88,11 +88,22 @@
     self.anaSetsContext = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
     [self.anaSetsContext setPersistentStoreCoordinator:psc];
     
+    [self reloadAllAnaylizerSetMenuItems];
+}
+
+- (void)reloadAllAnaylizerSetMenuItems
+{
+    while ([setsMenu numberOfItems] > 3) {
+        [setsMenu removeItemAtIndex:3];
+    }
+    
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"StAnaSet" inManagedObjectContext:self.anaSetsContext];
     NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    NSArray *sdArray = [NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"group" ascending:YES selector:@selector(localizedStandardCompare:)], [NSSortDescriptor sortDescriptorWithKey:@"setName" ascending:YES selector:@selector(localizedStandardCompare:)], nil];
+    [request setSortDescriptors:sdArray];
     [request setEntity:entityDescription];
     
-    err = nil;
+    NSError *err = nil;
     NSArray *array = [self.anaSetsContext executeFetchRequest:request error:&err];
     
     if (err != nil) {
@@ -105,7 +116,7 @@
             NSString *name = [anaSet valueForKey:@"setName"];
             NSString *group = [anaSet valueForKey:@"group"];
             NSString *keyCombo = [anaSet valueForKey:@"commandKey"];
-
+            
             [self addAnaylizerSetMenu:name withGroup:group withKey:keyCombo representedBy:anaSet];
         }
     }
@@ -168,17 +179,30 @@
 
 - (void) addAnaylizerSetMenu:(NSString *)name withGroup:(NSString *)group withKey:(NSString *)commandKey representedBy:(NSManagedObject *)representedObject
 {
-    NSString *subMenuName = group;
-    NSMenuItem *subMenuItem = [blocksMenu itemWithTitle:subMenuName];
+    NSMenuItem *subMenuItem = nil;
     NSMenu *subMenu = setsMenu;
     
+    if (name == nil) {
+        NSLog( @"addAnaylizerSetMenu: Name can not be nil" );
+        return;
+    }
+    
+    if (group == nil) {
+        group = @"";
+    }
+    
+    if (commandKey == nil) {
+        commandKey = @"";
+    }
+    
     if (![group isEqualToString:@""]) {
+        subMenuItem = [setsMenu itemWithTitle:group];
         if (subMenuItem == nil) {
             NSMenuItem *mainItem = [[[NSMenuItem alloc] init] autorelease];
-            [mainItem setTitle:subMenuName];
-            subMenu = [[[NSMenu alloc] initWithTitle:subMenuName] autorelease];
-            [blocksMenu addItem:mainItem];
-            [blocksMenu setSubmenu:subMenu forItem:mainItem];
+            [mainItem setTitle:group];
+            subMenu = [[[NSMenu alloc] initWithTitle:group] autorelease];
+            [setsMenu addItem:mainItem];
+            [setsMenu setSubmenu:subMenu forItem:mainItem];
         }
         else {
             subMenu = [subMenuItem submenu];
@@ -193,8 +217,7 @@
 - (IBAction)makeAnaylizerSet:(id)sender
 {
     StStream *theStream = sender;
-//    NSLog(@"app delegate make anaylizerset: %@", theStream);
-    
+
     if(self.anaylizerSetGetInformation == nil) {
         self.anaylizerSetGetInformation = [[[NewAnaylizerSetWindowController alloc] initWithWindowNibName:@"NewAnaylizerSetDialog"] autorelease];
     }
@@ -207,8 +230,6 @@
     [nasd orderOut: self];
 
     if (result == YES) {
-        NSLog(@"User clicked yes!");
-        
         NSString *newName = [self.anaylizerSetGetInformation.nameField stringValue];
         NSManagedObject *anaSet = [self anaylizerSetNamed:newName];
 
@@ -267,8 +288,7 @@
 
 - (IBAction)manageAnaylizerSets:(id)sender
 {
-    NSLog(@"manageAnaylizerSets: %@", sender);
-    
+#pragma unused (sender)
     if (self.manageAnaylizerWindowController == nil) {
         self.manageAnaylizerWindowController = [[[AnaylizerSetWindowController alloc] initWithWindowNibName:@"AnaylizerSetWindowController"] autorelease];
         self.manageAnaylizerWindowController.managedObjectContext = self.anaSetsContext;

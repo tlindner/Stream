@@ -14,7 +14,7 @@
 {
     BOOL observationsActive;
     HFLineCountingRepresenter *lcRepresenter;
-    StAnaylizer *lastAnaylizer;
+//    StAnaylizer *lastAnaylizer;
 }
 
 - (void) setupRepresentedObject;

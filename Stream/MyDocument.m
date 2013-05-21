@@ -275,6 +275,13 @@
     else if ([menuItem action] == @selector(exportBlocks:)) {
         return NO;
     }
+    else if ([menuItem action] == @selector(applyAnaylizerSet:)) {
+        NSArray *selectedObjects = [streamTreeControler selectedObjects];
+        
+        if ([selectedObjects count] > 0) {
+            return YES;
+        }
+    }
     else if ([[menuItem representedObject] respondsToSelector:@selector(anaylizerKey)]) {
         NSArray *selectedObjects = [streamTreeControler selectedObjects];
         

@@ -8,6 +8,7 @@
 
 #import "AnaylizerSetWindowController.h"
 #import "StAnaylizer.h"
+#import "AppDelegate.h"
 
 float heightForStringDrawing2(NSString *myString, NSFont *myFont, float myWidth);
 
@@ -20,6 +21,7 @@ float heightForStringDrawing2(NSString *myString, NSFont *myFont, float myWidth)
 @synthesize managedObjectContext;
 @synthesize anaylizerTableView;
 @synthesize anaylizerArrayController;
+@synthesize anaylizetSetsController;
 
 - (id)initWithWindow:(NSWindow *)window
 {
@@ -54,6 +56,17 @@ float heightForStringDrawing2(NSString *myString, NSFont *myFont, float myWidth)
 #pragma unused (aNotification)
     NSUInteger count = [[anaylizerArrayController arrangedObjects] count];
     [anaylizerTableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, count)]];
+}
+
+
+- (IBAction)deleteAnaylizerSet:(id)sender {
+    [anaylizetSetsController remove:sender];
+    [[NSApp delegate] reloadAllAnaylizerSetMenuItems];
+}
+
+- (IBAction)nameFieldAction:(id)sender {
+#pragma unused (sender)
+    [[NSApp delegate] reloadAllAnaylizerSetMenuItems];
 }
 
 @end

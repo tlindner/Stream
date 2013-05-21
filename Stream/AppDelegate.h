@@ -26,6 +26,7 @@
 - (IBAction)manageAnaylizerSets:(id)sender;
 - (void) addAnaylizerSetMenu:(NSString *)name withGroup:(NSString *)group withKey:(NSString *)commandKey representedBy:(NSManagedObject *)representedObject;
 - (NSManagedObject *)anaylizerSetNamed:(NSString *)name;
+- (void)reloadAllAnaylizerSetMenuItems;
 
 @end
 
