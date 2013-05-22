@@ -20,6 +20,5 @@
 @property (nonatomic, assign) StAnaylizer *representedObject;
 @property (nonatomic, retain) NSData *resultingData;
 
-- (NSString *)convertToString;
 - (void)anaylizeData;
 @end

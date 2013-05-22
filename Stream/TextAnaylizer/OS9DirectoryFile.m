@@ -24,18 +24,32 @@
     return @"OS9DirectoryFile";
 }
 
-- (NSString *)convertToString
+- (void)anaylizeData
+{
+    StData *object = [self representedObject];
+    NSData *sourceData = [object resultingData];
+    NSString *result = [self convertToString:sourceData];
+    self.resultingData = [result dataUsingEncoding:NSUnicodeStringEncoding];
+    
+    object.resultingUTI = @"public.utf16-plain-text";
+    
+    if (self.resultingData == nil) {
+        self.resultingData = [NSData data];
+    }
+}
+
+- (NSString *)convertToString:(NSData *)source
 {
     NSMutableString *result = [[[NSMutableString alloc] init] autorelease];
-    unsigned length = [self.resultingData length], i=0;
-    const unsigned char *bytes = [self.resultingData bytes];
+    unsigned length = [source length], i=0;
+    const unsigned char *bytes = [source bytes];
     NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:@"OS9String"];
     
     if (vt != nil) {
         while (length > 0) {
             
             if (bytes[i*32] != 0) {
-                [result appendString:[vt transformedValue:[self.resultingData subdataWithRange:NSMakeRange(i * 32, 29)]]];
+                [result appendString:[vt transformedValue:[source subdataWithRange:NSMakeRange(i * 32, 29)]]];
                 [result appendString:@", "];
                 
                 unsigned lsn = bytes[(i * 32) + 29] << 16;

@@ -18,6 +18,7 @@
 }
 
 @property (nonatomic, assign) StAnaylizer *representedObject;
+@property (nonatomic, retain) NSData *resultingData;
 
 - (NSString *)disasemble6809:(NSData *)bufferObject;
 

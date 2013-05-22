@@ -10,4 +10,6 @@
 
 @interface OS9DirectoryFile : TextAnaylizer
 
+- (NSString *)convertToString:(NSData *)source;
+
 @end

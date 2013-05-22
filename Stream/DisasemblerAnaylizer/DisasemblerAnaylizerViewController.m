@@ -58,26 +58,16 @@
     [textView setEditable:![[[self representedObject] valueForKeyPath:@"optionsDictionary.DisasemblerAnaylizerViewController.readOnly"] boolValue]];
     [textView setFont:[NSFont fontWithName:@"Monaco" size:12.0]];
     
-    NSData *bytes;
-    if( [ro isKindOfClass:[StAnaylizer class]] )
-    {
-        bytes = [ro resultingData];
-    }
-    else if( [ro isKindOfClass:[StBlock class]] )
-    {
-        bytes = [ro resultingData];
-    }
-    else if( [ro isKindOfClass:[NSData class]] )
-    {
-        bytes = ro;
-    }
-    else {
-        [textView setString:@"No data supplied"];
-        return;
-    }
-    
     DisasemblerAnaylizer *modelObject = (DisasemblerAnaylizer *)[ro anaylizerObject];
-    [textView setString:[modelObject disasemble6809:bytes]];
+    [modelObject anaylizeData];
+    
+    NSString *result = [[[NSString alloc] initWithData:modelObject.resultingData encoding:NSUnicodeStringEncoding] autorelease];
+    
+    if (result == nil || [result isEqualToString:@""]) {
+        result = @"Unable to decode stream.";
+    }
+
+    [textView setString:result];
     [self startObserving];
  }
 

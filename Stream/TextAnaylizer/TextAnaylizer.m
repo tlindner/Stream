@@ -27,20 +27,20 @@ NSStringEncoding Convert_String_To_Encoding( NSString *inEncoding );
     }
 }
 
-- (NSString *)convertToString
-{
-    StData *object = [self representedObject];
-    NSString *encodingStringRep = [object valueForKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
-    NSStringEncoding encoding = Convert_String_To_Encoding(encodingStringRep);
-    NSString *result = [[[NSString alloc] initWithData:self.resultingData encoding:encoding] autorelease];
-
-    return result;
-}
-
 - (void)anaylizeData
 {
     StData *object = [self representedObject];
-    self.resultingData = [object resultingData];
+    NSData *sourceData = [object resultingData];
+    NSString *encodingStringRep = [object valueForKeyPath:@"optionsDictionary.TextAnaylizerViewController.encoding"];
+    NSStringEncoding encoding = Convert_String_To_Encoding(encodingStringRep);
+    NSString *result = [[[NSString alloc] initWithData:sourceData encoding:encoding] autorelease];
+    self.resultingData = [result dataUsingEncoding:NSUnicodeStringEncoding];
+        
+    object.resultingUTI = @"public.utf16-plain-text";
+    
+    if (self.resultingData == nil) {
+        self.resultingData = [NSData data];
+    }
 }
 
 - (void)dealloc

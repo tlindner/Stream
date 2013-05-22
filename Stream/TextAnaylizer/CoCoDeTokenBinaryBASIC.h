@@ -10,4 +10,6 @@
 
 @interface CoCoDeTokenBinaryBASIC : TextAnaylizer
 
+- (NSString *)convertToString:(NSData *)source;
+
 @end

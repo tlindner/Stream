@@ -25,6 +25,7 @@ unsigned char *memory = NULL;
 @implementation DisasemblerAnaylizer
 
 @synthesize representedObject;
+@synthesize resultingData;
 
 - (void) setRepresentedObject:(id)inRepresentedObject
 {
@@ -344,9 +345,18 @@ unsigned char *memory = NULL;
     NSLog( @"Dissasembler: replaceBytesInRange: %@ withByte 0x%x", NSStringFromRange(range), *byte);
 }
 
-- (void) anaylizeData
+- (void)anaylizeData
 {
-    /* Nothing to do */
+    StData *object = [self representedObject];
+    NSData *sourceData = [object resultingData];
+    NSString *result = [self disasemble6809:sourceData];
+    self.resultingData = [result dataUsingEncoding:NSUnicodeStringEncoding];
+    
+    object.resultingUTI = @"public.utf16-plain-text";
+    
+    if (self.resultingData == nil) {
+        self.resultingData = [NSData data];
+    }
 }
 
 + (NSArray *)anaylizerUTIs
@@ -377,6 +387,12 @@ unsigned char *memory = NULL;
 + (NSMutableDictionary *)defaultOptions
 {
     return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"readOnly", [NSNumber numberWithBool:NO], @"readOnlyEnabled", [NSMutableArray array], @"transferAddresses", [NSNumber numberWithBool:NO], @"transferAddressEnable", [NSNumber numberWithInt:0], @"directPageValue", [NSNumber numberWithInt:-1], @"offsetAddress", [NSNumber numberWithBool:YES], @"offsetEnable", [NSNumber numberWithBool:NO], @"support6309", [NSNumber numberWithBool:YES], @"showAddresses", [NSNumber numberWithBool:NO], @"showOS9", [NSNumber numberWithBool:YES], @"showHex", [NSNumber numberWithBool:NO], @"followPC", nil] autorelease];
+}
+
+- (void)dealloc
+{
+    self.resultingData = nil;
+    [super dealloc];
 }
 
 @end

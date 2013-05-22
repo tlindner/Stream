@@ -90,10 +90,24 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
     return @"CoCoDeTokenBinaryBASIC";
 }
 
-- (NSString *)convertToString
+- (void)anaylizeData
 {
-    unsigned char *buffer = (unsigned char *)[self.resultingData bytes];
-    NSUInteger bufferSize = [self.resultingData length];
+    StData *object = [self representedObject];
+    NSData *sourceData = [object resultingData];
+    NSString *result = [self convertToString:sourceData];
+    self.resultingData = [result dataUsingEncoding:NSUnicodeStringEncoding];
+    
+    object.resultingUTI = @"public.utf16-plain-text";
+    
+    if (self.resultingData == nil) {
+        self.resultingData = [NSData data];
+    }
+}
+
+- (NSString *)convertToString:(NSData *)source
+{
+    unsigned char *buffer = (unsigned char *)[source bytes];
+    NSUInteger bufferSize = [source length];
     
     NSUInteger file_size, value, line_number, pos;
     unsigned char c;
@@ -143,7 +157,7 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
                         [result appendString:@"!"];
                     }
                 } else {
-                    [result appendString:@"!"];
+                    [result appendFormat:@"%c", c];
                 }
            }
             else if (c >= 0x80) {

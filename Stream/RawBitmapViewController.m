@@ -43,51 +43,26 @@
 {
     RawBitmapAnaylizer *modelObject = (RawBitmapAnaylizer *)[[self representedObject] anaylizerObject];
     [modelObject anaylizeData];
-    [self setupRepresentedObject];
+    NSData *rd = [modelObject resultingData];
+    NSImage *image = nil;
+    
+    if ([rd length] > 0) {
+        image = [[[NSImage alloc] initWithData:rd] autorelease];
+    }
+
+    if (image == nil) {
+        image = [NSImage imageNamed:@"ImageNotWorking"];
+    }
+
+    [imageView setImage:image];
+   
     [self resumeObservations];
 }
 
-- (void) setupRepresentedObject
-{
-    unsigned char *planes[2];
-    
-    NSInteger ignoreHeaderBytes = [[[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes"] intValue];
-    NSInteger width = [[[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.horizontalPixels"] intValue];
-    NSInteger height = [[[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.verticalPixels"] intValue];
-    NSInteger bps = [[[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.bitsPerSample"] intValue];
-    NSInteger spp = [[[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.samplesPerPixel"] intValue];
-    BOOL isAlpha = [[[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.alphaChannel"] boolValue];
-    BOOL isPlanar = [[[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.planar"] boolValue];
-    NSString *colorSpaceName = [[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.colorSpaceName"];
-    NSInteger rowBytes = [[[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.rowBytes"] intValue];
-    NSInteger pixelBits = [[[self representedObject] valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.pixelBits"] intValue];
-    RawBitmapAnaylizer *modelObject = (RawBitmapAnaylizer *)[[self representedObject] anaylizerObject];
-    NSUInteger dataLength = [[modelObject resultingData] length], imageLength = (rowBytes * height) + ignoreHeaderBytes;
-    planes[0] = (unsigned char *)[[modelObject resultingData] bytes] + ignoreHeaderBytes;
-    planes[1] = 0;
-
-    if (imageLength > dataLength) {
-        NSImage *image = [NSImage imageNamed:@"ImageNotWorking"];
-        [imageView setImage:image];
-    } else {
-        NSBitmapImageRep *bir = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:planes pixelsWide:width pixelsHigh:height bitsPerSample:bps samplesPerPixel:spp hasAlpha:isAlpha isPlanar:isPlanar colorSpaceName:colorSpaceName bytesPerRow:rowBytes bitsPerPixel:pixelBits] autorelease];
-        
-        if (bir != nil) {
-            NSSize size = NSMakeSize(width, height);
-            
-            NSImage *image = [[[NSImage alloc] initWithSize:size] autorelease];
-            [image addRepresentation:bir];
-            [imageView setImage:image];
-        } else {
-            NSImage *image = [NSImage imageNamed:@"ImageNotWorking"];
-            [imageView setImage:image];
-        }
-    }
-}
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == self) {
-        [self setupRepresentedObject];
+        [self reloadView];
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }

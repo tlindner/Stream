@@ -33,22 +33,38 @@
 
 - (void) anaylizeData
 {
-    if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
-    {
-        StAnaylizer *object = [self representedObject];
-        self.resultingData = object.sourceData;
+    self.resultingData = [NSData data];
+    StData *ro = [self representedObject];
+    ro.resultingUTI = @"public.data";
+    NSData *sourceData = [ro resultingData];
+    
+    if (sourceData != nil) {
+        unsigned char *planes[2];
+        
+        NSInteger ignoreHeaderBytes = [[ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes"] intValue];
+        NSInteger width = [[ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.horizontalPixels"] intValue];
+        NSInteger height = [[ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.verticalPixels"] intValue];
+        NSInteger bps = [[ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.bitsPerSample"] intValue];
+        NSInteger spp = [[ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.samplesPerPixel"] intValue];
+        BOOL isAlpha = [[ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.alphaChannel"] boolValue];
+        BOOL isPlanar = [[ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.planar"] boolValue];
+        NSString *colorSpaceName = [ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.colorSpaceName"];
+        NSInteger rowBytes = [[ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.rowBytes"] intValue];
+        NSInteger pixelBits = [[ro valueForKeyPath:@"optionsDictionary.RawBitmapAnaylizer.pixelBits"] intValue];
+        NSUInteger dataLength = [sourceData length], imageLength = (rowBytes * height) + ignoreHeaderBytes;
+        planes[0] = (unsigned char *)[sourceData bytes] + ignoreHeaderBytes;
+        planes[1] = 0;
+        
+        if (imageLength < dataLength) {
+            NSBitmapImageRep *bir = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:planes pixelsWide:width pixelsHigh:height bitsPerSample:bps samplesPerPixel:spp hasAlpha:isAlpha isPlanar:isPlanar colorSpaceName:colorSpaceName bytesPerRow:rowBytes bitsPerPixel:pixelBits] autorelease];
+            
+            if (bir != nil) {
+                [bir setCompression:NSTIFFCompressionNone factor:1.0];
+                self.resultingData = [bir TIFFRepresentation];
+                ro.resultingUTI = @"public.tiff";
+            }
+        }
     }
-    else if( [[self representedObject] isKindOfClass:[StBlock class]] )
-    {
-        StBlock *theBlock = (StBlock *)[self representedObject];
-        self.resultingData = [theBlock resultingData];
-    }
-    else if( [[self representedObject] isKindOfClass:[NSData class]] )
-    {
-        self.resultingData = (NSData *)[self representedObject];
-    }
-    else
-        NSLog( @"RawBitmapAnaylizer: Unknown type of represented object" );
 }
 
 - (void)dealloc

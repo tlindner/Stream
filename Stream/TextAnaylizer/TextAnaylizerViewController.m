@@ -76,7 +76,8 @@
     TextAnaylizer *modelObject = (TextAnaylizer *)[object anaylizerObject];
     
     [modelObject anaylizeData];
-    result = [modelObject convertToString];
+    
+    result = [[[NSString alloc] initWithData:modelObject.resultingData encoding:NSUnicodeStringEncoding] autorelease];
 
     if (result == nil || [result isEqualToString:@""]) {
         result = @"Unable to decode stream.";
