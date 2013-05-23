@@ -51,7 +51,8 @@
         
         for (namedRange *nr in myArray) {
             NSRange range = [nr.range rangeValue];
-            [newFileBlock addDataRange:nr.name start:range.location length:range.length];
+            NSUInteger actualLength = [[stream topLevelBlockNamed:nr.name] actualBlockSize];
+            [newFileBlock addDataRange:nr.name start:range.location length:range.length expectedLength:actualLength];
         }
     }
     

@@ -74,6 +74,7 @@
 - (void)makeMarkForDeletion;
 - (NSArray *)recursiveChildBlocks;
 - (NSImage *)icon;
+- (NSUInteger)actualBlockSize;
 
 @end
 

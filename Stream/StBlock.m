@@ -866,7 +866,7 @@ static NSColor *failColor;
 - (NSImage *)icon
 {
     NSImage *_icon = [self primitiveIcon];
-    
+
     if (_icon == nil) {
         
         if( self.source == nil )

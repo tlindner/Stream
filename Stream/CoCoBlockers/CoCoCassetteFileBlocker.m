@@ -113,7 +113,7 @@
             data = (unsigned char *)[attributeDataObject bytes];
             
             while ([attributeDataObject length] > 0 && data[0] == 0x01) {
-                [newFile addDataRange:currentBlock start:0 length:0];
+                [newFile addDataRange:currentBlock start:0 length:0 expectedLength:data[1]];
                 
                 currentBlock = [NSString stringWithFormat:@"Block %d", blockNumber++];
                 theBlock = [stream topLevelBlockNamed:currentBlock];

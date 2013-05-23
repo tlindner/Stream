@@ -92,8 +92,6 @@
         [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.rowBytes" context:self];
         [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.pixelBits" context:self];
         observationsActive = NO;
-    } else {
-        NSLog( @"rawbitmap suspend observations: already suspended" );
     }
 }
 
@@ -113,8 +111,6 @@
         [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.rowBytes" options:NSKeyValueChangeSetting context:self];
         [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.pixelBits" options:NSKeyValueChangeSetting context:self];
         observationsActive = YES;
-    } else {
-        NSLog( @"rawbitmap resume observations: already resumed" );
     }
 }
 
