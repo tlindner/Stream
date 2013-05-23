@@ -60,8 +60,35 @@
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
     #pragma unused(notification)
+    
+    NSArray *classList = [Blockers sharedInstance].classList;
+    NSArray *classListSorted = [classList sortedArrayUsingComparator: ^(id obj1, id obj2) {
+        
+        /* Build combined strings */
+        Class obj1Class = NSClassFromString(obj1);
+        Class obj2Class = NSClassFromString(obj2);
+        NSString *obj1Group = [obj1Class blockerGroup];
+        NSString *obj2Group = [obj2Class blockerGroup];
+        
+        NSString *obj1Built, *obj2Built;
+        
+        if ([obj1Group isEqualToString:@""]) {
+            obj1Built = obj1;
+        } else {
+            obj1Built = [NSString stringWithFormat:@"%@ %@", obj1Group, obj1];
+        }
+        
+        if ([obj2Group isEqualToString:@""]) {
+            obj2Built = obj2;
+        } else {
+            obj2Built = [NSString stringWithFormat:@"%@ %@", obj2Group, obj2];
+        }
+        
+        /* return comparison */
+        return [obj1Built localizedCompare:obj2Built];
+    }];
 
-    for (NSString *blockerClassString in [Blockers sharedInstance].classList) {
+    for (NSString *blockerClassString in classListSorted) {
         [self addBlockerMenu:blockerClassString];
     }
     

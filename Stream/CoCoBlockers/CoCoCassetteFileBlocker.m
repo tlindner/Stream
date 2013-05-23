@@ -33,14 +33,15 @@
 
 + (NSString *)blockerGroup
 {
-    return @"CoCo";
+    return @"CoCo Cassette";
 }
 
 - (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
 {
 #pragma unused (anaylizer)
     NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoCassetteFileBlocker: Incompatiable stream" );
-    int blockNumber = 0, fileNumber = 0;
+    NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:@"RSDOSString"];
+    int blockNumber = 0;
     int noteFileType, noteDataType, noteGaps;
     
     /* Rummage thru data block building up files */
@@ -61,10 +62,27 @@
         if( [attributeDataObject length] > 0 && data[0] == 0x00 )
         {
             /* We found a start of a file! */
-            StBlock *newFile = [stream startNewBlockNamed:[NSString stringWithFormat:@"File %d", fileNumber++] owner:[CoCoCassetteFileBlocker blockerKey]];
             NSData *dataBlock = [theBlock resultingData];
             unsigned char *dataBlockBytes = (unsigned char *)[dataBlock bytes];
             NSUInteger dataBlockSize = [dataBlock length];
+
+            NSUInteger filenameLength = MIN((unsigned)8, dataBlockSize);
+            NSString *testFilename = [vt transformedValue:[NSData dataWithBytes:&dataBlockBytes[0] length:filenameLength]];
+            
+            if ([testFilename isEqualToString:@""]) {
+                testFilename = @"UNKNOWN";
+            }
+            
+            testFilename = [@"/" stringByAppendingString:testFilename];
+            StBlock *newFile = [stream startNewBlockNamed:testFilename owner:[CoCoCassetteFileBlocker blockerKey]];
+            
+            int filenameIndex=0;
+            NSString *fileName = testFilename;
+            while (newFile == nil) {
+                fileName = [testFilename stringByAppendingFormat:@" [%d]", filenameIndex++];
+                newFile = [stream startNewBlockNamed:fileName owner:[CoCoCassetteFileBlocker blockerKey]];
+            }
+
             if( dataBlockSize > 7 ) [newFile addAttributeRange:currentBlock start:0 length:8 name:@"Filename" verification:nil transformation:@"RSDOSString"];
             if( dataBlockSize > 8 ) {
                 [newFile addAttributeRange:currentBlock start:8 length:1 name:@"File Type" verification:nil transformation:@"BlocksUnsignedBigEndian"];

@@ -44,7 +44,7 @@
 
 + (NSString *)blockerGroup
 {
-    return @"CoCo";
+    return @"CoCo Disk";
 }
 
 - (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
