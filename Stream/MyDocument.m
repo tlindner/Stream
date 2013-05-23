@@ -496,8 +496,6 @@
         NSAlert *myAlert = [NSAlert alertWithMessageText:@"Could not create file" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not create file: %@", url]; 
         [myAlert beginSheetModalForWindow:[self windowForSheet] modalDelegate:nil didEndSelector:nil contextInfo:nil];
     }
-    
-    [objs release];
 }
 
 - (IBAction) exportBlocks:(NSArray *)selectedObjects
