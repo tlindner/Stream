@@ -431,15 +431,6 @@
     }
 }
 
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
-{
-    if ([menuItem action] == @selector(makeSubStream:)) {
-        return YES;
-    }
-    
-    return NO;
-}
-
 -(NSString *)nibName
 {
     return @"BlockerDataViewController";

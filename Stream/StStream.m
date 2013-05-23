@@ -51,7 +51,7 @@
     
     if( [name isEqualToString:@"stream"] )
     {
-        result = [[self lastFilterAnayliser] resultingData];
+        result = [[[self lastFilterAnayliser] anaylizerObject] resultingData];
     }
     else
     {

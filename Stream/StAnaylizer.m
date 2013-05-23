@@ -32,7 +32,6 @@ NSURL *MakeTemporaryFile( NSString *pattern );
 @dynamic parentStream;
 @dynamic title;
 @dynamic failIndexSet;
-@dynamic sourceData;
 
 + (void)initialize
 {
@@ -43,20 +42,6 @@ NSURL *MakeTemporaryFile( NSString *pattern );
 		slvt = [[[streamLockValueTransformer alloc] init] autorelease];
 		[NSValueTransformer setValueTransformer:slvt forName:@"streamLockValueTransformer"];		
     }
-}
-
-- (NSData *)sourceData
-{
-    NSData *_sourceData;
-    
-    _sourceData = [self primitiveSourceData];
-    
-    if (_sourceData == nil) {
-        _sourceData = [[[NSData alloc] initWithContentsOfURL:[self urlForCachedData]] autorelease];
-        [self setPrimitiveSourceData:_sourceData];
-    }
-    
-    return _sourceData;
 }
 
 + (NSSet *)keyPathsForValuesAffectingAnaylizerObject
@@ -228,7 +213,33 @@ NSURL *MakeTemporaryFile( NSString *pattern );
 
 - (NSData *)resultingData
 {
-    return self.anaylizerObject.resultingData;
+    NSData *result;
+    
+    result = [self primitiveResultingData];
+    
+    if (result == nil) {
+        StAnaylizer *previousAnaylizer = [self.parentStream previousAnayliser:self];
+        
+        if( previousAnaylizer == nil )
+        {   
+            /* we are the first anaylizer, data is in source stream */
+            if( self.parentStream.sourceURL != nil )
+            {
+                result = [NSData dataWithContentsOfURL: self.parentStream.sourceURL];
+            }
+            else {
+                result = self.parentStream.sourceBlock.resultingData;
+            }
+        }
+        else
+        {
+            result = previousAnaylizer.anaylizerObject.resultingData;
+        }
+        
+        [self setPrimitiveResultingData:result];
+    }
+    
+    return result;
 }
 
 - (void) setResultingData:(NSMutableData *)inData andChangedIndexSet:(NSMutableIndexSet *)inIndexSet

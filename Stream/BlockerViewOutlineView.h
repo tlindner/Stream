@@ -13,13 +13,6 @@
 @interface BlockerViewOutlineView : NSOutlineView
 
 - (IBAction)makeSubStream:(id)sender;
-- (IBAction) exportBlocks:(id)sender;
-
-@end
-
-@interface NSObject (BlockAttributeTableViewDelegate)
-
-- (NSColor *)tableView:(NSOutlineView *)aTableView backgroundColorForRow:(NSInteger)rowIndex;
-- (StBlock *)observingBlock;
+- (IBAction)exportBlocks:(id)sender;
 
 @end

@@ -32,6 +32,7 @@
 
 
 - (IBAction)add:(id)sender;
+- (IBAction)addURL:(id)sender;
 - (void) addStreamFromURL:(NSURL *)aURL;
 - (void) addSubStreamFromTopLevelBlock:(StBlock *)theBlock ofParent:(StStream *)theParent;
 - (IBAction)removeStream:(id)sender;

@@ -39,6 +39,15 @@
     [self reloadView];
 }
 
+- (void)setRepresentedObject:(id)representedObject
+{
+    if (representedObject != self.representedObject) {
+        [self suspendObservations];
+    }
+    
+    [super setRepresentedObject:representedObject];
+}
+
 - (void) reloadView
 {
     RawBitmapAnaylizer *modelObject = (RawBitmapAnaylizer *)[[self representedObject] anaylizerObject];
@@ -71,6 +80,7 @@
 {
     if (observationsActive == YES) {
         StAnaylizer *ro = self.representedObject;
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.passThrough" context:self];
         [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes" context:self];
         [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.horizontalPixels" context:self];
         [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.verticalPixels" context:self];
@@ -91,6 +101,7 @@
 {
     if (observationsActive == NO) {
         StAnaylizer *ro = self.representedObject;
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.passThrough" options:NSKeyValueChangeSetting context:self];
         [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes" options:NSKeyValueChangeSetting context:self];
         [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.horizontalPixels" options:NSKeyValueChangeSetting context:self];
         [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.verticalPixels" options:NSKeyValueChangeSetting context:self];
@@ -105,6 +116,11 @@
     } else {
         NSLog( @"rawbitmap resume observations: already resumed" );
     }
+}
+
+- (IBAction)imageChanging:(id)sender {
+#pragma unused (sender)
+    [self reloadView];
 }
 
 - (void)dealloc

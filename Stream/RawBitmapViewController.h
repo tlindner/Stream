@@ -16,5 +16,6 @@
 
 - (void) suspendObservations;
 - (void) resumeObservations;
+- (IBAction)imageChanging:(id)sender;
 
 @end

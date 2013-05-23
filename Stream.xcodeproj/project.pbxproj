@@ -31,6 +31,8 @@
 		772C658F13FEC0960060AB7F /* AnaylizerArrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */; };
 		772C659013FEC0960060AB7F /* AnaylizerHand.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */; };
 		772C659113FEC0960060AB7F /* AnaylizerLupe.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */; };
+		77331D6F174DB99200E69E11 /* GetNetURLWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77331D6D174DB99200E69E11 /* GetNetURLWindowController.m */; };
+		77331D70174DB99200E69E11 /* GetNetURLWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77331D6E174DB99200E69E11 /* GetNetURLWindowController.xib */; };
 		774C74B7173F4FF600FD43ED /* DavidKeilDiskImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C74B6173F4FF600FD43ED /* DavidKeilDiskImage.m */; };
 		7751C81C17420100001A8A5F /* RedCrossGreenCheckIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C81617420100001A8A5F /* RedCrossGreenCheckIcon.tiff */; };
 		7751C81D17420100001A8A5F /* GreenCheckIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7751C81717420100001A8A5F /* GreenCheckIcon.tiff */; };
@@ -234,6 +236,9 @@
 		772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerArrow.tiff; path = Stream/AudioAnaylizer/AnaylizerArrow.tiff; sourceTree = "<group>"; };
 		772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerHand.tiff; path = Stream/AudioAnaylizer/AnaylizerHand.tiff; sourceTree = "<group>"; };
 		772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerLupe.tiff; path = Stream/AudioAnaylizer/AnaylizerLupe.tiff; sourceTree = "<group>"; };
+		77331D6C174DB99200E69E11 /* GetNetURLWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetNetURLWindowController.h; sourceTree = "<group>"; };
+		77331D6D174DB99200E69E11 /* GetNetURLWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetNetURLWindowController.m; sourceTree = "<group>"; };
+		77331D6E174DB99200E69E11 /* GetNetURLWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GetNetURLWindowController.xib; sourceTree = "<group>"; };
 		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerTableViewCellView.h; path = Stream/AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
 		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerTableViewCellView.m; path = Stream/AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
 		774A181613FAB01500510032 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -583,7 +588,6 @@
 		7759CF2713DBA1A200789DB3 = {
 			isa = PBXGroup;
 			children = (
-				77ED69101737092C0024397E /* Quartz.framework */,
 				774A181613FAB01500510032 /* LICENSE */,
 				775ED2CD13DCF86500BC96C9 /* README */,
 				77E9E6EF17337F6B0027C7E9 /* TODO */,
@@ -623,6 +627,7 @@
 		7759CF3513DBA1A300789DB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				77ED69101737092C0024397E /* Quartz.framework */,
 				77793EBA1723A29800E607F6 /* QuartzCore.framework */,
 				777745AA171B558300700BB7 /* MAAttachedWindow.h */,
 				777745AB171B558300700BB7 /* MAAttachedWindow.m */,
@@ -670,6 +675,9 @@
 				7754DD7D1747C14D00E090F0 /* StreamsPicturesPopover.xib */,
 				7754DD801747C2CE00E090F0 /* StreamsPicturesPopoverViewController.h */,
 				7754DD811747C2CE00E090F0 /* StreamsPicturesPopoverViewController.m */,
+				77331D6C174DB99200E69E11 /* GetNetURLWindowController.h */,
+				77331D6D174DB99200E69E11 /* GetNetURLWindowController.m */,
+				77331D6E174DB99200E69E11 /* GetNetURLWindowController.xib */,
 			);
 			path = Stream;
 			sourceTree = "<group>";
@@ -1185,6 +1193,7 @@
 				77ABAF48174991AC00CE3C6F /* RawBitmapViewController.xib in Resources */,
 				77ABAF4A17499C8300CE3C6F /* RawBitmapAccessoryView.xib in Resources */,
 				77ABAF4E1749C3F900CE3C6F /* ImageNotWorking.tiff in Resources */,
+				77331D70174DB99200E69E11 /* GetNetURLWindowController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1333,6 +1342,7 @@
 				77086FB117494B6F00C0BD48 /* StAnaSet.m in Sources */,
 				77ABAF431749913000CE3C6F /* RawBitmapAnaylizer.m in Sources */,
 				77ABAF47174991AC00CE3C6F /* RawBitmapViewController.m in Sources */,
+				77331D6F174DB99200E69E11 /* GetNetURLWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -255,9 +255,8 @@
 								</object>
 								<object class="NSMenuItem" id="1034746486">
 									<reference key="NSMenu" ref="720053764"/>
-									<bool key="NSIsAlternate">YES</bool>
-									<string key="NSTitle">Add URL…</string>
-									<string key="NSKeyEquiv">D</string>
+									<string key="NSTitle">Add Stream URL…</string>
+									<string key="NSKeyEquiv">u</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -2121,6 +2120,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
+						<string key="label">addURL:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="1034746486"/>
+					</object>
+					<int key="connectionID">648</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
 						<string key="label">addFontTrait:</string>
 						<reference key="source" ref="739804602"/>
 						<reference key="destination" ref="481459203"/>
@@ -3659,7 +3666,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">647</int>
+			<int key="maxID">648</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3840,6 +3847,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>add:</string>
+							<string>addURL:</string>
 							<string>applyAnaylizerSet:</string>
 							<string>imagePopoverClick:</string>
 							<string>makeAnaylizerSet:</string>
@@ -3849,6 +3857,7 @@
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -3863,6 +3872,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>add:</string>
+							<string>addURL:</string>
 							<string>applyAnaylizerSet:</string>
 							<string>imagePopoverClick:</string>
 							<string>makeAnaylizerSet:</string>
@@ -3874,6 +3884,10 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
 								<string key="name">add:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">addURL:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

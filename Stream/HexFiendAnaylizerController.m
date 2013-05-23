@@ -264,8 +264,6 @@
         [hexView removeObserver:self forKeyPath:@"data"];
         
         observationsActive = NO;
-    } else {
-        NSLog(@"Hex field: already suspended");
     }
 }
 
@@ -282,8 +280,6 @@
         [hexView addObserver:self forKeyPath:@"data" options:NSKeyValueChangeReplacement context:nil];
         
         observationsActive = YES;
-    } else {
-        NSLog(@"Hex field: already resumed");
     }
 }
 

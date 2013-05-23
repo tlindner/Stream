@@ -27,7 +27,6 @@
 @property (nonatomic, retain) NSValue *viewRange;
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, retain) NSOrderedSet *edits;
-@property (nonatomic, retain) NSData *sourceData;
 @property (nonatomic, retain) StStream *parentStream;
 
 - (float) computedAnaylizerHeight;

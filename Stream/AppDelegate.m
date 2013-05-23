@@ -14,6 +14,7 @@
 #import "NSFileManager+DirectoryLocations.h"
 #import "NewAnaylizerSetWindowController.h"
 #import "AnaylizerSetWindowController.h"
+#import "GetNetURLWindowController.h"
 
 @implementation AppDelegate
 
@@ -22,6 +23,7 @@
 @synthesize anaSetsContext;
 @synthesize anaylizerSetGetInformation;
 @synthesize manageAnaylizerWindowController;
+@synthesize urlWindowController;
 
 - (id)init
 {
@@ -74,7 +76,18 @@
     NSPersistentStore *ps = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:anaSetsURL options:nil error:&err];
             
     if (err != nil) {
-        NSLog(@"error creating/loading anaylizer sets document: %@", err);
+        NSLog(@"error creating/loading “Anaylizer Sets.binary”: %@\nLet's delete it and start over.", err);
+        err = nil;
+        [[NSFileManager defaultManager] removeItemAtURL:anaSetsURL error:&err];
+        
+        if (err == nil) {
+            ps = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:anaSetsURL options:nil error:&err];
+            if (err != nil) {
+                NSLog( @"Error persists while trying to load “Anaylizer Sets.binary”: %@", err );
+            }
+        } else {
+            NSLog(@"Error removing existing “Anaylizer Sets.binary”: %@", err);
+        }
     }
     
     err = nil;
@@ -82,7 +95,7 @@
     [ps loadMetadata:&err];
     
     if (err != nil) {
-        NSLog(@"error loading meta data for anaylizer sets document: %@", err);
+        NSLog(@"error loading meta data for “Anaylizer Sets.binary”: %@", err);
     }
     
     self.anaSetsContext = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
@@ -93,6 +106,13 @@
 
 - (void)reloadAllAnaylizerSetMenuItems
 {
+    NSError *err = nil;
+    [self.anaSetsContext save:&err];
+    
+    if (err != nil) {
+        NSLog(@"Error at reloadAllAnaylizerSetMenuItems: %@", err);
+    }
+    
     while ([setsMenu numberOfItems] > 3) {
         [setsMenu removeItemAtIndex:3];
     }
@@ -103,7 +123,7 @@
     [request setSortDescriptors:sdArray];
     [request setEntity:entityDescription];
     
-    NSError *err = nil;
+    err = nil;
     NSArray *array = [self.anaSetsContext executeFetchRequest:request error:&err];
     
     if (err != nil) {
@@ -113,11 +133,13 @@
     if (array != nil)
     {
         for (NSManagedObject *anaSet in array) {
-            NSString *name = [anaSet valueForKey:@"setName"];
-            NSString *group = [anaSet valueForKey:@"group"];
-            NSString *keyCombo = [anaSet valueForKey:@"commandKey"];
-            
-            [self addAnaylizerSetMenu:name withGroup:group withKey:keyCombo representedBy:anaSet];
+            if (![anaSet isDeleted]) {
+                NSString *name = [anaSet valueForKey:@"setName"];
+                NSString *group = [anaSet valueForKey:@"group"];
+                NSString *keyCombo = [anaSet valueForKey:@"commandKey"];
+                
+                [self addAnaylizerSetMenu:name withGroup:group withKey:keyCombo representedBy:anaSet];
+            }
         }
     }
 }
@@ -222,10 +244,17 @@
         self.anaylizerSetGetInformation = [[[NewAnaylizerSetWindowController alloc] initWithWindowNibName:@"NewAnaylizerSetDialog"] autorelease];
     }
     
-    [self.anaylizerSetGetInformation.nameField setStringValue:@""];
+    NSString *name;
+    int j=1;
+    name = [NSString stringWithFormat:@"Set #%d", j++];
+    while ([self anaylizerSetNamed:name] != nil) {
+        name = [NSString stringWithFormat:@"Set #%d", j++];
+    }
+
+    NSWindow *nasd = [self.anaylizerSetGetInformation window];
+    [self.anaylizerSetGetInformation.nameField setStringValue:name];
     [self.anaylizerSetGetInformation.groupField setStringValue:@""];
     [self.anaylizerSetGetInformation.keyComboField setStringValue:@""];
-    NSWindow *nasd = [self.anaylizerSetGetInformation window];
     NSInteger result = [NSApp runModalForWindow: nasd];
     [nasd orderOut: self];
 
@@ -298,6 +327,57 @@
     [self.manageAnaylizerWindowController showWindow:self];
 }
 
+- (NSURL *)getURLFromUser
+{
+    NSURL *result = nil;
+    
+    if(self.urlWindowController == nil) {
+        self.urlWindowController = [[[GetNetURLWindowController alloc] initWithWindowNibName:@"GetNetURLWindowController"] autorelease];
+    }
+
+    NSWindow *nasd = [self.urlWindowController window];
+    NSUserDefaults *ud =  [NSUserDefaults standardUserDefaults];
+    NSArray *previousURLs = [ud arrayForKey:@"previousURLList"];
+    
+    if (previousURLs == nil) {
+        previousURLs = [NSArray array];
+    }
+
+    [self.urlWindowController.urlPopupButton removeAllItems];
+    [self.urlWindowController.urlPopupButton addItemsWithTitles:previousURLs];
+    
+    NSInteger reply = [NSApp runModalForWindow: nasd];
+    [nasd orderOut: self];
+    
+    if (reply == YES) {
+        NSString *urlString = [self.urlWindowController.urlTextField stringValue];
+        result = [[[NSURL alloc] initWithString:urlString] autorelease];
+        
+        if ([previousURLs count] > 15) {
+            previousURLs = [previousURLs subarrayWithRange:NSMakeRange(0, [previousURLs count]-2)];
+        }
+        
+        if (![previousURLs containsObject:urlString]) {
+            previousURLs = [previousURLs arrayByAddingObject:urlString];
+        }
+        
+        [ud setObject:previousURLs forKey:@"previousURLList"];
+        [ud synchronize];
+    }
+    
+    return result;
+}
+
+- (void)dealloc
+{
+    self.anaSetsContext = nil;
+    self.anaylizerSetGetInformation = nil;
+    self.manageAnaylizerWindowController = nil;
+    self.urlWindowController = nil;
+
+    [super dealloc];
+}
+
 @end
 
 @implementation NSError (ExtendedErrorCategory)
@@ -309,17 +389,14 @@
     
     NSMutableDictionary *dictionaryRep = [[self userInfo] mutableCopy];
     
-    [dictionaryRep setObject:[self domain]
-                      forKey:@"domain"];
-    [dictionaryRep setObject:[NSNumber numberWithInteger:[self code]]
-                      forKey:@"code"];
+    [dictionaryRep setObject:[self domain] forKey:@"domain"];
+    [dictionaryRep setObject:[NSNumber numberWithInteger:[self code]] forKey:@"code"];
     
     NSError *underlyingError = [[self userInfo] objectForKey:NSUnderlyingErrorKey];
     NSString *underlyingErrorDescription = [underlyingError debugDescription];
     if (underlyingErrorDescription)
     {
-        [dictionaryRep setObject:underlyingErrorDescription
-                          forKey:NSUnderlyingErrorKey];
+        [dictionaryRep setObject:underlyingErrorDescription forKey:NSUnderlyingErrorKey];
     }
     
     // Finish up

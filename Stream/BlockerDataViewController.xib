@@ -86,7 +86,7 @@
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<object class="NSTableColumn" id="183178854">
 																<double key="NSWidth">35</double>
-																<double key="NSMinWidth">10</double>
+																<double key="NSMinWidth">16</double>
 																<double key="NSMaxWidth">3.4028234663852886e+38</double>
 																<object class="NSTableHeaderCell" key="NSHeaderCell">
 																	<int key="NSCellFlags">75628096</int>
@@ -118,7 +118,7 @@
 																</object>
 																<object class="NSImageCell" key="NSDataCell" id="390483724">
 																	<int key="NSCellFlags">67239424</int>
-																	<int key="NSCellFlags2">33554432</int>
+																	<int key="NSCellFlags2">0</int>
 																	<object class="NSFont" key="NSSupport" id="460988031">
 																		<string key="NSName">LucidaGrande</string>
 																		<double key="NSSize">13</double>
@@ -130,13 +130,13 @@
 																	<int key="NSStyle">0</int>
 																	<bool key="NSAnimates">NO</bool>
 																</object>
-																<int key="NSResizingMask">3</int>
+																<int key="NSResizingMask">1</int>
 																<bool key="NSIsResizeable">YES</bool>
 																<bool key="NSIsEditable">YES</bool>
 																<reference key="NSTableView" ref="1001255841"/>
 															</object>
 															<object class="NSTableColumn" id="446702694">
-																<double key="NSWidth">114</double>
+																<double key="NSWidth">120</double>
 																<double key="NSMinWidth">16</double>
 																<double key="NSMaxWidth">64000</double>
 																<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -172,7 +172,7 @@
 																		<reference key="NSColor" ref="598352129"/>
 																	</object>
 																</object>
-																<int key="NSResizingMask">3</int>
+																<int key="NSResizingMask">1</int>
 																<bool key="NSIsResizeable">YES</bool>
 																<reference key="NSTableView" ref="1001255841"/>
 															</object>
@@ -225,7 +225,7 @@
 											<object class="NSScroller" id="777577606">
 												<reference key="NSNextResponder" ref="307100959"/>
 												<int key="NSvFlags">-2147483392</int>
-												<string key="NSFrame">{{1, 256}, {518, 15}}</string>
+												<string key="NSFrame">{{1, 256}, {161, 15}}</string>
 												<reference key="NSSuperview" ref="307100959"/>
 												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="788690132"/>
@@ -233,7 +233,7 @@
 												<int key="NSsFlags">1</int>
 												<reference key="NSTarget" ref="307100959"/>
 												<string key="NSAction">_doScroller:</string>
-												<double key="NSPercent">0.8341384863123994</double>
+												<double key="NSPercent">0.99382716049382713</double>
 											</object>
 										</object>
 										<string key="NSFrameSize">{163, 272}</string>
@@ -554,6 +554,7 @@
 					<string>53.IBPluginDependency</string>
 					<string>54.IBPluginDependency</string>
 					<string>56.IBPluginDependency</string>
+					<string>57.CustomClassName</string>
 					<string>57.IBPluginDependency</string>
 					<string>58.IBPluginDependency</string>
 					<string>61.IBPluginDependency</string>
@@ -574,6 +575,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>BlockerViewOutlineView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -643,6 +645,46 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/BlockerDataViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">BlockerViewOutlineView</string>
+					<string key="superclassName">NSOutlineView</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>exportBlocks:</string>
+							<string>makeSubStream:</string>
+						</object>
+						<object class="NSArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>exportBlocks:</string>
+							<string>makeSubStream:</string>
+						</object>
+						<object class="NSArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">exportBlocks:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">makeSubStream:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/BlockerViewOutlineView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

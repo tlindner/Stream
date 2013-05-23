@@ -48,22 +48,8 @@
 
 - (void) anaylizeData
 {
-    if( [[self representedObject] isKindOfClass:[StAnaylizer class]] )
-    {
-        StAnaylizer *object = [self representedObject];
-        self.resultingData = object.sourceData;
-    }
-    else if( [[self representedObject] isKindOfClass:[StBlock class]] )
-    {
-        StBlock *theBlock = (StBlock *)[self representedObject];
-        self.resultingData = [theBlock resultingData];
-    }
-    else if( [[self representedObject] isKindOfClass:[NSData class]] )
-    {
-        self.resultingData = (NSData *)[self representedObject];
-    }
-    else
-        NSLog( @"HexFiendAnaylizer: Unknown type of represented object" );
+    StData *ro = [self representedObject];
+    self.resultingData = ro.resultingData;
 }
 
 - (void)dealloc

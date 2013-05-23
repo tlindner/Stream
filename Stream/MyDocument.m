@@ -89,9 +89,15 @@
                 }
                 
                 [self.pictureURLs removeAllObjects];
-                id url = [observingStream sourceURL];
+                StStream *findParentURLStream = observingStream;
+                id url = [findParentURLStream sourceURL];
 
-                if (url != nil) {
+                while (url == nil) {
+                    findParentURLStream = findParentURLStream.parentStream;
+                    url = [findParentURLStream sourceURL];
+                }
+                
+                if ([url isFileURL]) {
                     BOOL foundTxt = NO;
                     NSFileManager *fm = [NSFileManager defaultManager];
                     NSString *baseFilenameString = [[url URLByDeletingPathExtension] lastPathComponent];
@@ -120,7 +126,13 @@
                     if ([self.pictureURLs count] > 0) {
                         NSImage *image = [[[NSImage alloc] initByReferencingURL:[self.pictureURLs objectAtIndex:0]] autorelease];
                         [imageButton setImage:image];
+                        [imageButton setEnabled:YES];
                     }
+                }
+                else {
+                    NSImage *image = [NSImage imageNamed:@"ImageNotWorking"];
+                    [imageButton setImage:image];
+                    [imageButton setEnabled:NO];
                 }
             }
             else {
@@ -161,6 +173,16 @@
     [myOpenPanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
 }
 
+- (IBAction)addURL:(id)sender
+{
+#pragma unused (sender)
+    NSURL *url = [[NSApp delegate] getURLFromUser];
+    
+    if (url != nil) {
+        [self addStreamFromURL:url];
+    }
+}
+
 - (void) addStreamFromURL:(NSURL *)aURL
 {
     NSManagedObject *newObject = [[streamTreeControler newObject] autorelease];
@@ -199,10 +221,14 @@
         name = [theBlock getAttributeDatawithUIName:@"Name"];
         
         if( ![[name class] isSubclassOfClass:[NSString class]] ) {
-            name = [theBlock source];
-
+            name = [theBlock name];
+            
             if( ![[name class] isSubclassOfClass:[NSString class]] ) {
-                name = [theBlock description];
+                name = [theBlock source];
+                
+                if( ![[name class] isSubclassOfClass:[NSString class]] ) {
+                    name = [theBlock description];
+                }
             }
         }
     }
@@ -270,6 +296,9 @@
         return NO;
     }
     else if ([menuItem action] == @selector(add:)) {
+        return YES;
+    }
+    else if ([menuItem action] == @selector(addURL:)) {
         return YES;
     }
     else if ([menuItem action] == @selector(exportBlocks:)) {

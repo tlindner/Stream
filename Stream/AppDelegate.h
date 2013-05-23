@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class StStream, NewAnaylizerSetWindowController, AnaylizerSetWindowController;
+@class StStream, NewAnaylizerSetWindowController, AnaylizerSetWindowController, GetNetURLWindowController;
 
 @interface AppDelegate : NSObject
 {
@@ -20,6 +20,7 @@
 @property (retain) NSManagedObjectContext *anaSetsContext;
 @property (retain) NewAnaylizerSetWindowController *anaylizerSetGetInformation;
 @property (retain) AnaylizerSetWindowController *manageAnaylizerWindowController;
+@property (retain) GetNetURLWindowController *urlWindowController;
 
 - (void) addBlockerMenu:(NSString *)classNameString;
 - (IBAction)makeAnaylizerSet:(id)sender;
@@ -27,6 +28,7 @@
 - (void) addAnaylizerSetMenu:(NSString *)name withGroup:(NSString *)group withKey:(NSString *)commandKey representedBy:(NSManagedObject *)representedObject;
 - (NSManagedObject *)anaylizerSetNamed:(NSString *)name;
 - (void)reloadAllAnaylizerSetMenuItems;
+- (NSURL *)getURLFromUser;
 
 @end
 
