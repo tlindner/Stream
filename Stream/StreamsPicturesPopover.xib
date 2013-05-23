@@ -161,7 +161,6 @@
 						<string key="NSFrame">{{734, 12}, {82, 32}}</string>
 						<reference key="NSSuperview" ref="437041840"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="396381095">
@@ -200,7 +199,7 @@
 							<int key="NSCellFlags">130560</int>
 							<int key="NSCellFlags2">33554432</int>
 							<string key="NSCellIdentifier">_NS:9</string>
-							<int key="NSAlign">4</int>
+							<int key="NSAlign">0</int>
 							<int key="NSScale">3</int>
 							<int key="NSStyle">0</int>
 							<bool key="NSAnimates">YES</bool>
@@ -471,7 +470,10 @@
 					<string key="superclassName">NSPersistentDocument</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="add:">id</string>
+						<string key="addURL:">id</string>
+						<string key="applyAnaylizerSet:">id</string>
 						<string key="imagePopoverClick:">id</string>
+						<string key="makeAnaylizerSet:">id</string>
 						<string key="makeSubStream:">id</string>
 						<string key="removeAnaylizer:">id</string>
 						<string key="removeStream:">id</string>
@@ -481,8 +483,20 @@
 							<string key="name">add:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="addURL:">
+							<string key="name">addURL:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="applyAnaylizerSet:">
+							<string key="name">applyAnaylizerSet:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="imagePopoverClick:">
 							<string key="name">imagePopoverClick:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="makeAnaylizerSet:">
+							<string key="name">makeAnaylizerSet:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="makeSubStream:">

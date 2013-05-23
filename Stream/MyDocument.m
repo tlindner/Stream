@@ -575,7 +575,6 @@
 
 - (IBAction)applyAnaylizerSet:(id)sender
 {
-    NSLog(@"MyDocument applyAnaylizerSet: %@", sender);
     NSMenuItem *menuItem = sender;
     NSManagedObject *anaSet = [menuItem representedObject];
     NSMutableOrderedSet *anaSetAnaylizers = [anaSet mutableOrderedSetValueForKey:@"Anaylizers"];

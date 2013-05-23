@@ -158,18 +158,18 @@
     NSArray *array = [self.anaSetsContext executeFetchRequest:request error:&err];
     
     if (err != nil) {
-        NSLog(@"Error fetching anaylyizer set named %@: %@", name, err);
+//        NSLog(@"Error fetching anaylyizer set named %@: %@", name, err);
     }
     else if (array != nil) {
         if ([array count] == 0) {
-            NSLog(@"Error fetching anaylyizer set named %@: zero sets found", name);
+//            NSLog(@"Error fetching anaylyizer set named %@: zero sets found", name);
         } else if ([array count] > 1) {
-            NSLog(@"Error fetching anaylyizer set named %@: %lu sets found", name, [array count]);
+//            NSLog(@"Error fetching anaylyizer set named %@: %lu sets found", name, [array count]);
         } else {
             result = [array objectAtIndex:0];
         }
     } else {
-        NSLog(@"Error fetching anaylyizer set named %@: no sets found", name);
+//        NSLog(@"Error fetching anaylyizer set named %@: no sets found", name);
     }
     
     return result;

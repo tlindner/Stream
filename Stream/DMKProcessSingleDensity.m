@@ -13,7 +13,7 @@
 
 + (NSArray *)anaylizerUTIs
 {
-    return [NSArray arrayWithObject:@"org.macmess.imagedisk"];
+    return [NSArray arrayWithObject:@"org.macmess.dmk"];
 }
 
 + (NSString *)anayliserName
