@@ -152,29 +152,24 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
                 if (c >= 0x80) {
                     if( functions[c - 0x80] != nil ) {
                         [result appendString:functions[c-0x80]];
-                    }
-                    else {
+                    } else {
                         [result appendString:@"!"];
                     }
                 } else {
                     [result appendFormat:@"%c", c];
                 }
-           }
-            else if (c >= 0x80) {
+           } else if (c >= 0x80) {
                 /* a command call */
                 if (commands[c-0x80] != nil) {
                     [result appendString:commands[c - 0x80]];
-                }
-                else {
+                } else {
                     [result appendString:@"!"];
                 }
-            }
-            else if (c == ':' && (buffer[pos] == 0x83 || buffer[pos] == 0x84) ) {
+            } else if (c == ':' && (buffer[pos] == 0x83 || buffer[pos] == 0x84) ) {
                 /* When colon-apostrophe is encountered, the colon is dropped. */
                 /* When colon-ELSE is encountered, the colon is dropped */
-            }
-            else {
-                [result appendFormat:@"%c", c];
+            } else {
+                [result appendString:@"!"];
             }
         }
         
