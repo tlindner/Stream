@@ -138,6 +138,11 @@
               context:nil];
 }
 
+- (void) suspendObservations
+{
+    [listViewItems makeObjectsPerformSelector:@selector(suspendObservations)];
+}
+
 // MARK: -
 // MARK: Rebuilding content and layout
 

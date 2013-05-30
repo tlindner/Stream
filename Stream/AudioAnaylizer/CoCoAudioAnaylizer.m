@@ -824,15 +824,15 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     if( observationsActive == YES )
     {
         StAnaylizer *theAna = [self representedObject];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"];
-        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"];
-        [theAna removeObserver:self forKeyPath:@"resultingData"];
+//        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"];
+//        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"];
+//        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
+//        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+//        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
+//        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert"];
+//        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"];
+//        [theAna removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"];
+//        [theAna removeObserver:self forKeyPath:@"resultingData"];
         observationsActive = NO;
     } 
 }
@@ -842,15 +842,15 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     if( observationsActive == NO )
     {
         StAnaylizer *theAna = [self representedObject];
-        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
-        [theAna addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeReplacement context:nil];
+//        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify" options:NSKeyValueChangeSetting context:nil];
+//        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert" options:NSKeyValueChangeSetting context:nil];
+//        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate" options:NSKeyValueChangeSetting context:nil];
+//        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking" options:NSKeyValueChangeSetting context:nil];
+//        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
+//        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
+//        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
+//        [theAna addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
+//        [theAna addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeReplacement context:nil];
         observationsActive = YES;
     }
 }

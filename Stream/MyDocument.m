@@ -60,7 +60,6 @@
     [streamTreeControler addObserver:self forKeyPath:@"selectionIndexPaths" options:0 context:self];
     listView.prototypeItem = [[[AnaylizerListViewItem alloc] initWithNibName:@"AnaylizerListViewItem" bundle:nil] autorelease];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(documentWindowWillClose:) name:NSWindowWillCloseNotification object:documentWindow];
     [outlineView setFocusRingType:NSFocusRingTypeNone];
     
     NSArray *psa = [psc persistentStores];
@@ -290,6 +289,16 @@
 - (void)windowWillClose:(NSNotification *)notification
 {
 #pragma unused (notification)
+    [streamTreeControler removeObserver:self forKeyPath:@"selectionIndexPaths" context:self];
+    
+    if( observingStream != nil )
+    {
+        [observingStream removeObserver:self forKeyPath:@"anaylizers" context:self];
+        self.observingStream = nil;
+    }
+
+    [listView suspendObservations];
+
     NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
     NSArray *psa = [psc persistentStores];
     
@@ -572,20 +581,6 @@
         return NO;
     else
         return YES;
-}
-
-- (void)documentWindowWillClose:(NSNotification *)note
-{
-    #pragma unused(note)
-    [streamTreeControler removeObserver:self forKeyPath:@"selectionIndexPaths" context:self];
-    
-    if( observingStream != nil )
-    {
-        [observingStream removeObserver:self forKeyPath:@"anaylizers" context:self];
-        self.observingStream = nil;
-    }
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowWillCloseNotification object:documentWindow];
 }
 
 - (IBAction)imagePopoverClick:(id)sender
