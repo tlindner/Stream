@@ -39,6 +39,7 @@
         }
         else {
             anaObjectClass = [HexFiendAnaylizer class];
+            [_anaylizerObject anaylizeData];
         }
     }
     
@@ -56,6 +57,7 @@
         _anaylizerObject = [[[anaObjectClass alloc] init] autorelease];
         [_anaylizerObject setRepresentedObject:self];
         [self setPrimitiveAnaylizerObject:_anaylizerObject];
+        [_anaylizerObject anaylizeData];
     }
     
     return _anaylizerObject;

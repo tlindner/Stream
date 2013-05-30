@@ -32,6 +32,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
 @synthesize coalescedObject;
 @synthesize charactersObject;
 @synthesize characterObject;
+
 - (id)init
 {
     self = [super init];
@@ -56,24 +57,13 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     }
     
     representedObject = inRepresentedObject;
-    
-    if( inRepresentedObject != nil )
+
+    if( [inRepresentedObject respondsToSelector:@selector(addSubOptionsDictionary:withDictionary:)] )
     {
-        StAnaylizer *theAna = inRepresentedObject;
-        [theAna addSubOptionsDictionary:[CoCoAudioAnaylizer anaylizerKey] withDictionary:[CoCoAudioAnaylizer defaultOptions]];
-        
-        if( [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"] boolValue] == NO )
-        {
-            int audioChannel = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
-            [self loadAudioChannel:audioChannel];
-            [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"];
-        }
-        else {
-            [self reloadChachedAudioFrames];
-        }
-        /* setup observations */
-        [self resumeObservations];
+        [inRepresentedObject addSubOptionsDictionary:[CoCoAudioAnaylizer anaylizerKey] withDictionary:[CoCoAudioAnaylizer defaultOptions]];
     }
+    
+    [self resumeObservations];
 }
 
 - (void)dealloc
@@ -93,10 +83,18 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     [super dealloc];
 }
 
+- (void) anaylizeData
+{
+    StAnaylizer *theAna = self.representedObject;
+    int audioChannel = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
+    [self loadAudioChannel:audioChannel];
+}
+
 - (void) loadAudioChannel:(NSUInteger)audioChannel
 {
     currentAudioChannel = audioChannel;
-    StAnaylizer *theAna = self.representedObject;    
+    StAnaylizer *theAna = self.representedObject;
+    theAna.errorString = @"";
     OSStatus myErr;
     UInt32 propSize;
     
@@ -125,7 +123,10 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
         propSize = sizeof(clientFormat);
         
         myErr = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileDataFormat, &propSize, &clientFormat);
-        NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty1: returned %d", myErr );
+        if (myErr != noErr) {
+            theAna.errorString = [NSString stringWithFormat:@"ExtAudioFileGetProperty (1): returned error: %d", myErr];
+            return;
+        }
         
         UInt32 channelCount = clientFormat.mChannelsPerFrame;
         [theAna setValue:[NSNumber numberWithUnsignedInt:clientFormat.mChannelsPerFrame] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.channelCount"];
@@ -148,13 +149,19 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
         
         propSize = sizeof(SInt64);
         myErr = ExtAudioFileGetProperty(af, kExtAudioFileProperty_FileLengthFrames, &propSize, &fileFrameCount);
-        NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileGetProperty2: returned %d", myErr );
+        if (myErr != noErr) {
+            theAna.errorString = [NSString stringWithFormat:@"ExtAudioFileGetProperty (2): returned error: %d", myErr];
+            return;
+        }
         
         SetCanonical(&clientFormat, (UInt32)channelCount, YES);
         
         propSize = sizeof(clientFormat);
         myErr = ExtAudioFileSetProperty(af, kExtAudioFileProperty_ClientDataFormat, propSize, &clientFormat);
-        NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileSetProperty: returned %d", myErr );
+        if (myErr != noErr) {
+            theAna.errorString = [NSString stringWithFormat:@"ExtAudioFileSetProperty: returned error: %d", myErr];
+            return;
+        }
         
         size_t frameBufferSize = sizeof(AudioSampleType) * fileFrameCount * channelCount;
         AudioSampleType *frameBufferAS = malloc(frameBufferSize+1);
@@ -166,13 +173,17 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
         bufList.mBuffers[0].mDataByteSize = (UInt32)frameBufferSize;
         UInt32 ioFrameCount = (unsigned int)fileFrameCount;
         myErr = ExtAudioFileRead(af, &ioFrameCount, &bufList);
-        NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
+        if (myErr != noErr) {
+            theAna.errorString = [NSString stringWithFormat:@"ExtAudioFileRead: returned error: %d", myErr];
+            return;
+        }
         
         /* destride audio sample so we only have the one selected channel */
         NSMutableData *frameBufferObject = [NSMutableData dataWithLength:sizeof(AudioSampleType) * fileFrameCount];
         AudioSampleType *frameBufferObjectBytes = [frameBufferObject mutableBytes];
         AudioSampleType *sourceAudioFrame = frameBufferAS + (audioChannel - 1);
-        
+        [theAna setValue:[NSString stringWithFormat:@"%d", fileFrameCount] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameCount"];
+
         for( SInt64 i=0; i<fileFrameCount; i++ )
         {
             frameBufferObjectBytes[i] = sourceAudioFrame[i*channelCount];
@@ -193,12 +204,13 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
         [self didChangeValueForKey:@"frameBuffer"];
         
         myErr = ExtAudioFileDispose(af);
-        NSAssert( myErr == noErr, @"CoCoAudioAnaylizer: ExtAudioFileRead: returned %d", myErr );
+        if (myErr != noErr) {
+            theAna.errorString = [NSString stringWithFormat:@"ExtAudioFileDispose: returned error: %d", myErr];
+        }
     }
     else
     {
-        NSLog(@"CoCoAudioAnaylizer: ExtAudioFileOpenURL: could not open file");
-        return;
+        theAna.errorString = @"ExtAudioFileOpenURL: could not open file";
     }
 }
 
@@ -216,7 +228,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
 
 - (NSURL*) makeWavFile:(NSURL *)waveFile withData:(NSData *)data
 {
-        
     StAnaylizer *theAna = self.representedObject;
     Float64 _sample_rate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"] doubleValue];
     UInt32 _channel_count = 1;
@@ -249,14 +260,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     }
 }
 
-- (void) anaylizeData
-{
-    StAnaylizer *theAna = self.representedObject;
-    int audioChannel = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] intValue];
-    [self loadAudioChannel:audioChannel];
-    [theAna setValue:[NSNumber numberWithBool:YES] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.initializedOD"];
-}
-
 - (void) anaylizeAudioData
 {
     NSAssert(self.representedObject != nil, @"Anaylize Audio Data: anaylizer can not be nil");
@@ -270,7 +273,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     float highCycle = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] floatValue];
     BOOL interpolate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"] boolValue];
     
-//    NSMutableData *frameBufferObject = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.frameBufferObject"];
     NSMutableData *frameBufferObject = self.frameBuffer;
     AudioSampleType *audioFrames = [frameBufferObject mutableBytes];
     NSUInteger frameCount = [frameBufferObject length] / sizeof(AudioSampleType);
@@ -297,9 +299,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     
     if( resyncThresholdHertz > lowCycle/2.0 )
     {
-        //self.errorString = @"Resynchronization threshold cannot be larger than half of the low frequency target.";
-        //self.anaylizationError = YES;
-        NSLog( @"Setting anaylization error" );
+        theAna.errorString = @"Resynchronization threshold cannot be larger than half of the low frequency target.";
         return;
     }
     
@@ -475,9 +475,10 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     free( indexBuffer );
 
     self.resultingData = self.characterObject;
-//    [theAna setResultingData:characterObject andChangedIndexSet:changedIndexSetObject];
     
     [changedIndexSetObject release];
+    
+    [theAna.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
 }
 
 - (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte
@@ -653,7 +654,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     
     /* get max of current wave form */
     NSDictionary *optionsDictionary = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
-//    NSMutableData *charactersObject = [optionsDictionary objectForKey:@"charactersObject"];
     NSRange *characters = (NSRange *)[self.charactersObject mutableBytes];
     NSMutableData *audioFramesObject = self.frameBuffer;
     AudioSampleType *audioFrames = [audioFramesObject mutableBytes];
@@ -662,7 +662,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     NSData *previousDataObject = [NSData dataWithBytes:frameStart length:sizeof(AudioSampleType) * characters[idx].length];
     
     /* calculate waveform buffer size */
-//    NSMutableData *characterObject = [theAna valueForKey:@"resultingData"];
     unsigned char *character = [self.characterObject mutableBytes];
     int zeros = 0, ones = 0;
     unsigned int test = character[idx];
@@ -710,7 +709,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     
     /* slide changed byte to accomadate new size */
     unsigned long delta = totalLength - characters[idx].length;
-//    NSMutableIndexSet *changedSet = [optionsDictionary objectForKey:@"changedIndexes"];
     NSMutableIndexSet *previousChangedSet = [self.changedIndexes mutableCopy];
     [self.changedIndexes shiftIndexesStartingAtIndex:characters[idx+1].location by:delta];
     
@@ -738,7 +736,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
 - (void) setPreviousState:(NSDictionary *)previousState
 {
     StAnaylizer *theAna = self.representedObject;
-//    NSMutableDictionary *optionsDict = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController"];
     NSMutableData *frameBufferObject = self.frameBuffer;
     
     /* setup redo */
@@ -748,7 +745,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     NSRange range = [priorRange rangeValue];
     NSData *priorData = [frameBufferObject subdataWithRange:range];
     NSManagedObjectContext *parentContext = [theAna managedObjectContext];
-//    NSIndexSet *priorChangedSet = [optionsDict objectForKey:@"changedIndexes"];
     NSDictionary *priorState = [NSDictionary dictionaryWithObjectsAndKeys:priorData, @"data", priorRange, @"range", [[self.changedIndexes mutableCopy] autorelease], @"indexSet", nil];
     
     /* register redo */
@@ -756,12 +752,9 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     [[parentContext undoManager] setActionName:@"Change"];
     
     /* apply previous state */
-//    [optionsDict willChangeValueForKey:@"frameBufferObject"];
     NSData *previousSamplesObject = [previousState objectForKey:@"data"];
     [frameBufferObject replaceBytesInRange:range withBytes:[previousSamplesObject bytes] length:[previousSamplesObject length]];
-//    [optionsDict didChangeValueForKey:@"frameBufferObject"];
     self.changedIndexes = previousChangedSet;
-//    [optionsDict setObject:previousChangedSet forKey:@"changedIndexes"];
     
     /* re anaylize */
     [self anaylizeAudioData];
@@ -819,8 +812,11 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     vDSP_vsmul( frames, 1, &divisor, &(frames[origin]), 1, width );
     
     NSData *zeros = [NSData dataWithBytes:&(frames[origin]) length:width * sizeof(float)]; 
-    [theAna postEdit:zeros range:NSMakeRange(origin, width)];
+    [theAna postEdit:zeros range:NSMakeRange(origin * sizeof(float), width * sizeof(float))];
+    
+    [self willChangeValueForKey:@"frameBuffer"];
     [self anaylizeAudioData];
+    [self didChangeValueForKey:@"frameBuffer"];
 }
 
 - (void) suspendObservations
@@ -886,7 +882,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
 
 + (NSMutableDictionary *)defaultOptions
 {
-    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNumber numberWithBool:NO], @"initializedOD", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", [NSNumber numberWithInteger:100], @"amplify", [NSNumber numberWithBool:NO], @"selected", [NSNumber numberWithBool:NO], @"interpolate", [NSNumber numberWithBool:NO], @"dcblocking", [NSNumber numberWithBool:NO], @"invert", nil] autorelease];
+    return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"0", @"frameCount", [NSNumber numberWithFloat:1094.68085106384f], @"lowCycle", [NSNumber numberWithFloat:2004.54545454545f], @"highCycle", [NSNumber numberWithFloat:NAN], @"scale", [NSNumber numberWithFloat:0], @"scrollOrigin", [NSNumber numberWithFloat:300.0],@"resyncThreashold", @"1", @"audioChannel", [NSArray arrayWithObject:@"1"], @"audioChannelList", [NSNull null], @"sampleRate", [NSNull null], @"channelCount", [NSNumber numberWithFloat:0.75], @"averagedMaximumSample", [NSNumber numberWithInteger:100], @"amplify", [NSNumber numberWithBool:NO], @"selected", [NSNumber numberWithBool:NO], @"interpolate", [NSNumber numberWithBool:NO], @"dcblocking", [NSNumber numberWithBool:NO], @"invert", nil] autorelease];
 }
 
 @end

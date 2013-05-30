@@ -17,6 +17,7 @@
 		770B6878173D9AB80097305E /* ArbitraryGroupBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B6877173D9AB80097305E /* ArbitraryGroupBlocker.m */; };
 		770B687C173D9B030097305E /* ArbitraryGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B687A173D9B030097305E /* ArbitraryGroupViewController.m */; };
 		770B687D173D9B030097305E /* ArbitraryGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 770B687B173D9B030097305E /* ArbitraryGroupViewController.xib */; };
+		770BF39317525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 770BF39217525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib */; };
 		770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */; };
 		771AD296141D06C800E0FE41 /* CoCoAudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */; };
 		771AD29A141D414B00E0FE41 /* HexFiendAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */; };
@@ -211,6 +212,7 @@
 		770B6879173D9B030097305E /* ArbitraryGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArbitraryGroupViewController.h; path = "Stream/Generic Blockers/ArbitraryGroupViewController.h"; sourceTree = "<group>"; };
 		770B687A173D9B030097305E /* ArbitraryGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ArbitraryGroupViewController.m; path = "Stream/Generic Blockers/ArbitraryGroupViewController.m"; sourceTree = "<group>"; };
 		770B687B173D9B030097305E /* ArbitraryGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ArbitraryGroupViewController.xib; path = "Stream/Generic Blockers/ArbitraryGroupViewController.xib"; sourceTree = "<group>"; };
+		770BF39217525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerBlockSettingPopover.xib; path = Stream/AnaylizerBlockSettingPopover.xib; sourceTree = "<group>"; };
 		770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataViewController.h; path = Stream/BlockerDataViewController.h; sourceTree = "<group>"; };
 		770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataViewController.m; path = Stream/BlockerDataViewController.m; sourceTree = "<group>"; };
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
@@ -822,6 +824,7 @@
 				77263A8813F734EC00EBD507 /* AnaylizerSettingPopOverViewController.h */,
 				77263A8913F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m */,
 				77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */,
+				770BF39217525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib */,
 				779F74C81724779F00EC509B /* AnaylizerListViewItem.h */,
 				779F74C91724779F00EC509B /* AnaylizerListViewItem.m */,
 				779F74CB172478F500EC509B /* AnaylizerListViewItem.xib */,
@@ -1194,6 +1197,7 @@
 				77ABAF4A17499C8300CE3C6F /* RawBitmapAccessoryView.xib in Resources */,
 				77ABAF4E1749C3F900CE3C6F /* ImageNotWorking.tiff in Resources */,
 				77331D70174DB99200E69E11 /* GetNetURLWindowController.xib in Resources */,
+				770BF39317525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -145,6 +145,8 @@ static NSColor *failColor;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
     newBlock.expectedSize = length;
+    newBlock.icon = nil;
+    newBlock.attributeColor = nil;
     attrSubBlock.expectedSize += length;
     
 //    [self checkEdited:newBlock];
@@ -227,6 +229,8 @@ static NSColor *failColor;
     newBlock.repeat = repeat;
     newBlock.expectedSize = expectedLength;
     dataBlock.expectedSize = dataBlock.expectedSize + expectedLength;
+    newBlock.icon = nil;
+    newBlock.attributeColor = nil;
     
 //    [self checkEdited:newBlock];
 //    [self checkFail:newBlock];
@@ -272,6 +276,8 @@ static NSColor *failColor;
     newBlock.checkBytes = verify;
     newBlock.valueTransformer = transform;
     depBlock.expectedSize += length;
+    newBlock.icon = nil;
+    newBlock.attributeColor = nil;
     
 //    [self checkEdited:newBlock];
 //    [self checkFail:newBlock];
@@ -814,6 +820,11 @@ static NSColor *failColor;
     return result;
 }
 
+- (void) setAttributeColor:(NSColor *)attributeColor
+{
+    [self setPrimitiveAttributeColor:attributeColor];
+}
+
 - (NSColor *)attributeColor
 {
     NSColor *_attributeColor = [self primitiveAttributeColor];
@@ -861,6 +872,11 @@ static NSColor *failColor;
     }
     
     return _attributeColor;
+}
+
+- (void) setIcon:(NSImage *)icon
+{
+    [self setPrimitiveIcon:icon];
 }
 
 - (NSImage *)icon
@@ -1000,6 +1016,8 @@ static NSColor *failColor;
     self.unionRange = nil;
     self.expectedSize = 0;
     actualBlockSizeCache = 0;
+    self.icon = nil;
+    
     if (dataSubBlock)
     {
         dataSubBlock.markForDeletion = YES;
@@ -1008,6 +1026,7 @@ static NSColor *failColor;
         dataSubBlock.unionRange = nil;
         dataSubBlock.expectedSize = 0;
         dataSubBlock.actualBlockSizeCache = 0;
+        dataSubBlock.icon = nil;
         if ([dataSubBlock.blocks count] > 0) [[dataSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
     }
     
@@ -1018,6 +1037,7 @@ static NSColor *failColor;
         attrSubBlock.unionRange = nil;
         attrSubBlock.expectedSize = 0;
         attrSubBlock.actualBlockSizeCache = 0;
+        attrSubBlock.icon = nil;
         if ([attrSubBlock.blocks count] > 0) [[attrSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
     }
     
@@ -1028,6 +1048,7 @@ static NSColor *failColor;
         depSubBlock.unionRange = nil;
         depSubBlock.expectedSize = 0;
         depSubBlock.actualBlockSizeCache = 0;
+        depSubBlock.icon = nil;
         if ([depSubBlock.blocks count] > 0) [[depSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
     }
 }
@@ -1036,7 +1057,9 @@ static NSColor *failColor;
 {
     self.anaylizerObject = nil;
     self.resultingData = nil;
+    self.icon = nil;
     self.attributeColor = nil;
+    self.unionRange = nil;
 }
 
 - (BOOL) canChangeEditor

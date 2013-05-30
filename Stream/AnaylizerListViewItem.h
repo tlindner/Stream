@@ -8,12 +8,17 @@
 
 #import "SDListViewItem.h"
 
-@class DragRegionView, ColorGradientView, TLImageWithPopover, StBlock;
+@class DragRegionView, ColorGradientView, TLImageWithPopover, StBlock, AnaylizerSettingPopOverViewController;
 
 @interface AnaylizerListViewItem : SDListViewItem
 {
     NSViewController  *editorController;
 }
+
+@property (nonatomic, readonly) NSArray *utiList;
+@property (nonatomic, readonly) NSArray *editorList;
+@property (nonatomic, readonly) NSString *acceptsUTIList;
+@property (nonatomic, readonly) StBlock *selectedBlock;
 
 @property (assign) IBOutlet DragRegionView *dragView;
 @property (assign) IBOutlet NSButton *disclosureTriangle;
@@ -21,8 +26,12 @@
 @property (retain) NSViewController *editorController;
 @property (assign) IBOutlet ColorGradientView *colorGradientView;
 @property (assign) IBOutlet NSButton *blockSettingsButton;
+@property (assign) IBOutlet NSButton *anaylizerSettingsButton;
 @property (assign) IBOutlet NSButton *anaylizerErrorButton;
+
 @property (assign) IBOutlet NSViewController *blockSettingsViewController;
+@property (assign) IBOutlet AnaylizerSettingPopOverViewController *anaylizerSettingsViewController;
+
 @property (assign) IBOutlet TLImageWithPopover *imageWithPopover;
 @property (assign) NSTreeController *blockTreeController;
 @property (assign) StBlock *previousBoundBlock;
@@ -30,6 +39,8 @@
 - (IBAction)removeAnaylizer:(id)sender;
 - (IBAction)collapse:(id)sender;
 - (IBAction)blockSetttings:(id)sender;
+- (IBAction)anaylizerSettings:(id)sender;
+- (void)popoverWillClose:(NSNotification *)notification;
 - (void)loadStreamEditor;
 
 - (void) suspendObservations;

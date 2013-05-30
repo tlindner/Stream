@@ -16,6 +16,7 @@ static BOOL initialized = NO;
 
 @synthesize classList;
 @synthesize nameLookup;
+@synthesize utiList;
 
 + (void)initialize
 {
@@ -25,6 +26,7 @@ static BOOL initialized = NO;
         {
             sharedSingleton = [[Analyzation alloc] init];
             initialized = YES;
+            sharedSingleton.utiList = [NSMutableArray array];
             [sharedSingleton addAnalyzer:@"CoCoAudioAnaylizer"];
             [sharedSingleton addAnalyzer:@"BlockerDataAnaylizer"];
             [sharedSingleton addAnalyzer:@"BlockAttributeAnaylizer"];
@@ -35,6 +37,14 @@ static BOOL initialized = NO;
             [sharedSingleton addAnalyzer:@"CoCoDeTokenBinaryBASIC"];
             [sharedSingleton addAnalyzer:@"OS9DirectoryFile"];
             [sharedSingleton addAnalyzer:@"RawBitmapAnaylizer"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
+//            [sharedSingleton addAnalyzer:@"XXX"];
 //            [sharedSingleton addAnalyzer:@"XXX"];
 //            [sharedSingleton addAnalyzer:@"XXX"];
             
@@ -81,6 +91,14 @@ static BOOL initialized = NO;
     Class theClass = NSClassFromString(anaylizer);
     [self.nameLookup setObject:theClass forKey:[theClass anayliserName]];
 
+    /* build uti list for user interface */
+    for (NSString *uti in [theClass anaylizerUTIs]) {
+        if (![self.utiList containsObject:uti]) {
+            [self.utiList addObject:uti];
+        }
+    }
+    
+    [self.utiList sortUsingSelector:@selector(compare:)];
 }
 
 - (NSArray*)anaylizersforUTI:(NSString *)inUTI
@@ -125,6 +143,7 @@ static BOOL initialized = NO;
 }
 
 - (void)dealloc {
+    self.utiList = nil;
     self.classList = nil;
     self.nameLookup = nil;
 

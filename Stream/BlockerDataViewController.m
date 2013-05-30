@@ -351,6 +351,7 @@
     }
     else if( [keyPath isEqualToString:@"editIndexSet"] )
     {
+        [outlineView reloadData];
         [outlineView setNeedsDisplay];
     }
     else if( [keyPath isEqualToString:@"viewRange"] )

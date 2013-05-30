@@ -52,7 +52,7 @@
     [super windowControllerDidLoadNib:aController];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
     
-//    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
+    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
 //    NSManagedObjectContext *newMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
 //    [newMOC setPersistentStoreCoordinator:psc];
 //    [self setManagedObjectContext:newMOC];
@@ -62,6 +62,20 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(documentWindowWillClose:) name:NSWindowWillCloseNotification object:documentWindow];
     [outlineView setFocusRingType:NSFocusRingTypeNone];
+    
+    NSArray *psa = [psc persistentStores];
+    
+    if (psa != nil) {
+        if ([psa count] > 0) {
+            NSPersistentStore *ps = [psa objectAtIndex:0];
+            NSDictionary *meta = [ps metadata];
+            NSString *rectString = [meta objectForKey:@"windowFrame"];
+            
+            if (rectString != nil) {
+                [[[[self windowControllers] objectAtIndex:0] window] setFrameFromString:rectString];
+            }
+        }
+    }
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
@@ -94,6 +108,12 @@
 
                 while (url == nil) {
                     findParentURLStream = findParentURLStream.parentStream;
+                    
+                    if (findParentURLStream == nil) {
+                        url = nil;
+                        break;
+                    }
+                    
                     url = [findParentURLStream sourceURL];
                 }
                 
@@ -264,6 +284,29 @@
     if( err != nil )
     {
         NSLog( @"%@", err );
+    }
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+#pragma unused (notification)
+    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
+    NSArray *psa = [psc persistentStores];
+    
+    if (psa != nil) {
+        if ([psa count] > 0) {
+            NSPersistentStore *ps = [psa objectAtIndex:0];
+            NSString *frameString = [[[[self windowControllers] objectAtIndex:0] window] stringWithSavedFrame];
+            NSMutableDictionary *meta = [[[ps metadata] mutableCopy] autorelease];
+            [meta setObject:frameString forKey:@"windowFrame"];
+            [psc setMetadata:meta forPersistentStore:ps];
+            NSError *err = nil;
+            [self.managedObjectContext save:&err];
+            
+            if (err != nil) {
+                NSLog(@"Error setting meta data: %@", err);
+            }
+        }
     }
 }
 

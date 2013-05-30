@@ -16,6 +16,7 @@
 
 @property(nonatomic, retain) NSMutableArray *classList;
 @property(nonatomic, retain) NSMutableDictionary *nameLookup;
+@property(nonatomic, retain) NSMutableArray *utiList;
 
 + (Analyzation *)sharedInstance;
 - (void) addAnalyzer:(NSString *)anaylizer;
