@@ -19,6 +19,7 @@
 @property (nonatomic, readonly) NSArray *editorList;
 @property (nonatomic, readonly) NSString *acceptsUTIList;
 @property (nonatomic, readonly) StBlock *selectedBlock;
+@property (nonatomic, assign) StBlock *previousSelectedBlock;
 
 @property (assign) IBOutlet DragRegionView *dragView;
 @property (assign) IBOutlet NSButton *disclosureTriangle;
@@ -33,7 +34,7 @@
 @property (assign) IBOutlet AnaylizerSettingPopOverViewController *anaylizerSettingsViewController;
 
 @property (assign) IBOutlet TLImageWithPopover *imageWithPopover;
-@property (assign) NSTreeController *blockTreeController;
+@property (nonatomic, readonly) NSTreeController *blockTreeController;
 @property (assign) StBlock *previousBoundBlock;
 
 - (IBAction)removeAnaylizer:(id)sender;

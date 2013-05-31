@@ -49,7 +49,7 @@
 {
     AnaylizerListViewItem *ro = self.representedObject;
     StData *data = (StData *)ro.selectedBlock;
-    
+
     /* are we a blocker anaylizer? */
     if (data == nil) {
         /* nope, we are a filter anaylizer */

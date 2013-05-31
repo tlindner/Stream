@@ -52,22 +52,32 @@
 @synthesize editorList;
 @synthesize acceptsUTIList;
 @synthesize selectedBlock;
+@synthesize previousSelectedBlock;
 
 - (void)setRepresentedObject:(id)representedObject
 {
     [super setRepresentedObject:representedObject];
     
-    if (representedObject != nil) {
-        [representedObject addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
-        [representedObject addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
+//    if (representedObject != nil) {
+//        [representedObject addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+//        [representedObject addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
 //        [representedObject addObserver:self forKeyPath:@"sourceUTI" options:0 context:self];
-    }    
+//    }    
 }
 
 - (void)loadView
 {
     [super loadView];
     [self loadStreamEditor];
+    
+    if (self.blockTreeController == nil) {
+        [[self representedObject] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+    } else {
+        [self.blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
+        [[self selectedBlock] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+    }
+    
+    [[self representedObject] addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
 }
 
 - (NSArray *)utiList
@@ -101,16 +111,25 @@
     return [[Analyzation sharedInstance] anaylizersforUTI:[ro valueForKey:@"sourceUTI"]];
 }
 
+- (NSTreeController *)blockTreeController
+{
+    NSTreeController *result = nil;
+    
+    if ([[[self representedObject] currentEditorView] isEqualToString:@"Blocker View"]) {
+        BlockerDataViewController *blockerController = (BlockerDataViewController *)self.editorController;
+        result = blockerController.treeController;
+    }
+    
+    return result;
+}
+
 - (StBlock *)selectedBlock
 {
     StBlock *result = nil;
-    StData *ro = self.representedObject;
     
-    if( [ro.currentEditorView isEqualToString:@"Blocker View"] )
+    if( self.blockTreeController != nil )
     {
-        BlockerDataViewController *blockerController = (BlockerDataViewController *)self.editorController;
-        blockTreeController = blockerController.treeController;
-        NSArray *selectedObjects = [blockTreeController selectedObjects];
+        NSArray *selectedObjects = [self.blockTreeController selectedObjects];
         
         if( [selectedObjects count] > 0 )
         {
@@ -140,7 +159,15 @@
         }
         else if ([keyPath isEqualToString:@"currentEditorView"]) {
             [self willChangeValueForKey:@"acceptsUTIList"];
-            [self loadStreamEditor];
+
+            if (self.blockTreeController == nil) {
+                [self loadStreamEditor];
+            } else {
+                if (anaylizerSettingsViewController != nil) {
+                    [self.anaylizerSettingsViewController setAccessoryView];
+                }
+            }
+            
             [self didChangeValueForKey:@"acceptsUTIList"];
         }
         else if ([keyPath isEqualToString:@"paneExpanded"]) {
@@ -172,14 +199,21 @@
                 if (block != nil) {
                     [imageWithPopover bind:@"errorMessage2" toObject:block withKeyPath:@"errorString" options:nil];
                 }
-                
+
                 /* update setting pop over */
                 if (anaylizerSettingsViewController != nil) {
                     [self willChangeValueForKey:@"editorList"];
                     [self willChangeValueForKey:@"acceptsUTIList"];
+
+                    [self.previousSelectedBlock removeObserver:self forKeyPath:@"currentEditorView" context:self];
                     [self.anaylizerSettingsViewController setAccessoryView];
+                    
+                    self.previousSelectedBlock = [self selectedBlock];
+                    [self.previousSelectedBlock addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+
                     [self didChangeValueForKey:@"acceptsUTIList"];
                     [self didChangeValueForKey:@"editorList"];
+                    
                 }
             } else {
                 NSLog(@"selected objects changed but, editor controller is not a block controller");
@@ -192,32 +226,16 @@
 
 - (void)dealloc
 {
-    StAnaylizer *theAna = [self representedObject];
-    
-    if (self.representedObject != nil) {
-        [self.representedObject removeObserver:self forKeyPath:@"currentEditorView" context:self];
-        [self.representedObject removeObserver:self forKeyPath:@"paneExpanded" context:self];
-        self.representedObject = nil;
+    if (anaylizerSettingsViewController != nil) {
+        [anaylizerSettingsViewController.popover performClose:self];
     }
     
-    if (self.editorController != nil) {
-//        [self.editorController.view removeFromSuperview];
-//        [self.editorController setRepresentedObject:nil];
-        self.editorController = nil;
-    }
-    
-    blockSettingsViewController = nil;
-    
-    if (self.blockTreeController != nil) {
-        [self.blockTreeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
-        self.blockTreeController = nil;
-    }
-
+    self.editorController = nil;
+    self.blockSettingsViewController = nil;
     [imageWithPopover unbind:@"errorMessage"];
+    StAnaylizer *theAna = [self representedObject];
     theAna.viewController = nil;
-    
-    [theAna setViewController:nil];
-    
+
     [super dealloc];
 }
 
@@ -243,13 +261,7 @@
     
     [imageWithPopover unbind:@"errorMessage"];
     [imageWithPopover bind:@"errorMessage" toObject:theAna withKeyPath:@"errorString" options:nil];
-    
-    if ([[theAna valueForKey:@"currentEditorView"] isEqualToString:@"Blocker View"]) {
-        BlockerDataViewController *blockerController = (BlockerDataViewController *)self.editorController;
-        blockTreeController = blockerController.treeController;
-        [blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
-    }
-    
+
     if (anaylizerSettingsViewController != nil) {
         [self.anaylizerSettingsViewController setAccessoryView];
     }
@@ -312,12 +324,12 @@
 {
 #pragma unused (sender)
     if (anaylizerSettingsViewController == nil) {
-        StBlock *block = [self selectedBlock];
-        
-        if (block == nil) {
+        if (self.blockTreeController == nil) {
             self.anaylizerSettingsViewController = [[AnaylizerSettingPopOverViewController alloc] initWithNibName:@"AnaylizerSettingPopover" bundle:nil];
         } else {
             self.anaylizerSettingsViewController = [[AnaylizerSettingPopOverViewController alloc] initWithNibName:@"AnaylizerBlockSettingPopover" bundle:nil];
+            [self.selectedBlock addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+            self.previousSelectedBlock = self.selectedBlock;
         }
         
         [self.anaylizerSettingsViewController setRepresentedObject:self];
@@ -332,6 +344,7 @@
 {
     if ([notification object] == anaylizerSettingsViewController.popover) {
         /* anaylizer view controller will close */
+        [[self selectedBlock] removeObserver:self forKeyPath:@"currentEditorView" context:self];
         self.anaylizerSettingsViewController = nil;
     }
 }
@@ -341,36 +354,35 @@
     [blockSettingsViewController suspendObservations];
     [editorController suspendObservations];
 
-    if ([self representedObject] != nil) {
+    if (self.blockTreeController == nil) {
         [[self representedObject] removeObserver:self forKeyPath:@"currentEditorView" context:self];
-        [[self representedObject] removeObserver:self forKeyPath:@"paneExpanded" context:self];
-//        [self.representedObject removeObserver:self forKeyPath:@"sourceUTI" context:self];
+    } else {
+        if (anaylizerSettingsViewController != nil) {
+            [[self selectedBlock] removeObserver:self forKeyPath:@"currentEditorView" context:self];
+        }
+        
+        [self.blockTreeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
     }
 
-    if ([[[self representedObject] valueForKey:@"currentEditorView"] isEqualToString:@"Blocker View"]) {
-        BlockerDataViewController *blockerController = (BlockerDataViewController *)self.editorController;
-        blockTreeController = blockerController.treeController;
-        [blockTreeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
-    }
+    [[self representedObject] removeObserver:self forKeyPath:@"paneExpanded" context:self];
 }
 
 - (void) resumeObservations
 {
     [blockSettingsViewController resumeObservations];
     [editorController resumeObservations];
-    
-    if ([self representedObject] != nil) {
-        [[self representedObject] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
-        [[self representedObject] addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
-//        [[self representedObject] addObserver:self forKeyPath:@"sourceUTI" options:0 context:self];
-    }
-    
-    if ([[[self representedObject] valueForKey:@"currentEditorView"] isEqualToString:@"Blocker View"]) {
-        BlockerDataViewController *blockerController = (BlockerDataViewController *)self.editorController;
-        blockTreeController = blockerController.treeController;
-        [blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
-    }
-}
 
+    if (self.blockTreeController == nil) {
+        [[self representedObject] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+    } else {
+        if (anaylizerSettingsViewController != nil) {
+            [[self selectedBlock] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+        }
+        
+        [self.blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
+    }
+
+    [[self representedObject] addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
+}
 
 @end
