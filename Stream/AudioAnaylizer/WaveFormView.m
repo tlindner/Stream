@@ -82,6 +82,9 @@ typedef struct
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnaylizer addObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"failIndexSet" options:NSKeyValueChangeSetting context:nil];
         [self.cachedAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
@@ -103,6 +106,9 @@ typedef struct
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.amplify"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.interpolate"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.invert"];
+        [self.cachedAnaylizer removeObserver:self forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"resultingData"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"failIndexSet"];
         [self.cachedAnaylizer removeObserver:self forKeyPath:@"editIndexSet"];
@@ -536,41 +542,77 @@ typedef struct
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     //NSLog(@"ObserveValueForKeyPath: %@\nofObject: %@\nchange: %@\ncontext: %p", keyPath, object, change, context);
-    
-    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] )
+    if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.interpolate"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
-    }
-    else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] )
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+    } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.amplify"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+    } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.invert"])
+    {
+        resample = YES;
+        [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+    } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"])
+    {
+        resample = YES;
+        [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+    } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] )
+    {
+        resample = YES;
+        [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+    } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] )
+    {
+        resample = YES;
+        [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"resultingData"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"failIndexSet"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"editIndexSet"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
+        [self.cachedAnaylizer.anaylizerObject anaylizeData];
+        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"frameBuffer"] )
     {
@@ -580,11 +622,6 @@ typedef struct
     else if( [keyPath isEqualToString:@"viewRange"] )
     {
         [self zoomToCharacter: [[self.cachedAnaylizer viewRange] rangeValue]];
-    }
-    else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.amplify"] )
-    {
-        resample = YES;
-        [self setNeedsDisplay:YES];
     }
     else if( [keyPath isEqualToString:@"anaylizers"] )
     {

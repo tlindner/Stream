@@ -134,7 +134,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
         if( audioChannel > channelCount )
             audioChannel = channelCount;
         
-        [theAna setValue:[NSString stringWithFormat:@"%d", audioChannel] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
+//        [theAna setValue:[NSString stringWithFormat:@"%d", audioChannel] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"];
         [theAna setValue:[NSNumber numberWithDouble:clientFormat.mSampleRate] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.sampleRate"];
         
         /* Build array for channel popup list in accessory view */
@@ -477,8 +477,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     self.resultingData = self.characterObject;
     
     [changedIndexSetObject release];
-    
-    [theAna.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
 }
 
 - (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte

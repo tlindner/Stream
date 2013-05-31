@@ -699,7 +699,6 @@
 							<reference ref="409689703"/>
 							<reference ref="414849455"/>
 							<reference ref="52657636"/>
-							<reference ref="187312482"/>
 							<reference ref="62519616"/>
 							<reference ref="979818446"/>
 							<reference ref="453544161"/>
@@ -1171,6 +1170,7 @@
 								<int key="contentType">2</int>
 								<reference key="containingView" ref="487033926"/>
 							</object>
+							<reference ref="187312482"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>

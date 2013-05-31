@@ -286,6 +286,23 @@
     }
 }
 
+- (void)windowDidEndLiveResize:(NSNotification *)notification
+{
+#pragma unused (notification)
+    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
+    NSArray *psa = [psc persistentStores];
+    
+    if (psa != nil) {
+        if ([psa count] > 0) {
+            NSPersistentStore *ps = [psa objectAtIndex:0];
+            NSString *frameString = [[[[self windowControllers] objectAtIndex:0] window] stringWithSavedFrame];
+            NSMutableDictionary *meta = [[[ps metadata] mutableCopy] autorelease];
+            [meta setObject:frameString forKey:@"windowFrame"];
+            [psc setMetadata:meta forPersistentStore:ps];
+        }
+    }
+}
+
 - (void)windowWillClose:(NSNotification *)notification
 {
 #pragma unused (notification)
@@ -298,25 +315,6 @@
     }
 
     [listView suspendObservations];
-
-    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
-    NSArray *psa = [psc persistentStores];
-    
-    if (psa != nil) {
-        if ([psa count] > 0) {
-            NSPersistentStore *ps = [psa objectAtIndex:0];
-            NSString *frameString = [[[[self windowControllers] objectAtIndex:0] window] stringWithSavedFrame];
-            NSMutableDictionary *meta = [[[ps metadata] mutableCopy] autorelease];
-            [meta setObject:frameString forKey:@"windowFrame"];
-            [psc setMetadata:meta forPersistentStore:ps];
-            NSError *err = nil;
-            [self.managedObjectContext save:&err];
-            
-            if (err != nil) {
-                NSLog(@"Error setting meta data: %@", err);
-            }
-        }
-    }
 }
 
 - (IBAction)removeStream:(id)sender

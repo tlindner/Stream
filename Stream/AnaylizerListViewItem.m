@@ -72,6 +72,7 @@
     
     if (self.blockTreeController == nil) {
         [[self representedObject] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+        [[self.representedObject anaylizerObject] anaylizeData];
     } else {
         [self.blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
         [[self selectedBlock] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
