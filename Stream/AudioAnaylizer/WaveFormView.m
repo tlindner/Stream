@@ -43,7 +43,6 @@ typedef struct
 @synthesize viewController;
 @synthesize cachedAnaylizer;
 @synthesize anaylizationError;
-@synthesize errorString;
 @synthesize observationsActive;
 
 //- (void)setFrame:(NSRect)frameRect
@@ -141,18 +140,6 @@ typedef struct
     NSRange *coalescedCharacters = [coalescedObject mutableBytes];
     NSUInteger coa_char_count = [coalescedObject length]/sizeof(NSRange);
     unsigned char *character = [characterObject mutableBytes];
-    
-    /* Drawing code here. */
-    if( anaylizationError == YES )
-    {
-        if (errorString == nil) self.errorString = @"No error message set!";
-        
-        [errorString drawInRect:dirtyRect withAttributes:nil];
-        
-        [[NSColor grayColor] set];
-        NSRectFill(dirtyRect);
-        return;
-    }
     
     if( audioFrames != nil )
     {
@@ -422,31 +409,31 @@ typedef struct
              [aPath fill];
          }];
         
-        /* draw red fail tints */
-        [[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5] set];
-        NSMutableIndexSet *failSet = [self.cachedAnaylizer valueForKeyPath:@"failIndexSet"];
-        range = NSMakeRange(0, NSUIntegerMax);
-        [failSet enumerateRangesInRange:range options:0 usingBlock:
-         ^(NSRange range, BOOL *stop)
-         {
-             #pragma unused(stop)
-             NSRect rect = NSMakeRect(characters[range.location].location, 0.0, 0.0, viewWaveHeight);
-             
-             for( NSUInteger i = 0; i<range.length; i++ )
-             {
-                 rect.size.width += characters[range.location + i].length;
-             }
-             
-             rect.origin.x /= scale;
-             rect.size.width /= scale;
-
-             NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
-             [aPath fill];
-             rect.origin.y = viewWaveHeight+2.0;
-             rect.size.height = 13;
-             aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
-             [aPath fill];
-         }];
+//        /* draw red fail tints */
+//        [[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5] set];
+//        NSMutableIndexSet *failSet = [self.cachedAnaylizer valueForKeyPath:@"failIndexSet"];
+//        range = NSMakeRange(0, NSUIntegerMax);
+//        [failSet enumerateRangesInRange:range options:0 usingBlock:
+//         ^(NSRange range, BOOL *stop)
+//         {
+//             #pragma unused(stop)
+//             NSRect rect = NSMakeRect(characters[range.location].location, 0.0, 0.0, viewWaveHeight);
+//             
+//             for( NSUInteger i = 0; i<range.length; i++ )
+//             {
+//                 rect.size.width += characters[range.location + i].length;
+//             }
+//             
+//             rect.origin.x /= scale;
+//             rect.size.width /= scale;
+//
+//             NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
+//             [aPath fill];
+//             rect.origin.y = viewWaveHeight+2.0;
+//             rect.size.height = 13;
+//             aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
+//             [aPath fill];
+//         }];
         
         /* draw lupe & selection rect */
         if( mouseDownOnPoint == NO )
@@ -466,6 +453,7 @@ typedef struct
             NSArray *blocksArray = [blocksSet sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
             NSArray *nameArray = [blocksArray valueForKey:@"name"];
             NSArray *rangeArrayObject = [blocksArray valueForKey:@"unionRange"];
+            NSArray *blocksColor = [blocksArray valueForKey:@"attributeColor"];
             NSRange *rangeArray = (NSRange *)malloc(sizeof(NSRange) * [rangeArrayObject count]);
             
             for (NSUInteger j=0; j<[rangeArrayObject count]; j++ )
@@ -481,10 +469,16 @@ typedef struct
             
             for (NSUInteger j=0; j<[nameArray count]; j++ )
             {
-                if (j & 0x1 )
-                    [lightColor set];
-                else
-                    [darkColor set];
+                NSColor *blockColor = [blocksColor objectAtIndex:j];
+                if ([blockColor isEqual:[NSColor clearColor]]) {
+                    if (j & 0x1 )
+                        [lightColor set];
+                    else
+                        [darkColor set];
+
+                } else {
+                    [blockColor set];
+                }
                 
                 NSRect blobRect, textRect;
                 

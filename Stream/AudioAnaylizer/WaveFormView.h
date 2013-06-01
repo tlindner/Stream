@@ -52,7 +52,6 @@
 @property (nonatomic, assign) StAnaylizer *cachedAnaylizer;
 @property (nonatomic, assign) BOOL observationsActive;
 @property (nonatomic, assign) BOOL anaylizationError;
-@property (nonatomic, retain) NSString *errorString;
 
 - (IBAction)chooseTool:(id)sender;
 - (void) activateObservations;
