@@ -420,6 +420,15 @@
     [super dealloc];
 }
 
+- (NSString *)outlineView:(NSOutlineView *)outlineView toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tc item:(id)item mouseLocation:(NSPoint)mouseLocation
+{
+#pragma unused (outlineView, cell, rect, tc, mouseLocation)
+    NSTreeNode *tn = item;
+    StBlock *block = [tn representedObject];
+    
+    return [block whyFail];
+}
+
 - (NSColor *)tableView:(NSOutlineView *)aTableView backgroundColorForRow:(NSInteger)rowIndex
 {
     NSColor *backgroundColor = [[[aTableView itemAtRow:rowIndex] representedObject] attributeColor];

@@ -547,72 +547,83 @@ typedef struct
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.amplify"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.invert"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"resultingData"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"failIndexSet"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"editIndexSet"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
-        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
+        [self.cachedAnaylizer.parentStream regenerateAllBlocks];
+//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"frameBuffer"] )
     {
@@ -1136,14 +1147,22 @@ typedef struct
 {
     toolMode = WFVLupe;
     NSMutableData *charactersObject = modelObject.charactersObject;
+    NSUInteger characterCount = [charactersObject length] / sizeof(NSRange);
     NSRange *characters = (NSRange *)[charactersObject mutableBytes];
+    CGFloat currentFrameWidth = [self frame].size.width;
     
     NSRect currentBounds = [[self superview] bounds];
     double timeToAccel = ZOOM_FRAMES/3.0;
-    double timeCruising = ZOOM_FRAMES / 3.0;
+    double timeCruising = ZOOM_FRAMES/3.0;
     double timeToDecel = ZOOM_FRAMES/3.0;
-    double finalPositionOrigin = characters[range.location].location - currentBounds.origin.x;
-    double finalPositionWidth = (characters[range.location + range.length].location - characters[range.location].location) - currentBounds.size.width;
+    
+    NSUInteger rangeMin = range.location;
+    rangeMin = MIN(rangeMin, characterCount-1);
+    NSUInteger rangeMax = range.location + range.length;
+    rangeMax = MIN(rangeMax, characterCount-1);
+    
+    double finalPositionOrigin = characters[rangeMin].location - currentBounds.origin.x;
+    double finalPositionWidth = ((characters[rangeMax].location + characters[rangeMax].length) - characters[rangeMin].location);
 
     for( int currentTime=0; currentTime<ZOOM_FRAMES; currentTime++ )
     {
@@ -1151,8 +1170,13 @@ typedef struct
         sizeFrames[currentTime] = currentBounds.size.width + Interpolate( timeToAccel, timeCruising, timeToDecel, finalPositionWidth, currentTime);
     }
     
-    originFrames[ZOOM_FRAMES] = characters[range.location].location - 5;
-    sizeFrames[ZOOM_FRAMES] = (characters[range.location + range.length].location - characters[range.location].location) + 5;
+    originFrames[ZOOM_FRAMES] = characters[rangeMin].location - 5.0;
+    originFrames[ZOOM_FRAMES] = MAX(originFrames[ZOOM_FRAMES], 0.0);
+    originFrames[ZOOM_FRAMES] = MIN(originFrames[ZOOM_FRAMES], currentFrameWidth);
+    
+    sizeFrames[ZOOM_FRAMES] = ((characters[rangeMax].location + characters[rangeMax].length) - characters[rangeMin].location) + 10.0;
+    sizeFrames[ZOOM_FRAMES] = MAX(sizeFrames[ZOOM_FRAMES], 1.0);
+    sizeFrames[ZOOM_FRAMES] = MIN(sizeFrames[ZOOM_FRAMES], currentFrameWidth - originFrames[ZOOM_FRAMES]);
     
     currentFrame = 0;
     panMomentumTimer = [[NSTimer scheduledTimerWithTimeInterval:0.035 target:self selector:@selector(mouseMomentum:) userInfo:nil repeats:YES] retain];

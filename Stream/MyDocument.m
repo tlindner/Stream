@@ -314,7 +314,7 @@
         self.observingStream = nil;
     }
 
-    [listView suspendObservations];
+//    [listView suspendObservations];
 }
 
 - (IBAction)removeStream:(id)sender

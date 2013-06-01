@@ -93,7 +93,7 @@ static const int endianTable[] = { 1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12,
                 if( i+blockLength+3 < length ) [newBlock addAttributeRange:@"stream" start:i+blockLength+3 length:1 name:@"Check Sum" verification:[NSData dataWithBytes:&checksumCheck length:1] transformation:@"BlocksUnsignedBigEndian"];
                 if( i+blockLength+4 < length ) [newBlock addAttributeRange:@"stream" start:i+blockLength+4 length:1 name:@"Fixed" verification:[NSData dataWithBytes:&fixed length:1] transformation:@"BlocksUnsignedBigEndian"];
                 
-                if( (blockType == 0) && (blockLength == 0x0f) )
+                if( (blockType == 0) && (blockLength == 0x0f) && (actualLength == 0x0f) )
                 {
                     [newBlock addDataRange:@"stream" start:i+3 length:8 name:@"File Name" transformation:@"RSDOSString"];
                     [newBlock addDataRange:@"stream" start:i+11 length:1 name:@"File Type" transformation:@"BlocksUnsignedBigEndian"];

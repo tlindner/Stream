@@ -129,6 +129,9 @@ static NSColor *failColor;
         newBlock.isEdit = NO;
         newBlock.isFail = NO;
         newBlock.resultingData = nil;
+        newBlock.expectedSize = 0;
+        newBlock.actualBlockSizeCache = 0;
+        newBlock.unionRange = nil;
     }
     else
     {
@@ -211,6 +214,9 @@ static NSColor *failColor;
         newBlock.isEdit = NO;
         newBlock.isFail = NO;
         newBlock.resultingData = nil;
+        newBlock.expectedSize = 0;
+        newBlock.actualBlockSizeCache = 0;
+        newBlock.unionRange = nil;
     }
     else
     {
@@ -244,8 +250,8 @@ static NSColor *failColor;
     StBlock *depBlock = depSubBlock; //[self subBlockNamed:@"dependencies"];
     
     if (depBlock == nil) {
-        depBlock = [NSEntityDescription insertNewObjectForEntityForName:@"dependencies" inManagedObjectContext:self.managedObjectContext];
-        depBlock.name = @"data";
+        depBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
+        depBlock.name = @"dependencies";
         depBlock.sourceUTI = @"public.data";
         [self addSubBlocksObject:depBlock];
         depSubBlock = depBlock;
@@ -260,6 +266,9 @@ static NSColor *failColor;
         newBlock.isEdit = NO;
         newBlock.isFail = NO;
         newBlock.resultingData = nil;
+        newBlock.expectedSize = 0;
+        newBlock.actualBlockSizeCache = 0;
+        newBlock.unionRange = nil;
     }
     else
     {
@@ -874,6 +883,43 @@ static NSColor *failColor;
     return _attributeColor;
 }
 
+- (NSString *)whyFail
+{
+    NSMutableString *result = [NSMutableString stringWithString:@""];
+    
+    if( self.source == nil )
+    {
+        /* top level block */  /* mid level block */
+        NSArray *childBlocks = [self recursiveChildBlocks];
+        
+        for (StBlock *aBlock in childBlocks) {
+            if ([[aBlock attributeColor] isEqualTo:failColor]) {
+                [result appendFormat:@"Child block failied: %@, ", [aBlock name]];
+            }
+            
+            NSString *sourceString = [aBlock source];
+            if (![sourceString isEqualTo:@"stream"]) {
+                if ([[[self.parentStream topLevelBlockNamed:sourceString] attributeColor] isEqualTo:failColor]) {
+                    [result appendFormat:@"top level block failied: %@, ", sourceString];
+                }
+            }
+        }
+        
+        if ([self expectedBlockSize] != [self actualBlockSize]) {
+            [result appendFormat:@"expected block size wrong: %d != %d, ", [self expectedBlockSize], [self actualBlockSize]];
+        }
+    }
+    else
+    {
+        /* leaf block */
+        if ([self isFail]) {
+            [result appendFormat:@"sel isFail set, "];
+        }
+    }
+    
+    return result;
+}
+
 - (void) setIcon:(NSImage *)icon
 {
     [self setPrimitiveIcon:icon];
@@ -1015,7 +1061,7 @@ static NSColor *failColor;
     self.resultingData = nil;
     self.unionRange = nil;
     self.expectedSize = 0;
-    actualBlockSizeCache = 0;
+    self.actualBlockSizeCache = 0;
     self.icon = nil;
     
     if (dataSubBlock)
@@ -1027,7 +1073,9 @@ static NSColor *failColor;
         dataSubBlock.expectedSize = 0;
         dataSubBlock.actualBlockSizeCache = 0;
         dataSubBlock.icon = nil;
-        if ([dataSubBlock.blocks count] > 0) [[dataSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
+//        if ([dataSubBlock.blocks count] > 0) [[dataSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
+        [[dataSubBlock.blocks array] makeObjectsPerformSelector:@selector(makeMarkForDeletion)];
+        dataIndex = 0;
     }
     
     if (attrSubBlock)
@@ -1038,7 +1086,9 @@ static NSColor *failColor;
         attrSubBlock.expectedSize = 0;
         attrSubBlock.actualBlockSizeCache = 0;
         attrSubBlock.icon = nil;
-        if ([attrSubBlock.blocks count] > 0) [[attrSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
+//        if ([attrSubBlock.blocks count] > 0) [[attrSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
+        [[attrSubBlock.blocks array] makeObjectsPerformSelector:@selector(makeMarkForDeletion)];
+        attrIndex = 0;
     }
     
     if (depSubBlock)
@@ -1049,7 +1099,9 @@ static NSColor *failColor;
         depSubBlock.expectedSize = 0;
         depSubBlock.actualBlockSizeCache = 0;
         depSubBlock.icon = nil;
-        if ([depSubBlock.blocks count] > 0) [[depSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
+//        if ([depSubBlock.blocks count] > 0) [[depSubBlock.blocks mutableOrderedSetValueForKey:@"blocks"] removeAllObjects];
+        [[depSubBlock.blocks array] makeObjectsPerformSelector:@selector(makeMarkForDeletion)];
+        depIndex = 0;
     }
 }
 
@@ -1104,6 +1156,24 @@ static NSColor *failColor;
     }
     
     return result;
+}
+
+- (void) cleanUpSubBlocks
+{
+    if ((dataSubBlock != nil) && ([[dataSubBlock blocks] count] == 0)) {
+        [self removeBlocksObject:dataSubBlock];
+        dataSubBlock = nil;
+    }
+    
+    if ((attrSubBlock != nil) && ([[attrSubBlock blocks] count] == 0)) {
+        [self removeBlocksObject:attrSubBlock];
+        attrSubBlock = nil;
+    }
+    
+    if ((depSubBlock != nil) && ([[depSubBlock blocks] count] == 0)) {
+        [self removeBlocksObject:depSubBlock];
+        depSubBlock = nil;
+    }
 }
 
 + (NSSet *)keyPathsForValuesAffectingAttributeColor

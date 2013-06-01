@@ -143,6 +143,11 @@
     [listViewItems makeObjectsPerformSelector:@selector(suspendObservations)];
 }
 
+- (void) resumeObservations
+{
+    [listViewItems makeObjectsPerformSelector:@selector(resumeObservations)];
+}
+
 // MARK: -
 // MARK: Rebuilding content and layout
 

@@ -57,5 +57,6 @@
 - (SDListViewItem*) itemAtIndex:(NSUInteger)index;
 - (NSRect) frameForItemAtIndex:(NSUInteger)index;
 - (void) suspendObservations;
+- (void) resumeObservations;
 
 @end

@@ -75,6 +75,8 @@
 - (NSArray *)recursiveChildBlocks;
 - (NSImage *)icon;
 - (NSUInteger)actualBlockSize;
+- (NSString *)whyFail;
+- (void)cleanUpSubBlocks;
 
 @end
 

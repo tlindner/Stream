@@ -340,6 +340,10 @@
             }
         }
         
+        for (StBlock *block in self.blocks) {
+            [block cleanUpSubBlocks];
+        }
+        
         self.topLevelBlocks = nil;
     }
     else

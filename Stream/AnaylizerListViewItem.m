@@ -19,21 +19,13 @@
 
 #define MINIMUM_HEIGHT 26.0
 
+void AbleAllControlsInView( NSView *inView, BOOL able );
+
 @interface AnaylizerListViewItem ()
 
 @end
 
 @implementation AnaylizerListViewItem
-
-//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-//{
-//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-//    if (self) {
-//        // Initialization code here.
-//    }
-//    
-//    return self;
-//}
 
 @synthesize dragView;
 @synthesize disclosureTriangle;
@@ -53,17 +45,6 @@
 @synthesize acceptsUTIList;
 @synthesize selectedBlock;
 @synthesize previousSelectedBlock;
-
-- (void)setRepresentedObject:(id)representedObject
-{
-    [super setRepresentedObject:representedObject];
-    
-//    if (representedObject != nil) {
-//        [representedObject addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
-//        [representedObject addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];
-//        [representedObject addObserver:self forKeyPath:@"sourceUTI" options:0 context:self];
-//    }    
-}
 
 - (void)loadView
 {
@@ -157,8 +138,7 @@
             
             [self willChangeValueForKey:@"editorList"];
             [self didChangeValueForKey:@"editorList"];
-        }
-        else if ([keyPath isEqualToString:@"currentEditorView"]) {
+        } else if ([keyPath isEqualToString:@"currentEditorView"]) {
             [self willChangeValueForKey:@"acceptsUTIList"];
 
             if (self.blockTreeController == nil) {
@@ -170,8 +150,7 @@
             }
             
             [self didChangeValueForKey:@"acceptsUTIList"];
-        }
-        else if ([keyPath isEqualToString:@"paneExpanded"]) {
+        } else if ([keyPath isEqualToString:@"paneExpanded"]) {
             if (!dragView.doingLiveResize) {
                 StAnaylizer *theAna = [self representedObject];
                 BOOL paneExpanded = theAna.paneExpanded;
@@ -227,6 +206,8 @@
 
 - (void)dealloc
 {
+    [self suspendObservations];
+    
     if (anaylizerSettingsViewController != nil) {
         [anaylizerSettingsViewController.popover performClose:self];
     }
@@ -387,3 +368,17 @@
 }
 
 @end
+
+void AbleAllControlsInView( NSView *inView, BOOL able )
+{
+    NSArray *subViews = [inView subviews];
+    
+    for (NSView *view in subViews) {
+        if ([[view class] isSubclassOfClass:[NSControl class]]) {
+            NSControl *control = (NSControl *)view;
+            [control setEnabled:able];
+        }
+        
+        AbleAllControlsInView(view, able);
+    }
+}
