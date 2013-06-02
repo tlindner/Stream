@@ -58,7 +58,7 @@
     listView.prototypeItem = [[[AnalyzerListViewItem alloc] initWithNibName:@"AnalyzerListViewItem" bundle:nil] autorelease];
 
     [outlineView setFocusRingType:NSFocusRingTypeNone];
-    [outlineView registerForDraggedTypes:[NSArray arrayWithObjects: NSFilenamesPboardType, nil]];
+    [outlineView registerForDraggedTypes:[NSArray arrayWithObjects: NSFilenamesPboardType, NSURLPboardType, nil]];
     
     NSArray *psa = [psc persistentStores];
     
@@ -657,6 +657,7 @@
 }
 
 - (NSDragOperation)outlineView:(NSOutlineView *)oView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
+#pragma unused (info, item, index)
     if(oView == outlineView) {
         return NSDragOperationGeneric;
     }
@@ -664,8 +665,16 @@
 }
 
 - (BOOL)outlineView:(NSOutlineView *)oView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)childIndex {
+#pragma unused (childIndex, item)
     if(oView == outlineView) {
-        [self addStreamFromURL:[NSURL URLFromPasteboard: [info draggingPasteboard]]];
+        NSArray *files = [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType];
+        if([files count] > 0) {
+            for (NSString *f in files) {
+                [self addStreamFromURL:[NSURL fileURLWithPath:f]];
+            }
+        } else {
+            [self addStreamFromURL:[NSURL URLFromPasteboard:[info draggingPasteboard]]];
+        }
         return YES;
     }
     return NO;
