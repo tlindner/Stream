@@ -7,7 +7,7 @@
 //
 
 #import "ArbitraryGroupViewController.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 #import "StBlock.h"
 #import "StStream.h"
 #import "ArbitraryGroupBlocker.h"
@@ -47,8 +47,8 @@
 {
     [super loadView];
     
-    StAnaylizer *theAna = self.representedObject;
-    NSPredicate *pr = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (anaylizerKind != %@)", theAna.parentStream, [ArbitraryGroupBlocker blockerKey]];
+    StAnalyzer *theAna = self.representedObject;
+    NSPredicate *pr = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (analyzerKind != %@)", theAna.parentStream, [ArbitraryGroupBlocker blockerKey]];
     [allBlockArrayController setFetchPredicate:pr];
     
     [allBlockArrayController addObserver:self forKeyPath:@"selectionIndexes" options:(NSKeyValueObservingOptionNew) context:self];
@@ -113,7 +113,7 @@
 {
 #pragma unused (notification)
     if (madeChange) {
-        StAnaylizer *theAna = self.representedObject;
+        StAnalyzer *theAna = self.representedObject;
         [theAna.parentStream regenerateAllBlocks];
     }
 }

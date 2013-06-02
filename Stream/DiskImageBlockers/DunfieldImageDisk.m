@@ -39,9 +39,9 @@ NSUInteger CalculateSectorSize( unsigned char value );
     return [[[NSMutableDictionary alloc] init] autorelease];
 }
 
-- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
-#pragma unused (anaylizer)
+#pragma unused (analyzer)
     
     if ([stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == NO) {
         return @"Incompatiable stream";
@@ -62,7 +62,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
     NSUInteger length = [streamBytesObject length];
 
     if (length < 4) {
-        return @"Buffer too short to anaylize";
+        return @"Buffer too short to analyze";
     }
 
     if (streamBytes[0] == 'I' && streamBytes[1] == 'M' && streamBytes[2] == 'D') {
@@ -159,7 +159,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
                 NSString *blockName;
                 NSUInteger actualLength;
                 
-                blockName = [NSString stringWithFormat:@"Track %d %d Side %d %d Sector %d %d", sectorCylinderMap[j], cylinder, sectorHeadMap[j], head & 0x01, j, sectorTable[j]];
+                blockName = [NSString stringWithFormat:@"Track %d %d Side %d %d Sector %ld %d", sectorCylinderMap[j], cylinder, sectorHeadMap[j], head & 0x01, (unsigned long)j, sectorTable[j]];
 
                 switch (sectorType) {
                     case 0:

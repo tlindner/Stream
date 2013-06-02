@@ -1,9 +1,9 @@
 #import <Cocoa/Cocoa.h>
-#import "AnaylizerSettingPopOverAccessoryViewController.h"
+#import "AnalyzerSettingPopOverAccessoryViewController.h"
 
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 
-@class AnaylizerListViewItem, DragRegionView;
+@class AnalyzerListViewItem, DragRegionView;
 
 @interface ColorGradientView : NSView
 {

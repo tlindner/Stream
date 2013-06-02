@@ -47,9 +47,9 @@
     return @"CoCo Disk";
 }
 
-- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
-#pragma unused (anaylizer)
+#pragma unused (analyzer)
     NSMutableString *shadowFat[68];
     
     for (int i=0; i<68; i++) {

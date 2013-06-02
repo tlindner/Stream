@@ -36,11 +36,11 @@
 - (void) addStreamFromURL:(NSURL *)aURL;
 - (void) addSubStreamFromTopLevelBlock:(StBlock *)theBlock ofParent:(StStream *)theParent;
 - (IBAction)removeStream:(id)sender;
-- (IBAction)removeAnaylizer:(id)sender;
-- (void) flushAnaylizer:(NSDictionary *)parameter;
+- (IBAction)removeAnalyzer:(id)sender;
+- (void) flushAnalyzer:(NSDictionary *)parameter;
 - (IBAction)makeSubStream:(id)sender;
 - (IBAction)imagePopoverClick:(id)sender;
-- (IBAction)makeAnaylizerSet:(id)sender;
-- (IBAction)applyAnaylizerSet:(id)sender;
+- (IBAction)makeAnalyzerSet:(id)sender;
+- (IBAction)applyAnalyzerSet:(id)sender;
 
 @end

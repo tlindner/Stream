@@ -7,31 +7,44 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7700637617128E730037055D /* AnaylizerPencil.tiff */; };
-		77086FA5174874E100C0BD48 /* AnaylizerSetWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FA3174874E100C0BD48 /* AnaylizerSetWindowController.m */; };
-		77086FA6174874E100C0BD48 /* AnaylizerSetWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77086FA4174874E100C0BD48 /* AnaylizerSetWindowController.xib */; };
+		63528711175BC09300A9092F /* CoCoDeTokenBinaryBASIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 63528708175BC09300A9092F /* CoCoDeTokenBinaryBASIC.m */; };
+		63528712175BC09300A9092F /* OS9DirectoryFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 6352870A175BC09300A9092F /* OS9DirectoryFile.m */; };
+		63528713175BC09300A9092F /* TextAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6352870B175BC09300A9092F /* TextAccessoryView.xib */; };
+		63528714175BC09300A9092F /* TextAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6352870D175BC09300A9092F /* TextAnalyzer.m */; };
+		63528715175BC09300A9092F /* TextAnalyzerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6352870F175BC09300A9092F /* TextAnalyzerViewController.m */; };
+		63528716175BC09300A9092F /* TextAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63528710175BC09300A9092F /* TextAnalyzerViewController.xib */; };
+		63528728175BC1AA00A9092F /* AnalyzerArrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 63528718175BC1AA00A9092F /* AnalyzerArrow.tiff */; };
+		6352872A175BC1AA00A9092F /* AnalyzerHand.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 6352871A175BC1AA00A9092F /* AnalyzerHand.tiff */; };
+		6352872C175BC1AA00A9092F /* AnalyzerLoupe.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 6352871C175BC1AA00A9092F /* AnalyzerLoupe.tiff */; };
+		6352872E175BC1AA00A9092F /* AnalyzerPencil.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 6352871E175BC1AA00A9092F /* AnalyzerPencil.tiff */; };
+		6352872F175BC1AA00A9092F /* AudioAnalyzer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6352871F175BC1AA00A9092F /* AudioAnalyzer.xib */; };
+		63528730175BC1AA00A9092F /* AudioAnalyzerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63528721175BC1AA00A9092F /* AudioAnalyzerViewController.m */; };
+		63528731175BC1AA00A9092F /* AudioAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63528722175BC1AA00A9092F /* AudioAnalyzerViewController.xib */; };
+		63528732175BC1AA00A9092F /* CoCoAudioAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 63528724175BC1AA00A9092F /* CoCoAudioAnalyzer.m */; };
+		63528733175BC1AA00A9092F /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63528726175BC1AA00A9092F /* WaveFormView.m */; };
+		6352874A175BC26E00A9092F /* DisassemblerAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63528743175BC26E00A9092F /* DisassemblerAccessoryView.xib */; };
+		6352874B175BC26E00A9092F /* DisassemblerAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 63528745175BC26E00A9092F /* DisassemblerAnalyzer.m */; };
+		6352874C175BC26E00A9092F /* DisassemblerAnalyzerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63528747175BC26E00A9092F /* DisassemblerAnalyzerViewController.m */; };
+		6352874D175BC26E00A9092F /* DisassemblerAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63528748175BC26E00A9092F /* DisassemblerAnalyzerViewController.xib */; };
+		63528750175BC31100A9092F /* AudioAnaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6352874F175BC31100A9092F /* AudioAnaScrollView.m */; };
+		77086FA5174874E100C0BD48 /* AnalyzerSetWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FA3174874E100C0BD48 /* AnalyzerSetWindowController.m */; };
+		77086FA6174874E100C0BD48 /* AnalyzerSetWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77086FA4174874E100C0BD48 /* AnalyzerSetWindowController.xib */; };
 		77086FA91748810400C0BD48 /* NSFileManager+DirectoryLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FA81748810400C0BD48 /* NSFileManager+DirectoryLocations.m */; };
-		77086FAB17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77086FAA17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib */; };
-		77086FAE1748915900C0BD48 /* NewAnaylizerSetWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FAD1748915900C0BD48 /* NewAnaylizerSetWindowController.m */; };
+		77086FAB17488E4D00C0BD48 /* NewAnalyzerSetDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77086FAA17488E4D00C0BD48 /* NewAnalyzerSetDialog.xib */; };
+		77086FAE1748915900C0BD48 /* NewAnalyzerSetWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FAD1748915900C0BD48 /* NewAnalyzerSetWindowController.m */; };
 		77086FB117494B6F00C0BD48 /* StAnaSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FB017494B6F00C0BD48 /* StAnaSet.m */; };
 		770B6878173D9AB80097305E /* ArbitraryGroupBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B6877173D9AB80097305E /* ArbitraryGroupBlocker.m */; };
 		770B687C173D9B030097305E /* ArbitraryGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770B687A173D9B030097305E /* ArbitraryGroupViewController.m */; };
 		770B687D173D9B030097305E /* ArbitraryGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 770B687B173D9B030097305E /* ArbitraryGroupViewController.xib */; };
-		770BF39317525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 770BF39217525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib */; };
+		770BF39317525ADD00F8CF00 /* AnalyzerBlockSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 770BF39217525ADD00F8CF00 /* AnalyzerBlockSettingPopover.xib */; };
 		770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */; };
-		771AD296141D06C800E0FE41 /* CoCoAudioAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */; };
-		771AD29A141D414B00E0FE41 /* HexFiendAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */; };
-		771AD29D141D431400E0FE41 /* BlockerDataAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD29C141D431400E0FE41 /* BlockerDataAnaylizer.m */; };
-		771AD2A0141D43AE00E0FE41 /* BlockAttributeAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */; };
-		771C998513F624DC00C3A263 /* AudioAnaylizer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 771C998413F624DC00C3A263 /* AudioAnaylizer.xib */; };
-		771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 771DC21A13F0374800579077 /* AudioAnaScrollView.m */; };
+		771AD29A141D414B00E0FE41 /* HexFiendAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD299141D414B00E0FE41 /* HexFiendAnalyzer.m */; };
+		771AD29D141D431400E0FE41 /* BlockerDataAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD29C141D431400E0FE41 /* BlockerDataAnalyzer.m */; };
+		771AD2A0141D43AE00E0FE41 /* BlockAttributeAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 771AD29F141D43AE00E0FE41 /* BlockAttributeAnalyzer.m */; };
 		7720B79017448E1A00C85C98 /* MakeBlockOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7720B78F17448E1A00C85C98 /* MakeBlockOperation.m */; };
-		77263A8413F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77263A8213F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m */; };
+		77263A8413F6DC3C00EBD507 /* AnalyzerSettingPopOverAccessoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77263A8213F6DC3C00EBD507 /* AnalyzerSettingPopOverAccessoryViewController.m */; };
 		77263A8713F721E400EBD507 /* HFAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77263A8613F721E400EBD507 /* HFAccessoryView.xib */; };
-		77263A8B13F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77263A8913F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m */; };
-		772C658F13FEC0960060AB7F /* AnaylizerArrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */; };
-		772C659013FEC0960060AB7F /* AnaylizerHand.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */; };
-		772C659113FEC0960060AB7F /* AnaylizerLupe.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */; };
+		77263A8B13F734EC00EBD507 /* AnalyzerSettingPopOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77263A8913F734EC00EBD507 /* AnalyzerSettingPopOverViewController.m */; };
 		77331D6F174DB99200E69E11 /* GetNetURLWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77331D6D174DB99200E69E11 /* GetNetURLWindowController.m */; };
 		77331D70174DB99200E69E11 /* GetNetURLWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77331D6E174DB99200E69E11 /* GetNetURLWindowController.xib */; };
 		774C74B7173F4FF600FD43ED /* DavidKeilDiskImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C74B6173F4FF600FD43ED /* DavidKeilDiskImage.m */; };
@@ -82,10 +95,6 @@
 		778A59911407524900B68EB4 /* BlockerDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778A59901407524900B68EB4 /* BlockerDataViewController.xib */; };
 		778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */; };
 		778BFDAA172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778BFDA9172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m */; };
-		778E46F1172F666400736D51 /* DisasemblerAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 778E46F0172F666400736D51 /* DisasemblerAnaylizer.m */; };
-		778E46F4172F672100736D51 /* DisasemblerAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778E46F3172F672100736D51 /* DisasemblerAccessoryView.xib */; };
-		778E46F8172F700C00736D51 /* DisasemblerAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 778E46F6172F700C00736D51 /* DisasemblerAnaylizerViewController.m */; };
-		778E46F9172F700C00736D51 /* DisasemblerAnaylizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778E46F7172F700C00736D51 /* DisasemblerAnaylizerViewController.xib */; };
 		779434C4173E8CD00090FD5F /* Blockers.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434C3173E8CD00090FD5F /* Blockers.m */; };
 		779434C9173EA5E90090FD5F /* AlertIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 779434C7173EA5E90090FD5F /* AlertIcon.tiff */; };
 		779434CC173EAD120090FD5F /* TLImageWithPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434CB173EAD120090FD5F /* TLImageWithPopover.m */; };
@@ -95,32 +104,25 @@
 		779434D7173EF2670090FD5F /* CoCoGranuleBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434D6173EF2670090FD5F /* CoCoGranuleBlocker.m */; };
 		779434DA173EFDA10090FD5F /* CoCoDiskFileBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 779434D9173EFDA00090FD5F /* CoCoDiskFileBlocker.m */; };
 		7799CD2813E5E00F007D5B8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */; };
-		7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7799CD2A13E63C1F007D5B8E /* WaveFormView.m */; };
-		779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F74C91724779F00EC509B /* AnaylizerListViewItem.m */; };
-		779F74CC172478F500EC509B /* AnaylizerListViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 779F74CB172478F500EC509B /* AnaylizerListViewItem.xib */; };
+		779F74CA1724779F00EC509B /* AnalyzerListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 779F74C91724779F00EC509B /* AnalyzerListViewItem.m */; };
+		779F74CC172478F500EC509B /* AnalyzerListViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 779F74CB172478F500EC509B /* AnalyzerListViewItem.xib */; };
 		77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */; };
 		77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */; };
-		77ABAF431749913000CE3C6F /* RawBitmapAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAF421749913000CE3C6F /* RawBitmapAnaylizer.m */; };
+		77ABAF431749913000CE3C6F /* RawBitmapAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAF421749913000CE3C6F /* RawBitmapAnalyzer.m */; };
 		77ABAF47174991AC00CE3C6F /* RawBitmapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77ABAF45174991AC00CE3C6F /* RawBitmapViewController.m */; };
 		77ABAF48174991AC00CE3C6F /* RawBitmapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAF46174991AC00CE3C6F /* RawBitmapViewController.xib */; };
 		77ABAF4A17499C8300CE3C6F /* RawBitmapAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAF4917499C8300CE3C6F /* RawBitmapAccessoryView.xib */; };
 		77ABAF4E1749C3F900CE3C6F /* ImageNotWorking.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77ABAF4C1749C3F900CE3C6F /* ImageNotWorking.tiff */; };
 		77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77AE7556141568BD0052A93D /* BlockIcon.tiff */; };
-		77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */; };
-		77B617FD172B8A81008E8F1A /* TextAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B617FC172B8A81008E8F1A /* TextAnaylizer.m */; };
-		77B61801172B8BA1008E8F1A /* TextAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */; };
-		77B61802172B8BA1008E8F1A /* TextAnaylizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77B61800172B8BA1008E8F1A /* TextAnaylizerViewController.xib */; };
-		77B61804172B8CD3008E8F1A /* TextAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77B61803172B8CD3008E8F1A /* TextAccessoryView.xib */; };
-		77C17FBD140F450100E23921 /* HexFiendAnaylizerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */; };
-		77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */; };
-		77C17FC3140F469700E23921 /* AudioAnaylizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */; };
-		77C17FC4140F469700E23921 /* AudioAnaylizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */; };
+		77B0146C1717C1D4008CAF1A /* AnalyzerEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B0146B1717C1D4008CAF1A /* AnalyzerEdit.m */; };
+		77C17FBD140F450100E23921 /* HexFiendAnalyzerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C17FBB140F450100E23921 /* HexFiendAnalyzerController.m */; };
+		77C17FBE140F450100E23921 /* HexFiendAnalyzerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77C17FBC140F450100E23921 /* HexFiendAnalyzerController.xib */; };
 		77C65631173AA89C0022336D /* StData.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C65630173AA89C0022336D /* StData.m */; };
 		77C8DE1613E6F2C000AD079E /* Analyzation.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C8DE1513E6F2C000AD079E /* Analyzation.m */; };
 		77CB933F1404AE7F0032F56F /* Zoom.tif in Resources */ = {isa = PBXBuildFile; fileRef = 77CB933E1404AE7F0032F56F /* Zoom.tif */; };
 		77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D94C8B13E8F704009192BA /* DragRegionView.m */; };
 		77DA26CD1421BAA2007BE635 /* BlockerViewOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */; };
-		77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */; };
+		77DBB9D413E7A89200C891F3 /* AnalyzerSettingPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77DBB9D313E7A89200C891F3 /* AnalyzerSettingPopover.xib */; };
 		77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */; };
 		77E24066173FEB7100234F5A /* DMKProcessSingleDensity.m in Sources */ = {isa = PBXBuildFile; fileRef = 77E24065173FEB7100234F5A /* DMKProcessSingleDensity.m */; };
 		77ED69111737092C0024397E /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77ED69101737092C0024397E /* Quartz.framework */; };
@@ -170,12 +172,10 @@
 		77F2048513DD3AEF00FA5B1F /* HFCancelOff.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048213DD3AEF00FA5B1F /* HFCancelOff.tiff */; };
 		77F2048613DD3AEF00FA5B1F /* HFCancelOn.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048313DD3AEF00FA5B1F /* HFCancelOn.tiff */; };
 		77F2048713DD3AEF00FA5B1F /* HFModalProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77F2048413DD3AEF00FA5B1F /* HFModalProgress.xib */; };
-		77F6044217400AAB00932477 /* CoCoDeTokenBinaryBASIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F6044117400AAB00932477 /* CoCoDeTokenBinaryBASIC.m */; };
-		77F6044617400E5900932477 /* OS9DirectoryFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F6044517400E5900932477 /* OS9DirectoryFile.m */; };
 		77F6044A1740ABCB00932477 /* OS9LogicalSectorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F604481740ABCB00932477 /* OS9LogicalSectorsViewController.m */; };
 		77F6044B1740ABCB00932477 /* OS9LogicalSectorsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77F604491740ABCB00932477 /* OS9LogicalSectorsViewController.xib */; };
 		77FE861E1736181B0015DCD8 /* DunfieldImageDisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 77FE861D1736181B0015DCD8 /* DunfieldImageDisk.m */; };
-		77FEA6D813F57D4B0082B946 /* StAnaylizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77FEA6D713F57D4B0082B946 /* StAnaylizer.m */; };
+		77FEA6D813F57D4B0082B946 /* StAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77FEA6D713F57D4B0082B946 /* StAnalyzer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -196,15 +196,50 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7700637617128E730037055D /* AnaylizerPencil.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerPencil.tiff; path = Stream/AudioAnaylizer/AnaylizerPencil.tiff; sourceTree = "<group>"; };
-		77086FA2174874E100C0BD48 /* AnaylizerSetWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerSetWindowController.h; path = Stream/AnaylizerSetWindowController.h; sourceTree = "<group>"; };
-		77086FA3174874E100C0BD48 /* AnaylizerSetWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerSetWindowController.m; path = Stream/AnaylizerSetWindowController.m; sourceTree = "<group>"; };
-		77086FA4174874E100C0BD48 /* AnaylizerSetWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerSetWindowController.xib; path = Stream/AnaylizerSetWindowController.xib; sourceTree = "<group>"; };
+		63528707175BC09300A9092F /* CoCoDeTokenBinaryBASIC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoDeTokenBinaryBASIC.h; path = Stream/TextAnalyzer/CoCoDeTokenBinaryBASIC.h; sourceTree = "<group>"; };
+		63528708175BC09300A9092F /* CoCoDeTokenBinaryBASIC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoDeTokenBinaryBASIC.m; path = Stream/TextAnalyzer/CoCoDeTokenBinaryBASIC.m; sourceTree = "<group>"; };
+		63528709175BC09300A9092F /* OS9DirectoryFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OS9DirectoryFile.h; path = Stream/TextAnalyzer/OS9DirectoryFile.h; sourceTree = "<group>"; };
+		6352870A175BC09300A9092F /* OS9DirectoryFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OS9DirectoryFile.m; path = Stream/TextAnalyzer/OS9DirectoryFile.m; sourceTree = "<group>"; };
+		6352870B175BC09300A9092F /* TextAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextAccessoryView.xib; path = Stream/TextAnalyzer/TextAccessoryView.xib; sourceTree = "<group>"; };
+		6352870C175BC09300A9092F /* TextAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextAnalyzer.h; path = Stream/TextAnalyzer/TextAnalyzer.h; sourceTree = "<group>"; };
+		6352870D175BC09300A9092F /* TextAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextAnalyzer.m; path = Stream/TextAnalyzer/TextAnalyzer.m; sourceTree = "<group>"; };
+		6352870E175BC09300A9092F /* TextAnalyzerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextAnalyzerViewController.h; path = Stream/TextAnalyzer/TextAnalyzerViewController.h; sourceTree = "<group>"; };
+		6352870F175BC09300A9092F /* TextAnalyzerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextAnalyzerViewController.m; path = Stream/TextAnalyzer/TextAnalyzerViewController.m; sourceTree = "<group>"; };
+		63528710175BC09300A9092F /* TextAnalyzerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextAnalyzerViewController.xib; path = Stream/TextAnalyzer/TextAnalyzerViewController.xib; sourceTree = "<group>"; };
+		63528717175BC1AA00A9092F /* AnalyzerArrow.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnalyzerArrow.psd; path = Stream/AudioAnalyzer/AnalyzerArrow.psd; sourceTree = "<group>"; };
+		63528718175BC1AA00A9092F /* AnalyzerArrow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnalyzerArrow.tiff; path = Stream/AudioAnalyzer/AnalyzerArrow.tiff; sourceTree = "<group>"; };
+		63528719175BC1AA00A9092F /* AnalyzerHand.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnalyzerHand.psd; path = Stream/AudioAnalyzer/AnalyzerHand.psd; sourceTree = "<group>"; };
+		6352871A175BC1AA00A9092F /* AnalyzerHand.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnalyzerHand.tiff; path = Stream/AudioAnalyzer/AnalyzerHand.tiff; sourceTree = "<group>"; };
+		6352871B175BC1AA00A9092F /* AnalyzerLoupe.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnalyzerLoupe.psd; path = Stream/AudioAnalyzer/AnalyzerLoupe.psd; sourceTree = "<group>"; };
+		6352871C175BC1AA00A9092F /* AnalyzerLoupe.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnalyzerLoupe.tiff; path = Stream/AudioAnalyzer/AnalyzerLoupe.tiff; sourceTree = "<group>"; };
+		6352871D175BC1AA00A9092F /* AnalyzerPencil.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnalyzerPencil.psd; path = Stream/AudioAnalyzer/AnalyzerPencil.psd; sourceTree = "<group>"; };
+		6352871E175BC1AA00A9092F /* AnalyzerPencil.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnalyzerPencil.tiff; path = Stream/AudioAnalyzer/AnalyzerPencil.tiff; sourceTree = "<group>"; };
+		6352871F175BC1AA00A9092F /* AudioAnalyzer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnalyzer.xib; path = Stream/AudioAnalyzer/AudioAnalyzer.xib; sourceTree = "<group>"; };
+		63528720175BC1AA00A9092F /* AudioAnalyzerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnalyzerViewController.h; path = Stream/AudioAnalyzer/AudioAnalyzerViewController.h; sourceTree = "<group>"; };
+		63528721175BC1AA00A9092F /* AudioAnalyzerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnalyzerViewController.m; path = Stream/AudioAnalyzer/AudioAnalyzerViewController.m; sourceTree = "<group>"; };
+		63528722175BC1AA00A9092F /* AudioAnalyzerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnalyzerViewController.xib; path = Stream/AudioAnalyzer/AudioAnalyzerViewController.xib; sourceTree = "<group>"; };
+		63528723175BC1AA00A9092F /* CoCoAudioAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoAudioAnalyzer.h; path = Stream/AudioAnalyzer/CoCoAudioAnalyzer.h; sourceTree = "<group>"; };
+		63528724175BC1AA00A9092F /* CoCoAudioAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoAudioAnalyzer.m; path = Stream/AudioAnalyzer/CoCoAudioAnalyzer.m; sourceTree = "<group>"; };
+		63528725175BC1AA00A9092F /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnalyzer/WaveFormView.h; sourceTree = "<group>"; };
+		63528726175BC1AA00A9092F /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnalyzer/WaveFormView.m; sourceTree = "<group>"; };
+		63528741175BC26E00A9092F /* dasm09.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dasm09.c; path = Stream/DisassemblerAnalyzer/dasm09.c; sourceTree = "<group>"; };
+		63528742175BC26E00A9092F /* dasm09.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dasm09.h; path = Stream/DisassemblerAnalyzer/dasm09.h; sourceTree = "<group>"; };
+		63528743175BC26E00A9092F /* DisassemblerAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DisassemblerAccessoryView.xib; path = Stream/DisassemblerAnalyzer/DisassemblerAccessoryView.xib; sourceTree = "<group>"; };
+		63528744175BC26E00A9092F /* DisassemblerAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DisassemblerAnalyzer.h; path = Stream/DisassemblerAnalyzer/DisassemblerAnalyzer.h; sourceTree = "<group>"; };
+		63528745175BC26E00A9092F /* DisassemblerAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DisassemblerAnalyzer.m; path = Stream/DisassemblerAnalyzer/DisassemblerAnalyzer.m; sourceTree = "<group>"; };
+		63528746175BC26E00A9092F /* DisassemblerAnalyzerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DisassemblerAnalyzerViewController.h; path = Stream/DisassemblerAnalyzer/DisassemblerAnalyzerViewController.h; sourceTree = "<group>"; };
+		63528747175BC26E00A9092F /* DisassemblerAnalyzerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DisassemblerAnalyzerViewController.m; path = Stream/DisassemblerAnalyzer/DisassemblerAnalyzerViewController.m; sourceTree = "<group>"; };
+		63528748175BC26E00A9092F /* DisassemblerAnalyzerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DisassemblerAnalyzerViewController.xib; path = Stream/DisassemblerAnalyzer/DisassemblerAnalyzerViewController.xib; sourceTree = "<group>"; };
+		6352874E175BC31100A9092F /* AudioAnaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaScrollView.h; path = Stream/AudioAnalyzer/AudioAnaScrollView.h; sourceTree = "<group>"; };
+		6352874F175BC31100A9092F /* AudioAnaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaScrollView.m; path = Stream/AudioAnalyzer/AudioAnaScrollView.m; sourceTree = "<group>"; };
+		77086FA2174874E100C0BD48 /* AnalyzerSetWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyzerSetWindowController.h; path = Stream/AnalyzerSetWindowController.h; sourceTree = "<group>"; };
+		77086FA3174874E100C0BD48 /* AnalyzerSetWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyzerSetWindowController.m; path = Stream/AnalyzerSetWindowController.m; sourceTree = "<group>"; };
+		77086FA4174874E100C0BD48 /* AnalyzerSetWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnalyzerSetWindowController.xib; path = Stream/AnalyzerSetWindowController.xib; sourceTree = "<group>"; };
 		77086FA71748810400C0BD48 /* NSFileManager+DirectoryLocations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+DirectoryLocations.h"; sourceTree = "<group>"; };
 		77086FA81748810400C0BD48 /* NSFileManager+DirectoryLocations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+DirectoryLocations.m"; sourceTree = "<group>"; };
-		77086FAA17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NewAnaylizerSetDialog.xib; path = Stream/NewAnaylizerSetDialog.xib; sourceTree = "<group>"; };
-		77086FAC1748915900C0BD48 /* NewAnaylizerSetWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewAnaylizerSetWindowController.h; path = Stream/NewAnaylizerSetWindowController.h; sourceTree = "<group>"; };
-		77086FAD1748915900C0BD48 /* NewAnaylizerSetWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewAnaylizerSetWindowController.m; path = Stream/NewAnaylizerSetWindowController.m; sourceTree = "<group>"; };
+		77086FAA17488E4D00C0BD48 /* NewAnalyzerSetDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NewAnalyzerSetDialog.xib; path = Stream/NewAnalyzerSetDialog.xib; sourceTree = "<group>"; };
+		77086FAC1748915900C0BD48 /* NewAnalyzerSetWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewAnalyzerSetWindowController.h; path = Stream/NewAnalyzerSetWindowController.h; sourceTree = "<group>"; };
+		77086FAD1748915900C0BD48 /* NewAnalyzerSetWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewAnalyzerSetWindowController.m; path = Stream/NewAnalyzerSetWindowController.m; sourceTree = "<group>"; };
 		77086FAF17494B6F00C0BD48 /* StAnaSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StAnaSet.h; path = Stream/StAnaSet.h; sourceTree = "<group>"; };
 		77086FB017494B6F00C0BD48 /* StAnaSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StAnaSet.m; path = Stream/StAnaSet.m; sourceTree = "<group>"; };
 		770B6876173D9AB80097305E /* ArbitraryGroupBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArbitraryGroupBlocker.h; path = "Stream/Generic Blockers/ArbitraryGroupBlocker.h"; sourceTree = "<group>"; };
@@ -212,37 +247,29 @@
 		770B6879173D9B030097305E /* ArbitraryGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArbitraryGroupViewController.h; path = "Stream/Generic Blockers/ArbitraryGroupViewController.h"; sourceTree = "<group>"; };
 		770B687A173D9B030097305E /* ArbitraryGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ArbitraryGroupViewController.m; path = "Stream/Generic Blockers/ArbitraryGroupViewController.m"; sourceTree = "<group>"; };
 		770B687B173D9B030097305E /* ArbitraryGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ArbitraryGroupViewController.xib; path = "Stream/Generic Blockers/ArbitraryGroupViewController.xib"; sourceTree = "<group>"; };
-		770BF39217525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerBlockSettingPopover.xib; path = Stream/AnaylizerBlockSettingPopover.xib; sourceTree = "<group>"; };
+		770BF39217525ADD00F8CF00 /* AnalyzerBlockSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnalyzerBlockSettingPopover.xib; path = Stream/AnalyzerBlockSettingPopover.xib; sourceTree = "<group>"; };
 		770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataViewController.h; path = Stream/BlockerDataViewController.h; sourceTree = "<group>"; };
 		770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataViewController.m; path = Stream/BlockerDataViewController.m; sourceTree = "<group>"; };
 		7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAutoLayoutSubView.h; path = Stream/ViewAutoLayoutSubView.h; sourceTree = "<group>"; };
 		7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewAutoLayoutSubView.m; path = Stream/ViewAutoLayoutSubView.m; sourceTree = "<group>"; };
-		771AD294141D06C800E0FE41 /* CoCoAudioAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoAudioAnaylizer.h; path = Stream/AudioAnaylizer/CoCoAudioAnaylizer.h; sourceTree = "<group>"; };
-		771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CoCoAudioAnaylizer.m; path = Stream/AudioAnaylizer/CoCoAudioAnaylizer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		771AD298141D414B00E0FE41 /* HexFiendAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnaylizer.h; path = Stream/HexFiendAnaylizer.h; sourceTree = "<group>"; };
-		771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnaylizer.m; path = Stream/HexFiendAnaylizer.m; sourceTree = "<group>"; };
-		771AD29B141D431400E0FE41 /* BlockerDataAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataAnaylizer.h; path = Stream/BlockerDataAnaylizer.h; sourceTree = "<group>"; };
-		771AD29C141D431400E0FE41 /* BlockerDataAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataAnaylizer.m; path = Stream/BlockerDataAnaylizer.m; sourceTree = "<group>"; };
-		771AD29E141D43AE00E0FE41 /* BlockAttributeAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeAnaylizer.h; path = Stream/BlockAttributeAnaylizer.h; sourceTree = "<group>"; };
-		771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeAnaylizer.m; path = Stream/BlockAttributeAnaylizer.m; sourceTree = "<group>"; };
-		771C998413F624DC00C3A263 /* AudioAnaylizer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnaylizer.xib; path = Stream/AudioAnaylizer/AudioAnaylizer.xib; sourceTree = "<group>"; };
-		771DC21913F0374800579077 /* AudioAnaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaScrollView.h; path = Stream/AudioAnaScrollView.h; sourceTree = "<group>"; };
-		771DC21A13F0374800579077 /* AudioAnaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaScrollView.m; path = Stream/AudioAnaScrollView.m; sourceTree = "<group>"; };
+		771AD298141D414B00E0FE41 /* HexFiendAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnalyzer.h; path = Stream/HexFiendAnalyzer.h; sourceTree = "<group>"; };
+		771AD299141D414B00E0FE41 /* HexFiendAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnalyzer.m; path = Stream/HexFiendAnalyzer.m; sourceTree = "<group>"; };
+		771AD29B141D431400E0FE41 /* BlockerDataAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerDataAnalyzer.h; path = Stream/BlockerDataAnalyzer.h; sourceTree = "<group>"; };
+		771AD29C141D431400E0FE41 /* BlockerDataAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerDataAnalyzer.m; path = Stream/BlockerDataAnalyzer.m; sourceTree = "<group>"; };
+		771AD29E141D43AE00E0FE41 /* BlockAttributeAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeAnalyzer.h; path = Stream/BlockAttributeAnalyzer.h; sourceTree = "<group>"; };
+		771AD29F141D43AE00E0FE41 /* BlockAttributeAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeAnalyzer.m; path = Stream/BlockAttributeAnalyzer.m; sourceTree = "<group>"; };
 		7720B78E17448E1A00C85C98 /* MakeBlockOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MakeBlockOperation.h; sourceTree = "<group>"; };
 		7720B78F17448E1A00C85C98 /* MakeBlockOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MakeBlockOperation.m; sourceTree = "<group>"; };
-		77263A8113F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerSettingPopOverAccessoryViewController.h; path = Stream/AnaylizerSettingPopOverAccessoryViewController.h; sourceTree = "<group>"; };
-		77263A8213F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerSettingPopOverAccessoryViewController.m; path = Stream/AnaylizerSettingPopOverAccessoryViewController.m; sourceTree = "<group>"; };
+		77263A8113F6DC3C00EBD507 /* AnalyzerSettingPopOverAccessoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyzerSettingPopOverAccessoryViewController.h; path = Stream/AnalyzerSettingPopOverAccessoryViewController.h; sourceTree = "<group>"; };
+		77263A8213F6DC3C00EBD507 /* AnalyzerSettingPopOverAccessoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyzerSettingPopOverAccessoryViewController.m; path = Stream/AnalyzerSettingPopOverAccessoryViewController.m; sourceTree = "<group>"; };
 		77263A8613F721E400EBD507 /* HFAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HFAccessoryView.xib; path = Stream/HexFiend/HFAccessoryView.xib; sourceTree = "<group>"; };
-		77263A8813F734EC00EBD507 /* AnaylizerSettingPopOverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerSettingPopOverViewController.h; path = Stream/AnaylizerSettingPopOverViewController.h; sourceTree = "<group>"; };
-		77263A8913F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerSettingPopOverViewController.m; path = Stream/AnaylizerSettingPopOverViewController.m; sourceTree = "<group>"; };
-		772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerArrow.tiff; path = Stream/AudioAnaylizer/AnaylizerArrow.tiff; sourceTree = "<group>"; };
-		772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerHand.tiff; path = Stream/AudioAnaylizer/AnaylizerHand.tiff; sourceTree = "<group>"; };
-		772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AnaylizerLupe.tiff; path = Stream/AudioAnaylizer/AnaylizerLupe.tiff; sourceTree = "<group>"; };
+		77263A8813F734EC00EBD507 /* AnalyzerSettingPopOverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyzerSettingPopOverViewController.h; path = Stream/AnalyzerSettingPopOverViewController.h; sourceTree = "<group>"; };
+		77263A8913F734EC00EBD507 /* AnalyzerSettingPopOverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyzerSettingPopOverViewController.m; path = Stream/AnalyzerSettingPopOverViewController.m; sourceTree = "<group>"; };
 		77331D6C174DB99200E69E11 /* GetNetURLWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetNetURLWindowController.h; sourceTree = "<group>"; };
 		77331D6D174DB99200E69E11 /* GetNetURLWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetNetURLWindowController.m; sourceTree = "<group>"; };
 		77331D6E174DB99200E69E11 /* GetNetURLWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GetNetURLWindowController.xib; sourceTree = "<group>"; };
-		773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerTableViewCellView.h; path = Stream/AnaylizerTableViewCellView.h; sourceTree = "<group>"; };
-		773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerTableViewCellView.m; path = Stream/AnaylizerTableViewCellView.m; sourceTree = "<group>"; };
+		773F17C613E4F77E002606A0 /* AnalyzerTableViewCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyzerTableViewCellView.h; path = Stream/AnalyzerTableViewCellView.h; sourceTree = "<group>"; };
+		773F17C713E4F77E002606A0 /* AnalyzerTableViewCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyzerTableViewCellView.m; path = Stream/AnalyzerTableViewCellView.m; sourceTree = "<group>"; };
 		774A181613FAB01500510032 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		774C74B5173F4FF600FD43ED /* DavidKeilDiskImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DavidKeilDiskImage.h; path = Stream/DiskImageBlockers/DavidKeilDiskImage.h; sourceTree = "<group>"; };
 		774C74B6173F4FF600FD43ED /* DavidKeilDiskImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DavidKeilDiskImage.m; path = Stream/DiskImageBlockers/DavidKeilDiskImage.m; sourceTree = "<group>"; };
@@ -328,14 +355,6 @@
 		778A6DFD1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+GSIndexSetAdditions.m"; sourceTree = "<group>"; };
 		778BFDA8172E0BA300C9005C /* CoCoSegmentedObjectBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoSegmentedObjectBlocker.h; path = Stream/CoCoBlockers/CoCoSegmentedObjectBlocker.h; sourceTree = "<group>"; };
 		778BFDA9172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CoCoSegmentedObjectBlocker.m; path = Stream/CoCoBlockers/CoCoSegmentedObjectBlocker.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		778E46EE172F660B00736D51 /* dasm09.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 1; lastKnownFileType = sourcecode.c.h; name = dasm09.h; path = Stream/DisasemblerAnaylizer/dasm09.h; sourceTree = "<group>"; tabWidth = 1; usesTabs = 0; };
-		778E46EF172F666400736D51 /* DisasemblerAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DisasemblerAnaylizer.h; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizer.h; sourceTree = "<group>"; };
-		778E46F0172F666400736D51 /* DisasemblerAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DisasemblerAnaylizer.m; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizer.m; sourceTree = "<group>"; };
-		778E46F2172F667A00736D51 /* dasm09.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = dasm09.c; path = Stream/DisasemblerAnaylizer/dasm09.c; sourceTree = "<group>"; };
-		778E46F3172F672100736D51 /* DisasemblerAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DisasemblerAccessoryView.xib; path = Stream/DisasemblerAnaylizer/DisasemblerAccessoryView.xib; sourceTree = "<group>"; };
-		778E46F5172F700C00736D51 /* DisasemblerAnaylizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DisasemblerAnaylizerViewController.h; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizerViewController.h; sourceTree = "<group>"; };
-		778E46F6172F700C00736D51 /* DisasemblerAnaylizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DisasemblerAnaylizerViewController.m; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizerViewController.m; sourceTree = "<group>"; };
-		778E46F7172F700C00736D51 /* DisasemblerAnaylizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DisasemblerAnaylizerViewController.xib; path = Stream/DisasemblerAnaylizer/DisasemblerAnaylizerViewController.xib; sourceTree = "<group>"; };
 		779434C2173E8CD00090FD5F /* Blockers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blockers.h; sourceTree = "<group>"; };
 		779434C3173E8CD00090FD5F /* Blockers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Blockers.m; sourceTree = "<group>"; };
 		779434C6173EA5E90090FD5F /* AlertIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = AlertIcon.psd; sourceTree = "<group>"; };
@@ -352,20 +371,14 @@
 		779434D8173EFDA00090FD5F /* CoCoDiskFileBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoDiskFileBlocker.h; path = Stream/CoCoBlockers/CoCoDiskFileBlocker.h; sourceTree = "<group>"; };
 		779434D9173EFDA00090FD5F /* CoCoDiskFileBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoDiskFileBlocker.m; path = Stream/CoCoBlockers/CoCoDiskFileBlocker.m; sourceTree = "<group>"; };
 		7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		7799CD2913E63C1F007D5B8E /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnaylizer/WaveFormView.h; sourceTree = "<group>"; };
-		7799CD2A13E63C1F007D5B8E /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnaylizer/WaveFormView.m; sourceTree = "<group>"; };
-		779F74C81724779F00EC509B /* AnaylizerListViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerListViewItem.h; path = Stream/AnaylizerListViewItem.h; sourceTree = "<group>"; };
-		779F74C91724779F00EC509B /* AnaylizerListViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerListViewItem.m; path = Stream/AnaylizerListViewItem.m; sourceTree = "<group>"; };
-		779F74CB172478F500EC509B /* AnaylizerListViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerListViewItem.xib; path = Stream/AnaylizerListViewItem.xib; sourceTree = "<group>"; };
-		77A98C12172AD392001A9A55 /* AnaylizerArrow.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnaylizerArrow.psd; path = Stream/AudioAnaylizer/AnaylizerArrow.psd; sourceTree = "<group>"; };
-		77A98C13172AD392001A9A55 /* AnaylizerHand.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnaylizerHand.psd; path = Stream/AudioAnaylizer/AnaylizerHand.psd; sourceTree = "<group>"; };
-		77A98C14172AD392001A9A55 /* AnaylizerLupe.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnaylizerLupe.psd; path = Stream/AudioAnaylizer/AnaylizerLupe.psd; sourceTree = "<group>"; };
-		77A98C15172AD392001A9A55 /* AnaylizerPencil.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = AnaylizerPencil.psd; path = Stream/AudioAnaylizer/AnaylizerPencil.psd; sourceTree = "<group>"; };
+		779F74C81724779F00EC509B /* AnalyzerListViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyzerListViewItem.h; path = Stream/AnalyzerListViewItem.h; sourceTree = "<group>"; };
+		779F74C91724779F00EC509B /* AnalyzerListViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyzerListViewItem.m; path = Stream/AnalyzerListViewItem.m; sourceTree = "<group>"; };
+		779F74CB172478F500EC509B /* AnalyzerListViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnalyzerListViewItem.xib; path = Stream/AnalyzerListViewItem.xib; sourceTree = "<group>"; };
 		77ABAD8D140F3217002F03BB /* BlockAttributeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAttributeViewController.h; path = Stream/BlockAttributeViewController.h; sourceTree = "<group>"; };
 		77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewController.m; path = Stream/BlockAttributeViewController.m; sourceTree = "<group>"; };
 		77ABAD8F140F3217002F03BB /* BlockAttributeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BlockAttributeViewController.xib; path = Stream/BlockAttributeViewController.xib; sourceTree = "<group>"; };
-		77ABAF411749913000CE3C6F /* RawBitmapAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RawBitmapAnaylizer.h; path = Stream/RawBitmapAnaylizer.h; sourceTree = "<group>"; };
-		77ABAF421749913000CE3C6F /* RawBitmapAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawBitmapAnaylizer.m; path = Stream/RawBitmapAnaylizer.m; sourceTree = "<group>"; };
+		77ABAF411749913000CE3C6F /* RawBitmapAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RawBitmapAnalyzer.h; path = Stream/RawBitmapAnalyzer.h; sourceTree = "<group>"; };
+		77ABAF421749913000CE3C6F /* RawBitmapAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawBitmapAnalyzer.m; path = Stream/RawBitmapAnalyzer.m; sourceTree = "<group>"; };
 		77ABAF44174991AC00CE3C6F /* RawBitmapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RawBitmapViewController.h; path = Stream/RawBitmapViewController.h; sourceTree = "<group>"; };
 		77ABAF45174991AC00CE3C6F /* RawBitmapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawBitmapViewController.m; path = Stream/RawBitmapViewController.m; sourceTree = "<group>"; };
 		77ABAF46174991AC00CE3C6F /* RawBitmapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RawBitmapViewController.xib; path = Stream/RawBitmapViewController.xib; sourceTree = "<group>"; };
@@ -373,20 +386,11 @@
 		77ABAF4B1749C3F900CE3C6F /* ImageNotWorking.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = ImageNotWorking.psd; path = Stream/ImageNotWorking.psd; sourceTree = "<group>"; };
 		77ABAF4C1749C3F900CE3C6F /* ImageNotWorking.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ImageNotWorking.tiff; path = Stream/ImageNotWorking.tiff; sourceTree = "<group>"; };
 		77AE7556141568BD0052A93D /* BlockIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = BlockIcon.tiff; sourceTree = "<group>"; };
-		77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnaylizerEdit.h; path = Stream/AnaylizerEdit.h; sourceTree = "<group>"; };
-		77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnaylizerEdit.m; path = Stream/AnaylizerEdit.m; sourceTree = "<group>"; };
-		77B617FB172B8A81008E8F1A /* TextAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextAnaylizer.h; path = Stream/TextAnaylizer/TextAnaylizer.h; sourceTree = "<group>"; };
-		77B617FC172B8A81008E8F1A /* TextAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TextAnaylizer.m; path = Stream/TextAnaylizer/TextAnaylizer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		77B617FE172B8BA1008E8F1A /* TextAnaylizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextAnaylizerViewController.h; path = Stream/TextAnaylizer/TextAnaylizerViewController.h; sourceTree = "<group>"; };
-		77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TextAnaylizerViewController.m; path = Stream/TextAnaylizer/TextAnaylizerViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		77B61800172B8BA1008E8F1A /* TextAnaylizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextAnaylizerViewController.xib; path = Stream/TextAnaylizer/TextAnaylizerViewController.xib; sourceTree = "<group>"; };
-		77B61803172B8CD3008E8F1A /* TextAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextAccessoryView.xib; path = Stream/TextAnaylizer/TextAccessoryView.xib; sourceTree = "<group>"; };
-		77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnaylizerController.h; path = Stream/HexFiendAnaylizerController.h; sourceTree = "<group>"; };
-		77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnaylizerController.m; path = Stream/HexFiendAnaylizerController.m; sourceTree = "<group>"; };
-		77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HexFiendAnaylizerController.xib; path = Stream/HexFiendAnaylizerController.xib; sourceTree = "<group>"; };
-		77C17FC0140F469700E23921 /* AudioAnaylizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaylizerViewController.h; path = Stream/AudioAnaylizer/AudioAnaylizerViewController.h; sourceTree = "<group>"; };
-		77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaylizerViewController.m; path = Stream/AudioAnaylizer/AudioAnaylizerViewController.m; sourceTree = "<group>"; };
-		77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioAnaylizerViewController.xib; path = Stream/AudioAnaylizer/AudioAnaylizerViewController.xib; sourceTree = "<group>"; };
+		77B0146A1717C1D4008CAF1A /* AnalyzerEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyzerEdit.h; path = Stream/AnalyzerEdit.h; sourceTree = "<group>"; };
+		77B0146B1717C1D4008CAF1A /* AnalyzerEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyzerEdit.m; path = Stream/AnalyzerEdit.m; sourceTree = "<group>"; };
+		77C17FBA140F450100E23921 /* HexFiendAnalyzerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HexFiendAnalyzerController.h; path = Stream/HexFiendAnalyzerController.h; sourceTree = "<group>"; };
+		77C17FBB140F450100E23921 /* HexFiendAnalyzerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HexFiendAnalyzerController.m; path = Stream/HexFiendAnalyzerController.m; sourceTree = "<group>"; };
+		77C17FBC140F450100E23921 /* HexFiendAnalyzerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HexFiendAnalyzerController.xib; path = Stream/HexFiendAnalyzerController.xib; sourceTree = "<group>"; };
 		77C6562F173AA89C0022336D /* StData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StData.h; path = Stream/StData.h; sourceTree = "<group>"; };
 		77C65630173AA89C0022336D /* StData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StData.m; path = Stream/StData.m; sourceTree = "<group>"; };
 		77C8DE1413E6F2C000AD079E /* Analyzation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Analyzation.h; sourceTree = "<group>"; };
@@ -396,7 +400,7 @@
 		77D94C8B13E8F704009192BA /* DragRegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DragRegionView.m; path = Stream/DragRegionView.m; sourceTree = "<group>"; };
 		77DA26CB1421BAA2007BE635 /* BlockerViewOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockerViewOutlineView.h; path = Stream/BlockerViewOutlineView.h; sourceTree = "<group>"; };
 		77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockerViewOutlineView.m; path = Stream/BlockerViewOutlineView.m; sourceTree = "<group>"; };
-		77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnaylizerSettingPopover.xib; path = Stream/AnaylizerSettingPopover.xib; sourceTree = "<group>"; };
+		77DBB9D313E7A89200C891F3 /* AnalyzerSettingPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnalyzerSettingPopover.xib; path = Stream/AnalyzerSettingPopover.xib; sourceTree = "<group>"; };
 		77DFCB75171A159100C4A876 /* CoCoCassetteFileBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoCassetteFileBlocker.h; path = Stream/CoCoBlockers/CoCoCassetteFileBlocker.h; sourceTree = "<group>"; };
 		77DFCB76171A159100C4A876 /* CoCoCassetteFileBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CoCoCassetteFileBlocker.m; path = Stream/CoCoBlockers/CoCoCassetteFileBlocker.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		77E24064173FEB7100234F5A /* DMKProcessSingleDensity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DMKProcessSingleDensity.h; path = Stream/DMKProcessSingleDensity.h; sourceTree = "<group>"; };
@@ -497,17 +501,13 @@
 		77F2048213DD3AEF00FA5B1F /* HFCancelOff.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = HFCancelOff.tiff; path = Stream/HexFiend/resources/HFCancelOff.tiff; sourceTree = "<group>"; };
 		77F2048313DD3AEF00FA5B1F /* HFCancelOn.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = HFCancelOn.tiff; path = Stream/HexFiend/resources/HFCancelOn.tiff; sourceTree = "<group>"; };
 		77F2048413DD3AEF00FA5B1F /* HFModalProgress.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HFModalProgress.xib; path = Stream/HexFiend/resources/HFModalProgress.xib; sourceTree = "<group>"; };
-		77F6044017400AAB00932477 /* CoCoDeTokenBinaryBASIC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoCoDeTokenBinaryBASIC.h; path = Stream/TextAnaylizer/CoCoDeTokenBinaryBASIC.h; sourceTree = "<group>"; };
-		77F6044117400AAB00932477 /* CoCoDeTokenBinaryBASIC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoDeTokenBinaryBASIC.m; path = Stream/TextAnaylizer/CoCoDeTokenBinaryBASIC.m; sourceTree = "<group>"; };
-		77F6044417400E5900932477 /* OS9DirectoryFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OS9DirectoryFile.h; path = Stream/TextAnaylizer/OS9DirectoryFile.h; sourceTree = "<group>"; };
-		77F6044517400E5900932477 /* OS9DirectoryFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OS9DirectoryFile.m; path = Stream/TextAnaylizer/OS9DirectoryFile.m; sourceTree = "<group>"; };
 		77F604471740ABCB00932477 /* OS9LogicalSectorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OS9LogicalSectorsViewController.h; path = "Stream/OS-9Blockers/OS9LogicalSectorsViewController.h"; sourceTree = "<group>"; };
 		77F604481740ABCB00932477 /* OS9LogicalSectorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OS9LogicalSectorsViewController.m; path = "Stream/OS-9Blockers/OS9LogicalSectorsViewController.m"; sourceTree = "<group>"; };
 		77F604491740ABCB00932477 /* OS9LogicalSectorsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OS9LogicalSectorsViewController.xib; path = "Stream/OS-9Blockers/OS9LogicalSectorsViewController.xib"; sourceTree = "<group>"; };
 		77FE861C1736181B0015DCD8 /* DunfieldImageDisk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DunfieldImageDisk.h; path = Stream/DiskImageBlockers/DunfieldImageDisk.h; sourceTree = "<group>"; };
 		77FE861D1736181B0015DCD8 /* DunfieldImageDisk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = DunfieldImageDisk.m; path = Stream/DiskImageBlockers/DunfieldImageDisk.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		77FEA6D613F57D4B0082B946 /* StAnaylizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StAnaylizer.h; path = Stream/StAnaylizer.h; sourceTree = "<group>"; };
-		77FEA6D713F57D4B0082B946 /* StAnaylizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StAnaylizer.m; path = Stream/StAnaylizer.m; sourceTree = "<group>"; };
+		77FEA6D613F57D4B0082B946 /* StAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StAnalyzer.h; path = Stream/StAnalyzer.h; sourceTree = "<group>"; };
+		77FEA6D713F57D4B0082B946 /* StAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StAnalyzer.m; path = Stream/StAnalyzer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -546,17 +546,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		77086FA0174874A900C0BD48 /* AnaylizerSets */ = {
+		77086FA0174874A900C0BD48 /* AnalyzerSets */ = {
 			isa = PBXGroup;
 			children = (
-				77086FA2174874E100C0BD48 /* AnaylizerSetWindowController.h */,
-				77086FA3174874E100C0BD48 /* AnaylizerSetWindowController.m */,
-				77086FA4174874E100C0BD48 /* AnaylizerSetWindowController.xib */,
-				77086FAC1748915900C0BD48 /* NewAnaylizerSetWindowController.h */,
-				77086FAD1748915900C0BD48 /* NewAnaylizerSetWindowController.m */,
-				77086FAA17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib */,
+				77086FA2174874E100C0BD48 /* AnalyzerSetWindowController.h */,
+				77086FA3174874E100C0BD48 /* AnalyzerSetWindowController.m */,
+				77086FA4174874E100C0BD48 /* AnalyzerSetWindowController.xib */,
+				77086FAC1748915900C0BD48 /* NewAnalyzerSetWindowController.h */,
+				77086FAD1748915900C0BD48 /* NewAnalyzerSetWindowController.m */,
+				77086FAA17488E4D00C0BD48 /* NewAnalyzerSetDialog.xib */,
 			);
-			name = AnaylizerSets;
+			name = AnalyzerSets;
 			sourceTree = "<group>";
 		};
 		770B6874173D9A200097305E /* Generic Blockers */ = {
@@ -571,20 +571,20 @@
 			name = "Generic Blockers";
 			sourceTree = "<group>";
 		};
-		772D952814088129001A449B /* HexFiendAnaylizer */ = {
+		772D952814088129001A449B /* HexFiendAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
 				77F203F913DD3A5F00FA5B1F /* HexFiend */,
 				77263A8613F721E400EBD507 /* HFAccessoryView.xib */,
-				77C17FBA140F450100E23921 /* HexFiendAnaylizerController.h */,
-				77C17FBB140F450100E23921 /* HexFiendAnaylizerController.m */,
-				77C17FBC140F450100E23921 /* HexFiendAnaylizerController.xib */,
-				771AD298141D414B00E0FE41 /* HexFiendAnaylizer.h */,
-				771AD299141D414B00E0FE41 /* HexFiendAnaylizer.m */,
+				77C17FBA140F450100E23921 /* HexFiendAnalyzerController.h */,
+				77C17FBB140F450100E23921 /* HexFiendAnalyzerController.m */,
+				77C17FBC140F450100E23921 /* HexFiendAnalyzerController.xib */,
+				771AD298141D414B00E0FE41 /* HexFiendAnalyzer.h */,
+				771AD299141D414B00E0FE41 /* HexFiendAnalyzer.m */,
 				77E24064173FEB7100234F5A /* DMKProcessSingleDensity.h */,
 				77E24065173FEB7100234F5A /* DMKProcessSingleDensity.m */,
 			);
-			name = HexFiendAnaylizer;
+			name = HexFiendAnalyzer;
 			sourceTree = "<group>";
 		};
 		7759CF2713DBA1A200789DB3 = {
@@ -595,19 +595,19 @@
 				77E9E6EF17337F6B0027C7E9 /* TODO */,
 				77ABAD8B140F31CE002F03BB /* BlockAttributeView */,
 				778A598C1407516500B68EB4 /* BlockerDataView */,
-				7799CD1E13E5C651007D5B8E /* AudioAnaylizer */,
-				772D952814088129001A449B /* HexFiendAnaylizer */,
-				77B617F9172B8A4E008E8F1A /* TextAnaylizer */,
-				778E46EC172F649C00736D51 /* DisasemblerAnaylizer */,
-				77ABAF40174990AB00CE3C6F /* Raw Bitmap Anaylizer */,
+				7799CD1E13E5C651007D5B8E /* AudioAnalyzer */,
+				772D952814088129001A449B /* HexFiendAnalyzer */,
+				77B617F9172B8A4E008E8F1A /* TextAnalyzer */,
+				778E46EC172F649C00736D51 /* DisassemblerAnalyzer */,
+				77ABAF40174990AB00CE3C6F /* Raw Bitmap Analyzer */,
 				778A59771406EE0700B68EB4 /* CoCoBlockers */,
 				77ED691217375CA90024397E /* OS-9Blockers */,
 				770B6874173D9A200097305E /* Generic Blockers */,
 				77764F051736026F007F34D3 /* DiskImageBlockers */,
 				77614F3413DC9B6C00041279 /* Models */,
-				7788588B13EDC1B30057E042 /* AnaylizerUI */,
+				7788588B13EDC1B30057E042 /* AnalyzerUI */,
 				7759CF3C13DBA1A300789DB3 /* Stream */,
-				77086FA0174874A900C0BD48 /* AnaylizerSets */,
+				77086FA0174874A900C0BD48 /* AnalyzerSets */,
 				7759CF5F13DBA1A300789DB3 /* StreamTests */,
 				7759CF7913DBA1A300789DB3 /* StreamImporter */,
 				7759CF3513DBA1A300789DB3 /* Frameworks */,
@@ -767,12 +767,12 @@
 				778A597D140703DB00B68EB4 /* StStream.m */,
 				77C6562F173AA89C0022336D /* StData.h */,
 				77C65630173AA89C0022336D /* StData.m */,
-				77FEA6D613F57D4B0082B946 /* StAnaylizer.h */,
-				77FEA6D713F57D4B0082B946 /* StAnaylizer.m */,
+				77FEA6D613F57D4B0082B946 /* StAnalyzer.h */,
+				77FEA6D713F57D4B0082B946 /* StAnalyzer.m */,
 				7760145E140987A500777D60 /* StBlock.h */,
 				7760145F140987A600777D60 /* StBlock.m */,
-				77B0146A1717C1D4008CAF1A /* AnaylizerEdit.h */,
-				77B0146B1717C1D4008CAF1A /* AnaylizerEdit.m */,
+				77B0146A1717C1D4008CAF1A /* AnalyzerEdit.h */,
+				77B0146B1717C1D4008CAF1A /* AnalyzerEdit.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -806,30 +806,30 @@
 			name = SDListView;
 			sourceTree = "<group>";
 		};
-		7788588B13EDC1B30057E042 /* AnaylizerUI */ = {
+		7788588B13EDC1B30057E042 /* AnalyzerUI */ = {
 			isa = PBXGroup;
 			children = (
 				779434CA173EAD120090FD5F /* TLImageWithPopover.h */,
 				779434CB173EAD120090FD5F /* TLImageWithPopover.m */,
 				77D94C8A13E8F704009192BA /* DragRegionView.h */,
 				77D94C8B13E8F704009192BA /* DragRegionView.m */,
-				773F17C613E4F77E002606A0 /* AnaylizerTableViewCellView.h */,
-				773F17C713E4F77E002606A0 /* AnaylizerTableViewCellView.m */,
+				773F17C613E4F77E002606A0 /* AnalyzerTableViewCellView.h */,
+				773F17C713E4F77E002606A0 /* AnalyzerTableViewCellView.m */,
 				7714BC5513EA580600892495 /* ViewAutoLayoutSubView.h */,
 				7714BC5613EA580600892495 /* ViewAutoLayoutSubView.m */,
 				776139AD13E1BA4200CA80BB /* ColorGradientView.h */,
 				776139AE13E1BA4200CA80BB /* ColorGradientView.m */,
-				77263A8113F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.h */,
-				77263A8213F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m */,
-				77263A8813F734EC00EBD507 /* AnaylizerSettingPopOverViewController.h */,
-				77263A8913F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m */,
-				77DBB9D313E7A89200C891F3 /* AnaylizerSettingPopover.xib */,
-				770BF39217525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib */,
-				779F74C81724779F00EC509B /* AnaylizerListViewItem.h */,
-				779F74C91724779F00EC509B /* AnaylizerListViewItem.m */,
-				779F74CB172478F500EC509B /* AnaylizerListViewItem.xib */,
+				77263A8113F6DC3C00EBD507 /* AnalyzerSettingPopOverAccessoryViewController.h */,
+				77263A8213F6DC3C00EBD507 /* AnalyzerSettingPopOverAccessoryViewController.m */,
+				77263A8813F734EC00EBD507 /* AnalyzerSettingPopOverViewController.h */,
+				77263A8913F734EC00EBD507 /* AnalyzerSettingPopOverViewController.m */,
+				77DBB9D313E7A89200C891F3 /* AnalyzerSettingPopover.xib */,
+				770BF39217525ADD00F8CF00 /* AnalyzerBlockSettingPopover.xib */,
+				779F74C81724779F00EC509B /* AnalyzerListViewItem.h */,
+				779F74C91724779F00EC509B /* AnalyzerListViewItem.m */,
+				779F74CB172478F500EC509B /* AnalyzerListViewItem.xib */,
 			);
-			name = AnaylizerUI;
+			name = AnalyzerUI;
 			sourceTree = "<group>";
 		};
 		778A59771406EE0700B68EB4 /* CoCoBlockers */ = {
@@ -856,52 +856,52 @@
 				778A59901407524900B68EB4 /* BlockerDataViewController.xib */,
 				770D89F6140A9B860009ECA2 /* BlockerDataViewController.h */,
 				770D89F7140A9B860009ECA2 /* BlockerDataViewController.m */,
-				771AD29B141D431400E0FE41 /* BlockerDataAnaylizer.h */,
-				771AD29C141D431400E0FE41 /* BlockerDataAnaylizer.m */,
+				771AD29B141D431400E0FE41 /* BlockerDataAnalyzer.h */,
+				771AD29C141D431400E0FE41 /* BlockerDataAnalyzer.m */,
 				77DA26CB1421BAA2007BE635 /* BlockerViewOutlineView.h */,
 				77DA26CC1421BAA2007BE635 /* BlockerViewOutlineView.m */,
 			);
 			name = BlockerDataView;
 			sourceTree = "<group>";
 		};
-		778E46EC172F649C00736D51 /* DisasemblerAnaylizer */ = {
+		778E46EC172F649C00736D51 /* DisassemblerAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				778E46EE172F660B00736D51 /* dasm09.h */,
-				778E46F2172F667A00736D51 /* dasm09.c */,
-				778E46EF172F666400736D51 /* DisasemblerAnaylizer.h */,
-				778E46F0172F666400736D51 /* DisasemblerAnaylizer.m */,
-				778E46F3172F672100736D51 /* DisasemblerAccessoryView.xib */,
-				778E46F5172F700C00736D51 /* DisasemblerAnaylizerViewController.h */,
-				778E46F6172F700C00736D51 /* DisasemblerAnaylizerViewController.m */,
-				778E46F7172F700C00736D51 /* DisasemblerAnaylizerViewController.xib */,
+				63528741175BC26E00A9092F /* dasm09.c */,
+				63528742175BC26E00A9092F /* dasm09.h */,
+				63528743175BC26E00A9092F /* DisassemblerAccessoryView.xib */,
+				63528744175BC26E00A9092F /* DisassemblerAnalyzer.h */,
+				63528745175BC26E00A9092F /* DisassemblerAnalyzer.m */,
+				63528746175BC26E00A9092F /* DisassemblerAnalyzerViewController.h */,
+				63528747175BC26E00A9092F /* DisassemblerAnalyzerViewController.m */,
+				63528748175BC26E00A9092F /* DisassemblerAnalyzerViewController.xib */,
 			);
-			name = DisasemblerAnaylizer;
+			name = DisassemblerAnalyzer;
 			sourceTree = "<group>";
 		};
-		7799CD1E13E5C651007D5B8E /* AudioAnaylizer */ = {
+		7799CD1E13E5C651007D5B8E /* AudioAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				7799CD2913E63C1F007D5B8E /* WaveFormView.h */,
-				7799CD2A13E63C1F007D5B8E /* WaveFormView.m */,
-				771DC21913F0374800579077 /* AudioAnaScrollView.h */,
-				771DC21A13F0374800579077 /* AudioAnaScrollView.m */,
-				77C17FC0140F469700E23921 /* AudioAnaylizerViewController.h */,
-				77C17FC1140F469700E23921 /* AudioAnaylizerViewController.m */,
-				771C998413F624DC00C3A263 /* AudioAnaylizer.xib */,
-				77C17FC2140F469700E23921 /* AudioAnaylizerViewController.xib */,
-				771AD294141D06C800E0FE41 /* CoCoAudioAnaylizer.h */,
-				771AD295141D06C800E0FE41 /* CoCoAudioAnaylizer.m */,
-				772C658C13FEC0950060AB7F /* AnaylizerArrow.tiff */,
-				77A98C12172AD392001A9A55 /* AnaylizerArrow.psd */,
-				7700637617128E730037055D /* AnaylizerPencil.tiff */,
-				77A98C15172AD392001A9A55 /* AnaylizerPencil.psd */,
-				772C658D13FEC0950060AB7F /* AnaylizerHand.tiff */,
-				77A98C13172AD392001A9A55 /* AnaylizerHand.psd */,
-				772C658E13FEC0950060AB7F /* AnaylizerLupe.tiff */,
-				77A98C14172AD392001A9A55 /* AnaylizerLupe.psd */,
+				6352874E175BC31100A9092F /* AudioAnaScrollView.h */,
+				6352874F175BC31100A9092F /* AudioAnaScrollView.m */,
+				63528717175BC1AA00A9092F /* AnalyzerArrow.psd */,
+				63528718175BC1AA00A9092F /* AnalyzerArrow.tiff */,
+				63528719175BC1AA00A9092F /* AnalyzerHand.psd */,
+				6352871A175BC1AA00A9092F /* AnalyzerHand.tiff */,
+				6352871B175BC1AA00A9092F /* AnalyzerLoupe.psd */,
+				6352871C175BC1AA00A9092F /* AnalyzerLoupe.tiff */,
+				6352871D175BC1AA00A9092F /* AnalyzerPencil.psd */,
+				6352871E175BC1AA00A9092F /* AnalyzerPencil.tiff */,
+				6352871F175BC1AA00A9092F /* AudioAnalyzer.xib */,
+				63528720175BC1AA00A9092F /* AudioAnalyzerViewController.h */,
+				63528721175BC1AA00A9092F /* AudioAnalyzerViewController.m */,
+				63528722175BC1AA00A9092F /* AudioAnalyzerViewController.xib */,
+				63528723175BC1AA00A9092F /* CoCoAudioAnalyzer.h */,
+				63528724175BC1AA00A9092F /* CoCoAudioAnalyzer.m */,
+				63528725175BC1AA00A9092F /* WaveFormView.h */,
+				63528726175BC1AA00A9092F /* WaveFormView.m */,
 			);
-			name = AudioAnaylizer;
+			name = AudioAnalyzer;
 			sourceTree = "<group>";
 		};
 		77ABAD8B140F31CE002F03BB /* BlockAttributeView */ = {
@@ -913,42 +913,42 @@
 				77ABAD8E140F3217002F03BB /* BlockAttributeViewController.m */,
 				776EB7E3142069060019329F /* BlockAttributeViewTableView.h */,
 				776EB7E4142069060019329F /* BlockAttributeViewTableView.m */,
-				771AD29E141D43AE00E0FE41 /* BlockAttributeAnaylizer.h */,
-				771AD29F141D43AE00E0FE41 /* BlockAttributeAnaylizer.m */,
+				771AD29E141D43AE00E0FE41 /* BlockAttributeAnalyzer.h */,
+				771AD29F141D43AE00E0FE41 /* BlockAttributeAnalyzer.m */,
 			);
 			name = BlockAttributeView;
 			sourceTree = "<group>";
 		};
-		77ABAF40174990AB00CE3C6F /* Raw Bitmap Anaylizer */ = {
+		77ABAF40174990AB00CE3C6F /* Raw Bitmap Analyzer */ = {
 			isa = PBXGroup;
 			children = (
 				77ABAF4B1749C3F900CE3C6F /* ImageNotWorking.psd */,
 				77ABAF4C1749C3F900CE3C6F /* ImageNotWorking.tiff */,
-				77ABAF411749913000CE3C6F /* RawBitmapAnaylizer.h */,
-				77ABAF421749913000CE3C6F /* RawBitmapAnaylizer.m */,
+				77ABAF411749913000CE3C6F /* RawBitmapAnalyzer.h */,
+				77ABAF421749913000CE3C6F /* RawBitmapAnalyzer.m */,
 				77ABAF4917499C8300CE3C6F /* RawBitmapAccessoryView.xib */,
 				77ABAF44174991AC00CE3C6F /* RawBitmapViewController.h */,
 				77ABAF45174991AC00CE3C6F /* RawBitmapViewController.m */,
 				77ABAF46174991AC00CE3C6F /* RawBitmapViewController.xib */,
 			);
-			name = "Raw Bitmap Anaylizer";
+			name = "Raw Bitmap Analyzer";
 			sourceTree = "<group>";
 		};
-		77B617F9172B8A4E008E8F1A /* TextAnaylizer */ = {
+		77B617F9172B8A4E008E8F1A /* TextAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				77B617FB172B8A81008E8F1A /* TextAnaylizer.h */,
-				77B617FC172B8A81008E8F1A /* TextAnaylizer.m */,
-				77B617FE172B8BA1008E8F1A /* TextAnaylizerViewController.h */,
-				77B617FF172B8BA1008E8F1A /* TextAnaylizerViewController.m */,
-				77B61800172B8BA1008E8F1A /* TextAnaylizerViewController.xib */,
-				77B61803172B8CD3008E8F1A /* TextAccessoryView.xib */,
-				77F6044017400AAB00932477 /* CoCoDeTokenBinaryBASIC.h */,
-				77F6044117400AAB00932477 /* CoCoDeTokenBinaryBASIC.m */,
-				77F6044417400E5900932477 /* OS9DirectoryFile.h */,
-				77F6044517400E5900932477 /* OS9DirectoryFile.m */,
+				63528707175BC09300A9092F /* CoCoDeTokenBinaryBASIC.h */,
+				63528708175BC09300A9092F /* CoCoDeTokenBinaryBASIC.m */,
+				63528709175BC09300A9092F /* OS9DirectoryFile.h */,
+				6352870A175BC09300A9092F /* OS9DirectoryFile.m */,
+				6352870B175BC09300A9092F /* TextAccessoryView.xib */,
+				6352870C175BC09300A9092F /* TextAnalyzer.h */,
+				6352870D175BC09300A9092F /* TextAnalyzer.m */,
+				6352870E175BC09300A9092F /* TextAnalyzerViewController.h */,
+				6352870F175BC09300A9092F /* TextAnalyzerViewController.m */,
+				63528710175BC09300A9092F /* TextAnalyzerViewController.xib */,
 			);
-			name = TextAnaylizer;
+			name = TextAnalyzer;
 			sourceTree = "<group>";
 		};
 		77ED691217375CA90024397E /* OS-9Blockers */ = {
@@ -1161,26 +1161,16 @@
 				77F2048513DD3AEF00FA5B1F /* HFCancelOff.tiff in Resources */,
 				77F2048613DD3AEF00FA5B1F /* HFCancelOn.tiff in Resources */,
 				77F2048713DD3AEF00FA5B1F /* HFModalProgress.xib in Resources */,
-				77DBB9D413E7A89200C891F3 /* AnaylizerSettingPopover.xib in Resources */,
-				771C998513F624DC00C3A263 /* AudioAnaylizer.xib in Resources */,
+				77DBB9D413E7A89200C891F3 /* AnalyzerSettingPopover.xib in Resources */,
 				77263A8713F721E400EBD507 /* HFAccessoryView.xib in Resources */,
-				772C658F13FEC0960060AB7F /* AnaylizerArrow.tiff in Resources */,
-				772C659013FEC0960060AB7F /* AnaylizerHand.tiff in Resources */,
-				772C659113FEC0960060AB7F /* AnaylizerLupe.tiff in Resources */,
 				77CB933F1404AE7F0032F56F /* Zoom.tif in Resources */,
 				778A59911407524900B68EB4 /* BlockerDataViewController.xib in Resources */,
 				776014621409C20D00777D60 /* BlockerViewAccessory.xib in Resources */,
 				77ABAD91140F3217002F03BB /* BlockAttributeViewController.xib in Resources */,
-				77C17FBE140F450100E23921 /* HexFiendAnaylizerController.xib in Resources */,
-				77C17FC4140F469700E23921 /* AudioAnaylizerViewController.xib in Resources */,
+				77C17FBE140F450100E23921 /* HexFiendAnalyzerController.xib in Resources */,
 				776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */,
 				77AE7557141568BD0052A93D /* BlockIcon.tiff in Resources */,
-				7700637717128E730037055D /* AnaylizerPencil.tiff in Resources */,
-				779F74CC172478F500EC509B /* AnaylizerListViewItem.xib in Resources */,
-				77B61802172B8BA1008E8F1A /* TextAnaylizerViewController.xib in Resources */,
-				77B61804172B8CD3008E8F1A /* TextAccessoryView.xib in Resources */,
-				778E46F4172F672100736D51 /* DisasemblerAccessoryView.xib in Resources */,
-				778E46F9172F700C00736D51 /* DisasemblerAnaylizerViewController.xib in Resources */,
+				779F74CC172478F500EC509B /* AnalyzerListViewItem.xib in Resources */,
 				770B687D173D9B030097305E /* ArbitraryGroupViewController.xib in Resources */,
 				779434C9173EA5E90090FD5F /* AlertIcon.tiff in Resources */,
 				779434D4173EDBFD0090FD5F /* BasicDiskImageViewController.xib in Resources */,
@@ -1191,13 +1181,23 @@
 				7751C82517420332001A8A5F /* NoIcon.tiff in Resources */,
 				7751C82D17420C54001A8A5F /* BlockIconBlock.tiff in Resources */,
 				7754DD7E1747C14D00E090F0 /* StreamsPicturesPopover.xib in Resources */,
-				77086FA6174874E100C0BD48 /* AnaylizerSetWindowController.xib in Resources */,
-				77086FAB17488E4D00C0BD48 /* NewAnaylizerSetDialog.xib in Resources */,
+				77086FA6174874E100C0BD48 /* AnalyzerSetWindowController.xib in Resources */,
+				77086FAB17488E4D00C0BD48 /* NewAnalyzerSetDialog.xib in Resources */,
 				77ABAF48174991AC00CE3C6F /* RawBitmapViewController.xib in Resources */,
 				77ABAF4A17499C8300CE3C6F /* RawBitmapAccessoryView.xib in Resources */,
 				77ABAF4E1749C3F900CE3C6F /* ImageNotWorking.tiff in Resources */,
 				77331D70174DB99200E69E11 /* GetNetURLWindowController.xib in Resources */,
-				770BF39317525ADD00F8CF00 /* AnaylizerBlockSettingPopover.xib in Resources */,
+				770BF39317525ADD00F8CF00 /* AnalyzerBlockSettingPopover.xib in Resources */,
+				63528713175BC09300A9092F /* TextAccessoryView.xib in Resources */,
+				63528716175BC09300A9092F /* TextAnalyzerViewController.xib in Resources */,
+				63528728175BC1AA00A9092F /* AnalyzerArrow.tiff in Resources */,
+				6352872A175BC1AA00A9092F /* AnalyzerHand.tiff in Resources */,
+				6352872C175BC1AA00A9092F /* AnalyzerLoupe.tiff in Resources */,
+				6352872E175BC1AA00A9092F /* AnalyzerPencil.tiff in Resources */,
+				6352872F175BC1AA00A9092F /* AudioAnalyzer.xib in Resources */,
+				63528731175BC1AA00A9092F /* AudioAnalyzerViewController.xib in Resources */,
+				6352874A175BC26E00A9092F /* DisassemblerAccessoryView.xib in Resources */,
+				6352874D175BC26E00A9092F /* DisassemblerAnalyzerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1287,40 +1287,32 @@
 				77F2048013DD3AD000FA5B1F /* HFTextView.m in Sources */,
 				77F2048113DD3AD000FA5B1F /* HFVerticalScrollerRepresenter.m in Sources */,
 				776139AF13E1BA4200CA80BB /* ColorGradientView.m in Sources */,
-				7799CD2B13E63C1F007D5B8E /* WaveFormView.m in Sources */,
 				77C8DE1613E6F2C000AD079E /* Analyzation.m in Sources */,
 				77D94C8C13E8F704009192BA /* DragRegionView.m in Sources */,
 				777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */,
-				771DC21B13F0374800579077 /* AudioAnaScrollView.m in Sources */,
-				77FEA6D813F57D4B0082B946 /* StAnaylizer.m in Sources */,
-				77263A8413F6DC3C00EBD507 /* AnaylizerSettingPopOverAccessoryViewController.m in Sources */,
-				77263A8B13F734EC00EBD507 /* AnaylizerSettingPopOverViewController.m in Sources */,
+				77FEA6D813F57D4B0082B946 /* StAnalyzer.m in Sources */,
+				77263A8413F6DC3C00EBD507 /* AnalyzerSettingPopOverAccessoryViewController.m in Sources */,
+				77263A8B13F734EC00EBD507 /* AnalyzerSettingPopOverViewController.m in Sources */,
 				778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */,
 				778A597E140703DB00B68EB4 /* StStream.m in Sources */,
 				778A598B14072E6A00B68EB4 /* AppDelegate.m in Sources */,
 				77601460140987A600777D60 /* StBlock.m in Sources */,
 				770D89F9140A9B860009ECA2 /* BlockerDataViewController.m in Sources */,
 				77ABAD90140F3217002F03BB /* BlockAttributeViewController.m in Sources */,
-				77C17FBD140F450100E23921 /* HexFiendAnaylizerController.m in Sources */,
-				77C17FC3140F469700E23921 /* AudioAnaylizerViewController.m in Sources */,
-				771AD296141D06C800E0FE41 /* CoCoAudioAnaylizer.m in Sources */,
-				771AD29A141D414B00E0FE41 /* HexFiendAnaylizer.m in Sources */,
-				771AD29D141D431400E0FE41 /* BlockerDataAnaylizer.m in Sources */,
-				771AD2A0141D43AE00E0FE41 /* BlockAttributeAnaylizer.m in Sources */,
+				77C17FBD140F450100E23921 /* HexFiendAnalyzerController.m in Sources */,
+				771AD29A141D414B00E0FE41 /* HexFiendAnalyzer.m in Sources */,
+				771AD29D141D431400E0FE41 /* BlockerDataAnalyzer.m in Sources */,
+				771AD2A0141D43AE00E0FE41 /* BlockAttributeAnalyzer.m in Sources */,
 				776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */,
 				77DA26CD1421BAA2007BE635 /* BlockerViewOutlineView.m in Sources */,
 				778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */,
-				77B0146C1717C1D4008CAF1A /* AnaylizerEdit.m in Sources */,
+				77B0146C1717C1D4008CAF1A /* AnalyzerEdit.m in Sources */,
 				77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */,
 				777745AC171B558300700BB7 /* MAAttachedWindow.m in Sources */,
 				77793EB8172391E500E607F6 /* SDListView.m in Sources */,
 				77793EB9172391E500E607F6 /* SDListViewItem.m in Sources */,
-				779F74CA1724779F00EC509B /* AnaylizerListViewItem.m in Sources */,
-				77B617FD172B8A81008E8F1A /* TextAnaylizer.m in Sources */,
-				77B61801172B8BA1008E8F1A /* TextAnaylizerViewController.m in Sources */,
+				779F74CA1724779F00EC509B /* AnalyzerListViewItem.m in Sources */,
 				778BFDAA172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m in Sources */,
-				778E46F1172F666400736D51 /* DisasemblerAnaylizer.m in Sources */,
-				778E46F8172F700C00736D51 /* DisasemblerAnaylizerViewController.m in Sources */,
 				77FE861E1736181B0015DCD8 /* DunfieldImageDisk.m in Sources */,
 				77ED691517375CE60024397E /* OS9LogicalSectorsBlocker.m in Sources */,
 				77714C631738A48B00EA4EC5 /* OS9FileBlocker.m in Sources */,
@@ -1335,18 +1327,26 @@
 				779434DA173EFDA10090FD5F /* CoCoDiskFileBlocker.m in Sources */,
 				774C74B7173F4FF600FD43ED /* DavidKeilDiskImage.m in Sources */,
 				77E24066173FEB7100234F5A /* DMKProcessSingleDensity.m in Sources */,
-				77F6044217400AAB00932477 /* CoCoDeTokenBinaryBASIC.m in Sources */,
-				77F6044617400E5900932477 /* OS9DirectoryFile.m in Sources */,
 				77F6044A1740ABCB00932477 /* OS9LogicalSectorsViewController.m in Sources */,
 				7720B79017448E1A00C85C98 /* MakeBlockOperation.m in Sources */,
 				7754DD821747C2CE00E090F0 /* StreamsPicturesPopoverViewController.m in Sources */,
-				77086FA5174874E100C0BD48 /* AnaylizerSetWindowController.m in Sources */,
+				77086FA5174874E100C0BD48 /* AnalyzerSetWindowController.m in Sources */,
 				77086FA91748810400C0BD48 /* NSFileManager+DirectoryLocations.m in Sources */,
-				77086FAE1748915900C0BD48 /* NewAnaylizerSetWindowController.m in Sources */,
+				77086FAE1748915900C0BD48 /* NewAnalyzerSetWindowController.m in Sources */,
 				77086FB117494B6F00C0BD48 /* StAnaSet.m in Sources */,
-				77ABAF431749913000CE3C6F /* RawBitmapAnaylizer.m in Sources */,
+				77ABAF431749913000CE3C6F /* RawBitmapAnalyzer.m in Sources */,
 				77ABAF47174991AC00CE3C6F /* RawBitmapViewController.m in Sources */,
 				77331D6F174DB99200E69E11 /* GetNetURLWindowController.m in Sources */,
+				63528711175BC09300A9092F /* CoCoDeTokenBinaryBASIC.m in Sources */,
+				63528712175BC09300A9092F /* OS9DirectoryFile.m in Sources */,
+				63528714175BC09300A9092F /* TextAnalyzer.m in Sources */,
+				63528715175BC09300A9092F /* TextAnalyzerViewController.m in Sources */,
+				63528730175BC1AA00A9092F /* AudioAnalyzerViewController.m in Sources */,
+				63528732175BC1AA00A9092F /* CoCoAudioAnalyzer.m in Sources */,
+				63528733175BC1AA00A9092F /* WaveFormView.m in Sources */,
+				6352874B175BC26E00A9092F /* DisassemblerAnalyzer.m in Sources */,
+				6352874C175BC26E00A9092F /* DisassemblerAnalyzerViewController.m in Sources */,
+				63528750175BC31100A9092F /* AudioAnaScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

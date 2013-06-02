@@ -8,7 +8,7 @@
 
 #import "OS9LogicalSectorsBlocker.h"
 #import "StBlock.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 
 NSUInteger FindFirstSector( StStream *stream, NSUInteger track );
 NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startSearch );
@@ -55,9 +55,9 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
     return @"OS-9";
 }
 
-- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
-#pragma unused (anaylizer)
+#pragma unused (analyzer)
     NSString *result = nil;
     NSUInteger track = 0;
     NSUInteger sectorStartID = NSUIntegerMax, sectorLastID = NSUIntegerMax;
@@ -86,7 +86,7 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
         return @"LSN 0 too short.";
     }
 
-    NSUInteger maxLSNCount = [[anaylizer.optionsDictionary valueForKeyPath:@"OS9LogicalSectorsBlocker.maxLSNCount"] intValue];
+    NSUInteger maxLSNCount = [[analyzer.optionsDictionary valueForKeyPath:@"OS9LogicalSectorsBlocker.maxLSNCount"] intValue];
     
     StBlock *newLSN = [stream startNewBlockNamed:[NSString stringWithFormat:@"LSN 0"] owner:[OS9LogicalSectorsBlocker blockerKey]];
   
@@ -435,7 +435,7 @@ NSUInteger FindFirstSector( StStream *stream, NSUInteger track )
     const NSUInteger endSearch = 256;
     
     while (result < endSearch && aBlock == nil) {
-        aBlock = [stream topLevelBlockNamed:[NSString stringWithFormat:@"Track * %d Side * 0 Sector * %d", track, result++]];
+        aBlock = [stream topLevelBlockNamed:[NSString stringWithFormat:@"Track * %ld Side * 0 Sector * %ld", (unsigned long)track, (unsigned long)result++]];
     }
     
     result--;
@@ -450,11 +450,11 @@ NSUInteger FindFirstSector( StStream *stream, NSUInteger track )
 NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startSearch )
 {
     NSUInteger result = startSearch;
-    StBlock *aBlock = [stream topLevelBlockNamed:[NSString stringWithFormat:@"Track * %d Side * 0 Sector * %d", track, result]];
+    StBlock *aBlock = [stream topLevelBlockNamed:[NSString stringWithFormat:@"Track * %ld Side * 0 Sector * %ld", (unsigned long)track, (unsigned long)result]];
     const NSUInteger endSearch = 256;
     
     while (result < endSearch && aBlock != nil) {
-        aBlock = [stream topLevelBlockNamed:[NSString stringWithFormat:@"Track * %d Side * 0 Sector * %d", track, result++]];
+        aBlock = [stream topLevelBlockNamed:[NSString stringWithFormat:@"Track * %ld Side * 0 Sector * %ld", (unsigned long)track, (unsigned long)result++]];
     }
     
     result -= 2;

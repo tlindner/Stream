@@ -9,9 +9,9 @@
 #import "ColorGradientView.h"
 #import "BlockerDataViewController.h"
 #import "Analyzation.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 #import "StBlock.h"
-#import "AnaylizerListViewItem.h"
+#import "AnalyzerListViewItem.h"
 #import "DragRegionView.h"
 
 

@@ -7,8 +7,8 @@
 //
 
 #import "DragRegionView.h"
-#import "AnaylizerListViewItem.h"
-#import "StAnaylizer.h"
+#import "AnalyzerListViewItem.h"
+#import "StAnalyzer.h"
 
 #define MINIMUM_HEIGHT 26.0
 
@@ -39,9 +39,9 @@
 - (void)mouseDown:(NSEvent *)theEvent
 {
     CGFloat start, distance = 0, offset;
-    StAnaylizer *ana = [viewOwner representedObject];
+    StAnalyzer *ana = [viewOwner representedObject];
     BOOL keepOn = YES;
-    float startAnaylizerHeight = ana.anaylizerHeight;
+    float startAnalyzerHeight = ana.analyzerHeight;
     BOOL startPaneExpanded = ana.paneExpanded;
     start = [theEvent locationInWindow].y;
     offset = [[self superview] bounds].size.height;
@@ -74,7 +74,7 @@
                     distance = MINIMUM_HEIGHT;
                 }
                 
-                ana.anaylizerHeight = distance;
+                ana.analyzerHeight = distance;
                 [viewOwner noteViewHeightChanged];
                 break;
                 
@@ -82,7 +82,7 @@
                 
 //                ignoreEvent = YES;
                 
-                if( startAnaylizerHeight == ana.anaylizerHeight )
+                if( startAnalyzerHeight == ana.analyzerHeight )
                 {
                 }
                 else
@@ -90,7 +90,7 @@
                     if( distance <= MINIMUM_HEIGHT+ 80 )
                     {
                         if( startPaneExpanded == YES ) ana.paneExpanded = NO;
-                        ana.anaylizerHeight = startAnaylizerHeight;
+                        ana.analyzerHeight = startAnalyzerHeight;
                     }
                     else
                     {

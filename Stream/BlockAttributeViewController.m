@@ -34,8 +34,8 @@
         if( theBlock != nil )
         {
             [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
-            [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
-            [lastFilterAnaylizer release];
+            [lastFilterAnalyzer removeObserver:self forKeyPath:@"editIndexSet" context:self];
+            [lastFilterAnalyzer release];
         }
         
         observationsActive = NO;
@@ -62,8 +62,8 @@
 //    NSAssert(observationsActive == NO, @"BlockAttributeView: double observer fault");
 
 //    [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
-//    lastFilterAnaylizer = (StData *)[[[theBlock getStream] lastFilterAnayliser] retain];
-//    [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+//    lastFilterAnalyzer = (StData *)[[[theBlock getStream] lastFilterAnalyzer] retain];
+//    [lastFilterAnalyzer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
     
 //    observationsActive = YES;
     [self resumeObservations];
@@ -89,7 +89,7 @@
 
 - (void)dealloc
 {
-//    StAnaylizer *theAna = [self representedObject];
+//    StAnalyzer *theAna = [self representedObject];
 //    theAna.viewController = nil;
     [self suspendObservations];
     
@@ -108,8 +108,8 @@
     if( observationsActive == YES )
     {
         [[self representedObject] removeObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" context:self];
-        [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
-        [lastFilterAnaylizer release];
+        [lastFilterAnalyzer removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        [lastFilterAnalyzer release];
         observationsActive = NO;
     }
 }
@@ -122,8 +122,8 @@
         StBlock *theBlock = [self representedObject];
         [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
 
-        lastFilterAnaylizer = (StData *)[[[theBlock getStream] lastFilterAnayliser] retain];
-        [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+        lastFilterAnalyzer = (StData *)[[[theBlock getStream] lastFilterAnalyzer] retain];
+        [lastFilterAnalyzer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
     }
 }
 

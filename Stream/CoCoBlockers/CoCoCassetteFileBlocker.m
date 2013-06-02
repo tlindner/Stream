@@ -36,9 +36,9 @@
     return @"CoCo Cassette";
 }
 
-- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
-#pragma unused (anaylizer)
+#pragma unused (analyzer)
     NSAssert( [stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == YES, @"CoCoCassetteFileBlocker: Incompatiable stream" );
     NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:@"RSDOSString"];
     int blockNumber = 0;

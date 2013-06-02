@@ -9,7 +9,7 @@
 #import "ArbitraryGroupBlocker.h"
 #import "StStream.h"
 #import "StBlock.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 
 @implementation ArbitraryGroupBlocker
 
@@ -38,14 +38,14 @@
     return @"Utility";
 }
 
-- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
     StBlock *newFileBlock;
 
     newFileBlock = [stream startNewBlockNamed:@"Arbitrary Block" owner:[ArbitraryGroupBlocker blockerKey]];
     
     if (newFileBlock != nil) {
-        NSMutableDictionary *optionsDictionary = anaylizer.optionsDictionary;
+        NSMutableDictionary *optionsDictionary = analyzer.optionsDictionary;
         NSMutableDictionary *myOptions = [optionsDictionary objectForKey:[ArbitraryGroupBlocker blockerKey]];
         NSMutableArray *myArray = [myOptions valueForKey:@"blockList"];
         
@@ -93,7 +93,7 @@
 -(NSString *)description
 {
     NSRange aRange = [self.range rangeValue];
-    return [NSString stringWithFormat:@"%@: %d, %d", self.name, aRange.location, aRange.length];
+    return [NSString stringWithFormat:@"%@: %ld, %ld", self.name, (unsigned long)aRange.location, (unsigned long)aRange.length];
 }
 
 - (void)dealloc

@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 //
 
-#import "HexFiendAnaylizer.h"
+#import "HexFiendAnalyzer.h"
 
-@interface DMKProcessSingleDensity : HexFiendAnaylizer
+@interface DMKProcessSingleDensity : HexFiendAnalyzer
 
 @end

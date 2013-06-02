@@ -7,7 +7,7 @@
 //
 
 #import "StAnaSet.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 
 
 @implementation StAnaSet
@@ -15,12 +15,12 @@
 @dynamic commandKey;
 @dynamic group;
 @dynamic setName;
-@dynamic anaylizers;
-@synthesize anaylizerArray;
+@dynamic analyzers;
+@synthesize analyzerArray;
 
-- (NSArray *)anaylizerArray
+- (NSArray *)analyzerArray
 {
-    return [self.anaylizers array];
+    return [self.analyzers array];
 }
 
 @end

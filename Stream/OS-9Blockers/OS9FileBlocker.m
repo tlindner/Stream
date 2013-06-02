@@ -49,9 +49,9 @@ NSString *DoFileFD( NSMutableIndexSet *processedLSNs, NSUInteger dd_tot,  StStre
     return self;
 }
 
-- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
-#pragma unused (anaylizer)
+#pragma unused (analyzer)
     NSString *result = nil;
     StBlock *lsn0block = [stream topLevelBlockNamed:@"LSN 0"];
     
@@ -211,7 +211,7 @@ NSString *DoFileFD( NSMutableIndexSet *processedLSNs, NSUInteger dd_tot, StStrea
                         }
                         
                         if (lsn > dd_tot) {
-                            [result appendFormat:@"\nFile: %@, file descriptor sector (%d) past end of image (%d)", filename, lsn, dd_tot];
+                            [result appendFormat:@"\nFile: %@, file descriptor sector (%d) past end of image (%ld)", filename, lsn, (unsigned long)dd_tot];
                             i++;
                             newDirLength -= 32;
                             continue;

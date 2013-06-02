@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
-		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">11G63b</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2182</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
-		<string key="IBDocument.HIToolboxVersion">569.00</string>
+		<int key="IBDocument.SystemTarget">1080</int>
+		<string key="IBDocument.SystemVersion">12D78</string>
+		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
+		<string key="IBDocument.AppKitVersion">1187.37</string>
+		<string key="IBDocument.HIToolboxVersion">626.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">2182</string>
+			<string key="NS.object.0">3084</string>
 		</object>
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<string>NSCustomObject</string>
 			<string>NSMenu</string>
 			<string>NSMenuItem</string>
-			<string>NSCustomObject</string>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -799,7 +799,7 @@
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSMenuItem" id="186225247">
 									<reference key="NSMenu" ref="189792223"/>
-									<string key="NSTitle">Create Anaylizer Set…</string>
+									<string key="NSTitle">Create Analyzer Set…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -807,7 +807,7 @@
 								</object>
 								<object class="NSMenuItem" id="343016705">
 									<reference key="NSMenu" ref="189792223"/>
-									<string key="NSTitle">Manage Anaylizer Sets</string>
+									<string key="NSTitle">Manage Analyzer Sets</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -2112,7 +2112,7 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">makeAnaylizerSet:</string>
+						<string key="label">makeAnalyzerSet:</string>
 						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="186225247"/>
 					</object>
@@ -2175,20 +2175,20 @@
 					<int key="connectionID">626</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">manageAnaylizerSets:</string>
-						<reference key="source" ref="687375514"/>
-						<reference key="destination" ref="343016705"/>
-					</object>
-					<int key="connectionID">646</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">setsMenu</string>
 						<reference key="source" ref="687375514"/>
 						<reference key="destination" ref="189792223"/>
 					</object>
 					<int key="connectionID">647</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">manageAnalyzerSets:</string>
+						<reference key="source" ref="687375514"/>
+						<reference key="destination" ref="343016705"/>
+					</object>
+					<int key="connectionID">649</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3666,7 +3666,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">648</int>
+			<int key="maxID">649</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3678,8 +3678,8 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>makeAnaylizerSet:</string>
-							<string>manageAnaylizerSets:</string>
+							<string>makeAnalyzerSet:</string>
+							<string>manageAnalyzerSets:</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3691,17 +3691,17 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>makeAnaylizerSet:</string>
-							<string>manageAnaylizerSets:</string>
+							<string>makeAnalyzerSet:</string>
+							<string>manageAnalyzerSets:</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
-								<string key="name">makeAnaylizerSet:</string>
+								<string key="name">makeAnalyzerSet:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">manageAnaylizerSets:</string>
+								<string key="name">manageAnalyzerSets:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>
@@ -3848,11 +3848,11 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>add:</string>
 							<string>addURL:</string>
-							<string>applyAnaylizerSet:</string>
+							<string>applyAnalyzerSet:</string>
 							<string>imagePopoverClick:</string>
-							<string>makeAnaylizerSet:</string>
+							<string>makeAnalyzerSet:</string>
 							<string>makeSubStream:</string>
-							<string>removeAnaylizer:</string>
+							<string>removeAnalyzer:</string>
 							<string>removeStream:</string>
 						</object>
 						<object class="NSArray" key="dict.values">
@@ -3873,11 +3873,11 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>add:</string>
 							<string>addURL:</string>
-							<string>applyAnaylizerSet:</string>
+							<string>applyAnalyzerSet:</string>
 							<string>imagePopoverClick:</string>
-							<string>makeAnaylizerSet:</string>
+							<string>makeAnalyzerSet:</string>
 							<string>makeSubStream:</string>
-							<string>removeAnaylizer:</string>
+							<string>removeAnalyzer:</string>
 							<string>removeStream:</string>
 						</object>
 						<object class="NSArray" key="dict.values">
@@ -3891,7 +3891,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">applyAnaylizerSet:</string>
+								<string key="name">applyAnalyzerSet:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -3899,7 +3899,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">makeAnaylizerSet:</string>
+								<string key="name">makeAnalyzerSet:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -3907,7 +3907,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">removeAnaylizer:</string>
+								<string key="name">removeAnalyzer:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

@@ -9,8 +9,8 @@
 #import "StBlock.h"
 #import "StStream.h"
 #import "Analyzation.h"
-#import "HexFiendAnaylizer.h"
-#import "TextAnaylizer.h"
+#import "HexFiendAnalyzer.h"
+#import "TextAnalyzer.h"
 
 static NSColor *failColor;
 
@@ -344,7 +344,7 @@ static NSColor *failColor;
             /* leaf */
             NSUInteger sourceLength;
             if ([self.source isEqualToString:@"stream"]) {
-                sourceLength = [[[self.parentBlock.parentBlock.parentStream lastFilterAnayliser] resultingData] length];
+                sourceLength = [[[self.parentBlock.parentBlock.parentStream lastFilterAnalyzer] resultingData] length];
              } else {
                 sourceLength = [[self.parentBlock.parentBlock.parentStream topLevelBlockNamed:self.source] actualBlockSize];
              }
@@ -391,7 +391,7 @@ static NSColor *failColor;
 {
     if( [newBlock.source isEqualToString:@"stream"] )
     {
-        if( [[[self getStream] lastFilterAnayliser] streamEditedInRange:NSMakeRange(newBlock.offset, newBlock.length)] )
+        if( [[[self getStream] lastFilterAnalyzer] streamEditedInRange:NSMakeRange(newBlock.offset, newBlock.length)] )
         {
             [newBlock smartSetEdit];
         }
@@ -697,7 +697,7 @@ static NSColor *failColor;
             if( [aBlock.source isEqualToString:@"stream"] )
             {
                 /* writing to stream */
-                [[[self getStream] lastFilterAnayliser] writebyte:byte atOffset:aBlock.offset + (offset - place)];
+                [[[self getStream] lastFilterAnalyzer] writebyte:byte atOffset:aBlock.offset + (offset - place)];
                 byteWritten = YES;
                 break;
             }
@@ -760,7 +760,7 @@ static NSColor *failColor;
         if( [self.source isEqualToString:@"stream"] )
         {
             NSRange range = {self.offset, self.length};
-            [[[self getStream] lastFilterAnayliser].failIndexSet addIndexesInRange:range];
+            [[[self getStream] lastFilterAnalyzer].failIndexSet addIndexesInRange:range];
         }
         
     }
@@ -1011,8 +1011,8 @@ static NSColor *failColor;
             if( [self.source isEqualToString:@"stream"] )
             {
                 NSRange range = {self.offset, self.length};
-                StAnaylizer *lastFilterAnaylizer = [[self getStream] lastFilterAnayliser];
-                NSIndexSet *set = lastFilterAnaylizer.editIndexSet;
+                StAnalyzer *lastFilterAnalyzer = [[self getStream] lastFilterAnalyzer];
+                NSIndexSet *set = lastFilterAnalyzer.editIndexSet;
                 NSMutableIndexSet *setInRange = [[set indexesInRange:range options:0 passingTest:
                                                   ^(NSUInteger idx, BOOL *stop){
     #pragma unused(idx)
@@ -1107,7 +1107,7 @@ static NSColor *failColor;
 
 - (void)willTurnIntoFault
 {
-    self.anaylizerObject = nil;
+    self.analyzerObject = nil;
     self.resultingData = nil;
     self.icon = nil;
     self.attributeColor = nil;
