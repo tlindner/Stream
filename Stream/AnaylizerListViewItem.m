@@ -195,7 +195,6 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
 
                     [self didChangeValueForKey:@"acceptsUTIList"];
                     [self didChangeValueForKey:@"editorList"];
-                    
                 }
             } else {
                 NSLog(@"selected objects changed but, editor controller is not a block controller");

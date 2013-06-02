@@ -669,6 +669,22 @@ typedef struct
     }   
 }
 
+- (IBAction)paste:(id)sender
+{
+#pragma unused(sender)
+    NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+    BOOL haveSound = [NSSound canInitWithPasteboard:pasteboard];
+    
+    if (haveSound) {
+//        NSSound *sound = [[[NSSound alloc] initWithPasteboard:pasteboard] autorelease];
+        NSBeep();
+    }
+    else
+    {
+        NSBeep();
+    }
+}
+
 - (void) mouseDown:(NSEvent *)theEvent
 {
     mouseDown = YES;
