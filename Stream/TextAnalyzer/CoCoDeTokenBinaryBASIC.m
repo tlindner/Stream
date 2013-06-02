@@ -120,12 +120,12 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
         
         if (file_size < (bufferSize-3)) {
             StData *ro = self.representedObject;
-            ro.errorString = [NSString stringWithFormat:@"BASIC Program size is less than the internal size: %d < %d", file_size, bufferSize-3];
+            ro.errorString = [NSString stringWithFormat:@"BASIC Program size is less than the internal size: %ld < %ld", (unsigned long)file_size, bufferSize-3];
         }
 
         if (file_size > (bufferSize-3)) {
             StData *ro = self.representedObject;
-            ro.errorString = [NSString stringWithFormat:@"BASIC Program size is greater than the internal size: %d > %d", file_size, bufferSize-3];
+            ro.errorString = [NSString stringWithFormat:@"BASIC Program size is greater than the internal size: %ld > %ld", (unsigned long)file_size, bufferSize-3];
         }
     }
     else {
@@ -142,7 +142,7 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
         line_number = buffer[pos++] << 8;
         line_number += buffer[pos++];
         
-        [result appendFormat:@"%d ", line_number];
+        [result appendFormat:@"%ld ", (unsigned long)line_number];
         
         while ((c = buffer[pos++]) != 0 && pos < bufferSize) {
             if (c == 0xff) {
@@ -183,9 +183,9 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
         [result appendString:@"\n\nBytes after BASIC program:\n\n"];
         
         for (unsigned i=0; pos+i < bufferSize; i+=16) {
-            unsigned j, jMin = MIN((unsigned)16, bufferSize - (pos+i));
+            unsigned j, jMin = MIN(16, bufferSize - (pos+i));
             
-            [result appendFormat:@"%04X ", pos+i];
+            [result appendFormat:@"%04lX ", pos+i];
             
             for (j=0; j<jMin; j++) {
                 [result appendFormat:@"%02X", buffer[pos+i+j]];

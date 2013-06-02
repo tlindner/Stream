@@ -22,7 +22,7 @@ void SetCanonical(AudioStreamBasicDescription *clientFormat, UInt32 nChannels, b
     BOOL observationsActive;
     StAnalyzer *representedObject;
     NSMutableData *frameBuffer;
-    int currentAudioChannel;
+    NSUInteger currentAudioChannel;
     NSMutableData *resultingData;
 }
 

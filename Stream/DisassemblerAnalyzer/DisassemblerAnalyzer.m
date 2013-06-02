@@ -509,10 +509,10 @@ void FCB_Dump( NSMutableString *result, unsigned char *memory, NSRange nilRange,
         if (intersectionRange.length > 0) {
             [result appendString:PrintORG (intersectionRange.location, filledRanges)];
             for (NSUInteger j=0; j<intersectionRange.length; j += 8) {
-                if (showAddress) [result appendFormat:@"%04X: ", intersectionRange.location+j];
+                if (showAddress) [result appendFormat:@"%04lX: ", intersectionRange.location+j];
                 if (showHex) [result appendFormat:@"               "];
                 if ((!showAddress)&&(!showHex)) [result appendFormat:@"\t"];
-                [result appendFormat:@"FCB", intersectionRange.location+j];
+                [result appendFormat:@"FCB"];
                 int min = MIN((NSUInteger)8, intersectionRange.length - j);
                 for (int k=0; k<min; k++) {
                     [result appendFormat:@" $%02X%s", memory[intersectionRange.location+j+k], k<min-1 ? "," : ""];
@@ -532,7 +532,7 @@ NSString *PrintORG (NSUInteger i, NSArray *filledRanges)
         NSRange theRange = [aRange rangeValue];
         
         if (i == theRange.location) {
-            result = [NSString stringWithFormat:@"; org $%04X\n",i];
+            result = [NSString stringWithFormat:@"; org $%04lX\n",(unsigned long)i];
             break;
         }
     }

@@ -76,22 +76,22 @@ typedef struct
 {
     if( observationsActive == NO )
     {
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.lowCycle" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.highCycle" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.resyncThreashold" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.audioChannel" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.amplify" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.interpolate" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.invert" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.dcblocking" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"resultingData" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"failIndexSet" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:nil];
-        [self.cachedAnalyzer addObserver:self forKeyPath:@"viewRange" options:NSKeyValueChangeSetting context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.lowCycle" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.highCycle" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.resyncThreashold" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.audioChannel" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.amplify" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.interpolate" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.invert" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.dcblocking" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"resultingData" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"failIndexSet" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"editIndexSet" options:0 context:nil];
+        [self.cachedAnalyzer addObserver:self forKeyPath:@"viewRange" options:0 context:nil];
         modelObject = (CoCoAudioAnalyzer *)[self.cachedAnalyzer analyzerObject];
-        [modelObject addObserver:self forKeyPath:@"frameBuffer" options:NSKeyValueChangeSetting context:nil];
+        [modelObject addObserver:self forKeyPath:@"frameBuffer" options:0 context:nil];
         StStream *theStream = [self.cachedAnalyzer parentStream];
-        [theStream addObserver:self forKeyPath:@"analyzers" options:NSKeyValueChangeSetting context:nil];
+        [theStream addObserver:self forKeyPath:@"analyzers" options:0 context:nil];
         observationsActive = YES;
     }
 }

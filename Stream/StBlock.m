@@ -140,7 +140,7 @@ static NSColor *failColor;
 //        [attrBlock addBlocksObject:newBlock];
     }
     
-    newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", attrIndex, blockName, start, length];
+    newBlock.name = [NSString stringWithFormat:@"%ld: %@, %ld, %ld", (unsigned long)attrIndex, blockName, (unsigned long)start, (unsigned long)length];
     newBlock.source = blockName;
     newBlock.uiName = name;
     newBlock.offset = start;
@@ -225,7 +225,7 @@ static NSColor *failColor;
 //        [dataBlock addBlocksObject:newBlock];
     }
     
-    newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", dataIndex, blockName, start, length];
+    newBlock.name = [NSString stringWithFormat:@"%ld: %@, %ld, %ld", (unsigned long)dataIndex, blockName, (unsigned long)start, (unsigned long)length];
     newBlock.uiName = name;
     newBlock.source = blockName;
     newBlock.offset = start;
@@ -277,7 +277,7 @@ static NSColor *failColor;
 //        [depBlock addBlocksObject:newBlock];
     }
     
-    newBlock.name = [NSString stringWithFormat:@"%d: %@, %d, %d", depIndex, blockName, start, length];
+    newBlock.name = [NSString stringWithFormat:@"%ld: %@, %ld, %ld", (unsigned long)depIndex, blockName, (unsigned long)start, (unsigned long)length];
     newBlock.uiName = name;
     newBlock.source = blockName;
     newBlock.offset = start;
@@ -711,7 +711,7 @@ static NSColor *failColor;
             place += aBlock.length;
     }
     
-    NSAssert(byteWritten == YES, @"Tried writing byte past end of block: %@, offset: %d", [self source], [self offset]);
+    NSAssert(byteWritten == YES, @"Tried writing byte past end of block: %@, offset: %lld", [self source], [self offset]);
     return byteWritten;
 }
 
@@ -906,7 +906,7 @@ static NSColor *failColor;
         }
         
         if ([self expectedBlockSize] != [self actualBlockSize]) {
-            [result appendFormat:@"expected block size wrong: %d != %d, ", [self expectedBlockSize], [self actualBlockSize]];
+            [result appendFormat:@"expected block size wrong: %ld != %ld, ", (unsigned long)[self expectedBlockSize], (unsigned long)[self actualBlockSize]];
         }
     }
     else

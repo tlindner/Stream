@@ -238,7 +238,8 @@
         NSArray *stringParts = [value componentsSeparatedByString:@"."];
         NSUInteger partCount = [stringParts count];
         NSString *extension = @"";
-        NSString *filename = [filename stringByAppendingString:[stringParts objectAtIndex:0]];
+        NSString *filename = @"";
+        filename = [filename stringByAppendingString:[stringParts objectAtIndex:0]];
         
         if (partCount > 1) {
             extension = [stringParts objectAtIndex:partCount-1];

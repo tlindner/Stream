@@ -561,7 +561,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     AudioSampleType *audioFrames = [audioFramesObject mutableBytes];
     AudioSampleType *frameStart = audioFrames + characters[idx].location;
     AudioSampleType maxValue = [[optionsDictionary objectForKey:@"averagedMaximumSample"] floatValue];
-    NSData *previousDataObject = [NSData dataWithBytes:frameStart length:sizeof(AudioSampleType) * characters[idx].length];
+//    NSData *previousDataObject = [NSData dataWithBytes:frameStart length:sizeof(AudioSampleType) * characters[idx].length];
     
     /* calculate waveform buffer size */
     unsigned char *character = [self.characterObject mutableBytes];
@@ -582,7 +582,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     int zerosLength = sampleRate / lowCycle;
     int totalLength = (ones * onesLength) + (zeros * zerosLength);
     
-    NSValue *newRangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType) * characters[idx].location, sizeof(AudioSampleType) * totalLength)];
+//    NSValue *newRangeValue = [NSValue valueWithRange:NSMakeRange(sizeof(AudioSampleType) * characters[idx].location, sizeof(AudioSampleType) * totalLength)];
     AudioSampleType *newByteWaveForm = malloc( sizeof(AudioSampleType) * totalLength );
     int waveFormIndex = 0;
     test = character[idx];

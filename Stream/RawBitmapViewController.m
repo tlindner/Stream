@@ -99,17 +99,17 @@
 {
     if (observationsActive == NO) {
         StAnalyzer *ro = self.representedObject;
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.passThrough" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.horizontalPixels" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.verticalPixels" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.bitsPerSample" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.samplesPerPixel" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.alphaChannel" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.planar" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.colorSpaceName" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.rowBytes" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.pixelBits" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.passThrough" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.horizontalPixels" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.verticalPixels" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.bitsPerSample" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.samplesPerPixel" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.alphaChannel" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.planar" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.colorSpaceName" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.rowBytes" options:0 context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.pixelBits" options:0 context:self];
         observationsActive = YES;
     }
 }

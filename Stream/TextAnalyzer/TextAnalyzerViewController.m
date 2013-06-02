@@ -94,11 +94,11 @@
     
     self.lastAnalyzer = [self representedObject];
     
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.wrapLines" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.overWriteMode" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.fixedWidthFont" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.encoding" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.readOnly" options:NSKeyValueChangeSetting context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.wrapLines" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.overWriteMode" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.fixedWidthFont" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.encoding" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.TextAnalyzerViewController.readOnly" options:0 context:self];
     observationsActive = YES;
 }
 

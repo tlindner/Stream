@@ -80,6 +80,7 @@ NSUInteger CalculateSectorSize( unsigned char value );
         StBlock *newBlock = [stream startNewBlockNamed:@"Note" owner:[DunfieldImageDisk blockerKey]];
         [newBlock addDataRange:@"stream" start:0 length:i-1];
         newBlock.sourceUTI = newBlock.resultingUTI = @"public.text";
+        newBlock.currentEditorView = @"Text Editor";
 
         while (i < length) {
             unsigned char sectorTable[256];
@@ -143,13 +144,13 @@ NSUInteger CalculateSectorSize( unsigned char value );
                 /* sector size map */
                 if ((i+sectorCount) >= length) return @"Abnormal end: short header";
                 for (NSUInteger j=0; j<sectorCount; j++) {
-                    sectorSizeMap[j] = CalculateSectorSize( streamBytes[i++] );
+                    sectorSizeMap[j] = (unsigned int)CalculateSectorSize( streamBytes[i++] );
                 }
             }
             else {
                 for (NSUInteger j=0; j<sectorCount; j++) {
                     
-                    sectorSizeMap[j] = CalculateSectorSize( sectorSizeCode );
+                    sectorSizeMap[j] = (unsigned int)CalculateSectorSize( sectorSizeCode );
                 }
             }
             

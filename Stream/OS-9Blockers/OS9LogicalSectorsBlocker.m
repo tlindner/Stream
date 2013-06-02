@@ -74,9 +74,9 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
     track--;
     
     sectorLastID = FindLastSector(stream, track, sectorStartID);
-    unsigned trackZeroSize = sectorLastID - sectorStartID + 1;
+    unsigned long trackZeroSize = sectorLastID - sectorStartID + 1;
 
-    NSString *firstSectorName = [NSString stringWithFormat:@"Track * %d Side * 0 Sector * %d", track, sectorStartID];
+    NSString *firstSectorName = [NSString stringWithFormat:@"Track * %ld Side * 0 Sector * %ld", (unsigned long)track, (unsigned long)sectorStartID];
     StBlock *lsn0Block = [stream topLevelBlockNamed:firstSectorName];
     
     NSData *lsn0Data = [lsn0Block resultingData];
@@ -166,12 +166,13 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
     NSUInteger totalSectorCount = (lsn0[0] << 16) + (lsn0[1] << 8) + lsn0[2];
     
     if (totalSectorCount > maxLSNCount) {
-        result = [NSString stringWithFormat:@"Stopped short at LSN %d. Maximum specified in stream: LSN %d", maxLSNCount, totalSectorCount];
+        result = [NSString stringWithFormat:@"Stopped short at LSN %ld. Maximum specified in stream: LSN %ld", (unsigned long)maxLSNCount, (unsigned long)totalSectorCount];
     }
     
     totalSectorCount = MIN(maxLSNCount, totalSectorCount);
     
-    unsigned sector, side, lsnNumber;
+    unsigned side, lsnNumber;
+    unsigned long sector;
     NSString *blockName;
     
     sector = sectorStartID + 1;
@@ -180,7 +181,7 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
     
     for (i=1; i<trackZeroSize; i++) {
         blockName = [NSString stringWithFormat:@"LSN %d", lsnNumber];
-        sectorName = [NSString stringWithFormat:@"Track * %d Side * 0 Sector * %d", track, sector];
+        sectorName = [NSString stringWithFormat:@"Track * %ld Side * 0 Sector * %ld", (unsigned long)track, sector];
         newLSN = [stream startNewBlockNamed:blockName owner:[OS9LogicalSectorsBlocker blockerKey]];
         [newLSN addDataRange:sectorName start:0 length:0 expectedLength:logicalSectorSize];
         
@@ -207,7 +208,7 @@ NSUInteger FindLastSector( StStream *stream, NSUInteger track, NSUInteger startS
         
         for (sector=sectorStartID; sector<trackSizeInSectors + sectorStartID; sector++) {
             blockName = [NSString stringWithFormat:@"LSN %d", lsnNumber];
-            sectorName = [NSString stringWithFormat:@"Track * %d Side * %d Sector * %d", track, side, sector];
+            sectorName = [NSString stringWithFormat:@"Track * %ld Side * %d Sector * %ld", (unsigned long)track, side, sector];
             newLSN = [stream startNewBlockNamed:blockName owner:[OS9LogicalSectorsBlocker blockerKey]];
             [newLSN addDataRange:sectorName start:0 length:0 expectedLength:logicalSectorSize];
             

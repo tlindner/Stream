@@ -271,13 +271,13 @@
 {
     if( observationsActive == NO )
     {
-        [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnalyzerController.readOnly" options:NSKeyValueChangeSetting context:nil];
-        [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnalyzerController.showOffset" options:NSKeyValueChangeSetting context:nil];
-        [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnalyzerController.offsetBase" options:NSKeyValueChangeSetting context:nil];
-        [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnalyzerController.overWriteMode" options:NSKeyValueChangeSetting context:nil];
+        [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnalyzerController.readOnly" options:0 context:nil];
+        [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnalyzerController.showOffset" options:0 context:nil];
+        [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnalyzerController.offsetBase" options:0 context:nil];
+        [[self representedObject] addObserver:self forKeyPath:@"optionsDictionary.HexFiendAnalyzerController.overWriteMode" options:0 context:nil];
 
         HFTextView *hexView = (HFTextView *)[self view];
-        [hexView addObserver:self forKeyPath:@"data" options:NSKeyValueChangeReplacement context:nil];
+        [hexView addObserver:self forKeyPath:@"data" options:0 context:nil];
         
         observationsActive = YES;
     }

@@ -203,12 +203,12 @@
 {
     if( self.observing == NO )
     {
-        [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:self];
+        [treeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
         lastFilterAnalyzer = [[[[self representedObject] parentStream] lastFilterAnalyzer] retain];
-        [lastFilterAnalyzer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+        [lastFilterAnalyzer addObserver:self forKeyPath:@"editIndexSet" options:0 context:self];
         StAnalyzer *theAna = [self representedObject];
-        [theAna addObserver:self forKeyPath:@"viewRange" options:NSKeyValueChangeSetting context:self];
-        [theAna.parentStream addObserver:self forKeyPath:@"blocks" options:NSKeyValueChangeSetting context:self];
+        [theAna addObserver:self forKeyPath:@"viewRange" options:0 context:self];
+        [theAna.parentStream addObserver:self forKeyPath:@"blocks" options:0 context:self];
         
     }
 
@@ -238,7 +238,7 @@
     }
     
     self.observingBlock = inBlock;
-    [self.observingBlock addObserver:self forKeyPath:@"currentEditorView" options:NSKeyValueChangeSetting context:self];
+    [self.observingBlock addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
 }
 
 - (void) stopObservingBlockEditor

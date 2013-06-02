@@ -55,7 +55,7 @@
 
     [textView setUsesFontPanel:YES];
     [textView setRichText:NO];
-    [textView setEditable:![[[self representedObject] valueForKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController"] boolValue]];
+    [textView setEditable:![[[self representedObject] valueForKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.readOnly"] boolValue]];
     [textView setFont:[NSFont fontWithName:@"Monaco" size:12.0]];
     
     DisassemblerAnalyzer *modelObject = (DisassemblerAnalyzer *)[ro analyzerObject];
@@ -79,14 +79,14 @@
     
     self.lastAnalyzer = [self representedObject];
     
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.directPageValue" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.transferAddresses" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.offsetAddress" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.support6309" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.showAddresses" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.showOS9" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.showHex" options:NSKeyValueChangeSetting context:self];
-    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.followPC" options:NSKeyValueChangeSetting context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.directPageValue" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.transferAddresses" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.offsetAddress" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.support6309" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.showAddresses" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.showOS9" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.showHex" options:0 context:self];
+    [self.lastAnalyzer addObserver:self forKeyPath:@"optionsDictionary.DisassemblerAnalyzerViewController.followPC" options:0 context:self];
     
     observationsActive = YES;
 }

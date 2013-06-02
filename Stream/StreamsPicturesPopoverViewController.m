@@ -46,7 +46,7 @@
     [popupButton removeAllItems];
     [popupButton addItemsWithTitles:[urls valueForKey:@"lastPathComponent"]];
 
-    NSInteger index = [popupButton indexOfSelectedItem];
+    int index = (int)[popupButton indexOfSelectedItem];
     NSURL *fileURL = [urls objectAtIndex:index];
     
     if ([[[fileURL pathExtension] lowercaseString] isEqualToString:@"txt"]) {
@@ -68,7 +68,7 @@
 {
 #pragma unused (sender)
     NSMutableArray *urls = self.representedObject;
-    NSInteger index = [popupButton indexOfSelectedItem];
+    int index = (int)[popupButton indexOfSelectedItem];
 
     NSURL *fileURL = [urls objectAtIndex:index];
     

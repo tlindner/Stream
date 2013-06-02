@@ -120,10 +120,10 @@
     {
         observationsActive = YES;
         StBlock *theBlock = [self representedObject];
-        [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:NSKeyValueChangeSetting context:self];
+        [theBlock addObserver:self forKeyPath:@"optionsDictionary.BlockAttributeViewController.numericDisplay" options:0 context:self];
 
         lastFilterAnalyzer = (StData *)[[[theBlock getStream] lastFilterAnalyzer] retain];
-        [lastFilterAnalyzer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+        [lastFilterAnalyzer addObserver:self forKeyPath:@"editIndexSet" options:0 context:self];
     }
 }
 
