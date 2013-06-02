@@ -312,7 +312,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{234, 4}, {82, 28}}</string>
 						<reference key="NSSuperview" ref="487033926"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:161</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="836107377">
@@ -473,14 +472,6 @@
 						<reference key="destination" ref="498225486"/>
 					</object>
 					<int key="connectionID">2885</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">sourceUTIAction:</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="414849455"/>
-					</object>
-					<int key="connectionID">3408</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">

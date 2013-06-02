@@ -186,10 +186,12 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
                     [self willChangeValueForKey:@"acceptsUTIList"];
 
                     [self.previousSelectedBlock removeObserver:self forKeyPath:@"currentEditorView" context:self];
+                    [self.previousSelectedBlock removeObserver:self forKeyPath:@"sourceUTI" context:self];
                     [self.anaylizerSettingsViewController setAccessoryView];
                     
                     self.previousSelectedBlock = [self selectedBlock];
                     [self.previousSelectedBlock addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+                    [self.previousSelectedBlock addObserver:self forKeyPath:@"sourceUTI" options:0 context:self];
 
                     [self didChangeValueForKey:@"acceptsUTIList"];
                     [self didChangeValueForKey:@"editorList"];
@@ -311,6 +313,7 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
         } else {
             self.anaylizerSettingsViewController = [[AnaylizerSettingPopOverViewController alloc] initWithNibName:@"AnaylizerBlockSettingPopover" bundle:nil];
             [self.selectedBlock addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+            [self.selectedBlock addObserver:self forKeyPath:@"sourceUTI" options:0 context:self];
             self.previousSelectedBlock = self.selectedBlock;
         }
         
@@ -338,9 +341,11 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
 
     if (self.blockTreeController == nil) {
         [[self representedObject] removeObserver:self forKeyPath:@"currentEditorView" context:self];
+        [[self representedObject] removeObserver:self forKeyPath:@"sourceUTI" context:self];
     } else {
         if (anaylizerSettingsViewController != nil) {
             [[self selectedBlock] removeObserver:self forKeyPath:@"currentEditorView" context:self];
+            [[self selectedBlock] removeObserver:self forKeyPath:@"sourceUTI" context:self];
         }
         
         [self.blockTreeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
@@ -356,9 +361,11 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
 
     if (self.blockTreeController == nil) {
         [[self representedObject] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+        [[self representedObject] addObserver:self forKeyPath:@"sourceUTI" options:0 context:self];
     } else {
         if (anaylizerSettingsViewController != nil) {
             [[self selectedBlock] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+            [[self selectedBlock] addObserver:self forKeyPath:@"sourceUTI" options:0 context:self];
         }
         
         [self.blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
