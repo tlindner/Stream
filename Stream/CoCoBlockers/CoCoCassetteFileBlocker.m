@@ -77,7 +77,8 @@
             StBlock *newFile = [stream startNewBlockNamed:testFilename owner:[CoCoCassetteFileBlocker blockerKey]];
             
             int filenameIndex=0;
-            NSString *fileName = testFilename;
+            NSString *fileName;
+            fileName = testFilename;
             while (newFile == nil) {
                 fileName = [testFilename stringByAppendingFormat:@" [%d]", filenameIndex++];
                 newFile = [stream startNewBlockNamed:fileName owner:[CoCoCassetteFileBlocker blockerKey]];

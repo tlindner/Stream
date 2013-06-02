@@ -139,7 +139,6 @@
         [self.textScrollView setHasHorizontalScroller:YES];
         NSTextView *textView = [[[NSTextView alloc] initWithFrame:textViewFrame] autorelease];
         
-        textView = [[NSTextView alloc] initWithFrame:textViewFrame];
         [self.textScrollView setDocumentView:textView];
         [textView setString:string];
         [[textView textStorage] setFont:[NSFont userFixedPitchFontOfSize:14.0]];

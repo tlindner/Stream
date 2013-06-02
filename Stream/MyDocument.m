@@ -592,7 +592,7 @@
 #pragma unused (sender)
     if (self.imagePopoverNib == nil) {
         imagePopoverViewController = nil;
-        self.imagePopoverNib = [[NSNib alloc] initWithNibNamed:@"StreamsPicturesPopover" bundle:nil];
+        self.imagePopoverNib = [[[NSNib alloc] initWithNibNamed:@"StreamsPicturesPopover" bundle:nil] autorelease];
         
         if (![self.imagePopoverNib instantiateNibWithOwner:self topLevelObjects:nil]) {
             NSLog(@"Warning! Could not load image popover nib file.\n");

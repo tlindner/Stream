@@ -437,7 +437,7 @@ typedef struct
             NSColor *lightColor = [NSColor colorWithCalibratedWhite:0.8 alpha:0.5];
             NSColor *darkColor = [NSColor colorWithCalibratedWhite:0.65 alpha:0.5];
             
-            for (NSUInteger j=0; j<[nameArray count]; j++ )
+            for (NSUInteger j=0; j<[rangeArrayObject count]; j++ )
             {
                 NSColor *blockColor = [blocksColor objectAtIndex:j];
                 if ([blockColor isEqual:[NSColor clearColor]]) {
