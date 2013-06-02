@@ -101,9 +101,9 @@ static BOOL initialized = NO;
     [self.nameLookup setObject:blockerClass forKey:[blockerClass blockerKey]];
 }
 
-- (NSString *)makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *)makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
-#pragma unused (stream, anaylizer)
+#pragma unused (stream, analyzer)
     NSLog( @"MakeBlocker needs to be implemented in the subclass");
     return nil;
 }

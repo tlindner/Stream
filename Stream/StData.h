@@ -14,18 +14,18 @@
 
 @property (nonatomic, retain) NSString * resultingUTI;
 @property (nonatomic, retain) NSString * sourceUTI;
-@property (nonatomic, retain) NSString * anaylizerKind;
+@property (nonatomic, retain) NSString * analyzerKind;
 @property (nonatomic, retain) NSString * currentEditorView;
 @property (nonatomic) BOOL readOnly;
 @property (nonatomic, retain) NSMutableDictionary *optionsDictionary;
-@property (nonatomic, retain) NSObject *anaylizerObject;
+@property (nonatomic, retain) NSObject *analyzerObject;
 @property (nonatomic, assign, readwrite) NSViewController *viewController;
 @property (nonatomic, retain) NSData *resultingData;
 @property (nonatomic, retain) NSValue *unionRange;
 @property (nonatomic, retain) NSString *errorString;
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions;
-- (void) anaylizeData;
+- (void) analyzeData;
 
 @end
 
@@ -36,11 +36,11 @@
 - (NSValue *)primitiveUnionRange;
 - (void)setPrimitiveUnionRange:(NSValue *)value;
 
-- (NSObject *)primitiveAnaylizerObject;
-- (void)setPrimitiveAnaylizerObject:(NSObject *)ao;
+- (NSObject *)primitiveAnalyzerObject;
+- (void)setPrimitiveAnalyzerObject:(NSObject *)ao;
 
 @end
 
-@interface NSObject (AnaylizerObjectAdditions)
-- (void) anaylizeData;
+@interface NSObject (AnalyzerObjectAdditions)
+- (void) analyzeData;
 @end

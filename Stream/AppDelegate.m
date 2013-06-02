@@ -9,11 +9,11 @@
 #import "AppDelegate.h"
 #import "Analyzation.h"
 #import "StStream.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 #import "Blockers.h"
 #import "NSFileManager+DirectoryLocations.h"
-#import "NewAnaylizerSetWindowController.h"
-#import "AnaylizerSetWindowController.h"
+#import "NewAnalyzerSetWindowController.h"
+#import "AnalyzerSetWindowController.h"
 #import "GetNetURLWindowController.h"
 
 @implementation AppDelegate
@@ -21,8 +21,8 @@
 @synthesize blocksMenu;
 @synthesize setsMenu;
 @synthesize anaSetsContext;
-@synthesize anaylizerSetGetInformation;
-@synthesize manageAnaylizerWindowController;
+@synthesize analyzerSetGetInformation;
+@synthesize manageAnalyzerWindowController;
 @synthesize urlWindowController;
 
 - (id)init
@@ -92,9 +92,9 @@
         [self addBlockerMenu:blockerClassString];
     }
     
-    /* Initialize anaylizer sets */
+    /* Initialize analyzer sets */
     NSString *appSupportDir = [[NSFileManager defaultManager] applicationSupportDirectory];
-    NSURL *anaSetsURL = [[[NSURL alloc] initFileURLWithPath:[appSupportDir stringByAppendingPathComponent:@"Anaylizer Sets.binary"]] autorelease];
+    NSURL *anaSetsURL = [[[NSURL alloc] initFileURLWithPath:[appSupportDir stringByAppendingPathComponent:@"Analyzer Sets.binary"]] autorelease];
     NSBundle *myBundle = [NSBundle mainBundle];
     NSURL *mom = [myBundle URLForResource:@"MyDocument" withExtension:@"momd"];
     NSManagedObjectModel *om = [[[NSManagedObjectModel alloc] initWithContentsOfURL:mom] autorelease];
@@ -103,17 +103,17 @@
     NSPersistentStore *ps = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:anaSetsURL options:nil error:&err];
             
     if (err != nil) {
-        NSLog(@"error creating/loading “Anaylizer Sets.binary”: %@\nLet's delete it and start over.", err);
+        NSLog(@"error creating/loading “Analyzer Sets.binary”: %@\nLet's delete it and start over.", err);
         err = nil;
         [[NSFileManager defaultManager] removeItemAtURL:anaSetsURL error:&err];
         
         if (err == nil) {
             ps = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:anaSetsURL options:nil error:&err];
             if (err != nil) {
-                NSLog( @"Error persists while trying to load “Anaylizer Sets.binary”: %@", err );
+                NSLog( @"Error persists while trying to load “Analyzer Sets.binary”: %@", err );
             }
         } else {
-            NSLog(@"Error removing existing “Anaylizer Sets.binary”: %@", err);
+            NSLog(@"Error removing existing “Analyzer Sets.binary”: %@", err);
         }
     }
     
@@ -122,22 +122,22 @@
     [ps loadMetadata:&err];
     
     if (err != nil) {
-        NSLog(@"error loading meta data for “Anaylizer Sets.binary”: %@", err);
+        NSLog(@"error loading meta data for “Analyzer Sets.binary”: %@", err);
     }
     
     self.anaSetsContext = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
     [self.anaSetsContext setPersistentStoreCoordinator:psc];
     
-    [self reloadAllAnaylizerSetMenuItems];
+    [self reloadAllAnalyzerSetMenuItems];
 }
 
-- (void)reloadAllAnaylizerSetMenuItems
+- (void)reloadAllAnalyzerSetMenuItems
 {
     NSError *err = nil;
     [self.anaSetsContext save:&err];
     
     if (err != nil) {
-        NSLog(@"Error at reloadAllAnaylizerSetMenuItems: %@", err);
+        NSLog(@"Error at reloadAllAnalyzerSetMenuItems: %@", err);
     }
     
     while ([setsMenu numberOfItems] > 3) {
@@ -154,7 +154,7 @@
     NSArray *array = [self.anaSetsContext executeFetchRequest:request error:&err];
     
     if (err != nil) {
-        NSLog(@"Error fetching anaylyizer sets: %@", err);
+        NSLog(@"Error fetching analyzer sets: %@", err);
     }
     
     if (array != nil)
@@ -165,13 +165,13 @@
                 NSString *group = [anaSet valueForKey:@"group"];
                 NSString *keyCombo = [anaSet valueForKey:@"commandKey"];
                 
-                [self addAnaylizerSetMenu:name withGroup:group withKey:keyCombo representedBy:anaSet];
+                [self addAnalyzerSetMenu:name withGroup:group withKey:keyCombo representedBy:anaSet];
             }
         }
     }
 }
 
-- (NSManagedObject *)anaylizerSetNamed:(NSString *)name
+- (NSManagedObject *)analyzerSetNamed:(NSString *)name
 {
     NSManagedObject *result = nil;
     
@@ -185,18 +185,18 @@
     NSArray *array = [self.anaSetsContext executeFetchRequest:request error:&err];
     
     if (err != nil) {
-//        NSLog(@"Error fetching anaylyizer set named %@: %@", name, err);
+//        NSLog(@"Error fetching analyzer set named %@: %@", name, err);
     }
     else if (array != nil) {
         if ([array count] == 0) {
-//            NSLog(@"Error fetching anaylyizer set named %@: zero sets found", name);
+//            NSLog(@"Error fetching analyzer set named %@: zero sets found", name);
         } else if ([array count] > 1) {
-//            NSLog(@"Error fetching anaylyizer set named %@: %lu sets found", name, [array count]);
+//            NSLog(@"Error fetching analyzer set named %@: %lu sets found", name, [array count]);
         } else {
             result = [array objectAtIndex:0];
         }
     } else {
-//        NSLog(@"Error fetching anaylyizer set named %@: no sets found", name);
+//        NSLog(@"Error fetching analyzer set named %@: no sets found", name);
     }
     
     return result;
@@ -226,13 +226,13 @@
     [subMenu addItem:newMenuItem];
 }
 
-- (void) addAnaylizerSetMenu:(NSString *)name withGroup:(NSString *)group withKey:(NSString *)commandKey representedBy:(NSManagedObject *)representedObject
+- (void) addAnalyzerSetMenu:(NSString *)name withGroup:(NSString *)group withKey:(NSString *)commandKey representedBy:(NSManagedObject *)representedObject
 {
     NSMenuItem *subMenuItem = nil;
     NSMenu *subMenu = setsMenu;
     
     if (name == nil) {
-        NSLog( @"addAnaylizerSetMenu: Name can not be nil" );
+        NSLog( @"addAnalyzerSetMenu: Name can not be nil" );
         return;
     }
     
@@ -258,45 +258,45 @@
         }
     }
     
-    NSMenuItem *newMenuItem = [[[NSMenuItem alloc] initWithTitle:name action:@selector(applyAnaylizerSet:) keyEquivalent:commandKey] autorelease];
+    NSMenuItem *newMenuItem = [[[NSMenuItem alloc] initWithTitle:name action:@selector(applyAnalyzerSet:) keyEquivalent:commandKey] autorelease];
     [newMenuItem setRepresentedObject:representedObject];
     [subMenu addItem:newMenuItem];
 }
 
-- (IBAction)makeAnaylizerSet:(id)sender
+- (IBAction)makeAnalyzerSet:(id)sender
 {
     StStream *theStream = sender;
 
-    if(self.anaylizerSetGetInformation == nil) {
-        self.anaylizerSetGetInformation = [[[NewAnaylizerSetWindowController alloc] initWithWindowNibName:@"NewAnaylizerSetDialog"] autorelease];
+    if(self.analyzerSetGetInformation == nil) {
+        self.analyzerSetGetInformation = [[[NewAnalyzerSetWindowController alloc] initWithWindowNibName:@"NewAnalyzerSetDialog"] autorelease];
     }
     
     NSString *name;
     int j=1;
     name = [NSString stringWithFormat:@"Set #%d", j++];
-    while ([self anaylizerSetNamed:name] != nil) {
+    while ([self analyzerSetNamed:name] != nil) {
         name = [NSString stringWithFormat:@"Set #%d", j++];
     }
 
-    NSWindow *nasd = [self.anaylizerSetGetInformation window];
-    [self.anaylizerSetGetInformation.nameField setStringValue:name];
-    [self.anaylizerSetGetInformation.groupField setStringValue:@""];
-    [self.anaylizerSetGetInformation.keyComboField setStringValue:@""];
+    NSWindow *nasd = [self.analyzerSetGetInformation window];
+    [self.analyzerSetGetInformation.nameField setStringValue:name];
+    [self.analyzerSetGetInformation.groupField setStringValue:@""];
+    [self.analyzerSetGetInformation.keyComboField setStringValue:@""];
     NSInteger result = [NSApp runModalForWindow: nasd];
     [nasd orderOut: self];
 
     if (result == YES) {
-        NSString *newName = [self.anaylizerSetGetInformation.nameField stringValue];
-        NSManagedObject *anaSet = [self anaylizerSetNamed:newName];
+        NSString *newName = [self.analyzerSetGetInformation.nameField stringValue];
+        NSManagedObject *anaSet = [self analyzerSetNamed:newName];
 
         if (anaSet != nil) {
             /* Ask user if they want to replace existing set */
-            NSAlert *replaceAlert = [NSAlert alertWithMessageText:@"Duplicate Anayzer Set Name" defaultButton:@"Cancel" alternateButton:@"OK" otherButton:nil informativeTextWithFormat:@"An anaylizer set named “%@” already exists. Do you want to replace it?", newName];
+            NSAlert *replaceAlert = [NSAlert alertWithMessageText:@"Duplicate Analyzer Set Name" defaultButton:@"Cancel" alternateButton:@"OK" otherButton:nil informativeTextWithFormat:@"An analyzer set named “%@” already exists. Do you want to replace it?", newName];
             
             NSInteger result = [replaceAlert runModal];
             
             if (result == NSAlertSecondButtonReturn) {
-                [[anaSet mutableOrderedSetValueForKey:@"anaylizers"] removeAllObjects];
+                [[anaSet mutableOrderedSetValueForKey:@"analyzers"] removeAllObjects];
             } else {
                 return;
             }
@@ -304,30 +304,30 @@
             anaSet = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaSet" inManagedObjectContext:self.anaSetsContext];
         }
         
-        [anaSet setValue:[self.anaylizerSetGetInformation.nameField stringValue] forKey:@"setName"];
-        [anaSet setValue:[self.anaylizerSetGetInformation.groupField stringValue] forKey:@"group"];
-        [anaSet setValue:[self.anaylizerSetGetInformation.keyComboField stringValue] forKey:@"commandKey"];
-        NSMutableOrderedSet *anaylizers = [anaSet mutableOrderedSetValueForKey:@"anaylizers"];
+        [anaSet setValue:[self.analyzerSetGetInformation.nameField stringValue] forKey:@"setName"];
+        [anaSet setValue:[self.analyzerSetGetInformation.groupField stringValue] forKey:@"group"];
+        [anaSet setValue:[self.analyzerSetGetInformation.keyComboField stringValue] forKey:@"commandKey"];
+        NSMutableOrderedSet *analyzers = [anaSet mutableOrderedSetValueForKey:@"analyzers"];
         Analyzation *analyzation = [Analyzation sharedInstance];
         
-        for (StAnaylizer *sourceAna in theStream.anaylizers) {
-            StAnaylizer *destAna = [NSEntityDescription insertNewObjectForEntityForName:@"StAnaylizer" inManagedObjectContext:self.anaSetsContext];
-            destAna.anaylizerHeight = sourceAna.anaylizerHeight;
+        for (StAnalyzer *sourceAna in theStream.analyzers) {
+            StAnalyzer *destAna = [NSEntityDescription insertNewObjectForEntityForName:@"StAnalyzer" inManagedObjectContext:self.anaSetsContext];
+            destAna.analyzerHeight = sourceAna.analyzerHeight;
             destAna.paneExpanded = sourceAna.paneExpanded;
-            destAna.anaylizerKind = sourceAna.anaylizerKind;
+            destAna.analyzerKind = sourceAna.analyzerKind;
             destAna.currentEditorView = sourceAna.currentEditorView;
             destAna.readOnly = sourceAna.readOnly;
             destAna.resultingUTI = sourceAna.resultingUTI;
             destAna.sourceUTI = sourceAna.sourceUTI;
 
-            NSDictionary *copyDictionary = [sourceAna.optionsDictionary valueForKey:sourceAna.anaylizerKind];
+            NSDictionary *copyDictionary = [sourceAna.optionsDictionary valueForKey:sourceAna.analyzerKind];
             
             if (copyDictionary != nil) {
                 NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:copyDictionary];
-                [destAna.optionsDictionary setObject:[NSKeyedUnarchiver unarchiveObjectWithData:archivedData] forKey:sourceAna.anaylizerKind];
+                [destAna.optionsDictionary setObject:[NSKeyedUnarchiver unarchiveObjectWithData:archivedData] forKey:sourceAna.analyzerKind];
             }
             
-            NSString *anaKey = [[analyzation anaylizerClassforName:sourceAna.currentEditorView] anaylizerKey];
+            NSString *anaKey = [[analyzation analyzerClassforName:sourceAna.currentEditorView] analyzerKey];
             copyDictionary = [sourceAna.optionsDictionary valueForKey:anaKey];
             
             if (copyDictionary != nil) {
@@ -335,23 +335,23 @@
                 [destAna.optionsDictionary setObject:[NSKeyedUnarchiver unarchiveObjectWithData:archivedData] forKey:anaKey];
             }
 
-            [anaylizers addObject:destAna];
+            [analyzers addObject:destAna];
         }
 
-        [self addAnaylizerSetMenu:[self.anaylizerSetGetInformation.nameField stringValue] withGroup:[self.anaylizerSetGetInformation.groupField stringValue] withKey:[self.anaylizerSetGetInformation.keyComboField stringValue] representedBy:anaSet];
+        [self addAnalyzerSetMenu:[self.analyzerSetGetInformation.nameField stringValue] withGroup:[self.analyzerSetGetInformation.groupField stringValue] withKey:[self.analyzerSetGetInformation.keyComboField stringValue] representedBy:anaSet];
     }
 }
 
-- (IBAction)manageAnaylizerSets:(id)sender
+- (IBAction)manageAnalyzerSets:(id)sender
 {
 #pragma unused (sender)
-    if (self.manageAnaylizerWindowController == nil) {
-        self.manageAnaylizerWindowController = [[[AnaylizerSetWindowController alloc] initWithWindowNibName:@"AnaylizerSetWindowController"] autorelease];
-        self.manageAnaylizerWindowController.managedObjectContext = self.anaSetsContext;
-        [self.manageAnaylizerWindowController loadWindow];
+    if (self.manageAnalyzerWindowController == nil) {
+        self.manageAnalyzerWindowController = [[[AnalyzerSetWindowController alloc] initWithWindowNibName:@"AnalyzerSetWindowController"] autorelease];
+        self.manageAnalyzerWindowController.managedObjectContext = self.anaSetsContext;
+        [self.manageAnalyzerWindowController loadWindow];
     }
     
-    [self.manageAnaylizerWindowController showWindow:self];
+    [self.manageAnalyzerWindowController showWindow:self];
 }
 
 - (NSURL *)getURLFromUser
@@ -398,8 +398,8 @@
 - (void)dealloc
 {
     self.anaSetsContext = nil;
-    self.anaylizerSetGetInformation = nil;
-    self.manageAnaylizerWindowController = nil;
+    self.analyzerSetGetInformation = nil;
+    self.manageAnalyzerWindowController = nil;
     self.urlWindowController = nil;
 
     [super dealloc];

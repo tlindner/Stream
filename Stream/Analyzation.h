@@ -19,17 +19,17 @@
 @property(nonatomic, retain) NSMutableArray *utiList;
 
 + (Analyzation *)sharedInstance;
-- (void) addAnalyzer:(NSString *)anaylizer;
-- (NSArray *)anaylizersforUTI:(NSString *)inUTI;
-- (Class)anaylizerClassforName:(NSString *)inName;
+- (void) addAnalyzer:(NSString *)analyzer;
+- (NSArray *)analyzersforUTI:(NSString *)inUTI;
+- (Class)analyzerClassforName:(NSString *)inName;
 
 @end
 
-@interface NSObject (AnaylizationExtensions)
-+ (NSArray *)anaylizerUTIs;
-+ (NSString *)anayliserName;
-+ (NSString *)anaylizerKey;
-+ (NSString *)AnaylizerPopoverAccessoryViewNib;
+@interface NSObject (AnalyzationExtensions)
++ (NSArray *)analyzerUTIs;
++ (NSString *)analyzerName;
++ (NSString *)analyzerKey;
++ (NSString *)AnalyzerPopoverAccessoryViewNib;
 + (NSMutableDictionary *)defaultOptions;
 - (Class)viewControllerClass;
 - (void)setRepresentedObject:(id)representedObject;

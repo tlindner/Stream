@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class AnaylizerListViewItem;
+@class AnalyzerListViewItem;
 
 @interface DragRegionView : NSView
 {
@@ -19,7 +19,7 @@
     
 }
 
-@property (assign) IBOutlet AnaylizerListViewItem *viewOwner;
+@property (assign) IBOutlet AnalyzerListViewItem *viewOwner;
 @property (assign) BOOL doingLiveResize;
 
 - (void)setCustomSubView:(NSView *)view paneExpanded:(BOOL)paneExpanded;

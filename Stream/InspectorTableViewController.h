@@ -11,7 +11,7 @@
 @interface InspectorTableViewController : NSViewController {
 
     IBOutlet NSTreeController *streamTreeControler;
-    IBOutlet NSTableView *anaylizerList;
+    IBOutlet NSTableView *analyzerList;
 }
 
 @end

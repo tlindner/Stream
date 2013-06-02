@@ -7,8 +7,8 @@
 //
 
 #import "RawBitmapViewController.h"
-#import "RawBitmapAnaylizer.h"
-#import "StAnaylizer.h"
+#import "RawBitmapAnalyzer.h"
+#import "StAnalyzer.h"
 
 @interface RawBitmapViewController ()
 
@@ -50,8 +50,8 @@
 
 - (void) reloadView
 {
-    RawBitmapAnaylizer *modelObject = (RawBitmapAnaylizer *)[[self representedObject] anaylizerObject];
-    [modelObject anaylizeData];
+    RawBitmapAnalyzer *modelObject = (RawBitmapAnalyzer *)[[self representedObject] analyzerObject];
+    [modelObject analyzeData];
     NSData *rd = [modelObject resultingData];
     NSImage *image = nil;
     
@@ -79,18 +79,18 @@
 - (void) suspendObservations
 {
     if (observationsActive == YES) {
-        StAnaylizer *ro = self.representedObject;
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.passThrough" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.horizontalPixels" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.verticalPixels" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.bitsPerSample" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.samplesPerPixel" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.alphaChannel" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.planar" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.colorSpaceName" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.rowBytes" context:self];
-        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.pixelBits" context:self];
+        StAnalyzer *ro = self.representedObject;
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.passThrough" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.horizontalPixels" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.verticalPixels" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.bitsPerSample" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.samplesPerPixel" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.alphaChannel" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.planar" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.colorSpaceName" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.rowBytes" context:self];
+        [ro removeObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.pixelBits" context:self];
         observationsActive = NO;
     }
 }
@@ -98,18 +98,18 @@
 - (void) resumeObservations
 {
     if (observationsActive == NO) {
-        StAnaylizer *ro = self.representedObject;
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.passThrough" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.horizontalPixels" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.verticalPixels" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.bitsPerSample" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.samplesPerPixel" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.alphaChannel" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.planar" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.colorSpaceName" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.rowBytes" options:NSKeyValueChangeSetting context:self];
-        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnaylizer.pixelBits" options:NSKeyValueChangeSetting context:self];
+        StAnalyzer *ro = self.representedObject;
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.passThrough" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.horizontalPixels" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.verticalPixels" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.bitsPerSample" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.samplesPerPixel" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.alphaChannel" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.planar" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.colorSpaceName" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.rowBytes" options:NSKeyValueChangeSetting context:self];
+        [ro addObserver:self forKeyPath:@"optionsDictionary.RawBitmapAnalyzer.pixelBits" options:NSKeyValueChangeSetting context:self];
         observationsActive = YES;
     }
 }

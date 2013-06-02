@@ -471,11 +471,11 @@
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="add:">id</string>
 						<string key="addURL:">id</string>
-						<string key="applyAnaylizerSet:">id</string>
+						<string key="applyAnalyzerSet:">id</string>
 						<string key="imagePopoverClick:">id</string>
-						<string key="makeAnaylizerSet:">id</string>
+						<string key="makeAnalyzerSet:">id</string>
 						<string key="makeSubStream:">id</string>
-						<string key="removeAnaylizer:">id</string>
+						<string key="removeAnalyzer:">id</string>
 						<string key="removeStream:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
@@ -487,24 +487,24 @@
 							<string key="name">addURL:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="applyAnaylizerSet:">
-							<string key="name">applyAnaylizerSet:</string>
+						<object class="IBActionInfo" key="applyAnalyzerSet:">
+							<string key="name">applyAnalyzerSet:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="imagePopoverClick:">
 							<string key="name">imagePopoverClick:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="makeAnaylizerSet:">
-							<string key="name">makeAnaylizerSet:</string>
+						<object class="IBActionInfo" key="makeAnalyzerSet:">
+							<string key="name">makeAnalyzerSet:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="makeSubStream:">
 							<string key="name">makeSubStream:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="removeAnaylizer:">
-							<string key="name">removeAnaylizer:</string>
+						<object class="IBActionInfo" key="removeAnalyzer:">
+							<string key="name">removeAnalyzer:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="removeStream:">

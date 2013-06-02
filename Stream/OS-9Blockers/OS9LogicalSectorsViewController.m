@@ -7,7 +7,7 @@
 //
 
 #import "OS9LogicalSectorsViewController.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 #import "StStream.h"
 
 @interface OS9LogicalSectorsViewController ()
@@ -36,7 +36,7 @@
 - (void)popoverWillClose:(NSNotification *)notification
 {
 #pragma unused (notification)
-    StAnaylizer *theAna = self.representedObject;
+    StAnalyzer *theAna = self.representedObject;
     [theAna.parentStream regenerateAllBlocks];
 }
 
