@@ -58,6 +58,7 @@
     listView.prototypeItem = [[[AnalyzerListViewItem alloc] initWithNibName:@"AnalyzerListViewItem" bundle:nil] autorelease];
 
     [outlineView setFocusRingType:NSFocusRingTypeNone];
+    [outlineView registerForDraggedTypes:[NSArray arrayWithObjects: NSFilenamesPboardType, nil]];
     
     NSArray *psa = [psc persistentStores];
     
@@ -306,6 +307,11 @@
             [psc setMetadata:meta forPersistentStore:ps];
         }
     }
+}
+
+- (void)windowDidMove:(NSNotification *)notification
+{
+    [self windowDidEndLiveResize:notification];
 }
 
 - (void)windowWillClose:(NSNotification *)notification
@@ -648,6 +654,21 @@
         [selectedStream regenerateAllBlocks];
     }
 
+}
+
+- (NSDragOperation)outlineView:(NSOutlineView *)oView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
+    if(oView == outlineView) {
+        return NSDragOperationGeneric;
+    }
+    return NSDragOperationNone;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)oView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)childIndex {
+    if(oView == outlineView) {
+        [self addStreamFromURL:[NSURL URLFromPasteboard: [info draggingPasteboard]]];
+        return YES;
+    }
+    return NO;
 }
 
 - (void)dealloc

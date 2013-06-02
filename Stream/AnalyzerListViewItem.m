@@ -53,10 +53,12 @@ void AbleAllControlsInView( NSView *inView, BOOL able );
     
     if (self.blockTreeController == nil) {
         [[self representedObject] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+        [[self representedObject] addObserver:self forKeyPath:@"sourceUTI" options:0 context:self];
         [[self.representedObject analyzerObject] analyzeData];
     } else {
         [self.blockTreeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:self];
         [[self selectedBlock] addObserver:self forKeyPath:@"currentEditorView" options:0 context:self];
+        [[self selectedBlock] addObserver:self forKeyPath:@"sourceUTI" options:0 context:self];
     }
     
     [[self representedObject] addObserver:self forKeyPath:@"paneExpanded" options:0 context:self];

@@ -3,28 +3,28 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
 		<string key="IBDocument.SystemVersion">11G63b</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2182</string>
+		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
 		<string key="IBDocument.AppKitVersion">1138.51</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">2182</string>
+			<string key="NS.object.0">3084</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
-			<string>NSTableColumn</string>
-			<string>NSScroller</string>
-			<string>NSSplitView</string>
 			<string>NSButton</string>
-			<string>NSScrollView</string>
 			<string>NSButtonCell</string>
-			<string>NSTextFieldCell</string>
-			<string>NSOutlineView</string>
 			<string>NSCustomObject</string>
 			<string>NSCustomView</string>
+			<string>NSOutlineView</string>
+			<string>NSScrollView</string>
+			<string>NSScroller</string>
+			<string>NSSplitView</string>
+			<string>NSTableColumn</string>
+			<string>NSTextFieldCell</string>
+			<string>NSTreeController</string>
+			<string>NSUserDefaultsController</string>
 			<string>NSView</string>
 			<string>NSWindowTemplate</string>
-			<string>NSUserDefaultsController</string>
-			<string>NSTreeController</string>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -75,7 +75,6 @@
 															<int key="NSvFlags">256</int>
 															<string key="NSFrameSize">{211, 329}</string>
 															<reference key="NSSuperview" ref="886163920"/>
-															<reference key="NSWindow"/>
 															<reference key="NSNextKeyView" ref="365273813"/>
 															<string key="NSReuseIdentifierKey">_NS:1071</string>
 															<bool key="NSEnabled">YES</bool>
@@ -186,7 +185,6 @@
 													</array>
 													<string key="NSFrame">{{1, 1}, {211, 329}}</string>
 													<reference key="NSSuperview" ref="1044775375"/>
-													<reference key="NSWindow"/>
 													<reference key="NSNextKeyView" ref="220875715"/>
 													<string key="NSReuseIdentifierKey">_NS:1069</string>
 													<reference key="NSDocView" ref="220875715"/>
@@ -198,7 +196,6 @@
 													<int key="NSvFlags">-2147483392</int>
 													<string key="NSFrame">{{224, 17}, {15, 102}}</string>
 													<reference key="NSSuperview" ref="1044775375"/>
-													<reference key="NSWindow"/>
 													<reference key="NSNextKeyView" ref="929541755"/>
 													<string key="NSReuseIdentifierKey">_NS:1094</string>
 													<reference key="NSTarget" ref="1044775375"/>
@@ -210,7 +207,7 @@
 													<int key="NSvFlags">-2147483392</int>
 													<string key="NSFrame">{{1, 397}, {262, 15}}</string>
 													<reference key="NSSuperview" ref="1044775375"/>
-													<reference key="NSWindow"/>
+													<reference key="NSNextKeyView" ref="427074822"/>
 													<string key="NSReuseIdentifierKey">_NS:1096</string>
 													<int key="NSsFlags">1</int>
 													<reference key="NSTarget" ref="1044775375"/>
@@ -220,7 +217,6 @@
 											</array>
 											<string key="NSFrameSize">{213, 331}</string>
 											<reference key="NSSuperview" ref="836597646"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="886163920"/>
 											<string key="NSReuseIdentifierKey">_NS:1067</string>
 											<int key="NSsFlags">133682</int>
@@ -234,7 +230,7 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{0, 341}, {213, 129}}</string>
 											<reference key="NSSuperview" ref="836597646"/>
-											<reference key="NSWindow"/>
+											<reference key="NSNextKeyView" ref="612719908"/>
 											<string key="NSReuseIdentifierKey">_NS:9</string>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSButtonCell" key="NSCell" id="517385785">
@@ -255,7 +251,7 @@
 									</array>
 									<string key="NSFrameSize">{213, 470}</string>
 									<reference key="NSSuperview" ref="806327619"/>
-									<reference key="NSWindow"/>
+									<reference key="NSNextKeyView" ref="1044775375"/>
 									<int key="NSDividerStyle">3</int>
 								</object>
 								<object class="NSScrollView" id="612719908">
@@ -271,15 +267,13 @@
 													<int key="NSvFlags">274</int>
 													<string key="NSFrameSize">{601, 468}</string>
 													<reference key="NSSuperview" ref="710964143"/>
-													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView" ref="561987594"/>
+													<reference key="NSNextKeyView" ref="696881837"/>
 													<string key="NSReuseIdentifierKey">_NS:9</string>
 													<string key="NSClassName">SDListView</string>
 												</object>
 											</array>
 											<string key="NSFrame">{{1, 1}, {599, 468}}</string>
 											<reference key="NSSuperview" ref="612719908"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="934504246"/>
 											<string key="NSReuseIdentifierKey">_NS:11</string>
 											<reference key="NSDocView" ref="934504246"/>
@@ -296,7 +290,6 @@
 											<int key="NSvFlags">256</int>
 											<string key="NSFrame">{{585, 1}, {15, 468}}</string>
 											<reference key="NSSuperview" ref="612719908"/>
-											<reference key="NSWindow"/>
 											<string key="NSReuseIdentifierKey">_NS:26</string>
 											<reference key="NSTarget" ref="612719908"/>
 											<string key="NSAction">_doScroller:</string>
@@ -308,7 +301,6 @@
 											<int key="NSvFlags">-2147483392</int>
 											<string key="NSFrame">{{-100, -100}, {575, 15}}</string>
 											<reference key="NSSuperview" ref="612719908"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="710964143"/>
 											<string key="NSReuseIdentifierKey">_NS:30</string>
 											<bool key="NSEnabled">YES</bool>
@@ -320,8 +312,7 @@
 									</array>
 									<string key="NSFrame">{{223, 0}, {601, 470}}</string>
 									<reference key="NSSuperview" ref="806327619"/>
-									<reference key="NSWindow"/>
-									<reference key="NSNextKeyView" ref="710964143"/>
+									<reference key="NSNextKeyView" ref="561987594"/>
 									<string key="NSReuseIdentifierKey">_NS:9</string>
 									<int key="NSsFlags">133266</int>
 									<reference key="NSVScroller" ref="696881837"/>
@@ -331,14 +322,14 @@
 							</array>
 							<string key="NSFrame">{{0, -13}, {824, 470}}</string>
 							<reference key="NSSuperview" ref="568628114"/>
-							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView" ref="836597646"/>
 							<bool key="NSIsVertical">YES</bool>
 							<int key="NSDividerStyle">3</int>
 						</object>
 					</array>
 					<string key="NSFrameSize">{824, 455}</string>
 					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
+					<reference key="NSNextKeyView" ref="806327619"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMinSize">{94, 108}</string>
@@ -457,6 +448,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">outlineView</string>
+						<reference key="source" ref="512844837"/>
+						<reference key="destination" ref="220875715"/>
+					</object>
+					<int key="connectionID">103634</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="275939982"/>
 						<reference key="destination" ref="512844837"/>
@@ -478,6 +477,22 @@
 						</object>
 					</object>
 					<int key="connectionID">100206</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="220875715"/>
+						<reference key="destination" ref="512844837"/>
+					</object>
+					<int key="connectionID">103633</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">dataSource</string>
+						<reference key="source" ref="220875715"/>
+						<reference key="destination" ref="512844837"/>
+					</object>
+					<int key="connectionID">103635</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -709,210 +724,9 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">103632</int>
+			<int key="maxID">103635</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<object class="IBPartialClassDescription">
-					<string key="className">MyDocument</string>
-					<string key="superclassName">NSPersistentDocument</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="add:">id</string>
-						<string key="imagePopoverClick:">id</string>
-						<string key="makeAnalyzerSet:">id</string>
-						<string key="makeSubStream:">id</string>
-						<string key="removeAnalyzer:">id</string>
-						<string key="removeStream:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="add:">
-							<string key="name">add:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="imagePopoverClick:">
-							<string key="name">imagePopoverClick:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="makeAnalyzerSet:">
-							<string key="name">makeAnalyzerSet:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="makeSubStream:">
-							<string key="name">makeSubStream:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="removeAnalyzer:">
-							<string key="name">removeAnalyzer:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="removeStream:">
-							<string key="name">removeStream:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="documentWindow">NSWindow</string>
-						<string key="imageButton">NSButton</string>
-						<string key="imagePopoverViewController">StreamsPicturesPopoverViewController</string>
-						<string key="leftSplitView">NSSplitView</string>
-						<string key="listView">SDListView</string>
-						<string key="outlineView">NSOutlineView</string>
-						<string key="streamListView">NSScrollView</string>
-						<string key="streamTreeControler">NSTreeController</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="documentWindow">
-							<string key="name">documentWindow</string>
-							<string key="candidateClassName">NSWindow</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="imageButton">
-							<string key="name">imageButton</string>
-							<string key="candidateClassName">NSButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="imagePopoverViewController">
-							<string key="name">imagePopoverViewController</string>
-							<string key="candidateClassName">StreamsPicturesPopoverViewController</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="leftSplitView">
-							<string key="name">leftSplitView</string>
-							<string key="candidateClassName">NSSplitView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="listView">
-							<string key="name">listView</string>
-							<string key="candidateClassName">SDListView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="outlineView">
-							<string key="name">outlineView</string>
-							<string key="candidateClassName">NSOutlineView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="streamListView">
-							<string key="name">streamListView</string>
-							<string key="candidateClassName">NSScrollView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="streamTreeControler">
-							<string key="name">streamTreeControler</string>
-							<string key="candidateClassName">NSTreeController</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/MyDocument.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="ConfigurableButton1:">id</string>
-						<string key="ConfigurableButton2:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="ConfigurableButton1:">
-							<string key="name">ConfigurableButton1:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="ConfigurableButton2:">
-							<string key="name">ConfigurableButton2:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/NSViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">SDListView</string>
-					<string key="superclassName">NSView</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">prototypeItem</string>
-						<string key="NS.object.0">SDListViewItem</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">prototypeItem</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">prototypeItem</string>
-							<string key="candidateClassName">SDListViewItem</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/SDListView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">SDListViewItem</string>
-					<string key="superclassName">NSViewController</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/SDListViewItem.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">StreamsPicturesPopoverViewController</string>
-					<string key="superclassName">NSViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="changePopupButton:">id</string>
-						<string key="clickDone:">id</string>
-						<string key="clickStepper:">id</string>
-						<string key="showPopover:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="changePopupButton:">
-							<string key="name">changePopupButton:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="clickDone:">
-							<string key="name">clickDone:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="clickStepper:">
-							<string key="name">clickStepper:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="showPopover:">
-							<string key="name">showPopover:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="imageView">NSImageView</string>
-						<string key="popover">NSPopover</string>
-						<string key="popupButton">NSPopUpButton</string>
-						<string key="stepper">NSStepper</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="imageView">
-							<string key="name">imageView</string>
-							<string key="candidateClassName">NSImageView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="popover">
-							<string key="name">popover</string>
-							<string key="candidateClassName">NSPopover</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="popupButton">
-							<string key="name">popupButton</string>
-							<string key="candidateClassName">NSPopUpButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="stepper">
-							<string key="name">stepper</string>
-							<string key="candidateClassName">NSStepper</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/StreamsPicturesPopoverViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">StreamsTreeController</string>
-					<string key="superclassName">NSTreeController</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/StreamsTreeController.h</string>
-					</object>
-				</object>
-			</array>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">
