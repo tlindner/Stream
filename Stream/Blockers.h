@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class StStream, StAnaylizer;
+@class StStream, StAnalyzer;
 
 @interface Blockers : NSObject
 
@@ -23,7 +23,7 @@
 + (NSString *)blockerPopoverAccessoryViewNib;
 + (NSMutableDictionary *)defaultOptions;
 
-- (NSString *)makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
+- (NSString *)makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer;
 - (void) addBlocker:(NSString *)blocker;
 
 @end

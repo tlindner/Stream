@@ -8,10 +8,10 @@
 
 #import "BlockerDataViewController.h"
 #import "AppDelegate.h"
-#import "HexFiendAnaylizerController.h"
+#import "HexFiendAnalyzerController.h"
 #import "Analyzation.h"
 #import "StStream.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 #import "StBlock.h"
 
 @implementation BlockerDataViewController
@@ -96,7 +96,7 @@
         }
     }
     
-    StAnaylizer *thePreviousAna = [(StAnaylizer *)[self representedObject] previousAnaylizer];
+    StAnalyzer *thePreviousAna = [(StAnalyzer *)[self representedObject] previousAnalyzer];
     [thePreviousAna willChangeValueForKey:@"viewRange"];
     if (thePreviousAna.paneExpanded == NO) {
         [thePreviousAna willChangeValueForKey:@"paneExpanded"];
@@ -189,9 +189,9 @@
 
 - (void) reloadView
 {
-    StAnaylizer *theAna = [self representedObject];
+    StAnalyzer *theAna = [self representedObject];
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (parentBlock == nil) AND (anaylizerKind == %@)", theAna.parentStream, theAna.anaylizerKind ];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(parentStream == %@) AND (parentBlock == nil) AND (analyzerKind == %@)", theAna.parentStream, theAna.analyzerKind ];
     [treeController setFetchPredicate:predicate];
 
 //    NSAssert(self.observing == NO, @"BlockAttributeView: double observer fault");
@@ -204,9 +204,9 @@
     if( self.observing == NO )
     {
         [treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueChangeSetting context:self];
-        lastFilterAnaylizer = [[[[self representedObject] parentStream] lastFilterAnayliser] retain];
-        [lastFilterAnaylizer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
-        StAnaylizer *theAna = [self representedObject];
+        lastFilterAnalyzer = [[[[self representedObject] parentStream] lastFilterAnalyzer] retain];
+        [lastFilterAnalyzer addObserver:self forKeyPath:@"editIndexSet" options:NSKeyValueChangeSetting context:self];
+        StAnalyzer *theAna = [self representedObject];
         [theAna addObserver:self forKeyPath:@"viewRange" options:NSKeyValueChangeSetting context:self];
         [theAna.parentStream addObserver:self forKeyPath:@"blocks" options:NSKeyValueChangeSetting context:self];
         
@@ -220,11 +220,11 @@
     if( self.observing == YES )
     {
         [treeController removeObserver:self forKeyPath:@"selectedObjects" context:self];
-        [lastFilterAnaylizer removeObserver:self forKeyPath:@"editIndexSet" context:self];
-        StAnaylizer *theAna = [self representedObject];
+        [lastFilterAnalyzer removeObserver:self forKeyPath:@"editIndexSet" context:self];
+        StAnalyzer *theAna = [self representedObject];
         [theAna removeObserver:self forKeyPath:@"viewRange" context:self];
         [theAna.parentStream removeObserver:self forKeyPath:@"blocks" context:self];
-        [lastFilterAnaylizer release];
+        [lastFilterAnalyzer release];
     }
     
     self.observing = NO;
@@ -281,7 +281,7 @@
                 if( self.observingBlock != theBlock )
                 {
                     [self stopObservingBlockEditor];
-                    Class anaClass = [[theBlock anaylizerObject] viewControllerClass];
+                    Class anaClass = [[theBlock analyzerObject] viewControllerClass];
                     
                     if( [[self.editorViewController class] isSubclassOfClass:anaClass] )
                     {
@@ -320,7 +320,7 @@
         if( [selectedObjects count] > 0 )
         {
             StBlock *theBlock = [selectedObjects objectAtIndex:0];
-            Class anaClass = [[theBlock anaylizerObject] viewControllerClass];
+            Class anaClass = [[theBlock analyzerObject] viewControllerClass];
             
             if( ![[self.editorViewController class] isSubclassOfClass:anaClass] )
             {
@@ -404,7 +404,7 @@
 
 - (void)dealloc
 {
-//    StAnaylizer *theAna = [self representedObject];
+//    StAnalyzer *theAna = [self representedObject];
 //    theAna.viewController = nil;
 
     [[self.editorViewController view] removeFromSuperview];

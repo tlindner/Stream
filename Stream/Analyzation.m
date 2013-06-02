@@ -7,7 +7,7 @@
 //
 
 #import "Analyzation.h"
-#import "HexFiendAnaylizer.h"
+#import "HexFiendAnalyzer.h"
 
 static Analyzation *sharedSingleton;
 static BOOL initialized = NO;
@@ -27,16 +27,16 @@ static BOOL initialized = NO;
             sharedSingleton = [[Analyzation alloc] init];
             initialized = YES;
             sharedSingleton.utiList = [NSMutableArray array];
-            [sharedSingleton addAnalyzer:@"CoCoAudioAnaylizer"];
-            [sharedSingleton addAnalyzer:@"BlockerDataAnaylizer"];
-            [sharedSingleton addAnalyzer:@"BlockAttributeAnaylizer"];
-            [sharedSingleton addAnalyzer:@"HexFiendAnaylizer"];
-            [sharedSingleton addAnalyzer:@"TextAnaylizer"];
-            [sharedSingleton addAnalyzer:@"DisasemblerAnaylizer"];
+            [sharedSingleton addAnalyzer:@"CoCoAudioAnalyzer"];
+            [sharedSingleton addAnalyzer:@"BlockerDataAnalyzer"];
+            [sharedSingleton addAnalyzer:@"BlockAttributeAnalyzer"];
+            [sharedSingleton addAnalyzer:@"HexFiendAnalyzer"];
+            [sharedSingleton addAnalyzer:@"TextAnalyzer"];
+            [sharedSingleton addAnalyzer:@"DisassemblerAnalyzer"];
             [sharedSingleton addAnalyzer:@"DMKProcessSingleDensity"];
             [sharedSingleton addAnalyzer:@"CoCoDeTokenBinaryBASIC"];
             [sharedSingleton addAnalyzer:@"OS9DirectoryFile"];
-            [sharedSingleton addAnalyzer:@"RawBitmapAnaylizer"];
+            [sharedSingleton addAnalyzer:@"RawBitmapAnalyzer"];
 //            [sharedSingleton addAnalyzer:@"XXX"];
 //            [sharedSingleton addAnalyzer:@"XXX"];
 //            [sharedSingleton addAnalyzer:@"XXX"];
@@ -60,7 +60,7 @@ static BOOL initialized = NO;
         }
     }
 
-    NSLog( @"Anaylization singleton does not exist" );
+    NSLog( @"Analyzation singleton does not exist" );
     return nil;
 }
 
@@ -74,7 +74,7 @@ static BOOL initialized = NO;
     return self;
 }
 
-- (void) addAnalyzer:(NSString *)anaylizer
+- (void) addAnalyzer:(NSString *)analyzer
 {
     if (self.classList == nil)
     {
@@ -86,13 +86,13 @@ static BOOL initialized = NO;
         self.nameLookup = [[[NSMutableDictionary alloc] init] autorelease];
     }
     
-    [self.classList addObject:anaylizer];
+    [self.classList addObject:analyzer];
     
-    Class theClass = NSClassFromString(anaylizer);
-    [self.nameLookup setObject:theClass forKey:[theClass anayliserName]];
+    Class theClass = NSClassFromString(analyzer);
+    [self.nameLookup setObject:theClass forKey:[theClass analyzerName]];
 
     /* build uti list for user interface */
-    for (NSString *uti in [theClass anaylizerUTIs]) {
+    for (NSString *uti in [theClass analyzerUTIs]) {
         if (![self.utiList containsObject:uti]) {
             [self.utiList addObject:uti];
         }
@@ -101,17 +101,17 @@ static BOOL initialized = NO;
     [self.utiList sortUsingSelector:@selector(compare:)];
 }
 
-- (NSArray*)anaylizersforUTI:(NSString *)inUTI
+- (NSArray*)analyzersforUTI:(NSString *)inUTI
 {
     NSMutableArray *resultArray = [[NSMutableArray alloc] init];
     
-    for (NSString *anaylizer in self.classList)
+    for (NSString *analyzer in self.classList)
     {
-        Class theClass = NSClassFromString(anaylizer);
+        Class theClass = NSClassFromString(analyzer);
         
         if (theClass != nil)
         {
-            NSArray *classUTIs = [theClass anaylizerUTIs];
+            NSArray *classUTIs = [theClass analyzerUTIs];
             
             if( (classUTIs != nil) && ([classUTIs count] > 0) )
             {
@@ -121,23 +121,23 @@ static BOOL initialized = NO;
                     conforms = UTTypeConformsTo((CFStringRef)inUTI, (CFStringRef)aUTI);
                     
                     if( conforms )
-                        [resultArray addObject:[theClass anayliserName]];
+                        [resultArray addObject:[theClass analyzerName]];
                 }
             }
             else
-                NSLog( @"Anaylizer %@ returned zero conformable UTIs", anaylizer );
+                NSLog( @"Analyzer %@ returned zero conformable UTIs", analyzer );
         }
         else
-            NSLog( @"Shared Anaylizer error: Can not find class %@", anaylizer );
+            NSLog( @"Shared Analyzer error: Can not find class %@", analyzer );
     }
     
     if( [resultArray count] == 0 )
-        [resultArray addObject:[HexFiendAnaylizer anayliserName]];
+        [resultArray addObject:[HexFiendAnalyzer analyzerName]];
     
     return [resultArray autorelease];
 }
 
-- (Class)anaylizerClassforName:(NSString *)inName
+- (Class)analyzerClassforName:(NSString *)inName
 {
     return [nameLookup objectForKey:inName];
 }

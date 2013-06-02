@@ -10,7 +10,7 @@
 #import "StStream.h"
 #import "StBlock.h"
 
-@class StAnaylizer;
+@class StAnalyzer;
 
 @implementation CoCoGranuleBlocker
 
@@ -39,9 +39,9 @@
     return @"CoCo Disk";
 }
 
-- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
-#pragma unused (anaylizer)
+#pragma unused (analyzer)
     int startSector, track;
     StBlock *newGran, *directory, *fat, *directoryEntries;
     

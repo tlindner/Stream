@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class StAnaylizer, StBlock, StStream;
+@class StAnalyzer, StBlock, StStream;
 
 @interface StStream : NSManagedObject
 
@@ -25,7 +25,7 @@
 @property (nonatomic, retain) NSString * sourceUTI;
 @property (nonatomic, retain) NSString * streamTransform;
 @property (nonatomic, retain) NSMutableDictionary * topLevelBlocks;
-@property (nonatomic, retain) NSOrderedSet *anaylizers;
+@property (nonatomic, retain) NSOrderedSet *analyzers;
 @property (nonatomic, retain) NSSet *blocks;
 @property (nonatomic, retain) NSSet *childStreams;
 @property (nonatomic, retain) StStream *parentStream;
@@ -35,9 +35,9 @@
 - (StBlock *)topLevelBlockNamed:(NSString *)theName;
 - (StBlock *)startNewBlockNamed:(NSString *)name owner:(NSString *)owner;
 - (StBlock *)makeNewBlockNamed:(NSString *)name owner:(NSString *)owner;
-- (StAnaylizer *)lastFilterAnayliser;
-- (StAnaylizer *)previousAnayliser:(StAnaylizer *)inAna;
-- (NSArray *)blocksWithAnaylizerKey:(NSString *)key;
+- (StAnalyzer *)lastFilterAnalyzer;
+- (StAnalyzer *)previousAnalyzer:(StAnalyzer *)inAna;
+- (NSArray *)blocksWithAnalyzerKey:(NSString *)key;
 - (void)setBlock:(StBlock *)theBlock withData:(NSData *)theData;
 - (void) setBlock:(StBlock *)theBlock withData:(NSData *)theData inRange:(NSRange)range;
 - (void)regenerateAllBlocks;
@@ -49,16 +49,16 @@
 
 @interface StStream (CoreDataGeneratedAccessors)
 
-- (void)insertObject:(StAnaylizer *)value inAnaylizersAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromAnaylizersAtIndex:(NSUInteger)idx;
-- (void)insertAnaylizers:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeAnaylizersAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInAnaylizersAtIndex:(NSUInteger)idx withObject:(StAnaylizer *)value;
-- (void)replaceAnaylizersAtIndexes:(NSIndexSet *)indexes withAnaylizers:(NSArray *)values;
-- (void)addAnaylizersObject:(StAnaylizer *)value;
-- (void)removeAnaylizersObject:(StAnaylizer *)value;
-- (void)addAnaylizers:(NSOrderedSet *)values;
-- (void)removeAnaylizers:(NSOrderedSet *)values;
+- (void)insertObject:(StAnalyzer *)value inAnalyzersAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromAnalyzersAtIndex:(NSUInteger)idx;
+- (void)insertAnalyzers:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeAnalyzersAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInAnalyzersAtIndex:(NSUInteger)idx withObject:(StAnalyzer *)value;
+- (void)replaceAnalyzersAtIndexes:(NSIndexSet *)indexes withAnalyzers:(NSArray *)values;
+- (void)addAnalyzersObject:(StAnalyzer *)value;
+- (void)removeAnalyzersObject:(StAnalyzer *)value;
+- (void)addAnalyzers:(NSOrderedSet *)values;
+- (void)removeAnalyzers:(NSOrderedSet *)values;
 
 - (void)addBlocksObject:(StBlock *)value;
 - (void)removeBlocksObject:(StBlock *)value;
@@ -76,5 +76,5 @@
 @end
 
 @interface NSObject (StreamBlockerMakerExtension)
-+ (void) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer;
++ (void) makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer;
 @end

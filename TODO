@@ -1,10 +1,10 @@
 A record of action items I know I need to get to.
 
-• Have anaylizers manage their own accessory views.
+• Have analyzers manage their own accessory views.
 
 • Make "Follows PC" dissasembler option know about PULS PC and PULU PC, and TFR zero into PC.
 
-• Have dissasembler mark possible PC changes.
+• Have disassembler mark possible PC changes.
 
 • Change option dictionary keys to use regular names, and not View Controller names.
 

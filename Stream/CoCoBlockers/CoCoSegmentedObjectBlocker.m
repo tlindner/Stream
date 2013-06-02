@@ -35,9 +35,9 @@
     return @"CoCo";
 }
 
-- (NSString *) makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *) makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
-#pragma unused (anaylizer)
+#pragma unused (analyzer)
     if ([stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == NO) {
         return @"Incompatiable stream";
     }

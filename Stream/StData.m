@@ -8,64 +8,64 @@
 
 #import "StData.h"
 #import "Analyzation.h"
-#import "HexFiendAnaylizer.h"
-#import "TextAnaylizer.h"
+#import "HexFiendAnalyzer.h"
+#import "TextAnalyzer.h"
 
 
 @implementation StData
 
 @dynamic resultingUTI;
 @dynamic sourceUTI;
-@dynamic anaylizerKind;
+@dynamic analyzerKind;
 @dynamic currentEditorView;
 @dynamic readOnly;
 @dynamic optionsDictionary;
-@dynamic anaylizerObject;
+@dynamic analyzerObject;
 @dynamic viewController;
 @dynamic resultingData;
 @dynamic unionRange;
 @dynamic errorString;
 
-- (NSObject *)anaylizerObject
+- (NSObject *)analyzerObject
 {
-    NSObject *_anaylizerObject = [self primitiveAnaylizerObject];
+    NSObject *_analyzerObject = [self primitiveAnalyzerObject];
     
-    Class anaObjectClass = [[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView];
+    Class anaObjectClass = [[Analyzation sharedInstance] analyzerClassforName:self.currentEditorView];
     
     if( anaObjectClass == nil )
     {
         if ([self.sourceUTI isEqualToString:@"public.text"]) {
-            anaObjectClass = [TextAnaylizer class];
+            anaObjectClass = [TextAnalyzer class];
         }
         else {
-            anaObjectClass = [HexFiendAnaylizer class];
-            [_anaylizerObject anaylizeData];
+            anaObjectClass = [HexFiendAnalyzer class];
+            [_analyzerObject analyzeData];
         }
     }
     
-    if( _anaylizerObject == nil )
+    if( _analyzerObject == nil )
     {
-        _anaylizerObject = [[[anaObjectClass alloc] init] autorelease];
-        [_anaylizerObject setRepresentedObject:self];
-        [self setPrimitiveAnaylizerObject:_anaylizerObject];
+        _analyzerObject = [[[anaObjectClass alloc] init] autorelease];
+        [_analyzerObject setRepresentedObject:self];
+        [self setPrimitiveAnalyzerObject:_analyzerObject];
     }
-    else if( ![[_anaylizerObject class] isSubclassOfClass:[[Analyzation sharedInstance] anaylizerClassforName:self.currentEditorView]] )
+    else if( ![[_analyzerObject class] isSubclassOfClass:[[Analyzation sharedInstance] analyzerClassforName:self.currentEditorView]] )
     {
-        [_anaylizerObject setRepresentedObject:nil];
-        [self setPrimitiveAnaylizerObject:nil];
+        [_analyzerObject setRepresentedObject:nil];
+        [self setPrimitiveAnalyzerObject:nil];
         
-        _anaylizerObject = [[[anaObjectClass alloc] init] autorelease];
-        [_anaylizerObject setRepresentedObject:self];
-        [self setPrimitiveAnaylizerObject:_anaylizerObject];
-        [_anaylizerObject anaylizeData];
+        _analyzerObject = [[[anaObjectClass alloc] init] autorelease];
+        [_analyzerObject setRepresentedObject:self];
+        [self setPrimitiveAnalyzerObject:_analyzerObject];
+        [_analyzerObject analyzeData];
     }
     
-    return _anaylizerObject;
+    return _analyzerObject;
 }
 
-- (void) anaylizeData
+- (void) analyzeData
 {
-    [[self anaylizerObject] anaylizeData];
+    [[self analyzerObject] analyzeData];
 }
 
 - (void) addSubOptionsDictionary:(NSString *)subOptionsID withDictionary:(NSMutableDictionary *)newOptions

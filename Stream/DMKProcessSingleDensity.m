@@ -7,45 +7,45 @@
 //
 
 #import "DMKProcessSingleDensity.h"
-#import "HexFiendAnaylizerController.h"
+#import "HexFiendAnalyzerController.h"
 
 @implementation DMKProcessSingleDensity
 
-+ (NSArray *)anaylizerUTIs
++ (NSArray *)analyzerUTIs
 {
     return [NSArray arrayWithObject:@"org.macmess.dmk"];
 }
 
-+ (NSString *)anayliserName
++ (NSString *)analyzerName
 {
     return @"DMK Process Single Density";
 }
 
-+ (NSString *)AnaylizerPopoverAccessoryViewNib
++ (NSString *)AnalyzerPopoverAccessoryViewNib
 {
     return @"HFAccessoryView";
 }
 
 - (Class)viewControllerClass
 {
-    return [HexFiendAnaylizerController class];
+    return [HexFiendAnalyzerController class];
 }
 
-+ (NSString *)anaylizerKey
++ (NSString *)analyzerKey
 {
     return @"DMKProcessSingleDensity";
 }
 
-- (void)anaylizeData
+- (void)analyzeData
 {
-    [super anaylizeData];
+    [super analyzeData];
     NSData *data = self.resultingData;
     
     unsigned const char *bytes = [data bytes];
     NSUInteger inputLength = [data length];
     
     if (inputLength < 16) {
-        StAnaylizer *theAna = self.representedObject;
+        StAnalyzer *theAna = self.representedObject;
         theAna.errorString = @"Stream less that DMK header in length. No Processing done.";
         self.resultingData = data;
         return;
@@ -56,7 +56,7 @@
     unsigned sideCount = (bytes[4] & 0x10) ? 1 : 2;
     
     if( 16 + (trackCount * trackLength * sideCount) != inputLength ) {
-        StAnaylizer *theAna = self.representedObject;
+        StAnalyzer *theAna = self.representedObject;
         theAna.errorString = @"Calculated length of stream does not match actual stream length. No Processing done.";
         self.resultingData = data;
         return;
@@ -84,7 +84,7 @@
                 offset &= 0x3fff;
                 
                 if (offset > trackLength) {
-                    StAnaylizer *theAna = self.representedObject;
+                    StAnalyzer *theAna = self.representedObject;
                     theAna.errorString = [NSString stringWithFormat:@"IDAM offset %d on track index %d overflows track length. No Processing done.", idamIndex, trackIndex];
                     free(workBuffer);
                     self.resultingData = data;
@@ -99,7 +99,7 @@
                     nextOffset &= 0x3fff;
 
                     if (nextOffset > trackLength) {
-                        StAnaylizer *theAna = self.representedObject;
+                        StAnalyzer *theAna = self.representedObject;
                         theAna.errorString = [NSString stringWithFormat:@"IDAM offset %d on track index %d overflows track length. No Processing done.", nextOffset, trackIndex];
                         free(workBuffer);
                         self.resultingData = data;

@@ -7,7 +7,7 @@
 //
 
 #import "StStream.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 #import "StBlock.h"
 #import "StStream.h"
 #import "Blockers.h"
@@ -22,7 +22,7 @@
 @dynamic sourceUTI;
 @dynamic streamTransform;
 @dynamic topLevelBlocks;
-@dynamic anaylizers;
+@dynamic analyzers;
 @dynamic blocks;
 @dynamic childStreams;
 @dynamic parentStream;
@@ -51,7 +51,7 @@
     
     if( [name isEqualToString:@"stream"] )
     {
-        result = [[[self lastFilterAnayliser] anaylizerObject] resultingData];
+        result = [[[self lastFilterAnalyzer] analyzerObject] resultingData];
     }
     else
     {
@@ -97,7 +97,7 @@
         {
             /* reset block */
             [newBlock resetCounters];
-            newBlock.anaylizerKind = owner;
+            newBlock.analyzerKind = owner;
             newBlock.markForDeletion = NO;
             newBlock.isEdit = NO;
             newBlock.isFail = NO;
@@ -163,7 +163,7 @@
         /* ok, create new block */
         StBlock *newBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
         newBlock.name = name;
-        newBlock.anaylizerKind = owner;
+        newBlock.analyzerKind = owner;
        
 //        StBlock *newDataBlock = [NSEntityDescription insertNewObjectForEntityForName:@"StBlock" inManagedObjectContext:self.managedObjectContext];
 //        newDataBlock.name = @"data";
@@ -198,36 +198,36 @@
     return result;
 }
 
-- (StAnaylizer *)lastFilterAnayliser
+- (StAnalyzer *)lastFilterAnalyzer
 {
-    for (StAnaylizer *anAnayliser in [[self anaylizers] reversedOrderedSet])
+    for (StAnalyzer *anAnalyzer in [[self analyzers] reversedOrderedSet])
     {
-        if( ![anAnayliser.currentEditorView isEqualToString:@"Blocker View"] )
+        if( ![anAnalyzer.currentEditorView isEqualToString:@"Blocker View"] )
         {
-            return anAnayliser;
+            return anAnalyzer;
         }
     }
     
-    NSLog( @"StStream: lastFilterAnayliser did not find a last filter anayliser" );
+    NSLog( @"StStream: lastFilterAnalyzer did not find a last filter analyzer" );
     return nil;
 }
 
-- (StAnaylizer *)previousAnayliser:(StAnaylizer *)inAna
+- (StAnalyzer *)previousAnalyzer:(StAnalyzer *)inAna
 {
-    NSUInteger theIndex = [[self anaylizers] indexOfObject:inAna];
+    NSUInteger theIndex = [[self analyzers] indexOfObject:inAna];
     
     if( theIndex == 0 )
         return nil;
     else
-        return [[self anaylizers] objectAtIndex:theIndex - 1];
+        return [[self analyzers] objectAtIndex:theIndex - 1];
 }
 
-- (NSArray *)blocksWithAnaylizerKey:(NSString *)key
+- (NSArray *)blocksWithAnalyzerKey:(NSString *)key
 {
     NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
     
     for (StBlock *aBlock in self.blocks) {
-        if ([aBlock.anaylizerKind isEqualToString:key]) {
+        if ([aBlock.analyzerKind isEqualToString:key]) {
             [result addObject:aBlock];
         }
     }
@@ -245,7 +245,7 @@
     NSUInteger index, end = NSMaxRange(range);
     unsigned char *bytes = (unsigned char *)[theData bytes];
     const unsigned char *orginalBytes = [[theBlock resultingData] bytes];
-    StAnaylizer *lastAaylizer = [self lastFilterAnayliser];
+    StAnalyzer *lastAaylizer = [self lastFilterAnalyzer];
     
     [lastAaylizer willChangeValueForKey:@"resultingData"];
     
@@ -269,27 +269,27 @@
     self.topLevelBlocks = nil;
     
     /* reset fail index set */
-    [[[self lastFilterAnayliser] failIndexSet] removeAllIndexes];
+    [[[self lastFilterAnalyzer] failIndexSet] removeAllIndexes];
     
     [self willChangeValueForKey:@"blocks"];
-    [[[self anaylizers] array] makeObjectsPerformSelector:@selector(suspendObservations)];
+    [[[self analyzers] array] makeObjectsPerformSelector:@selector(suspendObservations)];
 
     /* Regenerate blocks using blockers */
-    for( StAnaylizer *anAna in [self anaylizers] )
+    for( StAnalyzer *anAna in [self analyzers] )
     {
         if( [anAna.currentEditorView isEqualToString:@"Blocker View"] )
         {
-            Class blockerClass = NSClassFromString([anAna valueForKey:@"anaylizerKind"]);
+            Class blockerClass = NSClassFromString([anAna valueForKey:@"analyzerKind"]);
             
             if (blockerClass != nil )
             {
                 Blockers *blocker = [[blockerClass alloc] init];
-                anAna.errorString = [blocker makeBlocks:self withAnaylizer:anAna];
+                anAna.errorString = [blocker makeBlocks:self withAnalyzer:anAna];
                 [blocker release];
             }
             else
             {
-                NSAssert(YES==NO, @"Stream: regernerating blocks, blocker class %@ not found", [anAna valueForKey:@"anaylizerKind"]);
+                NSAssert(YES==NO, @"Stream: regernerating blocks, blocker class %@ not found", [anAna valueForKey:@"analyzerKind"]);
             }
         }
     }
@@ -297,7 +297,7 @@
     /* delete any blocks still marked for deletion */
     [self deleteTopLevelBlocksMarkedForDeletion];
     
-    [[[self anaylizers] array] makeObjectsPerformSelector:@selector(resumeObservations)];
+    [[[self analyzers] array] makeObjectsPerformSelector:@selector(resumeObservations)];
     [self didChangeValueForKey:@"blocks"];
 }
 
@@ -324,7 +324,7 @@
         if( resultBlockArray != nil)
         {
             /* notify blocker views of impending deletes */
-            for( StAnaylizer *anAna in [self anaylizers] )
+            for( StAnalyzer *anAna in [self analyzers] )
             {
                 if( [anAna.currentEditorView respondsToSelector:@selector(notifyOfImpendingDeletion:)] )
                 {

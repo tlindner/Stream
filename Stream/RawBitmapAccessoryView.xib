@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
-		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">11G63b</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2182</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
-		<string key="IBDocument.HIToolboxVersion">569.00</string>
+		<int key="IBDocument.SystemTarget">1080</int>
+		<string key="IBDocument.SystemVersion">12D78</string>
+		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
+		<string key="IBDocument.AppKitVersion">1187.37</string>
+		<string key="IBDocument.HIToolboxVersion">626.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">2182</string>
+			<string key="NS.object.0">3084</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
-			<string>NSPopUpButton</string>
-			<string>NSButton</string>
-			<string>NSMenu</string>
-			<string>NSTextFieldCell</string>
-			<string>NSButtonCell</string>
 			<string>NSBox</string>
+			<string>NSButton</string>
+			<string>NSButtonCell</string>
 			<string>NSCustomObject</string>
 			<string>NSCustomView</string>
-			<string>NSStepperCell</string>
+			<string>NSMenu</string>
+			<string>NSPopUpButton</string>
 			<string>NSPopUpButtonCell</string>
-			<string>NSTextField</string>
 			<string>NSStepper</string>
+			<string>NSStepperCell</string>
+			<string>NSTextField</string>
+			<string>NSTextFieldCell</string>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -33,7 +33,7 @@
 		</object>
 		<array class="NSMutableArray" key="IBDocument.RootObjects" id="1000">
 			<object class="NSCustomObject" id="1001">
-				<string key="NSClassName">AnaylizerSettingPopOverAccessoryViewController</string>
+				<string key="NSClassName">AnalyzerSettingPopOverAccessoryViewController</string>
 			</object>
 			<object class="NSCustomObject" id="1003">
 				<string key="NSClassName">FirstResponder</string>
@@ -42,7 +42,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="1005">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSBox" id="121270730">
@@ -62,7 +62,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="518611101">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Planar:</string>
 											<object class="NSFont" key="NSSupport" id="26">
@@ -91,6 +91,7 @@
 												</object>
 											</object>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSButton" id="656018209">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -101,13 +102,13 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSButtonCell" key="NSCell" id="359900476">
-											<int key="NSCellFlags">-2080244224</int>
+											<int key="NSCellFlags">-2080374784</int>
 											<int key="NSCellFlags2">131072</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:9</string>
 											<reference key="NSControlView" ref="656018209"/>
-											<int key="NSButtonFlags">1211912703</int>
+											<int key="NSButtonFlags">1211912448</int>
 											<int key="NSButtonFlags2">2</int>
 											<object class="NSCustomResource" key="NSNormalImage" id="556335079">
 												<string key="NSClassName">NSImage</string>
@@ -121,6 +122,7 @@
 											<int key="NSPeriodicDelay">200</int>
 											<int key="NSPeriodicInterval">25</int>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="586449809">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -131,7 +133,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="754200236">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Alpha Channel:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -140,6 +142,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSStepper" id="869271444">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -150,7 +153,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1083</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSStepperCell" key="NSCell" id="566096789">
-											<int key="NSCellFlags">68025888</int>
+											<int key="NSCellFlags">67895328</int>
 											<int key="NSCellFlags2">131072</int>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:1083</string>
@@ -161,6 +164,7 @@
 											<double key="NSIncrement">1</double>
 											<bool key="NSAutorepeat">YES</bool>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="349729976">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -171,7 +175,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="400748447">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Bits Per Sample:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -180,6 +184,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSStepper" id="40848971">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -190,7 +195,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1083</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSStepperCell" key="NSCell" id="118763010">
-											<int key="NSCellFlags">68025888</int>
+											<int key="NSCellFlags">67895328</int>
 											<int key="NSCellFlags2">131072</int>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:1083</string>
@@ -201,6 +206,7 @@
 											<double key="NSIncrement">1</double>
 											<bool key="NSAutorepeat">YES</bool>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="438304599">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -211,7 +217,7 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="440241226">
-											<int key="NSCellFlags">-1804468671</int>
+											<int key="NSCellFlags">-1804599231</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
@@ -234,6 +240,7 @@
 												<reference key="NSColor" ref="947888259"/>
 											</object>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSButton" id="977412420">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -244,13 +251,13 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSButtonCell" key="NSCell" id="957080528">
-											<int key="NSCellFlags">-2080244224</int>
+											<int key="NSCellFlags">-2080374784</int>
 											<int key="NSCellFlags2">131072</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:9</string>
 											<reference key="NSControlView" ref="977412420"/>
-											<int key="NSButtonFlags">1211912703</int>
+											<int key="NSButtonFlags">1211912448</int>
 											<int key="NSButtonFlags2">2</int>
 											<reference key="NSNormalImage" ref="556335079"/>
 											<reference key="NSAlternateImage" ref="489782589"/>
@@ -259,6 +266,7 @@
 											<int key="NSPeriodicDelay">200</int>
 											<int key="NSPeriodicInterval">25</int>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSStepper" id="105695075">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -269,7 +277,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1083</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSStepperCell" key="NSCell" id="608542602">
-											<int key="NSCellFlags">68025888</int>
+											<int key="NSCellFlags">67895328</int>
 											<int key="NSCellFlags2">131072</int>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:1083</string>
@@ -280,6 +288,7 @@
 											<double key="NSIncrement">1</double>
 											<bool key="NSAutorepeat">YES</bool>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="408764572">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -290,7 +299,7 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="545935301">
-											<int key="NSCellFlags">-1804468671</int>
+											<int key="NSCellFlags">-1804599231</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
@@ -300,6 +309,7 @@
 											<reference key="NSBackgroundColor" ref="449545345"/>
 											<reference key="NSTextColor" ref="771165450"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="47486688">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -310,7 +320,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="292101277">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Vertical Pixels:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -319,6 +329,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="372830381">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -329,7 +340,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="1058086947">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Horizontal Pixels:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -338,6 +349,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="839344923">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -348,7 +360,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="243358926">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Ignore Header Bytes:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -357,6 +369,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="369000045">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -367,7 +380,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="664930659">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Samples Per Pixel:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -376,6 +389,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSStepper" id="892177957">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -386,7 +400,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1083</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSStepperCell" key="NSCell" id="200020311">
-											<int key="NSCellFlags">68025888</int>
+											<int key="NSCellFlags">67895328</int>
 											<int key="NSCellFlags2">131072</int>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:1083</string>
@@ -396,6 +410,7 @@
 											<double key="NSIncrement">1</double>
 											<bool key="NSAutorepeat">YES</bool>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="447954087">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -406,7 +421,7 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="8960027">
-											<int key="NSCellFlags">-1804468671</int>
+											<int key="NSCellFlags">-1804599231</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
@@ -416,6 +431,7 @@
 											<reference key="NSBackgroundColor" ref="449545345"/>
 											<reference key="NSTextColor" ref="771165450"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSButton" id="1038555635">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -426,19 +442,20 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSButtonCell" key="NSCell" id="39140923">
-											<int key="NSCellFlags">604110336</int>
+											<int key="NSCellFlags">603979776</int>
 											<int key="NSCellFlags2">134348800</int>
 											<string key="NSContents">Guess</string>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:9</string>
 											<reference key="NSControlView" ref="1038555635"/>
-											<int key="NSButtonFlags">-2038284033</int>
+											<int key="NSButtonFlags">-2038284288</int>
 											<int key="NSButtonFlags2">129</int>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
 											<int key="NSPeriodicDelay">200</int>
 											<int key="NSPeriodicInterval">25</int>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="215675189">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -449,7 +466,7 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="569019356">
-											<int key="NSCellFlags">-1804468671</int>
+											<int key="NSCellFlags">-1804599231</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
@@ -459,6 +476,7 @@
 											<reference key="NSBackgroundColor" ref="449545345"/>
 											<reference key="NSTextColor" ref="771165450"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSPopUpButton" id="300051115">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -469,12 +487,12 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSPopUpButtonCell" key="NSCell" id="901136984">
-											<int key="NSCellFlags">-2076049856</int>
+											<int key="NSCellFlags">-2076180416</int>
 											<int key="NSCellFlags2">133120</int>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:9</string>
 											<reference key="NSControlView" ref="300051115"/>
-											<int key="NSButtonFlags">109199615</int>
+											<int key="NSButtonFlags">109199360</int>
 											<int key="NSButtonFlags2">129</int>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -497,6 +515,7 @@
 											<bool key="NSAltersState">YES</bool>
 											<int key="NSArrowPosition">2</int>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="70295931">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -507,7 +526,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="533831169">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Color Space:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -516,6 +535,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSPopUpButton" id="1013447687">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -526,12 +546,12 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSPopUpButtonCell" key="NSCell" id="840840849">
-											<int key="NSCellFlags">-2076049856</int>
+											<int key="NSCellFlags">-2076180416</int>
 											<int key="NSCellFlags2">133120</int>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:9</string>
 											<reference key="NSControlView" ref="1013447687"/>
-											<int key="NSButtonFlags">109199615</int>
+											<int key="NSButtonFlags">109199360</int>
 											<int key="NSButtonFlags2">129</int>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -550,6 +570,7 @@
 											<bool key="NSAltersState">YES</bool>
 											<int key="NSArrowPosition">2</int>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSStepper" id="656176139">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -560,7 +581,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1083</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSStepperCell" key="NSCell" id="654213065">
-											<int key="NSCellFlags">68025888</int>
+											<int key="NSCellFlags">67895328</int>
 											<int key="NSCellFlags2">131072</int>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:1083</string>
@@ -571,6 +592,7 @@
 											<double key="NSIncrement">1</double>
 											<bool key="NSAutorepeat">YES</bool>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="764911030">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -581,7 +603,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="362821098">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Row Bytes:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -590,6 +612,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="885292926">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -600,7 +623,7 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="538077062">
-											<int key="NSCellFlags">-1804468671</int>
+											<int key="NSCellFlags">-1804599231</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
@@ -610,6 +633,7 @@
 											<reference key="NSBackgroundColor" ref="449545345"/>
 											<reference key="NSTextColor" ref="771165450"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSStepper" id="499392669">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -620,7 +644,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1083</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSStepperCell" key="NSCell" id="465762169">
-											<int key="NSCellFlags">68025888</int>
+											<int key="NSCellFlags">67895328</int>
 											<int key="NSCellFlags2">131072</int>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:1083</string>
@@ -631,6 +655,7 @@
 											<double key="NSIncrement">1</double>
 											<bool key="NSAutorepeat">YES</bool>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="595724072">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -641,7 +666,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="862212767">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Pixel Bits:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -650,6 +675,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="168882125">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -660,7 +686,7 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="706956190">
-											<int key="NSCellFlags">-1804468671</int>
+											<int key="NSCellFlags">-1804599231</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
@@ -670,6 +696,7 @@
 											<reference key="NSBackgroundColor" ref="449545345"/>
 											<reference key="NSTextColor" ref="771165450"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="902808271">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -680,7 +707,7 @@
 										<string key="NSReuseIdentifierKey">_NS:3936</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="165554192">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Resulting UTI:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -689,17 +716,17 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="444865793">
 										<reference key="NSNextResponder" ref="297827864"/>
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{135, 12}, {147, 19}}</string>
 										<reference key="NSSuperview" ref="297827864"/>
-										<reference key="NSNextKeyView"/>
 										<string key="NSReuseIdentifierKey">_NS:248</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="244586976">
-											<int key="NSCellFlags">-1804468671</int>
+											<int key="NSCellFlags">-1804599231</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
@@ -709,6 +736,7 @@
 											<reference key="NSBackgroundColor" ref="449545345"/>
 											<reference key="NSTextColor" ref="771165450"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSTextField" id="973436414">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -719,7 +747,7 @@
 										<string key="NSReuseIdentifierKey">_NS:1505</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="324467916">
-											<int key="NSCellFlags">68288064</int>
+											<int key="NSCellFlags">68157504</int>
 											<int key="NSCellFlags2">272761856</int>
 											<string key="NSContents">Pass Data Through:</string>
 											<reference key="NSSupport" ref="26"/>
@@ -728,6 +756,7 @@
 											<reference key="NSBackgroundColor" ref="752821753"/>
 											<reference key="NSTextColor" ref="1028503273"/>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 									<object class="NSButton" id="1059621556">
 										<reference key="NSNextResponder" ref="297827864"/>
@@ -738,13 +767,13 @@
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSButtonCell" key="NSCell" id="811562728">
-											<int key="NSCellFlags">-2080244224</int>
+											<int key="NSCellFlags">-2080374784</int>
 											<int key="NSCellFlags2">131072</int>
 											<string key="NSContents"/>
 											<reference key="NSSupport" ref="26"/>
 											<string key="NSCellIdentifier">_NS:9</string>
 											<reference key="NSControlView" ref="1059621556"/>
-											<int key="NSButtonFlags">1211912703</int>
+											<int key="NSButtonFlags">1211912448</int>
 											<int key="NSButtonFlags2">2</int>
 											<reference key="NSNormalImage" ref="556335079"/>
 											<reference key="NSAlternateImage" ref="489782589"/>
@@ -753,6 +782,7 @@
 											<int key="NSPeriodicDelay">200</int>
 											<int key="NSPeriodicInterval">25</int>
 										</object>
+										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 									</object>
 								</array>
 								<string key="NSFrame">{{1, 1}, {314, 310}}</string>
@@ -767,7 +797,7 @@
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<string key="NSOffsets">{0, 0}</string>
 						<object class="NSTextFieldCell" key="NSTitleCell">
-							<int key="NSCellFlags">67239424</int>
+							<int key="NSCellFlags">67108864</int>
 							<int key="NSCellFlags2">0</int>
 							<string key="NSContents">Raw Bitmap:</string>
 							<reference key="NSSupport" ref="26"/>
@@ -785,7 +815,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{331, 322}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="121270730"/>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -810,15 +839,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes</string>
 						<reference key="source" ref="215675189"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="215675189"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -826,15 +855,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes</string>
 						<reference key="source" ref="892177957"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="892177957"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.ignoreHeaderBytes</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.ignoreHeaderBytes</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -842,15 +871,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.horizontalPixels</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.horizontalPixels</string>
 						<reference key="source" ref="408764572"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="408764572"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.horizontalPixels</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.horizontalPixels</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.horizontalPixels</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.horizontalPixels</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -858,15 +887,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.horizontalPixels</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.horizontalPixels</string>
 						<reference key="source" ref="40848971"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="40848971"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.horizontalPixels</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.horizontalPixels</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.horizontalPixels</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.horizontalPixels</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -874,15 +903,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.verticalPixels</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.verticalPixels</string>
 						<reference key="source" ref="438304599"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="438304599"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.verticalPixels</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.verticalPixels</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.verticalPixels</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.verticalPixels</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -890,15 +919,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.verticalPixels</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.verticalPixels</string>
 						<reference key="source" ref="869271444"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="869271444"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.verticalPixels</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.verticalPixels</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.verticalPixels</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.verticalPixels</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -906,15 +935,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentValues: representedObject.optionsDictionary.RawBitmapAnaylizer.bitsPerSampleList</string>
+						<string key="label">contentValues: representedObject.optionsDictionary.RawBitmapAnalyzer.bitsPerSampleList</string>
 						<reference key="source" ref="300051115"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector" id="564370856">
 							<reference key="NSSource" ref="300051115"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">contentValues: representedObject.optionsDictionary.RawBitmapAnaylizer.bitsPerSampleList</string>
+							<string key="NSLabel">contentValues: representedObject.optionsDictionary.RawBitmapAnalyzer.bitsPerSampleList</string>
 							<string key="NSBinding">contentValues</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.bitsPerSampleList</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.bitsPerSampleList</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -922,15 +951,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedValue: representedObject.optionsDictionary.RawBitmapAnaylizer.bitsPerSample</string>
+						<string key="label">selectedValue: representedObject.optionsDictionary.RawBitmapAnalyzer.bitsPerSample</string>
 						<reference key="source" ref="300051115"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="300051115"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">selectedValue: representedObject.optionsDictionary.RawBitmapAnaylizer.bitsPerSample</string>
+							<string key="NSLabel">selectedValue: representedObject.optionsDictionary.RawBitmapAnalyzer.bitsPerSample</string>
 							<string key="NSBinding">selectedValue</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.bitsPerSample</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.bitsPerSample</string>
 							<reference key="NSPreviousConnector" ref="564370856"/>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
@@ -939,15 +968,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.samplesPerPixel</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.samplesPerPixel</string>
 						<reference key="source" ref="447954087"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="447954087"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.samplesPerPixel</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.samplesPerPixel</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.samplesPerPixel</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.samplesPerPixel</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -955,15 +984,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.samplesPerPixel</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.samplesPerPixel</string>
 						<reference key="source" ref="105695075"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="105695075"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.samplesPerPixel</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.samplesPerPixel</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.samplesPerPixel</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.samplesPerPixel</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -971,15 +1000,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.alphaChannel</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.alphaChannel</string>
 						<reference key="source" ref="977412420"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="977412420"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.alphaChannel</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.alphaChannel</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.alphaChannel</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.alphaChannel</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -987,15 +1016,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.planar</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.planar</string>
 						<reference key="source" ref="656018209"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="656018209"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.planar</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.planar</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.planar</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.planar</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -1003,15 +1032,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentValues: representedObject.optionsDictionary.RawBitmapAnaylizer.colorSpaceNameList</string>
+						<string key="label">contentValues: representedObject.optionsDictionary.RawBitmapAnalyzer.colorSpaceNameList</string>
 						<reference key="source" ref="1013447687"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector" id="454152119">
 							<reference key="NSSource" ref="1013447687"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">contentValues: representedObject.optionsDictionary.RawBitmapAnaylizer.colorSpaceNameList</string>
+							<string key="NSLabel">contentValues: representedObject.optionsDictionary.RawBitmapAnalyzer.colorSpaceNameList</string>
 							<string key="NSBinding">contentValues</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.colorSpaceNameList</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.colorSpaceNameList</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -1019,15 +1048,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedValue: representedObject.optionsDictionary.RawBitmapAnaylizer.colorSpaceName</string>
+						<string key="label">selectedValue: representedObject.optionsDictionary.RawBitmapAnalyzer.colorSpaceName</string>
 						<reference key="source" ref="1013447687"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="1013447687"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">selectedValue: representedObject.optionsDictionary.RawBitmapAnaylizer.colorSpaceName</string>
+							<string key="NSLabel">selectedValue: representedObject.optionsDictionary.RawBitmapAnalyzer.colorSpaceName</string>
 							<string key="NSBinding">selectedValue</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.colorSpaceName</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.colorSpaceName</string>
 							<reference key="NSPreviousConnector" ref="454152119"/>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
@@ -1036,15 +1065,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.rowBytes</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.rowBytes</string>
 						<reference key="source" ref="656176139"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="656176139"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.rowBytes</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.rowBytes</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.rowBytes</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.rowBytes</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -1052,15 +1081,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.rowBytes</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.rowBytes</string>
 						<reference key="source" ref="885292926"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="885292926"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.rowBytes</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.rowBytes</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.rowBytes</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.rowBytes</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -1068,15 +1097,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.pixelBits</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.pixelBits</string>
 						<reference key="source" ref="499392669"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="499392669"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.pixelBits</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.pixelBits</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.pixelBits</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.pixelBits</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -1084,15 +1113,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.pixelBits</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.pixelBits</string>
 						<reference key="source" ref="168882125"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="168882125"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.pixelBits</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.pixelBits</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.pixelBits</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.pixelBits</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -1116,15 +1145,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnaylizer.passThrough</string>
+						<string key="label">value: representedObject.optionsDictionary.RawBitmapAnalyzer.passThrough</string>
 						<reference key="source" ref="1059621556"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="1059621556"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnaylizer.passThrough</string>
+							<string key="NSLabel">value: representedObject.optionsDictionary.RawBitmapAnalyzer.passThrough</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnaylizer.passThrough</string>
+							<string key="NSKeyPath">representedObject.optionsDictionary.RawBitmapAnalyzer.passThrough</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>

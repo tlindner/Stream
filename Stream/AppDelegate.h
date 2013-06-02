@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class StStream, NewAnaylizerSetWindowController, AnaylizerSetWindowController, GetNetURLWindowController;
+@class StStream, NewAnalyzerSetWindowController, AnalyzerSetWindowController, GetNetURLWindowController;
 
 @interface AppDelegate : NSObject
 {
@@ -18,16 +18,16 @@
 @property (assign) IBOutlet NSMenu *blocksMenu;
 @property (assign) IBOutlet NSMenu *setsMenu;
 @property (retain) NSManagedObjectContext *anaSetsContext;
-@property (retain) NewAnaylizerSetWindowController *anaylizerSetGetInformation;
-@property (retain) AnaylizerSetWindowController *manageAnaylizerWindowController;
+@property (retain) NewAnalyzerSetWindowController *analyzerSetGetInformation;
+@property (retain) AnalyzerSetWindowController *manageAnalyzerWindowController;
 @property (retain) GetNetURLWindowController *urlWindowController;
 
 - (void) addBlockerMenu:(NSString *)classNameString;
-- (IBAction)makeAnaylizerSet:(id)sender;
-- (IBAction)manageAnaylizerSets:(id)sender;
-- (void) addAnaylizerSetMenu:(NSString *)name withGroup:(NSString *)group withKey:(NSString *)commandKey representedBy:(NSManagedObject *)representedObject;
-- (NSManagedObject *)anaylizerSetNamed:(NSString *)name;
-- (void)reloadAllAnaylizerSetMenuItems;
+- (IBAction)makeAnalyzerSet:(id)sender;
+- (IBAction)manageAnalyzerSets:(id)sender;
+- (void) addAnalyzerSetMenu:(NSString *)name withGroup:(NSString *)group withKey:(NSString *)commandKey representedBy:(NSManagedObject *)representedObject;
+- (NSManagedObject *)analyzerSetNamed:(NSString *)name;
+- (void)reloadAllAnalyzerSetMenuItems;
 - (NSURL *)getURLFromUser;
 
 @end

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Blockers.h"
 
-@class StStream, StAnaylizer;
+@class StStream, StAnalyzer;
 
 @interface DunfieldImageDisk : Blockers
 

@@ -9,29 +9,29 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class StAnaylizer;
+@class StAnalyzer;
 
 @interface StAnaSet : NSManagedObject
 
 @property (nonatomic, retain) NSString * commandKey;
 @property (nonatomic, retain) NSString * group;
 @property (nonatomic, retain) NSString * setName;
-@property (nonatomic, retain) NSOrderedSet *anaylizers;
+@property (nonatomic, retain) NSOrderedSet *analyzers;
 
 
-@property (nonatomic, readonly) NSArray *anaylizerArray;
+@property (nonatomic, readonly) NSArray *analyzerArray;
 @end
 
 @interface StAnaSet (CoreDataGeneratedAccessors)
 
-- (void)insertObject:(StAnaylizer *)value inAnaylizersAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromAnaylizersAtIndex:(NSUInteger)idx;
-- (void)insertAnaylizers:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeAnaylizersAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInAnaylizersAtIndex:(NSUInteger)idx withObject:(StAnaylizer *)value;
-- (void)replaceAnaylizersAtIndexes:(NSIndexSet *)indexes withAnaylizers:(NSArray *)values;
-- (void)addAnaylizersObject:(StAnaylizer *)value;
-- (void)removeAnaylizersObject:(StAnaylizer *)value;
-- (void)addAnaylizers:(NSOrderedSet *)values;
-- (void)removeAnaylizers:(NSOrderedSet *)values;
+- (void)insertObject:(StAnalyzer *)value inAnalyzersAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromAnalyzersAtIndex:(NSUInteger)idx;
+- (void)insertAnalyzers:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeAnalyzersAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInAnalyzersAtIndex:(NSUInteger)idx withObject:(StAnalyzer *)value;
+- (void)replaceAnalyzersAtIndexes:(NSIndexSet *)indexes withAnalyzers:(NSArray *)values;
+- (void)addAnalyzersObject:(StAnalyzer *)value;
+- (void)removeAnalyzersObject:(StAnalyzer *)value;
+- (void)addAnalyzers:(NSOrderedSet *)values;
+- (void)removeAnalyzers:(NSOrderedSet *)values;
 @end

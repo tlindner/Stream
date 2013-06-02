@@ -8,7 +8,7 @@
 
 #import "BasicDiskImage.h"
 #import "StStream.h"
-#import "StAnaylizer.h"
+#import "StAnalyzer.h"
 #import "StBlock.h"
 
 @implementation BasicDiskImage
@@ -38,7 +38,7 @@
     return [[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithUnsignedInteger:0], @"skipHeaderLength", [NSNumber numberWithUnsignedInteger:256], @"sectorLength", [NSNumber numberWithUnsignedInteger:1], @"sideCount", [NSNumber numberWithUnsignedInteger:18], @"trackLength",[NSNumber numberWithUnsignedInteger:1], @"firstSectorID", nil] autorelease];
 }
 
-- (NSString *)makeBlocks:(StStream *)stream withAnaylizer:(StAnaylizer *)anaylizer
+- (NSString *)makeBlocks:(StStream *)stream withAnalyzer:(StAnalyzer *)analyzer
 {
     if ([stream respondsToSelector:@selector(dataOfTopLevelBlockNamed:)] == NO) {
         return @"Incompatiable stream";
@@ -51,7 +51,7 @@
     }
         
     NSUInteger streamLength = [streamBytesObject length], bytesConsumed;
-    NSDictionary *option = [[anaylizer optionsDictionary] objectForKey:[BasicDiskImage blockerKey]];
+    NSDictionary *option = [[analyzer optionsDictionary] objectForKey:[BasicDiskImage blockerKey]];
     NSUInteger skipHeaderLength = [[option objectForKey:@"skipHeaderLength"] intValue];
     NSUInteger sectorLength = [[option objectForKey:@"sectorLength"] intValue];
     NSUInteger sideCount = [[option objectForKey:@"sideCount"] intValue];
@@ -65,7 +65,7 @@
         for (NSUInteger i = 0; i <sideCount; i++) {
             for (NSUInteger j=0; j<trackLength; j++) {
 
-                StBlock *newsector = [stream startNewBlockNamed:[NSString stringWithFormat:@"Track %d %d Side %d %d Sector %d %d", track, track, i, i, j, j+firstSectorID] owner:[BasicDiskImage blockerKey]];
+                StBlock *newsector = [stream startNewBlockNamed:[NSString stringWithFormat:@"Track %ld %ld Side %ld %ld Sector %ld %ld", (unsigned long)track, (unsigned long)track, (unsigned long)i, (unsigned long)i, (unsigned long)j, j+firstSectorID] owner:[BasicDiskImage blockerKey]];
                 
                 NSUInteger actualLength = MIN(sectorLength, streamLength - sectorLength);
                 [newsector addDataRange:@"stream" start:bytesConsumed length:actualLength expectedLength:sectorLength];

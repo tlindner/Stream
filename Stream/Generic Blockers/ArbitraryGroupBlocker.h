@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Blockers.h"
 
-@class StAnaylizer, StStream;
+@class StAnalyzer, StStream;
 
 @interface ArbitraryGroupBlocker : Blockers
 
