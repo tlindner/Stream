@@ -403,37 +403,7 @@ typedef struct
              NSRect rect = NSMakeRect(range.location/scale, 0.0, range.length/scale, viewWaveHeight);
              NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
              [aPath fill];
-             rect.origin.y = viewWaveHeight+2.0;
-             rect.size.height = 13;
-             aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
-             [aPath fill];
          }];
-        
-//        /* draw red fail tints */
-//        [[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:0.5] set];
-//        NSMutableIndexSet *failSet = [self.cachedAnaylizer valueForKeyPath:@"failIndexSet"];
-//        range = NSMakeRange(0, NSUIntegerMax);
-//        [failSet enumerateRangesInRange:range options:0 usingBlock:
-//         ^(NSRange range, BOOL *stop)
-//         {
-//             #pragma unused(stop)
-//             NSRect rect = NSMakeRect(characters[range.location].location, 0.0, 0.0, viewWaveHeight);
-//             
-//             for( NSUInteger i = 0; i<range.length; i++ )
-//             {
-//                 rect.size.width += characters[range.location + i].length;
-//             }
-//             
-//             rect.origin.x /= scale;
-//             rect.size.width /= scale;
-//
-//             NSBezierPath* aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
-//             [aPath fill];
-//             rect.origin.y = viewWaveHeight+2.0;
-//             rect.size.height = 13;
-//             aPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
-//             [aPath fill];
-//         }];
         
         /* draw lupe & selection rect */
         if( mouseDownOnPoint == NO )
@@ -542,42 +512,36 @@ typedef struct
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.amplify"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.invert"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.dcblocking"])
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.lowCycle"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     } else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.highCycle"] )
     {
         resample = YES;
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.resyncThreashold"])
     {
@@ -585,7 +549,6 @@ typedef struct
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"optionsDictionary.AudioAnaylizerViewController.audioChannel"] )
     {
@@ -593,7 +556,6 @@ typedef struct
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"resultingData"] )
     {
@@ -601,7 +563,6 @@ typedef struct
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"failIndexSet"] )
     {
@@ -609,7 +570,6 @@ typedef struct
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"editIndexSet"] )
     {
@@ -617,7 +577,6 @@ typedef struct
         [self setNeedsDisplay:YES];
         [self.cachedAnaylizer.anaylizerObject anaylizeData];
         [self.cachedAnaylizer.parentStream regenerateAllBlocks];
-//        [self.cachedAnaylizer.parentStream performSelectorOnMainThread:@selector(regenerateAllBlocks) withObject:nil waitUntilDone:NO];
     }
     else if( [keyPath isEqualToString:@"frameBuffer"] )
     {

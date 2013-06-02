@@ -98,18 +98,6 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     OSStatus myErr;
     UInt32 propSize;
     
-    /* clear out modified data index set*/
-    if (self.changedIndexes == nil) {
-        self.changedIndexes = [[[NSMutableIndexSet alloc] init] autorelease];
-    }
-    
-    [self.changedIndexes removeAllIndexes];
-    
-    NSMutableIndexSet *editIndexSet = theAna.editIndexSet;
-    [editIndexSet removeAllIndexes];
-    NSMutableIndexSet *failIndexSet = theAna.failIndexSet;
-    [failIndexSet removeAllIndexes];
-    
     /* Convert data to samples */
     NSURL *fileURL = [theAna urlForCachedData];
     ExtAudioFileRef af;
@@ -439,44 +427,40 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     
     [theAna setValue:[NSNumber numberWithFloat:average] forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.averagedMaximumSample"];
     
-    /* store NSMutableData Objects away */
-//    [theAna setValue:coalescedObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.coalescedObject"];
-//    [theAna setValue:charactersObject forKeyPath:@"optionsDictionary.AudioAnaylizerViewController.charactersObject"];
-
     /* generate new changed index set */
-    NSMutableIndexSet *changedIndexSetObject = [[NSMutableIndexSet alloc] init];
+//    NSMutableIndexSet *changedIndexSetObject = [[NSMutableIndexSet alloc] init];
 //    NSMutableIndexSet *changedIndexes = [theAna valueForKeyPath:@"optionsDictionary.AudioAnaylizerViewController.changedIndexes"];
     
-    NSRange maximumRange = {0, NSUIntegerMax};
-    NSUInteger count = [self.changedIndexes countOfIndexesInRange:maximumRange];
-    NSUInteger *indexBuffer = malloc( sizeof(NSUInteger) * count);
+//    NSRange maximumRange = {0, NSUIntegerMax};
+//    NSUInteger count = [self.changedIndexes countOfIndexesInRange:maximumRange];
+//    NSUInteger *indexBuffer = malloc( sizeof(NSUInteger) * count);
     
-    [self.changedIndexes getIndexes:indexBuffer maxCount:count inIndexRange:&maximumRange];
+//    [self.changedIndexes getIndexes:indexBuffer maxCount:count inIndexRange:&maximumRange];
 
-    NSUInteger j = 0;
-    i = 0;
-    
-    while( i < count && j < char_count)
-    {
-        if( indexBuffer[i] < characters[j].location )
-        {
-            i++;
-        }
-        else if( NSLocationInRange(indexBuffer[i], characters[j] ) )
-        {
-            [changedIndexSetObject addIndex:j];
-            i++;
-            j++;
-        }
-        else
-            j++;
-    }
-    
-    free( indexBuffer );
+//    NSUInteger j = 0;
+//    i = 0;
+//    
+//    while( i < count && j < char_count)
+//    {
+//        if( indexBuffer[i] < characters[j].location )
+//        {
+//            i++;
+//        }
+//        else if( NSLocationInRange(indexBuffer[i], characters[j] ) )
+//        {
+//            [changedIndexSetObject addIndex:j];
+//            i++;
+//            j++;
+//        }
+//        else
+//            j++;
+//    }
+//    
+//    free( indexBuffer );
 
     self.resultingData = self.characterObject;
     
-    [changedIndexSetObject release];
+//    [changedIndexSetObject release];
 }
 
 - (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte
@@ -486,9 +470,27 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
 
 - (void) applyAllEdits
 {
+    NSRange editRange;
+    NSInteger shift;
+    
+    /* clear out modified data index set*/
+    if (self.changedIndexes == nil) {
+        self.changedIndexes = [[[NSMutableIndexSet alloc] init] autorelease];
+    }
+    
+    [self.changedIndexes removeAllIndexes];
+    
     for (AnaylizerEdit *edit in [representedObject edits])
     {
         [self.frameBuffer replaceBytesInRange:NSMakeRange(edit.location, edit.length) withBytes:[edit.data bytes] length:[edit.data length]];
+        
+        editRange.location = edit.location / sizeof(float);
+        editRange.length = edit.length / sizeof(float);
+        
+        shift = editRange.length - ([edit.data length] / sizeof(float));
+        
+        [self.changedIndexes addIndexesInRange:editRange];
+        [self.changedIndexes shiftIndexesStartingAtIndex:editRange.location+editRange.length by:shift];        
     }
 }
 
@@ -608,25 +610,25 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     //free( newByteWaveForm );
     
     /* slide changed byte to accomadate new size */
-    unsigned long delta = totalLength - characters[idx].length;
-    NSMutableIndexSet *previousChangedSet = [self.changedIndexes mutableCopy];
-    [self.changedIndexes shiftIndexesStartingAtIndex:characters[idx+1].location by:delta];
+//    unsigned long delta = totalLength - characters[idx].length;
+//    NSMutableIndexSet *previousChangedSet = [self.changedIndexes mutableCopy];
+//    [self.changedIndexes shiftIndexesStartingAtIndex:characters[idx+1].location by:delta];
     
     /* adjust characters accounting */
-    characters[idx].length = totalLength;
-    for( unsigned long i = idx+1; i < [self.characterObject length]; i++ )
-        characters[i].location += delta;
+//    characters[idx].length = totalLength;
+//    for( unsigned long i = idx+1; i < [self.characterObject length]; i++ )
+//        characters[i].location += delta;
     
     /* add newley generated waveform to changed set */
     [self.changedIndexes addIndexesInRange:characters[idx]];
 
     /* setup undo */
-    NSManagedObjectContext *parentContext = [theAna managedObjectContext];
-    NSUndoManager *um = [parentContext undoManager];
-    NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousDataObject, @"data", newRangeValue, @"range", previousChangedSet, @"indexSet", nil];
-    [previousChangedSet release];
-    [um registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
-    [um setActionName:@"Byte Change"];
+//    NSManagedObjectContext *parentContext = [theAna managedObjectContext];
+//    NSUndoManager *um = [parentContext undoManager];
+//    NSDictionary *previousState = [NSDictionary dictionaryWithObjectsAndKeys:previousDataObject, @"data", newRangeValue, @"range", previousChangedSet, @"indexSet", nil];
+//    [previousChangedSet release];
+//    [um registerUndoWithTarget:self selector:@selector(setPreviousState:) object:previousState];
+//    [um setActionName:@"Byte Change"];
     
     /* post edit to anaylizer */
     [theAna postEdit:newByteWaveFormObject atLocation:oldRange.location withLength:oldRange.length];
@@ -716,6 +718,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     [self willChangeValueForKey:@"frameBuffer"];
     [self anaylizeAudioData];
     [theAna.parentStream regenerateAllBlocks];
+    [self.changedIndexes addIndexesInRange:NSMakeRange(origin, width)];
     [self didChangeValueForKey:@"frameBuffer"];
 }
 
