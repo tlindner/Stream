@@ -53,9 +53,6 @@
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
     
     NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
-//    NSManagedObjectContext *newMOC = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
-//    [newMOC setPersistentStoreCoordinator:psc];
-//    [self setManagedObjectContext:newMOC];
 
     [streamTreeControler addObserver:self forKeyPath:@"selectionIndexPaths" options:0 context:self];
     listView.prototypeItem = [[[AnaylizerListViewItem alloc] initWithNibName:@"AnaylizerListViewItem" bundle:nil] autorelease];
@@ -75,7 +72,15 @@
             }
         }
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(persistentStoresDidChange:) name:NSPersistentStoreCoordinatorStoresDidChangeNotification object:psc];
 }
+
+-(void)persistentStoresDidChange:(NSNotification *)notification
+{
+    [self windowDidEndLiveResize:notification];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == self) {
@@ -314,7 +319,8 @@
         self.observingStream = nil;
     }
 
-//    [listView suspendObservations];
+    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSPersistentStoreCoordinatorStoresDidChangeNotification object:psc];
 }
 
 - (IBAction)removeStream:(id)sender
