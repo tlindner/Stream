@@ -21,6 +21,7 @@
 @property (assign) IBOutlet NSWindow *documentWindow;
 @property (assign) IBOutlet NSScrollView *streamListView;
 @property (assign) IBOutlet NSSplitView *leftSplitView;
+@property (assign) IBOutlet NSSplitView *mainSplitView;
 @property (nonatomic, retain) NSCursor *zoomCursor;
 @property (assign) IBOutlet SDListView *listView;
 @property (assign) IBOutlet NSButton *imageButton;

@@ -24,6 +24,7 @@
 @synthesize zoomCursor;
 @synthesize listView;
 @synthesize leftSplitView;
+@synthesize mainSplitView;
 @synthesize imageButton;
 @synthesize pictureURLs;
 @synthesize outlineView;
@@ -71,6 +72,28 @@
             if (rectString != nil) {
                 [[[[self windowControllers] objectAtIndex:0] window] setFrameFromString:rectString];
             }
+
+            NSArray *subViews = [leftSplitView subviews];
+            NSValue *frameValue;
+            
+            if ([subViews count] == 2) {
+                for (int i=0; i<2; i++) {
+                    frameValue = [meta objectForKey:[NSString stringWithFormat:@"leftSplit %d",i]];
+                    if (frameValue != nil) {
+                        [[subViews objectAtIndex:i] setFrame:[frameValue rectValue]];
+                    }
+                }
+            }
+            
+            subViews = [mainSplitView subviews];
+            if ([subViews count] == 2) {
+                for (int i=0; i<2; i++) {
+                    frameValue = [meta objectForKey:[NSString stringWithFormat:@"mainSplit %d",i]];
+                    if (frameValue != nil) {
+                        [[subViews objectAtIndex:i] setFrame:[frameValue rectValue]];
+                    }
+                }
+            }
         }
     }
     
@@ -80,6 +103,7 @@
 -(void)persistentStoresDidChange:(NSNotification *)notification
 {
     [self windowDidEndLiveResize:notification];
+    [self splitViewDidResizeSubviews:notification];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -575,22 +599,64 @@
     };
     
     [mySavePanel beginSheetModalForWindow:[self windowForSheet] completionHandler: sheetCompleation];
-
 }
 
-//- (BOOL)selectionShouldChangeInTableView:(NSTableView *)aTableView
-//{
-//    #pragma unused(aTableView)
-//    return NO;
-//}
+- (BOOL)selectionShouldChangeInTableView:(NSTableView *)aTableView
+{
+    #pragma unused(aTableView)
+    return YES;
+}
 
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)subview
 {
     #pragma unused(splitView)
-    if( subview == leftSplitView || subview == imageButton)
+
+    if( subview == leftSplitView)
+    {
         return NO;
+    }
+    else if (subview == imageButton)
+    {
+        return NO;
+    }
     else
         return YES;
+}
+
+- (void)splitViewDidResizeSubviews:(NSNotification *)aNotification
+{
+#pragma unused (aNotification)
+    NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
+    NSArray *psa = [psc persistentStores];
+    
+    if (psa != nil) {
+        if ([psa count] > 0) {
+            NSPersistentStore *ps = [psa objectAtIndex:0];
+            NSMutableDictionary *meta = [[[ps metadata] mutableCopy] autorelease];
+            
+            NSArray *subViews = [leftSplitView subviews];
+            NSValue *frame;
+            
+            if ([subViews count] == 2) {
+                for (int i=0; i<2; i++) {
+                    frame = [NSValue valueWithRect:[[subViews objectAtIndex:i] frame]];
+//                    NSLog( @"left split #%d: %@", i+1, frame);
+                    [meta setObject:frame forKey:[NSString stringWithFormat:@"leftSplit %d",i]];
+                }
+            }
+            
+            subViews = [mainSplitView subviews];
+            if ([subViews count] == 2) {
+                for (int i=0; i<2; i++) {
+                    frame = [NSValue valueWithRect:[[subViews objectAtIndex:i] frame]];
+//                    NSLog( @"main split #%d: %@", i+1, frame);
+                    [meta setObject:frame forKey:[NSString stringWithFormat:@"mainSplit %d",i]];
+                }
+            }
+            
+            [psc setMetadata:meta forPersistentStore:ps];
+        }
+    }
 }
 
 - (IBAction)imagePopoverClick:(id)sender
@@ -653,7 +719,6 @@
         
         [selectedStream regenerateAllBlocks];
     }
-
 }
 
 - (NSDragOperation)outlineView:(NSOutlineView *)oView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
