@@ -7,7 +7,13 @@ Programmer tool to explore data.
 *  This means documents saved will not be openable after schema changes are made.
 *
 *********
-
+*
+* If you are checking out this code from github have to run two commands from the command line
+* git submodule init
+* then
+* git submodule update
+*
+*********
 
 
 
