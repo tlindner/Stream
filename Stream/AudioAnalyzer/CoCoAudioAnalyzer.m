@@ -220,7 +220,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     Float64 _sample_rate = [[theAna valueForKeyPath:@"optionsDictionary.AudioAnalyzerViewController.sampleRate"] doubleValue];
     UInt32 _channel_count = 1;
     float *_samples = (float *)[data bytes];
-    UInt32 _frame_count = [data length] / sizeof(float);
+    UInt32 _frame_count = (UInt32)[data length] / sizeof(float);
     
     
     AudioStreamBasicDescription file_desc = {0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -273,7 +273,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     self.zeroCrossingArray = [NSData dataWithBytesNoCopy:zero_crossings length:sizeof(float)*crossingCount];
 
     /* Scan zero crossings looking for valid data */
-    int max_possible_characters = (crossingCount*2*8)+1;
+    NSUInteger max_possible_characters = (crossingCount*2*8)+1;
     self.charactersObject = [NSMutableData dataWithLength:sizeof(NSRange)*max_possible_characters];
     NSRange *characters = [self.charactersObject mutableBytes];
     self.characterObject = [NSMutableData dataWithLength:sizeof(unsigned char)*max_possible_characters];

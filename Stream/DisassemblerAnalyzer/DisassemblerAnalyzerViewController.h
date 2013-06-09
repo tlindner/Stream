@@ -21,4 +21,6 @@
 - (void) suspendObservations;
 - (void) resumeObservations;
 
+- (void)ConfigurableButton1:(id)sender;
+
 @end

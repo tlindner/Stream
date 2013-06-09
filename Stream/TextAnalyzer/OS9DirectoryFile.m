@@ -41,7 +41,7 @@
 - (NSString *)convertToString:(NSData *)source
 {
     NSMutableString *result = [[[NSMutableString alloc] init] autorelease];
-    unsigned length = [source length], i=0;
+    NSUInteger length = [source length], i=0;
     const unsigned char *bytes = [source bytes];
     NSValueTransformer *vt = [NSValueTransformer valueTransformerForName:@"OS9String"];
     

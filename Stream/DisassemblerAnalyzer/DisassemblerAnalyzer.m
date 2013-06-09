@@ -513,8 +513,8 @@ void FCB_Dump( NSMutableString *result, unsigned char *memory, NSRange nilRange,
                 if (showHex) [result appendFormat:@"               "];
                 if ((!showAddress)&&(!showHex)) [result appendFormat:@"\t"];
                 [result appendFormat:@"FCB"];
-                int min = MIN((NSUInteger)8, intersectionRange.length - j);
-                for (int k=0; k<min; k++) {
+                NSUInteger min = MIN((NSUInteger)8, intersectionRange.length - j);
+                for (NSUInteger k=0; k<min; k++) {
                     [result appendFormat:@" $%02X%s", memory[intersectionRange.location+j+k], k<min-1 ? "," : ""];
                 }
                 

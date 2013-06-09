@@ -182,8 +182,8 @@ NSString *d_commands[128] = {@"FOR", @"GO", @"REM", @"'", @"ELSE", @"IF", @"DATA
     if (pos < bufferSize) {
         [result appendString:@"\n\nBytes after BASIC program:\n\n"];
         
-        for (unsigned i=0; pos+i < bufferSize; i+=16) {
-            unsigned j, jMin = MIN(16, bufferSize - (pos+i));
+        for (NSUInteger i=0; pos+i < bufferSize; i+=16) {
+            NSUInteger j, jMin = MIN((NSUInteger)16, bufferSize - (pos+i));
             
             [result appendFormat:@"%04lX ", pos+i];
             

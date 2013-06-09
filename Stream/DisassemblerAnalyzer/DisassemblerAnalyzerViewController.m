@@ -136,6 +136,11 @@
     }
 }
 
+- (void)ConfigurableButton1:(id)sender
+{
+    NSLog(@"ConfigurableButton1: %@", sender);
+}
+
 - (void)dealloc
 {
     [self stopObserving];

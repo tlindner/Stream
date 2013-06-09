@@ -64,7 +64,7 @@ NSString *DoFileFD( NSMutableIndexSet *processedLSNs, NSUInteger dd_tot,  StStre
     
     if (lsn0Data != nil && [lsn0Data length] > 0x0a) {
         const unsigned char *lsn0 = [lsn0Data bytes];
-        unsigned short logicalSectorSizeCode = lsn0[0x69] << 8;
+        NSUInteger logicalSectorSizeCode = lsn0[0x69] << 8;
         logicalSectorSizeCode += lsn0[0x6a];
         unsigned short logicalSectorSize = logicalSectorSizeCode == 0 ? 256 : 256 * logicalSectorSizeCode;
         
@@ -144,7 +144,7 @@ NSString *DoFileFD( NSMutableIndexSet *processedLSNs, NSUInteger dd_tot, StStrea
         if (fdLength > 0x0d) [newFileBlock addAttributeRange:fdLSN start:0x09 length:4 name:@"fd.siz" verification:nil transformation:@"BlocksUnsignedBigEndian"];
         if (fdLength > 0x10) [newFileBlock addAttributeRange:fdLSN start:0x0d length:3 name:@"fd.creat" verification:nil transformation:@"OS9Date"];
         
-        unsigned long fileSize = fd[0x09];
+        NSUInteger fileSize = fd[0x09];
         fileSize <<= 24;
         fileSize += fd[0x0a] << 16;
         fileSize += fd[0x0b] << 8;
@@ -175,7 +175,7 @@ NSString *DoFileFD( NSMutableIndexSet *processedLSNs, NSUInteger dd_tot, StStrea
            
                 for (unsigned j=0; j<size; j++) {
                     NSString *segLSN = [NSString stringWithFormat:@"LSN %d", lsn + j];
-                    unsigned actualSize = MIN(logicalSectorSize, fileSize);
+                    NSUInteger actualSize = MIN(logicalSectorSize, fileSize);
                     [newFileBlock addDataRange:segLSN start:0 length:(actualSize == logicalSectorSize) ? 0 : fileSize expectedLength:actualSize];
                     fileSize -= actualSize;
                     
