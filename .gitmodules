@@ -1,0 +1,3 @@
+[submodule "ThirdParty/HexFiend"]
+	path = ThirdParty/HexFiend
+	url = https://github.com/tlindner/HexFiend.git
