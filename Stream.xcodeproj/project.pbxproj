@@ -371,8 +371,8 @@
 		779434C3173E8CD00090FD5F /* Blockers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Blockers.m; sourceTree = "<group>"; };
 		779434C6173EA5E90090FD5F /* AlertIcon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = AlertIcon.psd; sourceTree = "<group>"; };
 		779434C7173EA5E90090FD5F /* AlertIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AlertIcon.tiff; sourceTree = "<group>"; };
-		779434CA173EAD120090FD5F /* TLImageWithPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLImageWithPopover.h; sourceTree = "<group>"; };
-		779434CB173EAD120090FD5F /* TLImageWithPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLImageWithPopover.m; sourceTree = "<group>"; };
+		779434CA173EAD120090FD5F /* TLImageWithPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TLImageWithPopover.h; path = Stream/TLImageWithPopover.h; sourceTree = "<group>"; };
+		779434CB173EAD120090FD5F /* TLImageWithPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TLImageWithPopover.m; path = Stream/TLImageWithPopover.m; sourceTree = "<group>"; };
 		779434CD173EC88A0090FD5F /* BasicDiskImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasicDiskImage.h; path = Stream/DiskImageBlockers/BasicDiskImage.h; sourceTree = "<group>"; };
 		779434CE173EC88A0090FD5F /* BasicDiskImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicDiskImage.m; path = Stream/DiskImageBlockers/BasicDiskImage.m; sourceTree = "<group>"; };
 		779434D0173EDBFD0090FD5F /* BasicDiskImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasicDiskImageViewController.h; path = Stream/DiskImageBlockers/BasicDiskImageViewController.h; sourceTree = "<group>"; };
