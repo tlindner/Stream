@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "HFLineCountingRepresenter.h"
+#import "HexFiend/HFLineCountingRepresenter.h"
 #import "StAnalyzer.h"
 
 @interface HexFiendAnalyzerController : NSViewController
@@ -20,7 +20,7 @@
 - (void) setupRepresentedObject;
 - (void) setLineNumberFormatString:(NSString *)inFormat;
 - (void) reloadView;
-- (void) setEditContentRanges;
+// - (void) setEditContentRanges;
 
 - (void) suspendObservations;
 - (void) resumeObservations;

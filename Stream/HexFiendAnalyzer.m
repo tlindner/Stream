@@ -9,7 +9,7 @@
 #import "HexFiendAnalyzer.h"
 #import "HexFiendAnalyzerController.h"
 #import "StAnalyzer.h"
-#import "HFTextView.h"
+#import "HexFiend/HFTextView.h"
 
 @implementation HexFiendAnalyzer
 

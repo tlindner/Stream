@@ -9,7 +9,7 @@
 #import "HexFiendAnalyzerController.h"
 #import "HexFiendAnalyzer.h"
 #import "Analyzation.h"
-#import "HFTextView.h"
+#import "HexFiend/HFTextView.h"
 #import "StStream.h"
 #import "StAnalyzer.h"
 #import "StBlock.h"
@@ -186,7 +186,7 @@
         }
         else if( [[self representedObject] isKindOfClass:[StBlock class]] )
         {
-            [self setEditContentRanges];
+            // [self setEditContentRanges];
         }
         else if( [[self representedObject] isKindOfClass:[NSData class]] )
         {
@@ -199,7 +199,7 @@
     else
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
-
+/*
 - (void) setEditContentRanges
 {
     if( [[self representedObject] isKindOfClass:[StAnalyzer class]] )
@@ -226,7 +226,7 @@
     else
         NSLog( @"HexFiendAnalyzerController: setEditContentRanges: unknown represented object class" );
 }
-
+*/
 - (void) setLineNumberFormatString:(NSString *)inFormat
 {
     if( lcRepresenter != nil )
