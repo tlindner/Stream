@@ -29,6 +29,9 @@
 		6352874C175BC26E00A9092F /* DisassemblerAnalyzerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63528747175BC26E00A9092F /* DisassemblerAnalyzerViewController.m */; };
 		6352874D175BC26E00A9092F /* DisassemblerAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63528748175BC26E00A9092F /* DisassemblerAnalyzerViewController.xib */; };
 		63528750175BC31100A9092F /* AudioAnaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6352874F175BC31100A9092F /* AudioAnaScrollView.m */; };
+		638981B117652DC600528D0C /* MAAttachedWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 638981B017652DC600528D0C /* MAAttachedWindow.m */; };
+		638981B917652DCD00528D0C /* SDListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 638981B517652DCD00528D0C /* SDListView.m */; };
+		638981BA17652DCD00528D0C /* SDListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 638981B817652DCD00528D0C /* SDListViewItem.m */; };
 		77086FA5174874E100C0BD48 /* AnalyzerSetWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FA3174874E100C0BD48 /* AnalyzerSetWindowController.m */; };
 		77086FA6174874E100C0BD48 /* AnalyzerSetWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77086FA4174874E100C0BD48 /* AnalyzerSetWindowController.xib */; };
 		77086FA91748810400C0BD48 /* NSFileManager+DirectoryLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 77086FA81748810400C0BD48 /* NSFileManager+DirectoryLocations.m */; };
@@ -86,9 +89,6 @@
 		776932361412DA50008B6606 /* BlockAttributeViewAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 776932351412DA50008B6606 /* BlockAttributeViewAccessory.xib */; };
 		776EB7E5142069060019329F /* BlockAttributeViewTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776EB7E4142069060019329F /* BlockAttributeViewTableView.m */; };
 		77714C631738A48B00EA4EC5 /* OS9FileBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 77714C621738A48B00EA4EC5 /* OS9FileBlocker.m */; };
-		777745AC171B558300700BB7 /* MAAttachedWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 777745AB171B558300700BB7 /* MAAttachedWindow.m */; };
-		77793EB8172391E500E607F6 /* SDListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77793EB2172391E500E607F6 /* SDListView.m */; };
-		77793EB9172391E500E607F6 /* SDListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 77793EB5172391E500E607F6 /* SDListViewItem.m */; };
 		77793EBB1723A29800E607F6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77793EBA1723A29800E607F6 /* QuartzCore.framework */; };
 		777984BD13E99E96007198EE /* StreamsTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 777984BC13E99E96007198EE /* StreamsTreeController.m */; };
 		778A597B1406EE7600B68EB4 /* CoCoCassetteBlocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 778A597A1406EE7600B68EB4 /* CoCoCassetteBlocker.m */; };
@@ -235,8 +235,6 @@
 		63528724175BC1AA00A9092F /* CoCoAudioAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoCoAudioAnalyzer.m; path = Stream/AudioAnalyzer/CoCoAudioAnalyzer.m; sourceTree = "<group>"; };
 		63528725175BC1AA00A9092F /* WaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveFormView.h; path = Stream/AudioAnalyzer/WaveFormView.h; sourceTree = "<group>"; };
 		63528726175BC1AA00A9092F /* WaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveFormView.m; path = Stream/AudioAnalyzer/WaveFormView.m; sourceTree = "<group>"; };
-		63528741175BC26E00A9092F /* dasm09.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dasm09.c; path = Stream/DisassemblerAnalyzer/dasm09.c; sourceTree = "<group>"; };
-		63528742175BC26E00A9092F /* dasm09.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dasm09.h; path = Stream/DisassemblerAnalyzer/dasm09.h; sourceTree = "<group>"; };
 		63528743175BC26E00A9092F /* DisassemblerAccessoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DisassemblerAccessoryView.xib; path = Stream/DisassemblerAnalyzer/DisassemblerAccessoryView.xib; sourceTree = "<group>"; };
 		63528744175BC26E00A9092F /* DisassemblerAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DisassemblerAnalyzer.h; path = Stream/DisassemblerAnalyzer/DisassemblerAnalyzer.h; sourceTree = "<group>"; };
 		63528745175BC26E00A9092F /* DisassemblerAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DisassemblerAnalyzer.m; path = Stream/DisassemblerAnalyzer/DisassemblerAnalyzer.m; sourceTree = "<group>"; };
@@ -245,6 +243,16 @@
 		63528748175BC26E00A9092F /* DisassemblerAnalyzerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DisassemblerAnalyzerViewController.xib; path = Stream/DisassemblerAnalyzer/DisassemblerAnalyzerViewController.xib; sourceTree = "<group>"; };
 		6352874E175BC31100A9092F /* AudioAnaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAnaScrollView.h; path = Stream/AudioAnalyzer/AudioAnaScrollView.h; sourceTree = "<group>"; };
 		6352874F175BC31100A9092F /* AudioAnaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioAnaScrollView.m; path = Stream/AudioAnalyzer/AudioAnaScrollView.m; sourceTree = "<group>"; };
+		638981AB17652DB100528D0C /* dasm09.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dasm09.c; path = ThirdParty/dasm09/dasm09.c; sourceTree = "<group>"; };
+		638981AC17652DB100528D0C /* dasm09.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dasm09.h; path = ThirdParty/dasm09/dasm09.h; sourceTree = "<group>"; };
+		638981AF17652DC600528D0C /* MAAttachedWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAAttachedWindow.h; sourceTree = "<group>"; };
+		638981B017652DC600528D0C /* MAAttachedWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAAttachedWindow.m; sourceTree = "<group>"; };
+		638981B317652DCD00528D0C /* SDListView+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SDListView+Private.h"; sourceTree = "<group>"; };
+		638981B417652DCD00528D0C /* SDListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDListView.h; sourceTree = "<group>"; };
+		638981B517652DCD00528D0C /* SDListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDListView.m; sourceTree = "<group>"; };
+		638981B617652DCD00528D0C /* SDListViewItem+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SDListViewItem+Private.h"; sourceTree = "<group>"; };
+		638981B717652DCD00528D0C /* SDListViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDListViewItem.h; sourceTree = "<group>"; };
+		638981B817652DCD00528D0C /* SDListViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDListViewItem.m; sourceTree = "<group>"; };
 		77086FA2174874E100C0BD48 /* AnalyzerSetWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyzerSetWindowController.h; path = Stream/AnalyzerSetWindowController.h; sourceTree = "<group>"; };
 		77086FA3174874E100C0BD48 /* AnalyzerSetWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyzerSetWindowController.m; path = Stream/AnalyzerSetWindowController.m; sourceTree = "<group>"; };
 		77086FA4174874E100C0BD48 /* AnalyzerSetWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnalyzerSetWindowController.xib; path = Stream/AnalyzerSetWindowController.xib; sourceTree = "<group>"; };
@@ -345,14 +353,6 @@
 		776EB7E4142069060019329F /* BlockAttributeViewTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAttributeViewTableView.m; path = Stream/BlockAttributeViewTableView.m; sourceTree = "<group>"; };
 		77714C611738A48B00EA4EC5 /* OS9FileBlocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OS9FileBlocker.h; path = "Stream/OS-9Blockers/OS9FileBlocker.h"; sourceTree = "<group>"; };
 		77714C621738A48B00EA4EC5 /* OS9FileBlocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OS9FileBlocker.m; path = "Stream/OS-9Blockers/OS9FileBlocker.m"; sourceTree = "<group>"; };
-		777745AA171B558300700BB7 /* MAAttachedWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAAttachedWindow.h; path = Stream/MAAttachedWindow.h; sourceTree = "<group>"; };
-		777745AB171B558300700BB7 /* MAAttachedWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAAttachedWindow.m; path = Stream/MAAttachedWindow.m; sourceTree = "<group>"; };
-		77793EB1172391E500E607F6 /* SDListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDListView.h; path = Stream/SDListView/SDListView.h; sourceTree = "<group>"; };
-		77793EB2172391E500E607F6 /* SDListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDListView.m; path = Stream/SDListView/SDListView.m; sourceTree = "<group>"; };
-		77793EB3172391E500E607F6 /* SDListView+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SDListView+Private.h"; path = "Stream/SDListView/SDListView+Private.h"; sourceTree = "<group>"; };
-		77793EB4172391E500E607F6 /* SDListViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDListViewItem.h; path = Stream/SDListView/SDListViewItem.h; sourceTree = "<group>"; };
-		77793EB5172391E500E607F6 /* SDListViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDListViewItem.m; path = Stream/SDListView/SDListViewItem.m; sourceTree = "<group>"; };
-		77793EB6172391E500E607F6 /* SDListViewItem+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SDListViewItem+Private.h"; path = "Stream/SDListView/SDListViewItem+Private.h"; sourceTree = "<group>"; };
 		77793EBA1723A29800E607F6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		777984BB13E99E96007198EE /* StreamsTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamsTreeController.h; sourceTree = "<group>"; };
 		777984BC13E99E96007198EE /* StreamsTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamsTreeController.m; sourceTree = "<group>"; };
@@ -480,6 +480,50 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		638981A417652D8F00528D0C /* Third Party */ = {
+			isa = PBXGroup;
+			children = (
+				638981B217652DCD00528D0C /* SDListView */,
+				638981AE17652DC600528D0C /* MAAttachedWindow */,
+				638981AA17652DA000528D0C /* dasm09 */,
+				63327D491765266F0081BE0A /* HexFiend_2.xcodeproj */,
+			);
+			name = "Third Party";
+			sourceTree = "<group>";
+		};
+		638981AA17652DA000528D0C /* dasm09 */ = {
+			isa = PBXGroup;
+			children = (
+				638981AB17652DB100528D0C /* dasm09.c */,
+				638981AC17652DB100528D0C /* dasm09.h */,
+			);
+			name = dasm09;
+			sourceTree = "<group>";
+		};
+		638981AE17652DC600528D0C /* MAAttachedWindow */ = {
+			isa = PBXGroup;
+			children = (
+				638981AF17652DC600528D0C /* MAAttachedWindow.h */,
+				638981B017652DC600528D0C /* MAAttachedWindow.m */,
+			);
+			name = MAAttachedWindow;
+			path = ThirdParty/MAAttachedWindow;
+			sourceTree = "<group>";
+		};
+		638981B217652DCD00528D0C /* SDListView */ = {
+			isa = PBXGroup;
+			children = (
+				638981B317652DCD00528D0C /* SDListView+Private.h */,
+				638981B417652DCD00528D0C /* SDListView.h */,
+				638981B517652DCD00528D0C /* SDListView.m */,
+				638981B617652DCD00528D0C /* SDListViewItem+Private.h */,
+				638981B717652DCD00528D0C /* SDListViewItem.h */,
+				638981B817652DCD00528D0C /* SDListViewItem.m */,
+			);
+			name = SDListView;
+			path = ThirdParty/SDListView;
+			sourceTree = "<group>";
+		};
 		77086FA0174874A900C0BD48 /* AnalyzerSets */ = {
 			isa = PBXGroup;
 			children = (
@@ -545,8 +589,7 @@
 				7759CF7913DBA1A300789DB3 /* StreamImporter */,
 				7759CF3513DBA1A300789DB3 /* Frameworks */,
 				7759CF3313DBA1A300789DB3 /* Products */,
-				77793EAE172391A600E607F6 /* SDListView */,
-				63327D491765266F0081BE0A /* HexFiend_2.xcodeproj */,
+				638981A417652D8F00528D0C /* Third Party */,
 			);
 			sourceTree = "<group>";
 		};
@@ -565,8 +608,6 @@
 			children = (
 				77ED69101737092C0024397E /* Quartz.framework */,
 				77793EBA1723A29800E607F6 /* QuartzCore.framework */,
-				777745AA171B558300700BB7 /* MAAttachedWindow.h */,
-				777745AB171B558300700BB7 /* MAAttachedWindow.m */,
 				7768590513F0FF92006BE753 /* Accelerate.framework */,
 				7799CD2713E5E00F007D5B8E /* AudioToolbox.framework */,
 				7759CF3613DBA1A300789DB3 /* Cocoa.framework */,
@@ -727,19 +768,6 @@
 			name = DiskImageBlockers;
 			sourceTree = "<group>";
 		};
-		77793EAE172391A600E607F6 /* SDListView */ = {
-			isa = PBXGroup;
-			children = (
-				77793EB1172391E500E607F6 /* SDListView.h */,
-				77793EB2172391E500E607F6 /* SDListView.m */,
-				77793EB3172391E500E607F6 /* SDListView+Private.h */,
-				77793EB4172391E500E607F6 /* SDListViewItem.h */,
-				77793EB5172391E500E607F6 /* SDListViewItem.m */,
-				77793EB6172391E500E607F6 /* SDListViewItem+Private.h */,
-			);
-			name = SDListView;
-			sourceTree = "<group>";
-		};
 		7788588B13EDC1B30057E042 /* AnalyzerUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -801,8 +829,6 @@
 		778E46EC172F649C00736D51 /* DisassemblerAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				63528741175BC26E00A9092F /* dasm09.c */,
-				63528742175BC26E00A9092F /* dasm09.h */,
 				63528743175BC26E00A9092F /* DisassemblerAccessoryView.xib */,
 				63528744175BC26E00A9092F /* DisassemblerAnalyzer.h */,
 				63528745175BC26E00A9092F /* DisassemblerAnalyzer.m */,
@@ -1144,9 +1170,6 @@
 				778A6DFE1714760A0064BEAB /* NSIndexSet+GSIndexSetAdditions.m in Sources */,
 				77B0146C1717C1D4008CAF1A /* AnalyzerEdit.m in Sources */,
 				77DFCB77171A159100C4A876 /* CoCoCassetteFileBlocker.m in Sources */,
-				777745AC171B558300700BB7 /* MAAttachedWindow.m in Sources */,
-				77793EB8172391E500E607F6 /* SDListView.m in Sources */,
-				77793EB9172391E500E607F6 /* SDListViewItem.m in Sources */,
 				779F74CA1724779F00EC509B /* AnalyzerListViewItem.m in Sources */,
 				778BFDAA172E0BA300C9005C /* CoCoSegmentedObjectBlocker.m in Sources */,
 				77FE861E1736181B0015DCD8 /* DunfieldImageDisk.m in Sources */,
@@ -1183,6 +1206,9 @@
 				6352874B175BC26E00A9092F /* DisassemblerAnalyzer.m in Sources */,
 				6352874C175BC26E00A9092F /* DisassemblerAnalyzerViewController.m in Sources */,
 				63528750175BC31100A9092F /* AudioAnaScrollView.m in Sources */,
+				638981B117652DC600528D0C /* MAAttachedWindow.m in Sources */,
+				638981B917652DCD00528D0C /* SDListView.m in Sources */,
+				638981BA17652DCD00528D0C /* SDListViewItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
