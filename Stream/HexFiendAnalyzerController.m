@@ -47,12 +47,14 @@
     HexFiendAnalyzer *modelObject = (HexFiendAnalyzer *)[[self representedObject] analyzerObject];
     [modelObject analyzeData];
 
-    [[hexView controller] setInOverwriteMode:NO];
+    [[hexView controller] setEditMode:HFInsertMode];
     
     [hexView setData:[modelObject resultingData]];
     
     BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnalyzerController.overWriteMode"] boolValue];
-    [[hexView controller] setInOverwriteMode:overWriteMode];
+    if(overWriteMode) {
+        [[hexView controller] setEditMode:HFOverwriteMode];
+    }
     
     [self setupRepresentedObject];
 }
@@ -83,7 +85,9 @@
     [self setLineNumberFormatString:offsetBase];
 
     BOOL overWriteMode = [[[self representedObject] valueForKeyPath:@"optionsDictionary.HexFiendAnalyzerController.overWriteMode"] boolValue];
-    [[hexView controller] setInOverwriteMode:overWriteMode];
+    if(overWriteMode) {
+        [[hexView controller] setEditMode:HFOverwriteMode];
+    }
     [[hexView controller] setEditable:!readOnly];
 //    [self setEditContentRanges];
 
@@ -136,7 +140,9 @@
         if( [change objectForKey:@"new"] != [NSNull null] )
         {
             HFTextView *hexView = (HFTextView *)[self view];
-            [[hexView controller] setInOverwriteMode:overWriteMode];
+            if(overWriteMode) {
+                [[hexView controller] setEditMode:HFOverwriteMode];
+            }
         }
     }
     else if( [keyPath isEqualToString:@"data"] )
