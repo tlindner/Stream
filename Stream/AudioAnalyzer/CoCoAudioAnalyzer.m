@@ -427,40 +427,7 @@ BOOL hi_to_low_at(NSUInteger i, float zero_crossings[], AudioSampleType audioFra
     
     [theAna setValue:[NSNumber numberWithFloat:average] forKeyPath:@"optionsDictionary.AudioAnalyzerViewController.averagedMaximumSample"];
     
-    /* generate new changed index set */
-//    NSMutableIndexSet *changedIndexSetObject = [[NSMutableIndexSet alloc] init];
-//    NSMutableIndexSet *changedIndexes = [theAna valueForKeyPath:@"optionsDictionary.AudioAnalyzerViewController.changedIndexes"];
-    
-//    NSRange maximumRange = {0, NSUIntegerMax};
-//    NSUInteger count = [self.changedIndexes countOfIndexesInRange:maximumRange];
-//    NSUInteger *indexBuffer = malloc( sizeof(NSUInteger) * count);
-    
-//    [self.changedIndexes getIndexes:indexBuffer maxCount:count inIndexRange:&maximumRange];
-
-//    NSUInteger j = 0;
-//    i = 0;
-//    
-//    while( i < count && j < char_count)
-//    {
-//        if( indexBuffer[i] < characters[j].location )
-//        {
-//            i++;
-//        }
-//        else if( NSLocationInRange(indexBuffer[i], characters[j] ) )
-//        {
-//            [changedIndexSetObject addIndex:j];
-//            i++;
-//            j++;
-//        }
-//        else
-//            j++;
-//    }
-//    
-//    free( indexBuffer );
-
     self.resultingData = self.characterObject;
-    
-//    [changedIndexSetObject release];
 }
 
 - (void)replaceBytesInRange:(NSRange)range withBytes:(unsigned char *)byte
